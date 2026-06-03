@@ -1,0 +1,62 @@
+# ── Secrets & Environment ──────────────────────────────────────
+.env
+*.env
+
+# ── Python ─────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+*.egg
+
+# ── Virtual environment ────────────────────────────────────────
+venv/
+.venv/
+env/
+.env/
+
+# ── IDE & Editor ───────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ── OS ─────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Logs ───────────────────────────────────────────────────────
+*.log
+outputs/logs/
+star-office-ui/backend/outputs/logs/
+trading_agent/outputs/logs/
+
+# ── Generated outputs ──────────────────────────────────────────
+trading_agent/outputs/charts/
+trading_agent/outputs/reports/
+trading_agent/outputs/results/
+star-office-ui/backend/outputs/results/
+
+# ── Local cache ────────────────────────────────────────────────
+trading_agent/data/cache/
+
+# ── Runtime state ──────────────────────────────────────────────
+star-office-ui/backend/state/workflow_state.json
+
+# ── Claude Code session (not project files) ────────────────────
+memory/
+.claude/
+
+# ── Node ───────────────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+
+# ── Font archives (keep extracted .woff2 only) ─────────────────
+*.zip
+
+# ── Jupyter ────────────────────────────────────────────────────
+.ipynb_checkpoints/

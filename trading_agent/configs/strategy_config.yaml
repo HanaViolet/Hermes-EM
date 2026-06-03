@@ -1,0 +1,11 @@
+moving_average:
+  short_window: 20
+  long_window: 60
+
+rsi:
+  window: 14
+  buy_threshold: 30
+  sell_threshold: 70
+
+momentum:
+  lookback_window: 20

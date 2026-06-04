@@ -1,5 +1,89 @@
 [
   {
+    "task_id": "3d22718a5319",
+    "ticker": "TSLA",
+    "strategy": "auto",
+    "completed_at": "2026-06-04 08:53:28"
+  },
+  {
+    "task_id": "4ac4d3281a29",
+    "ticker": "AAPL",
+    "strategy": "auto",
+    "completed_at": "2026-06-04 08:51:35"
+  },
+  {
+    "task_id": "0e6c8d345b62",
+    "ticker": "SPY",
+    "strategy": "auto",
+    "completed_at": "2026-06-04 08:49:57"
+  },
+  {
+    "task_id": "60007d63b7c4",
+    "ticker": "AAPL",
+    "strategy": "auto",
+    "completed_at": "2026-06-04 08:45:56"
+  },
+  {
+    "task_id": "db3555ccaa3e",
+    "ticker": "NVDA",
+    "strategy": "auto",
+    "completed_at": "2026-06-04 08:43:52"
+  },
+  {
+    "task_id": "fb733417e263",
+    "ticker": "SPY",
+    "strategy": "auto",
+    "completed_at": "2026-06-04 08:42:00"
+  },
+  {
+    "task_id": "76c3bbec5a83",
+    "ticker": "QQQ",
+    "strategy": "auto",
+    "completed_at": "2026-06-04 08:39:00"
+  },
+  {
+    "task_id": "791612183481",
+    "ticker": "AAPL",
+    "strategy": "auto",
+    "completed_at": "2026-06-04 08:35:59"
+  },
+  {
+    "task_id": "6c810d786f46",
+    "ticker": "SPY",
+    "strategy": "auto",
+    "completed_at": "2026-06-04 08:33:55"
+  },
+  {
+    "task_id": "dc6925ce893b",
+    "ticker": "NVDA",
+    "strategy": "auto",
+    "completed_at": "2026-06-04 08:32:56"
+  },
+  {
+    "task_id": "4f40e013ff6d",
+    "ticker": "SPY",
+    "strategy": "auto",
+    "completed_at": "2026-06-04 08:30:35"
+  },
+  {
+    "task_id": "8060a7cce98d",
+    "ticker": "SPY",
+    "strategy": "auto",
+    "completed_at": "2026-06-04 08:29:56"
+  },
+  {
+    "task_id": "8e412eb90adf",
+    "ticker": "QQQ",
+    "strategy": "auto",
+    "completed_at": "2026-06-04 08:28:48"
+  },
+  {
+    "task_id": "c4347b3bb0c9",
+    "ticker": "SPY",
+    "strategy": "ma",
+    "completed_at": "2026-06-04 08:25:25"
+  },
+  {
     "task_id": "9366d352eb10",
     "ticker": "SPY",
     "strategy": "auto",
@@ -59,82 +143,5 @@
     "total_return": 75.52,
     "max_drawdown": -18.16,
     "completed_at": "2026-06-04 08:00:22"
-  },
-  {
-    "task_id": "8295b6a67239",
-    "ticker": "SPY",
-    "strategy": "ma",
-    "decision": "Buy",
-    "confidence": "Medium",
-    "sharpe": 0.59,
-    "total_return": 42.36,
-    "max_drawdown": -30.29,
-    "completed_at": "2026-06-04 08:00:06"
-  },
-  {
-    "task_id": "55b5ee187210",
-    "ticker": "TSLA",
-    "strategy": "momentum",
-    "decision": "Hold",
-    "confidence": "Low",
-    "sharpe": 1.06,
-    "total_return": 129.03,
-    "max_drawdown": -25.01,
-    "completed_at": "2026-06-04 07:58:26"
-  },
-  {
-    "task_id": "0ff5f8a4e4e2",
-    "ticker": "AAPL",
-    "strategy": "momentum",
-    "decision": "Buy",
-    "confidence": "Medium",
-    "sharpe": 1.03,
-    "total_return": 142.8,
-    "max_drawdown": -20.82,
-    "completed_at": "2026-06-04 07:55:04"
-  },
-  {
-    "task_id": "34298f5aa2be",
-    "ticker": "SPY",
-    "strategy": "auto",
-    "decision": "Hold",
-    "confidence": "Low",
-    "sharpe": 0.64,
-    "total_return": 43.16,
-    "max_drawdown": -15.42,
-    "completed_at": "2026-06-04 07:53:04"
-  },
-  {
-    "task_id": "95ac98b26c2c",
-    "ticker": "QQQ",
-    "strategy": "auto",
-    "decision": "Hold",
-    "confidence": "Low",
-    "sharpe": 0.93,
-    "total_return": 94.26,
-    "max_drawdown": -20.98,
-    "completed_at": "2026-06-04 07:50:47"
-  },
-  {
-    "task_id": "2f3677449cf7",
-    "ticker": "SPY",
-    "strategy": "momentum",
-    "decision": "Hold",
-    "confidence": "Low",
-    "sharpe": 0.64,
-    "total_return": 43.16,
-    "max_drawdown": -15.42,
-    "completed_at": "2026-06-04 07:49:26"
-  },
-  {
-    "task_id": "71d14fd95793",
-    "ticker": "AAPL",
-    "strategy": "ma",
-    "decision": "Buy",
-    "confidence": "Medium",
-    "sharpe": 0.87,
-    "total_return": 119.36,
-    "max_drawdown": -22.54,
-    "completed_at": "2026-06-04 07:47:45"
   }
 ]

@@ -29,10 +29,13 @@ _MAX_HISTORY = 20
 def _run_agent_in_background(task: dict, task_id: str) -> None:
     """Entry point for the background thread."""
     try:
+        (_AGENT_PARENT / "trading_server" / "diag_thread_started.txt").write_text("thread started", encoding="utf-8")
         from trading_agent.utils.office_bridge import reset_telemetry
+        (_AGENT_PARENT / "trading_server" / "diag_after_reset_import.txt").write_text("reset imported", encoding="utf-8")
         reset_telemetry(task)
-
+        (_AGENT_PARENT / "trading_server" / "diag_after_reset_call.txt").write_text("reset called", encoding="utf-8")
         from trading_agent.agent.trading_agent import run_trading_agent
+        (_AGENT_PARENT / "trading_server" / "diag_after_agent_import.txt").write_text("agent imported", encoding="utf-8")
 
         ticker = task.get("ticker", "QQQ")
         start_date = task.get("start_date", "2020-01-01")
@@ -40,6 +43,7 @@ def _run_agent_in_background(task: dict, task_id: str) -> None:
         strategy_name = task.get("strategy", "auto")
         transaction_cost = float(task.get("transaction_cost", 0.001))
 
+        (_AGENT_PARENT / "trading_server" / "diag_calling_agent.txt").write_text(f"calling run_trading_agent({ticker},{strategy_name})", encoding="utf-8")
         result = run_trading_agent(
             ticker=ticker,
             start_date=start_date,
@@ -48,30 +52,66 @@ def _run_agent_in_background(task: dict, task_id: str) -> None:
             transaction_cost=transaction_cost,
         )
 
+        (_AGENT_PARENT / "trading_server" / "diag_agent_returned.txt").write_text(f"agent returned: {ticker} decision={result.get('decision',{}).get('decision','?')}", encoding="utf-8")
         decision = result.get("decision", {})
         backtest = result.get("backtest_result", {})
         report_md = result.get("report", "")
 
-        # Push final structured results to telemetry
-        from trading_agent.utils.office_bridge import update_workflow
-        update_workflow(
-            global_status="done",
-            current_stage="completed",
-            progress=100,
-            result_summary={
-                "decision": decision.get("decision", "N/A"),
-                "confidence": decision.get("confidence", "N/A"),
-                "selected_strategy": result.get("strategy", task.get("strategy", "?")),
-                "total_return": backtest.get("total_return"),
-                "annual_return": backtest.get("annual_return"),
-                "sharpe_ratio": backtest.get("sharpe_ratio"),
-                "max_drawdown": backtest.get("max_drawdown"),
-                "win_rate": backtest.get("win_rate"),
-                "trades": backtest.get("number_of_trades"),
-                "benchmark_return": backtest.get("benchmark_total_return"),
-            },
-            report={"markdown": report_md, "path": ""},
-        )
+        # Store strategy comparison in telemetry
+        strategy_scores = result.get("strategy_scores", [])
+
+        # Diagnostic: prove this code runs
+        _diag_path = Path(__file__).resolve().parent / "diag_runner_reached.txt"
+        _diag_path.write_text(f"RUNNER FINAL: ticker={ticker} decision={decision} backtest_keys={list(backtest.keys())[:5]} strategy_scores_count={len(strategy_scores)}", encoding="utf-8")
+
+        # Push final structured results DIRECTLY to the telemetry JSON file
+        import json as _json
+        from datetime import datetime as _dt, timezone as _tz
+        _path = Path(__file__).resolve().parent.parent / "ClawLibrary" / "src" / "data" / "trading-telemetry.json"
+        _snap = _json.loads(_path.read_text(encoding="utf-8")) if _path.exists() else {"mode":"live","resources":[],"recentEvents":[],"focus":{"resourceId":"break_room","detail":"","actorState":"resting"},"activeAgents":[],"activeProcesses":[],"trading":{"logs":[],"summary":{}}}
+        _snap.setdefault("trading", {})
+        _snap["trading"]["global_status"] = "done"
+        _snap["trading"]["current_stage"] = "completed"
+        _snap["trading"]["progress"] = 100
+        _snap["trading"]["decision"] = f"{decision.get('decision', 'N/A')} ({decision.get('confidence', 'N/A')})"
+        _snap["trading"]["summary"] = {
+            "decision": decision.get("decision", "N/A"),
+            "confidence": decision.get("confidence", "N/A"),
+            "selected_strategy": result.get("strategy", task.get("strategy", "?")),
+            "total_return": backtest.get("total_return"),
+            "sharpe_ratio": backtest.get("sharpe_ratio"),
+            "max_drawdown": backtest.get("max_drawdown"),
+            "win_rate": backtest.get("win_rate"),
+            "trades": backtest.get("number_of_trades"),
+        }
+        _snap["trading"]["report"] = {"markdown": report_md, "path": ""}
+        _snap["trading"]["logs"].append("Workflow completed")
+        _snap["generatedAt"] = _dt.now(_tz).isoformat()
+        # Update break room
+        _found_br = False
+        for _r in _snap.setdefault("resources", []):
+            if _r["id"] == "break_room":
+                _found_br = True
+                _r["items"] = [
+                    {"id":"br-1","title":"Last: "+ticker,"meta":"info","excerpt":"Completed analysis for "+ticker},
+                    {"id":"br-2","title":"Decision: "+str(decision.get('decision','?')),"meta":"metric","excerpt":"Final trading decision"}
+                ]
+                _r["itemCount"] = 2
+                _r["status"] = "done"
+            if _r["id"] == "skills" and strategy_scores:
+                for sc in strategy_scores:
+                    signal = "Buy" if sc.get("return",0) > 0 else "Sell" if sc.get("return",0) < -5 else "Hold"
+                    _r["items"].append({"id":"sc-"+sc.get("name","?"),"title":sc.get("name","?")+": score="+str(sc.get("score","?")),"meta":"metric","excerpt":"Return "+str(sc.get("return","?"))+"% | Sharpe "+str(sc.get("sharpe","?"))+" | "+signal})
+                _r["itemCount"] = len(_r["items"])
+        # Append break_room to visited_rooms pipeline
+        _visited = _snap["trading"].setdefault("visited_rooms", [])
+        if "break_room" not in _visited:
+            _visited.append("break_room")
+
+        # Atomic write
+        _tmp = _path.with_suffix(".tmp")
+        _tmp.write_text(_json.dumps(_snap, ensure_ascii=False, indent=2), encoding="utf-8")
+        _tmp.replace(_path)
 
         entry = {
             "ok": True,

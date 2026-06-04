@@ -1,11 +1,11 @@
-from tools.data_tool import get_price_data
-from tools.indicator_tool import add_technical_indicators
-from tools.strategy_tool import generate_signal
-from tools.risk_tool import apply_risk_control
-from tools.backtest_tool import run_backtest, save_backtest_result
-from tools.report_tool import make_final_decision, generate_report
-from utils.logger import get_logger
-from utils.office_bridge import update_workflow
+from trading_agent.tools.data_tool import get_price_data
+from trading_agent.tools.indicator_tool import add_technical_indicators
+from trading_agent.tools.strategy_tool import generate_signal
+from trading_agent.tools.risk_tool import apply_risk_control
+from trading_agent.tools.backtest_tool import run_backtest, save_backtest_result
+from trading_agent.tools.report_tool import make_final_decision, generate_report
+from trading_agent.utils.logger import get_logger
+from trading_agent.utils.office_bridge import update_workflow
 
 import math as _math
 
@@ -17,6 +17,8 @@ def select_best_strategy(data, strategies, transaction_cost=0.001):
     best_signal = None
     best_result = None
     best_score = -999
+
+    strategy_scores = []  # Collect all strategy results for comparison
 
     for strategy_name in strategies:
         raw_signal = generate_signal(data, strategy_name)
@@ -53,13 +55,29 @@ def select_best_strategy(data, strategies, transaction_cost=0.001):
         if result["max_drawdown"] < -0.40:
             score -= 1.0
 
+        strategy_scores.append({
+            "name": strategy_name,
+            "score": round(score, 3),
+            "sharpe": round(result["sharpe_ratio"], 3),
+            "return": round(result["total_return"] * 100, 2),
+            "trades": result["number_of_trades"],
+        })
+
         if score > best_score:
             best_score = score
             best_strategy = strategy_name
             best_signal = final_signal
             best_result = result
 
-    return best_strategy, best_signal, best_result
+    # Push strategy comparison for the Strategy Lab room artifact
+    update_workflow(
+        current_stage="selecting_strategy",
+        progress=50,
+        summary=f"Best: {best_strategy} (score={best_score:.2f})",
+        details={"strategies": strategy_scores},
+    )
+
+    return best_strategy, best_signal, best_result, strategy_scores
 
 
 def run_trading_agent(
@@ -145,8 +163,9 @@ def run_trading_agent(
             logs=["Compare candidate strategies"]
         )
 
+        strategy_scores = []
         if strategy_name == "auto":
-            strategy_name, final_signal, result = select_best_strategy(
+            strategy_name, final_signal, result, strategy_scores = select_best_strategy(
                 data=data,
                 strategies=["ma", "rsi", "momentum"],
                 transaction_cost=transaction_cost
@@ -233,6 +252,7 @@ def run_trading_agent(
             "backtest_result": result,
             "decision": decision_result,
             "report": report_md,
+            "strategy_scores": strategy_scores,
         }
 
     except Exception as exc:

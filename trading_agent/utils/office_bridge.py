@@ -34,6 +34,8 @@ _telemetry_state: dict = {
     "logs": [],
     "metrics": {},
     "updated_at": None,
+    "visited_rooms": [],
+    "strategy_compare": [],
 }
 
 # Trading stage → ClawLibrary room / LobsterStateId
@@ -103,6 +105,11 @@ def _build_snapshot() -> dict:
         elif room_id == "skills":  # Strategy Lab
             items.append({"id":"st-1","title":"Strategy: " + str(task.get("strategy","auto")),"meta":"info","excerpt":"Selected trading strategy"})
             items.append({"id":"st-2","title":"Signal: " + str(summary.get("decision","N/A")),"meta":"metric","excerpt":"Trade signal"})
+            # Show strategy comparison if available (auto mode)
+            compare = _telemetry_state.get("strategy_compare") or []
+            for sc in compare:
+                signal = "Buy" if sc.get("return",0) > 0 else "Sell" if sc.get("return",0) < -5 else "Hold"
+                items.append({"id":"sc-"+sc.get("name","?"),"title":sc.get("name","?")+": score="+str(sc.get("score","?")),"meta":"metric","excerpt":"Return "+str(sc.get("return","?"))+"% | Sharpe "+str(sc.get("sharpe","?"))+" | "+signal})
         elif room_id == "alarm":  # Risk Room
             items.append({"id":"rk-1","title":"Max DD: " + str(round(summary.get("max_drawdown",0)*100,2))+"%","meta":"metric","excerpt":"Maximum drawdown"})
             items.append({"id":"rk-2","title":"Confidence: " + str(summary.get("confidence","N/A")),"meta":"metric","excerpt":"Decision confidence"})
@@ -126,11 +133,20 @@ def _build_snapshot() -> dict:
         return items
 
     resources = []
+    visited = _telemetry_state.get("visited_rooms", [])
     for room_id, labels in ROOM_LABELS.items():
         items = _room_items(room_id)
-        status_val = "active" if room_id == focus_room else "idle"
-        if status == "done":
-            status_val = "idle" if room_id != "break_room" else "active"
+        # Room status: active=currently working, done=completed, idle=not visited
+        if room_id == focus_room and status != "done" and status != "error":
+            status_val = "active"
+        elif room_id in visited:
+            status_val = "done"
+        elif status == "done" and room_id == "break_room":
+            status_val = "active"  # Final stop
+        elif status == "error" and room_id == "alarm":
+            status_val = "alert"
+        else:
+            status_val = "idle"
         resources.append({
             "id": room_id,
             "title": labels.get("en", room_id),
@@ -196,6 +212,7 @@ def _build_snapshot() -> dict:
             "error": _telemetry_state.get("error"),
             "decision": _telemetry_state.get("decision"),
             "logs": _telemetry_state.get("logs", []),
+            "visited_rooms": _telemetry_state.get("visited_rooms", []),
         },
     }
 
@@ -242,6 +259,8 @@ def reset_telemetry(task: dict | None = None) -> None:
     _telemetry_state["decision"] = None
     _telemetry_state["logs"] = [f"Task: {task.get('ticker','?')} {task.get('strategy','?')}"] if task else []
     _telemetry_state["metrics"] = {}
+    _telemetry_state["visited_rooms"] = []
+    _telemetry_state["strategy_compare"] = []
     _telemetry_state["updated_at"] = datetime.now(timezone.utc).isoformat()
     _persist_telemetry()
 
@@ -265,6 +284,10 @@ def update_workflow(
         _telemetry_state["global_status"] = global_status
     if current_stage:
         _telemetry_state["current_stage"] = current_stage
+        # Track which room this stage maps to
+        room = STAGE_TO_ROOM.get(current_stage)
+        if room and room not in _telemetry_state.setdefault("visited_rooms", []):
+            _telemetry_state["visited_rooms"].append(room)
     if progress is not None:
         _telemetry_state["progress"] = progress
     if result_summary:
@@ -295,6 +318,10 @@ def update_workflow(
         for k, v in details.items():
             if isinstance(v, (int, float)):
                 _telemetry_state["metrics"][k] = round(float(v), 4)
+            elif k == "strategies" and isinstance(v, list):
+                # Store strategy comparison data (overwrite each time)
+                _telemetry_state["strategy_compare"] = v
+                _telemetry_state.setdefault("logs", []).append(f"Strategies compared: {len(v)} candidates")
 
     if logs:
         if isinstance(logs, list):

@@ -2869,6 +2869,28 @@
       .hud-activity-toggle { display: none; }
       /* Hide old archive-show-tab (replaced by right-panel-tab) */
       .archive-show-tab { display: none !important; }
+      /* Room flash animation when agent arrives */
+      @keyframes room-flash {
+        0%   { box-shadow: 0 0 24px rgba(56,189,248,0.9); transform: scale(1.03); background: rgba(56,189,248,0.12); }
+        50%  { box-shadow: 0 0 12px rgba(56,189,248,0.4); }
+        100% { box-shadow: none; transform: scale(1); background: transparent; }
+      }
+      .resource-menu button.room-just-visited {
+        animation: room-flash 1.2s ease-out;
+      }
+
+      /* Compact room list: smaller detail text, key metric highlight */
+      .resource-menu-detail {
+        font-size: 9px !important;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 140px;
+      }
+      .resource-menu button {
+        gap: 4px !important;
+      }
+
       /* Hide panel switcher (Info/Chat buttons) */
       .panel-switcher { display: none !important; }
       /* Disable old ClawLibrary archive-collapse — we use our own toggle */
@@ -2920,7 +2942,46 @@
       .menu-panel { width: 280px; right: 8px; top: 8px; bottom: 54px; border-radius: 8px; transition: transform 0.35s, opacity 0.35s; }
       .menu-panel.collapsed { transform: translateX(350px) !important; opacity: 0 !important; pointer-events: none !important; }
       .resource-menu { max-height: 40vh; }
-      .resource-menu button { font-size: 11px; padding: 5px 10px; }
+      .resource-menu button { font-size: 11px; padding: 5px 10px; transition: border-color 0.3s, box-shadow 0.3s; }
+
+      /* Room status color coding */
+      .resource-menu button[data-status="active"] {
+        border-color: rgba(56,189,248,0.7) !important;
+        box-shadow: 0 0 10px rgba(56,189,248,0.25);
+      }
+      .resource-menu button[data-status="alert"] {
+        border-color: rgba(251,113,133,0.7) !important;
+        box-shadow: 0 0 8px rgba(251,113,133,0.2);
+      }
+      .resource-menu button[data-status="completed"],
+      .resource-menu button[data-status="done"] {
+        border-left: 3px solid #36d399 !important;
+      }
+      /* Pulse animation for active room */
+      @keyframes room-pulse {
+        0%,100% { box-shadow: 0 0 8px rgba(56,189,248,0.2); }
+        50%     { box-shadow: 0 0 18px rgba(56,189,248,0.5); }
+      }
+      .resource-menu button[data-status="active"] {
+        animation: room-pulse 2s ease-in-out infinite;
+      }
+
+      /* Status dot before room name */
+      .resource-menu button[data-status] .resource-menu-name::before {
+        content: '';
+        display: inline-block;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        margin-right: 6px;
+        vertical-align: middle;
+        background: #94a3b8;
+      }
+      .resource-menu button[data-status="active"] .resource-menu-name::before { background: #38bdf8; }
+      .resource-menu button[data-status="completed"] .resource-menu-name::before,
+      .resource-menu button[data-status="done"] .resource-menu-name::before { background: #36d399; }
+      .resource-menu button[data-status="alert"] .resource-menu-name::before { background: #fb7185; }
+      .resource-menu button:not([data-status]) .resource-menu-name::before { background: #64748b; }
 
       /* Right panel show/hide tab */
       .right-panel-tab {
@@ -2999,7 +3060,14 @@
           <button class="drawer-tab" data-tab="chat" onclick="switchDrawerTab('chat')">AI Chat</button>
         </div>
         <div class="drawer-content" id="drawer-content-room">
-          <div style="padding:12px;color:#94a3b8;font-size:12px;">Click a room on the map to view its details here.</div>
+          <div class="drawer-subtabs" style="display:flex;gap:0;border-bottom:1px solid rgba(42,58,74,0.3);">
+            <button class="drawer-subtab active" data-subtab="summary" onclick="switchRoomSubtab('summary')" style="flex:1;background:transparent;border:none;color:#64748b;font-size:11px;padding:6px 8px;cursor:pointer;border-bottom:2px solid transparent;">Summary</button>
+            <button class="drawer-subtab" data-subtab="metrics" onclick="switchRoomSubtab('metrics')" style="flex:1;background:transparent;border:none;color:#64748b;font-size:11px;padding:6px 8px;cursor:pointer;border-bottom:2px solid transparent;">Metrics</button>
+            <button class="drawer-subtab" data-subtab="decision" onclick="switchRoomSubtab('decision')" style="flex:1;background:transparent;border:none;color:#64748b;font-size:11px;padding:6px 8px;cursor:pointer;border-bottom:2px solid transparent;">Decision</button>
+          </div>
+          <div id="room-sub-summary" style="padding:10px 12px;color:#94a3b8;font-size:12px;">Click a room on the map to view its details.</div>
+          <div id="room-sub-metrics" style="padding:10px 12px;color:#94a3b8;font-size:12px;display:none;"></div>
+          <div id="room-sub-decision" style="padding:10px 12px;color:#94a3b8;font-size:12px;display:none;"></div>
         </div>
         <div class="drawer-content hidden" id="drawer-content-timeline">
           <div style="padding:12px;color:#94a3b8;font-size:12px;" id="timeline-content">Run an analysis to see the execution timeline.</div>
@@ -3698,6 +3766,12 @@
         document.querySelectorAll('.drawer-tab').forEach(function(t) { t.classList.toggle('active', t.dataset.tab === tab); });
         document.querySelectorAll('.drawer-content').forEach(function(c) { c.classList.toggle('hidden', c.id !== 'drawer-content-' + tab); });
       }
+      function switchRoomSubtab(subtab) {
+        document.querySelectorAll('.drawer-subtab').forEach(function(t) { t.classList.toggle('active', t.dataset.subtab === subtab); t.style.borderBottomColor = t.dataset.subtab === subtab ? '#36d399' : 'transparent'; t.style.color = t.dataset.subtab === subtab ? '#36d399' : '#64748b'; });
+        document.getElementById('room-sub-summary').style.display = subtab === 'summary' ? '' : 'none';
+        document.getElementById('room-sub-metrics').style.display = subtab === 'metrics' ? '' : 'none';
+        document.getElementById('room-sub-decision').style.display = subtab === 'decision' ? '' : 'none';
+      }
     </script>
     <script>
       (function() {
@@ -3739,6 +3813,30 @@
           return Number(v).toFixed(decimals || 2);
         }
 
+        // ── Room flash + tooltip on focus change ──────────────────
+        var lastFocusRoom = null;
+        setInterval(function() {
+          var focused = document.querySelector('.resource-menu button[data-focus=\"true\"]');
+          if (focused) {
+            var roomId = focused.getAttribute('data-resource-id');
+            if (roomId && roomId !== lastFocusRoom) {
+              lastFocusRoom = roomId;
+              focused.classList.remove('room-just-visited');
+              void focused.offsetWidth;
+              focused.classList.add('room-just-visited');
+              // Update tooltip with current snapshot data
+              fetch('/api/trading/snapshot?t='+Date.now(), {cache:'no-store'}).then(function(r){return r.json()}).then(function(snap){
+                var room = (snap.resources||[]).find(function(rr){return rr.id===roomId;});
+                if (room) {
+                  var items = room.items || [];
+                  var tip = items.slice(0,3).map(function(i){return i.title;}).join(' | ');
+                  focused.title = tip || room.status || 'no data';
+                }
+              }).catch(function(){});
+            }
+          }
+        }, 1500);
+
         // ── Room click → Bottom Drawer ──────────────────────────
         document.addEventListener('click', function(e) {
           var btn = e.target.closest ? e.target.closest('button[data-resource-id]') : null;
@@ -3758,22 +3856,64 @@
               var zhName = '';
               (room.stats || []).forEach(function(st) { if (st.label === 'zh') zhName = st.value; });
 
-              var html = '<div style="padding:12px;">';
-              html += '<div style="font-size:15px;color:#36d399;margin-bottom:4px;">' + (zhName || room.title) + '</div>';
-              html += '<div style="font-size:11px;color:#64748b;margin-bottom:8px;">Status: ' + (room.status || 'idle') + '</div>';
+              // Summary tab
+              var sumHtml = '<div style="font-size:15px;color:#36d399;margin-bottom:4px;">' + (zhName || room.title) + '</div>';
+              sumHtml += '<div style="font-size:11px;color:#64748b;margin-bottom:8px;">Status: <span style="color:' + (room.status==='active'?'#38bdf8':room.status==='done'?'#36d399':room.status==='alert'?'#fb7185':'#94a3b8') + ';">' + (room.status || 'idle') + '</span></div>';
+              if (room.items && room.items.length > 0) {
+                // Summary: show info items first, then key metrics (max 6)
+                var infoItems = room.items.filter(function(i){ return i.meta === 'info'; });
+                var metricItems = room.items.filter(function(i){ return i.meta === 'metric'; });
+                var summaryItems = infoItems.concat(metricItems).slice(0, 6);
+                summaryItems.forEach(function(item) {
+                  var icon = item.meta === 'metric' ? '' : '';
+                  sumHtml += '<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:11px;border-bottom:1px solid rgba(42,58,74,0.2);"><span style="color:#94a3b8;">' + icon + ' ' + (item.title || '') + '</span><span style="color:#e5e7eb;font-weight:500;">' + (item.excerpt || '') + '</span></div>';
+                });
+                if (room.items.length > 6) sumHtml += '<div style="color:#64748b;font-size:10px;text-align:center;padding:4px;">+ ' + (room.items.length - 6) + ' more items in Metrics tab</div>';
+              } else { sumHtml += '<div style="color:#64748b;">No data yet.</div>'; }
+              document.getElementById('room-sub-summary').innerHTML = sumHtml;
 
+              // Metrics tab - progress bars with gauge visualization
+              var metHtml = '<div style="font-size:11px;color:#64748b;margin-bottom:6px;">Gauge visualization of all numeric metrics</div>';
               if (room.items && room.items.length > 0) {
                 room.items.forEach(function(item) {
-                  var icon = item.meta === 'metric' ? '📊' : item.meta === 'info' ? '📋' : '📄';
-                  html += '<div style="display:flex;justify-content:space-between;padding:5px 0;font-size:11px;border-bottom:1px solid rgba(42,58,74,0.3);">';
-                  html += '<span style="color:#94a3b8;">' + icon + ' ' + (item.title || '') + '</span>';
-                  html += '</div>';
+                  var match = (item.title || '').match(/([\d.-]+)/);
+                  if (match) {
+                    var val = parseFloat(match[1]);
+                    var pct = 50;
+                    if ((item.title||'').toLowerCase().indexOf('rsi') >= 0) { pct = Math.min(100, Math.max(0, val)); }
+                    else if ((item.title||'').toLowerCase().indexOf('sharpe') >= 0) { pct = Math.min(100, Math.max(0, val * 30 + 20)); }
+                    else if ((item.title||'').toLowerCase().indexOf('return') >= 0) { pct = Math.min(100, Math.max(0, Math.abs(val))); }
+                    else if ((item.title||'').toLowerCase().indexOf('dd') >= 0) { pct = Math.min(100, Math.abs(val) * 3); }
+                    else if ((item.title||'').toLowerCase().indexOf('volatility') >= 0) { pct = Math.min(100, val * 100); }
+                    else if ((item.title||'').toLowerCase().indexOf('win rate') >= 0) { pct = Math.min(100, Math.abs(val) * 100); }
+                    else { pct = Math.min(100, Math.abs(val) * 20); }
+                    var barC = pct > 75 ? '#fb7185' : pct > 45 ? '#fbbf24' : '#36d399';
+                    metHtml += '<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:3px;"><span style="color:#94a3b8;">' + (item.title || '') + '</span><span style="color:#e5e7eb;">' + (item.excerpt || val) + '</span></div><div style="background:rgba(42,58,74,0.3);height:8px;border-radius:4px;"><div style="background:' + barC + ';width:' + pct + '%;height:100%;border-radius:4px;transition:width 0.6s ease;box-shadow:0 0 6px ' + barC + '44;"></div></div></div>';
+                  }
                 });
-              } else {
-                html += '<div style="color:#64748b;font-size:11px;">This room has no data yet. Run an analysis to populate it.</div>';
               }
-              html += '</div>';
-              detailEl.innerHTML = html;
+              if (!metHtml) metHtml = '<div style="color:#64748b;">No numeric metrics available.</div>';
+              document.getElementById('room-sub-metrics').innerHTML = metHtml;
+
+              // Decision tab
+              var decHtml = '<div style="font-size:13px;color:#36d399;margin-bottom:8px;">Decision Summary</div>';
+              if (room.items && room.items.length > 0) {
+                var hasDecision = false;
+                room.items.forEach(function(item) {
+                  var t = (item.title || '').toLowerCase();
+                  if (t.indexOf('decision') >= 0 || t.indexOf('signal') >= 0 || t.indexOf('strategy') >= 0) {
+                    hasDecision = true;
+                    var act = (item.excerpt || '').toLowerCase();
+                    var cls = act.indexOf('buy') >= 0 ? 'buy' : act.indexOf('sell') >= 0 ? 'sell' : 'hold';
+                    decHtml += '<div style="margin-bottom:6px;"><span class="decision-badge ' + cls + '" style="font-size:11px;">' + (item.excerpt || item.title || '') + '</span></div>';
+                  }
+                });
+                if (!hasDecision) decHtml += '<div style="color:#64748b;">No trading decision in this room.</div>';
+              } else { decHtml += '<div style="color:#64748b;">Run analysis to see decisions.</div>'; }
+              decHtml += '<div style="margin-top:12px;padding:8px 10px;background:rgba(56,189,248,0.08);border:1px dashed rgba(56,189,248,0.3);border-radius:6px;font-size:10px;color:#38bdf8;text-align:center;cursor:pointer;" title="LLM Coming Soon" onclick="this.textContent=\'🤖 LLM analysis coming soon — will explain trading decisions in real-time.\';">🤖 Explain This Decision (Coming Soon)</div>';
+              document.getElementById('room-sub-decision').innerHTML = decHtml;
+
+              detailEl = document.getElementById('drawer-content-room');
 
               // Switch to Room Details tab and open drawer
               switchDrawerTab('room');
@@ -3865,16 +4005,23 @@
                 }).join('');
               }
 
-              // Timeline (execution path)
+              // Timeline (execution path) — order by visited_rooms
               var timelineEl = document.getElementById('timeline-content');
               var rooms = snap.resources || [];
-              var visited = rooms.filter(function(r) { return r.itemCount > 0; });
-              if (visited.length > 0) {
+              var roomMap = {};
+              rooms.forEach(function(r) { roomMap[r.id] = r; });
+              var visitedOrder = snap.trading?.visited_rooms || [];
+              // Fallback: if no visited_rooms, use rooms with items
+              if (visitedOrder.length === 0) {
+                visitedOrder = rooms.filter(function(r) { return r.itemCount > 0; }).map(function(r) { return r.id; });
+              }
+              if (visitedOrder.length > 0) {
                 var tl = '<div style="display:flex;flex-wrap:wrap;gap:8px;padding:4px 0;">';
-                visited.forEach(function(r, i) {
+                visitedOrder.forEach(function(rid, i) {
+                  var r = roomMap[rid];
                   var zh = '';
-                  (r.stats || []).forEach(function(st) { if (st.label === 'zh') zh = st.value; });
-                  tl += '<span style="background:rgba(54,211,153,0.1);border:1px solid rgba(54,211,153,0.3);border-radius:6px;padding:4px 10px;font-size:11px;color:#e5e7eb;">' + (i+1) + '. ' + (zh || r.title) + '</span>';
+                  if (r && r.stats) { r.stats.forEach(function(st) { if (st.label === 'zh') zh = st.value; }); }
+                  tl += '<span style="background:rgba(54,211,153,0.1);border:1px solid rgba(54,211,153,0.3);border-radius:6px;padding:4px 10px;font-size:11px;color:#e5e7eb;">' + (i+1) + '. ' + (zh || rid) + '</span>';
                 });
                 tl += '</div>';
                 timelineEl.innerHTML = tl;
@@ -3925,6 +4072,24 @@
             .catch(function() {});
         }
         loadHistory();
+
+        // ── Keyboard shortcuts ────────────────────────────────────
+        document.addEventListener('keydown', function(e) {
+          // R key: open drawer + switch to Room Details
+          if (e.key === 'r' && !e.ctrlKey && !e.metaKey && !e.target.closest('input,textarea,select')) {
+            var body = document.getElementById('chat-body');
+            var toggle = document.getElementById('chat-toggle');
+            if (body.classList.contains('hidden')) { body.classList.remove('hidden'); toggle.textContent = '▼ Close'; }
+            switchDrawerTab('room');
+          }
+          // T key: switch to Timeline
+          if (e.key === 't' && !e.ctrlKey && !e.metaKey && !e.target.closest('input,textarea,select')) {
+            var body = document.getElementById('chat-body');
+            var toggle = document.getElementById('chat-toggle');
+            if (body.classList.contains('hidden')) { body.classList.remove('hidden'); toggle.textContent = '▼ Close'; }
+            switchDrawerTab('timeline');
+          }
+        });
 
         // Initial update + polling
         updatePanels();

@@ -7,6 +7,8 @@ from tools.report_tool import make_final_decision, generate_report
 from utils.logger import get_logger
 from utils.office_bridge import update_workflow
 
+import math as _math
+
 logger = get_logger()
 
 
@@ -113,6 +115,25 @@ def run_trading_agent(
         )
 
         data = add_technical_indicators(raw_data)
+
+        # Extract indicator values for room artifacts display
+        last_row = data.iloc[-1]
+        indicator_metrics = {}
+        for col in ["ma20","ma60","rsi","macd","macd_signal","volatility_20d","daily_return","return_20d","close"]:
+            if col in data.columns:
+                try:
+                    val = float(last_row[col])
+                    if not _math.isnan(val):
+                        indicator_metrics[col] = round(val, 4)
+                except Exception:
+                    pass
+        # Push indicator values as telemetry metrics
+        update_workflow(
+            current_stage="calculating_indicators",
+            progress=30,
+            summary=f"Indicators: RSI={indicator_metrics.get('RSI','?')}, MACD={indicator_metrics.get('MACD','?')}",
+            details=indicator_metrics,
+        )
 
         # ── Stage 3-6: Strategy / Risk / Backtest ──
         update_workflow(

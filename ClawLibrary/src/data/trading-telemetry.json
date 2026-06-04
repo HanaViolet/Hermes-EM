@@ -1,0 +1,380 @@
+{
+  "mode": "live",
+  "generatedAt": "2026-06-04T08:11:13.361317+00:00",
+  "resources": [
+    {
+      "id": "document",
+      "title": "Reports & Analysis",
+      "status": "idle",
+      "items": [
+        {
+          "id": "rp-1",
+          "title": "Report: SPY",
+          "meta": "document",
+          "excerpt": "# Trading Agent Report: SPY\n\n## Final Decision\n- Decision: Hold\n- Confidence: Low\n\n## Strategy\n- Selected Strategy: momentum\n- Latest Signal: Cash\n\n## Backtest\n- Total Return: 43.16%\n- Benchmark Total"
+        }
+      ],
+      "itemCount": 1,
+      "stats": [
+        {
+          "label": "en",
+          "value": "Reports & Analysis",
+          "tone": "neutral"
+        },
+        {
+          "label": "zh",
+          "value": "报告与分析室",
+          "tone": "neutral"
+        }
+      ]
+    },
+    {
+      "id": "images",
+      "title": "Chart Room",
+      "status": "idle",
+      "items": [],
+      "itemCount": 0,
+      "stats": [
+        {
+          "label": "en",
+          "value": "Chart Room",
+          "tone": "neutral"
+        },
+        {
+          "label": "zh",
+          "value": "图表分析室",
+          "tone": "neutral"
+        }
+      ]
+    },
+    {
+      "id": "memory",
+      "title": "Strategy Memory",
+      "status": "idle",
+      "items": [],
+      "itemCount": 0,
+      "stats": [
+        {
+          "label": "en",
+          "value": "Strategy Memory",
+          "tone": "neutral"
+        },
+        {
+          "label": "zh",
+          "value": "策略记忆库",
+          "tone": "neutral"
+        }
+      ]
+    },
+    {
+      "id": "skills",
+      "title": "Strategy Lab",
+      "status": "idle",
+      "items": [
+        {
+          "id": "st-1",
+          "title": "Strategy: auto",
+          "meta": "info",
+          "excerpt": "Selected trading strategy"
+        },
+        {
+          "id": "st-2",
+          "title": "Signal: Hold",
+          "meta": "metric",
+          "excerpt": "Trade signal"
+        }
+      ],
+      "itemCount": 2,
+      "stats": [
+        {
+          "label": "en",
+          "value": "Strategy Lab",
+          "tone": "neutral"
+        },
+        {
+          "label": "zh",
+          "value": "策略实验室",
+          "tone": "neutral"
+        }
+      ]
+    },
+    {
+      "id": "gateway",
+      "title": "Market Data Room",
+      "status": "idle",
+      "items": [
+        {
+          "id": "gw-1",
+          "title": "Data Source: Yahoo Finance",
+          "meta": "info",
+          "excerpt": "OHLCV daily data"
+        },
+        {
+          "id": "gw-2",
+          "title": "Rows loaded: 1",
+          "meta": "metric",
+          "excerpt": "Loaded 1 rows for SPY"
+        }
+      ],
+      "itemCount": 2,
+      "stats": [
+        {
+          "label": "en",
+          "value": "Market Data Room",
+          "tone": "neutral"
+        },
+        {
+          "label": "zh",
+          "value": "市场数据室",
+          "tone": "neutral"
+        }
+      ]
+    },
+    {
+      "id": "log",
+      "title": "Execution Logs",
+      "status": "idle",
+      "items": [],
+      "itemCount": 0,
+      "stats": [
+        {
+          "label": "en",
+          "value": "Execution Logs",
+          "tone": "neutral"
+        },
+        {
+          "label": "zh",
+          "value": "执行日志台",
+          "tone": "neutral"
+        }
+      ]
+    },
+    {
+      "id": "mcp",
+      "title": "Indicator Lab",
+      "status": "idle",
+      "items": [],
+      "itemCount": 0,
+      "stats": [
+        {
+          "label": "en",
+          "value": "Indicator Lab",
+          "tone": "neutral"
+        },
+        {
+          "label": "zh",
+          "value": "指标实验室",
+          "tone": "neutral"
+        }
+      ]
+    },
+    {
+      "id": "schedule",
+      "title": "Decision Desk",
+      "status": "idle",
+      "items": [],
+      "itemCount": 0,
+      "stats": [
+        {
+          "label": "en",
+          "value": "Decision Desk",
+          "tone": "neutral"
+        },
+        {
+          "label": "zh",
+          "value": "决策调度台",
+          "tone": "neutral"
+        }
+      ]
+    },
+    {
+      "id": "alarm",
+      "title": "Risk Alert Room",
+      "status": "idle",
+      "items": [
+        {
+          "id": "rk-1",
+          "title": "Max DD: -15.42%",
+          "meta": "metric",
+          "excerpt": "Maximum drawdown"
+        },
+        {
+          "id": "rk-2",
+          "title": "Confidence: Low",
+          "meta": "metric",
+          "excerpt": "Decision confidence"
+        }
+      ],
+      "itemCount": 2,
+      "stats": [
+        {
+          "label": "en",
+          "value": "Risk Alert Room",
+          "tone": "neutral"
+        },
+        {
+          "label": "zh",
+          "value": "风险报警室",
+          "tone": "neutral"
+        }
+      ]
+    },
+    {
+      "id": "agent",
+      "title": "Agent Monitor",
+      "status": "idle",
+      "items": [
+        {
+          "id": "ag-1",
+          "title": "Stage: Done",
+          "meta": "info",
+          "excerpt": "Current workflow stage"
+        },
+        {
+          "id": "ag-2",
+          "title": "Progress: 100%",
+          "meta": "metric",
+          "excerpt": "Workflow progress"
+        }
+      ],
+      "itemCount": 2,
+      "stats": [
+        {
+          "label": "en",
+          "value": "Agent Monitor",
+          "tone": "neutral"
+        },
+        {
+          "label": "zh",
+          "value": "运行监控室",
+          "tone": "neutral"
+        }
+      ]
+    },
+    {
+      "id": "task_queues",
+      "title": "Backtest Lab",
+      "status": "idle",
+      "items": [
+        {
+          "id": "bt-1",
+          "title": "Sharpe: 0.64",
+          "meta": "metric",
+          "excerpt": "Risk-adjusted return"
+        },
+        {
+          "id": "bt-2",
+          "title": "Return: 43.16%",
+          "meta": "metric",
+          "excerpt": "Total return"
+        },
+        {
+          "id": "bt-3",
+          "title": "Win Rate: 38.0%",
+          "meta": "metric",
+          "excerpt": "Trade win rate"
+        },
+        {
+          "id": "bt-4",
+          "title": "Trades: 98",
+          "meta": "metric",
+          "excerpt": "Number of trades"
+        }
+      ],
+      "itemCount": 4,
+      "stats": [
+        {
+          "label": "en",
+          "value": "Backtest Lab",
+          "tone": "neutral"
+        },
+        {
+          "label": "zh",
+          "value": "回测实验室",
+          "tone": "neutral"
+        }
+      ]
+    },
+    {
+      "id": "break_room",
+      "title": "Break Room",
+      "status": "active",
+      "items": [
+        {
+          "id": "br-1",
+          "title": "Last: SPY",
+          "meta": "info",
+          "excerpt": "Completed analysis for SPY"
+        },
+        {
+          "id": "br-2",
+          "title": "Decision: Hold",
+          "meta": "metric",
+          "excerpt": "Final trading decision"
+        }
+      ],
+      "itemCount": 2,
+      "stats": [
+        {
+          "label": "en",
+          "value": "Break Room",
+          "tone": "neutral"
+        },
+        {
+          "label": "zh",
+          "value": "休息室",
+          "tone": "neutral"
+        }
+      ]
+    }
+  ],
+  "recentEvents": [
+    {
+      "resourceId": "break_room",
+      "type": "access",
+      "detail": "Task: SPY auto",
+      "timestamp": "2026-06-04T08:11:13.361317+00:00"
+    }
+  ],
+  "focus": {
+    "resourceId": "break_room",
+    "detail": "Completed. Decision: Hold",
+    "reason": "Complete",
+    "actorState": "resting"
+  },
+  "activeAgents": [],
+  "activeProcesses": [],
+  "mainActorContext": {
+    "tokens": 100,
+    "maxTokens": 100,
+    "remaining": 0
+  },
+  "trading": {
+    "ticker": "SPY",
+    "strategy": "auto",
+    "global_status": "done",
+    "current_stage": "completed",
+    "progress": 100,
+    "summary": {
+      "decision": "Hold",
+      "confidence": "Low",
+      "selected_strategy": "momentum",
+      "total_return": 0.4316457687816986,
+      "annual_return": 0.07840055836737836,
+      "sharpe_ratio": 0.6401191629090021,
+      "max_drawdown": -0.15422775261995003,
+      "win_rate": 0.3797996661101836,
+      "trades": 98,
+      "benchmark_return": 1.3126825875009498
+    },
+    "report": {
+      "markdown": "# Trading Agent Report: SPY\n\n## Final Decision\n- Decision: Hold\n- Confidence: Low\n\n## Strategy\n- Selected Strategy: momentum\n- Latest Signal: Cash\n\n## Backtest\n- Total Return: 43.16%\n- Benchmark Total Return: 131.27%\n- Annual Return: 7.84%\n- Annual Volatility: 12.25%\n- Sharpe Ratio: 0.64\n- Max Drawdown: -15.42%\n- Benchmark Max Drawdown: -25.36%\n- Win Rate: 37.98%\n- Number of Trades: 98\n\n## Risk Notice\nThis result is based on historical backtesting and is for educational use only. It is not financial advice.\n",
+      "path": ""
+    },
+    "error": null,
+    "decision": "Hold",
+    "logs": [
+      "Task: SPY auto"
+    ]
+  }
+}

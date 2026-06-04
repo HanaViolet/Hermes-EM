@@ -1,0 +1,168 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "schema": "trading-agent/work-output.protocol.v1"
+  },
+  "outputCategories": [
+    {
+      "id": "document",
+      "label": "Reports",
+      "summary": "Backtest reports, markdown analysis, trade summaries",
+      "sampleContents": ["daily backtest report", "strategy performance summary", "risk analysis"]
+    },
+    {
+      "id": "images",
+      "label": "Charts",
+      "summary": "Equity curves, drawdown charts, price & moving average plots",
+      "sampleContents": ["equity curve chart", "drawdown visualization", "price vs MA crossover"]
+    },
+    {
+      "id": "memory",
+      "label": "Trade History",
+      "summary": "Past trading decisions, strategy memory, performance records",
+      "sampleContents": ["historical decision log", "strategy comparison record", "performance archive"]
+    },
+    {
+      "id": "skills",
+      "label": "Strategies",
+      "summary": "Strategy configurations: MA crossover, RSI, momentum",
+      "sampleContents": ["ma crossover config", "rsi threshold params", "momentum lookback window"]
+    },
+    {
+      "id": "gateway",
+      "label": "Market Data",
+      "summary": "OHLCV price data from Yahoo Finance & Stooq, local cache status",
+      "sampleContents": ["daily OHLCV snapshot", "data source status", "cache coverage check"]
+    },
+    {
+      "id": "log",
+      "label": "Execution Logs",
+      "summary": "Runtime traces, pipeline stage logs, and event feeds",
+      "sampleContents": ["data loading trace", "indicator calculation log", "backtest execution log"]
+    },
+    {
+      "id": "mcp",
+      "label": "Indicators",
+      "summary": "Technical indicators: MA20, MA60, RSI, MACD, volatility",
+      "sampleContents": ["ma crossover signal", "rsi reading", "volatility calculation"]
+    },
+    {
+      "id": "schedule",
+      "label": "Decision Desk",
+      "summary": "Final trading decisions, signal aggregation, confidence scoring",
+      "sampleContents": ["buy signal with confidence", "hold decision rationale", "sell signal alert"]
+    },
+    {
+      "id": "alarm",
+      "label": "Risk Alerts",
+      "summary": "Risk control status: volatility filter, stop-loss, drawdown warnings",
+      "sampleContents": ["volatility threshold exceeded", "stop-loss triggered", "drawdown warning"]
+    },
+    {
+      "id": "agent",
+      "label": "Agent Monitor",
+      "summary": "Active agent status, current stage, progress tracking",
+      "sampleContents": ["agent stage pulse", "progress update", "stage transition log"]
+    },
+    {
+      "id": "task_queues",
+      "label": "Backtest Lab",
+      "summary": "Historical backtest engine: equity curves, Sharpe ratio, win rate",
+      "sampleContents": ["backtest result summary", "equity curve data", "trade list"]
+    },
+    {
+      "id": "break_room",
+      "label": "Break Room",
+      "summary": "Idle state, cooldown, waiting for new tasks",
+      "sampleContents": ["agent idle", "waiting for task", "recovery pause"]
+    }
+  ],
+  "interfaces": [
+    { "id": "document",   "label": "Report Generator",    "endpoint": "api/trading/report",   "status": "online" },
+    { "id": "images",     "label": "Chart Renderer",      "endpoint": "api/trading/charts",   "status": "online" },
+    { "id": "memory",     "label": "Trade History DB",    "endpoint": "outputs/results",      "status": "online" },
+    { "id": "skills",     "label": "Strategy Registry",   "endpoint": "configs/strategy_config.yaml", "status": "online" },
+    { "id": "gateway",    "label": "Yahoo Finance API",   "endpoint": "query1.finance.yahoo.com", "status": "online" },
+    { "id": "log",        "label": "Log Stream",          "endpoint": "outputs/logs/app.log", "status": "online" },
+    { "id": "mcp",        "label": "Indicator Engine",    "endpoint": "tools/indicator_tool", "status": "online" },
+    { "id": "schedule",   "label": "Decision Engine",     "endpoint": "tools/report_tool",    "status": "online" },
+    { "id": "alarm",      "label": "Risk Controller",     "endpoint": "tools/risk_tool",      "status": "online" },
+    { "id": "agent",      "label": "Agent Runner",        "endpoint": "agent/trading_agent",  "status": "online" },
+    { "id": "task_queues","label": "Backtest Engine",     "endpoint": "tools/backtest_tool",  "status": "online" },
+    { "id": "break_room", "label": "Idle Loop",           "endpoint": "api/trading/state",    "status": "online" }
+  ],
+  "states": [
+    {
+      "id": "resting",
+      "label": "Standby",
+      "zoneTypes": ["break_room"],
+      "interfaceIds": ["break_room"],
+      "outputCategoryIds": ["break_room"],
+      "detailTemplates": ["等待新任务…", "系统空闲，准备就绪", "Waiting for trading task…", "Systems idle, claws ready"]
+    },
+    {
+      "id": "syncing",
+      "label": "Loading Data",
+      "zoneTypes": ["gateway"],
+      "interfaceIds": ["gateway"],
+      "outputCategoryIds": ["gateway"],
+      "detailTemplates": ["正在加载市场数据…", "从 Yahoo/Stooq 获取行情", "Loading market data…", "Fetching from data sources"]
+    },
+    {
+      "id": "researching",
+      "label": "Calculating Indicators",
+      "zoneTypes": ["mcp"],
+      "interfaceIds": ["mcp"],
+      "outputCategoryIds": ["mcp"],
+      "detailTemplates": ["正在计算技术指标…", "MA / RSI / MACD 计算中", "Computing technical indicators…", "MA, RSI, MACD in progress"]
+    },
+    {
+      "id": "cataloging",
+      "label": "Selecting Strategy",
+      "zoneTypes": ["skills"],
+      "interfaceIds": ["skills"],
+      "outputCategoryIds": ["skills"],
+      "detailTemplates": ["正在选择交易策略…", "比较候选策略中", "Selecting trading strategy…", "Comparing candidate strategies"]
+    },
+    {
+      "id": "monitoring",
+      "label": "Checking Risk",
+      "zoneTypes": ["alarm"],
+      "interfaceIds": ["alarm"],
+      "outputCategoryIds": ["alarm"],
+      "detailTemplates": ["正在检查风险约束…", "波动率过滤 & 止损检查", "Checking risk constraints…", "Volatility filter & stop-loss"]
+    },
+    {
+      "id": "executing",
+      "label": "Running Backtest",
+      "zoneTypes": ["task_queues"],
+      "interfaceIds": ["task_queues"],
+      "outputCategoryIds": ["task_queues"],
+      "detailTemplates": ["正在运行历史回测…", "计算收益曲线 & 夏普比率", "Running historical backtest…", "Computing equity curves & Sharpe"]
+    },
+    {
+      "id": "writing",
+      "label": "Writing Report",
+      "zoneTypes": ["document"],
+      "interfaceIds": ["document"],
+      "outputCategoryIds": ["document"],
+      "detailTemplates": ["正在生成分析报告…", "汇总决策与绩效指标", "Writing analysis report…", "Summarizing decisions & metrics"]
+    },
+    {
+      "id": "idle",
+      "label": "Completed",
+      "zoneTypes": ["document", "images", "memory", "skills", "gateway", "log", "mcp", "schedule", "alarm", "agent", "task_queues"],
+      "interfaceIds": ["document", "agent"],
+      "outputCategoryIds": ["document", "memory"],
+      "detailTemplates": ["分析完成！", "Analysis complete!"]
+    },
+    {
+      "id": "error",
+      "label": "Error",
+      "zoneTypes": ["alarm"],
+      "interfaceIds": ["alarm", "log"],
+      "outputCategoryIds": ["alarm", "log"],
+      "detailTemplates": ["分析失败，请检查日志", "Analysis failed, check logs"]
+    }
+  ]
+}

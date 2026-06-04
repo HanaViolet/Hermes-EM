@@ -1,0 +1,856 @@
+{
+  "meta": {
+    "version": "0.6.0",
+    "schema": "claw-library/map.logic.v6",
+    "baseResolution": {
+      "width": 1920,
+      "height": 1080
+    }
+  },
+  "renderLayers": [
+    {
+      "id": "floor",
+      "depth": 1
+    },
+    {
+      "id": "back_walls",
+      "depth": 8
+    },
+    {
+      "id": "mid_props",
+      "depth": 20
+    },
+    {
+      "id": "actor",
+      "depth": 30
+    },
+    {
+      "id": "fg_occluder",
+      "depth": 50
+    },
+    {
+      "id": "fx_overlay",
+      "depth": 70
+    }
+  ],
+  "rooms": [
+    {
+      "id": "document",
+      "label": "Document",
+      "bounds": [
+        430,
+        650,
+        370,
+        250
+      ],
+      "labelAnchor": {
+        "x": 666,
+        "y": 664
+      }
+    },
+    {
+      "id": "mcp",
+      "label": "MCP",
+      "bounds": [
+        960,
+        54,
+        210,
+        168
+      ],
+      "labelAnchor": {
+        "x": 1074,
+        "y": 58
+      }
+    },
+    {
+      "id": "images",
+      "label": "Images",
+      "bounds": [
+        1280,
+        50,
+        280,
+        170
+      ],
+      "labelAnchor": {
+        "x": 1414,
+        "y": 57
+      }
+    },
+    {
+      "id": "memory",
+      "label": "Memory",
+      "bounds": [
+        50,
+        95,
+        500,
+        430
+      ],
+      "labelAnchor": {
+        "x": 366,
+        "y": 148
+      }
+    },
+    {
+      "id": "log",
+      "label": "Log",
+      "bounds": [
+        1360,
+        325,
+        150,
+        130
+      ],
+      "labelAnchor": {
+        "x": 1440,
+        "y": 362
+      }
+    },
+    {
+      "id": "schedule",
+      "label": "Schedule",
+      "bounds": [
+        1625,
+        325,
+        240,
+        130
+      ],
+      "labelAnchor": {
+        "x": 1715,
+        "y": 354
+      }
+    },
+    {
+      "id": "skills",
+      "label": "Skills",
+      "bounds": [
+        620,
+        50,
+        330,
+        250
+      ],
+      "labelAnchor": {
+        "x": 750,
+        "y": 52
+      }
+    },
+    {
+      "id": "gateway",
+      "label": "Gateway",
+      "bounds": [
+        700,
+        320,
+        470,
+        300
+      ],
+      "labelAnchor": {
+        "x": 845,
+        "y": 400
+      }
+    },
+    {
+      "id": "agent",
+      "label": "Agent",
+      "bounds": [
+        930,
+        650,
+        300,
+        210
+      ],
+      "labelAnchor": {
+        "x": 1086,
+        "y": 691
+      }
+    },
+    {
+      "id": "break_room",
+      "label": "Break Room",
+      "bounds": [
+        1320,
+        740,
+        480,
+        220
+      ],
+      "labelAnchor": {
+        "x": 1500,
+        "y": 675
+      }
+    },
+    {
+      "id": "task_queues",
+      "label": "Task Queues",
+      "bounds": [
+        700,
+        320,
+        470,
+        300
+      ],
+      "labelAnchor": {
+        "x": 845,
+        "y": 434
+      }
+    },
+    {
+      "id": "alarm",
+      "label": "Alarm",
+      "bounds": [
+        1550,
+        50,
+        250,
+        170
+      ],
+      "labelAnchor": {
+        "x": 1607,
+        "y": 62
+      }
+    }
+  ],
+  "walkableZones": [
+    {
+      "id": "memory-room",
+      "points": [
+        {
+          "x": 90,
+          "y": 165
+        },
+        {
+          "x": 430,
+          "y": 165
+        },
+        {
+          "x": 530,
+          "y": 240
+        },
+        {
+          "x": 530,
+          "y": 420
+        },
+        {
+          "x": 470,
+          "y": 500
+        },
+        {
+          "x": 130,
+          "y": 500
+        },
+        {
+          "x": 60,
+          "y": 420
+        },
+        {
+          "x": 60,
+          "y": 240
+        }
+      ]
+    },
+    {
+      "id": "north-spine",
+      "points": [
+        {
+          "x": 640,
+          "y": 140
+        },
+        {
+          "x": 1730,
+          "y": 140
+        },
+        {
+          "x": 1775,
+          "y": 180
+        },
+        {
+          "x": 1710,
+          "y": 230
+        },
+        {
+          "x": 1360,
+          "y": 230
+        },
+        {
+          "x": 1310,
+          "y": 285
+        },
+        {
+          "x": 960,
+          "y": 285
+        },
+        {
+          "x": 910,
+          "y": 320
+        },
+        {
+          "x": 720,
+          "y": 320
+        },
+        {
+          "x": 640,
+          "y": 250
+        }
+      ]
+    },
+    {
+      "id": "center-hall",
+      "points": [
+        {
+          "x": 520,
+          "y": 360
+        },
+        {
+          "x": 1380,
+          "y": 360
+        },
+        {
+          "x": 1460,
+          "y": 430
+        },
+        {
+          "x": 1360,
+          "y": 500
+        },
+        {
+          "x": 720,
+          "y": 500
+        },
+        {
+          "x": 620,
+          "y": 450
+        },
+        {
+          "x": 520,
+          "y": 450
+        }
+      ]
+    },
+    {
+      "id": "right-ops",
+      "points": [
+        {
+          "x": 1390,
+          "y": 330
+        },
+        {
+          "x": 1820,
+          "y": 330
+        },
+        {
+          "x": 1860,
+          "y": 370
+        },
+        {
+          "x": 1860,
+          "y": 470
+        },
+        {
+          "x": 1400,
+          "y": 470
+        },
+        {
+          "x": 1320,
+          "y": 410
+        }
+      ]
+    },
+    {
+      "id": "left-drop",
+      "points": [
+        {
+          "x": 430,
+          "y": 350
+        },
+        {
+          "x": 620,
+          "y": 350
+        },
+        {
+          "x": 620,
+          "y": 760
+        },
+        {
+          "x": 430,
+          "y": 760
+        }
+      ]
+    },
+    {
+      "id": "center-drop",
+      "points": [
+        {
+          "x": 760,
+          "y": 420
+        },
+        {
+          "x": 890,
+          "y": 420
+        },
+        {
+          "x": 890,
+          "y": 760
+        },
+        {
+          "x": 760,
+          "y": 760
+        }
+      ]
+    },
+    {
+      "id": "lower-main",
+      "points": [
+        {
+          "x": 460,
+          "y": 660
+        },
+        {
+          "x": 1210,
+          "y": 660
+        },
+        {
+          "x": 1250,
+          "y": 720
+        },
+        {
+          "x": 1250,
+          "y": 980
+        },
+        {
+          "x": 520,
+          "y": 980
+        },
+        {
+          "x": 430,
+          "y": 900
+        },
+        {
+          "x": 430,
+          "y": 720
+        }
+      ]
+    },
+    {
+      "id": "right-diagonal",
+      "points": [
+        {
+          "x": 1280,
+          "y": 620
+        },
+        {
+          "x": 1400,
+          "y": 620
+        },
+        {
+          "x": 1580,
+          "y": 790
+        },
+        {
+          "x": 1540,
+          "y": 850
+        },
+        {
+          "x": 1430,
+          "y": 850
+        },
+        {
+          "x": 1280,
+          "y": 700
+        }
+      ]
+    },
+    {
+      "id": "break-room",
+      "points": [
+        {
+          "x": 1380,
+          "y": 760
+        },
+        {
+          "x": 1800,
+          "y": 760
+        },
+        {
+          "x": 1820,
+          "y": 790
+        },
+        {
+          "x": 1820,
+          "y": 1020
+        },
+        {
+          "x": 1450,
+          "y": 1020
+        },
+        {
+          "x": 1360,
+          "y": 930
+        },
+        {
+          "x": 1360,
+          "y": 790
+        }
+      ]
+    }
+  ],
+  "walkGraph": {
+    "nodes": [
+      {
+        "id": "DO1",
+        "x": 620,
+        "y": 860,
+        "roomId": "document"
+      },
+      {
+        "id": "ME1",
+        "x": 300,
+        "y": 320,
+        "roomId": "memory"
+      },
+      {
+        "id": "MC1",
+        "x": 1040,
+        "y": 610,
+        "roomId": "mcp"
+      },
+      {
+        "id": "IM1",
+        "x": 1435,
+        "y": 155,
+        "roomId": "images"
+      },
+      {
+        "id": "LG1",
+        "x": 1435,
+        "y": 430,
+        "roomId": "log"
+      },
+      {
+        "id": "SC1",
+        "x": 1555,
+        "y": 430,
+        "roomId": "schedule"
+      },
+      {
+        "id": "SK1",
+        "x": 756,
+        "y": 242,
+        "roomId": "skills"
+      },
+      {
+        "id": "GW1",
+        "x": 860,
+        "y": 610,
+        "roomId": "gateway"
+      },
+      {
+        "id": "AG1",
+        "x": 1080,
+        "y": 820,
+        "roomId": "agent"
+      },
+      {
+        "id": "BR1",
+        "x": 1560,
+        "y": 875,
+        "roomId": "break_room"
+      },
+      {
+        "id": "TQ1",
+        "x": 1735,
+        "y": 430,
+        "roomId": "task_queues"
+      },
+      {
+        "id": "AL1",
+        "x": 1690,
+        "y": 155,
+        "roomId": "alarm"
+      },
+      {
+        "id": "H1",
+        "x": 470,
+        "y": 375,
+        "roomId": "memory"
+      },
+      {
+        "id": "H2",
+        "x": 780,
+        "y": 375,
+        "roomId": "skills"
+      },
+      {
+        "id": "H3",
+        "x": 1080,
+        "y": 375,
+        "roomId": "mcp"
+      },
+      {
+        "id": "H4",
+        "x": 1450,
+        "y": 375,
+        "roomId": "log"
+      },
+      {
+        "id": "V1",
+        "x": 620,
+        "y": 700,
+        "roomId": "document"
+      },
+      {
+        "id": "V2",
+        "x": 830,
+        "y": 620,
+        "roomId": "gateway"
+      },
+      {
+        "id": "V3",
+        "x": 1080,
+        "y": 700,
+        "roomId": "agent"
+      },
+      {
+        "id": "V4",
+        "x": 1500,
+        "y": 760,
+        "roomId": "break_room"
+      }
+    ],
+    "edges": [
+      [
+        "DO1",
+        "H1"
+      ],
+      [
+        "ME1",
+        "H1"
+      ],
+      [
+        "MC1",
+        "H2"
+      ],
+      [
+        "IM1",
+        "AL1"
+      ],
+      [
+        "AL1",
+        "SC1"
+      ],
+      [
+        "LG1",
+        "H4"
+      ],
+      [
+        "SC1",
+        "H4"
+      ],
+      [
+        "H1",
+        "H2"
+      ],
+      [
+        "H2",
+        "H3"
+      ],
+      [
+        "H3",
+        "H4"
+      ],
+      [
+        "H1",
+        "V1"
+      ],
+      [
+        "V1",
+        "SK1"
+      ],
+      [
+        "H2",
+        "V2"
+      ],
+      [
+        "V2",
+        "GW1"
+      ],
+      [
+        "GW1",
+        "V3"
+      ],
+      [
+        "V3",
+        "AG1"
+      ],
+      [
+        "V3",
+        "V4"
+      ],
+      [
+        "V4",
+        "BR1"
+      ],
+      [
+        "V4",
+        "TQ1"
+      ]
+    ]
+  },
+  "collisionPolygons": [],
+  "occluders": [
+    {
+      "id": "gateway-front",
+      "x": 690,
+      "y": 820,
+      "width": 220,
+      "height": 24
+    },
+    {
+      "id": "skills-bench-front",
+      "x": 160,
+      "y": 915,
+      "width": 180,
+      "height": 20
+    },
+    {
+      "id": "break-bar-front",
+      "x": 1215,
+      "y": 885,
+      "width": 180,
+      "height": 22
+    },
+    {
+      "id": "taskq-desk-front",
+      "x": 1605,
+      "y": 885,
+      "width": 180,
+      "height": 22
+    }
+  ],
+  "workZones": [
+    {
+      "id": "document",
+      "label": "Document",
+      "roomId": "document",
+      "type": "document",
+      "anchor": {
+        "x": 682,
+        "y": 822
+      },
+      "radius": 28
+    },
+    {
+      "id": "memory",
+      "label": "Memory",
+      "roomId": "memory",
+      "type": "memory",
+      "anchor": {
+        "x": 362,
+        "y": 344
+      },
+      "radius": 28
+    },
+    {
+      "id": "mcp",
+      "label": "MCP",
+      "roomId": "mcp",
+      "type": "mcp",
+      "anchor": {
+        "x": 902,
+        "y": 240
+      },
+      "radius": 22
+    },
+    {
+      "id": "images",
+      "label": "Images",
+      "roomId": "images",
+      "type": "images",
+      "anchor": {
+        "x": 1420,
+        "y": 225
+      },
+      "radius": 24
+    },
+    {
+      "id": "log",
+      "label": "Log",
+      "roomId": "log",
+      "type": "log",
+      "anchor": {
+        "x": 1403,
+        "y": 516
+      },
+      "radius": 22
+    },
+    {
+      "id": "schedule",
+      "label": "Schedule",
+      "roomId": "schedule",
+      "type": "schedule",
+      "anchor": {
+        "x": 1622,
+        "y": 488
+      },
+      "radius": 22
+    },
+    {
+      "id": "skills",
+      "label": "Skills",
+      "roomId": "skills",
+      "type": "skills",
+      "anchor": {
+        "x": 752,
+        "y": 247
+      },
+      "radius": 24
+    },
+    {
+      "id": "gateway",
+      "label": "Gateway",
+      "roomId": "gateway",
+      "type": "gateway",
+      "anchor": {
+        "x": 968,
+        "y": 602
+      },
+      "radius": 24
+    },
+    {
+      "id": "agent",
+      "label": "Agent",
+      "roomId": "agent",
+      "type": "agent",
+      "anchor": {
+        "x": 1057,
+        "y": 858
+      },
+      "radius": 24
+    },
+    {
+      "id": "break_room",
+      "label": "Break Room",
+      "roomId": "break_room",
+      "type": "break_room",
+      "anchor": {
+        "x": 1560,
+        "y": 875
+      },
+      "radius": 28
+    },
+    {
+      "id": "task_queues",
+      "label": "Task Queues",
+      "roomId": "task_queues",
+      "type": "task_queues",
+      "anchor": {
+        "x": 968,
+        "y": 602
+      },
+      "radius": 22
+    },
+    {
+      "id": "alarm",
+      "label": "Alarm",
+      "roomId": "alarm",
+      "type": "alarm",
+      "anchor": {
+        "x": 1615,
+        "y": 208
+      },
+      "radius": 22
+    }
+  ]
+}

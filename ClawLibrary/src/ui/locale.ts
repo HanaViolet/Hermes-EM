@@ -1,0 +1,96 @@
+export type UiLocale = 'en' | 'zh';
+
+export const RESOURCE_LABELS: Record<string, Record<UiLocale, string>> = {
+  document:    { en: 'Reports & Analysis',       zh: '报告与分析室' },
+  images:      { en: 'Chart Room',               zh: '图表分析室' },
+  memory:      { en: 'Strategy Memory',          zh: '策略记忆库' },
+  skills:      { en: 'Strategy Lab',             zh: '策略实验室' },
+  gateway:     { en: 'Market Data Room',         zh: '市场数据室' },
+  log:         { en: 'Execution Logs',           zh: '执行日志台' },
+  mcp:         { en: 'Indicator Lab',            zh: '指标实验室' },
+  schedule:    { en: 'Decision Desk',            zh: '决策调度台' },
+  alarm:       { en: 'Risk Alert Room',          zh: '风险报警室' },
+  agent:       { en: 'Agent Monitor',            zh: '运行监控室' },
+  task_queues: { en: 'Backtest Lab',             zh: '回测实验室' },
+  break_room:  { en: 'Break Room',               zh: '休息室' }
+};
+
+export const UI_TEXT = {
+  title:        { en: 'Trading Agent Control Room', zh: '量化交易 Agent 控制室' },
+  recentActivity: { en: 'Workflow Logs',            zh: '工作流日志' },
+  noActivity:     { en: 'No tasks yet. Submit a new analysis to begin.', zh: '暂无任务。提交新分析开始。' },
+  archiveLive:    { en: 'TRADING LIVE',             zh: '实时交易' },
+  quickRooms:     { en: 'Quick room routing',       zh: '快速房间路由' },
+  statsAssets:    { en: 'rooms',                    zh: '模块' },
+  statsLive:      { en: 'active',                   zh: '活跃' },
+  statsEvents:    { en: 'events',                   zh: '事件' },
+  waiting:        { en: 'waiting',                  zh: '等待中' },
+  hideInfo:       { en: 'Hide Info',                zh: '隐藏信息' },
+  showInfo:       { en: 'Show Info',                zh: '显示信息' },
+  shortcuts:      { en: 'Shortcuts',                zh: '快捷键' },
+  search:         { en: 'Search',                   zh: '搜索' },
+  copyContext:    { en: 'Copy Context',             zh: '复制上下文' },
+  close:          { en: 'Close',                    zh: '关闭' },
+  grid:           { en: 'Grid',                     zh: '网格' },
+  list:           { en: 'List',                     zh: '列表' },
+  allKinds:       { en: 'All Kinds',                zh: '全部分类' },
+  recommended:    { en: 'Recommended',              zh: '推荐' },
+  newest:         { en: 'Newest',                   zh: '最新' },
+  oldest:         { en: 'Oldest',                   zh: '最早' },
+  largest:        { en: 'Largest',                  zh: '最大' },
+  smallest:       { en: 'Smallest',                 zh: '最小' },
+  theme:          { en: 'Theme',                    zh: '主题' },
+  debug:          { en: 'Debug',                    zh: '调试' },
+  clawSkin:       { en: 'Skin',                     zh: '皮肤' },
+  preview:        { en: 'Preview',                  zh: '预览' },
+  loadingPreview: { en: 'Loading preview…',         zh: '预览加载中…' },
+  open:           { en: 'Open',                     zh: '打开' },
+  openFolder:     { en: 'Open Folder',              zh: '打开目录' },
+  copyPath:       { en: 'Copy Path',                zh: '复制路径' },
+  copyExcerpt:    { en: 'Copy Excerpt',             zh: '复制摘要' },
+  openSource:     { en: 'Open Source',              zh: '打开来源' },
+  copySource:     { en: 'Copy Source',              zh: '复制来源' },
+  openTopItem:    { en: 'Open Top Item',            zh: '打开首项' },
+  copyDetail:     { en: 'Copy Detail',              zh: '复制详情' },
+  topItem:        { en: 'Top Item',                 zh: '首项' },
+  recentEvents:   { en: 'Recent Events',            zh: '最近事件' },
+  status:         { en: 'Status',                   zh: '状态' },
+  source:         { en: 'Source',                   zh: '来源' },
+  signal:         { en: 'Signal',                   zh: '信号' },
+  focus:          { en: 'Focus',                    zh: '焦点' },
+  pointer:        { en: 'Pointer',                  zh: '指针' },
+  client:         { en: 'Client',                   zh: '屏幕' },
+  scene:          { en: 'Scene',                    zh: '场景' },
+  lastClick:      { en: 'Last Click',               zh: '上次点击' },
+  clickClient:    { en: 'Click Client',             zh: '点击屏幕' },
+  stageInside:    { en: 'Inside Stage',             zh: '在场景内' },
+  stageOutside:   { en: 'Outside Stage',            zh: '场景外' },
+  active:         { en: 'Active',                   zh: '活跃' },
+  idle:           { en: 'Idle',                     zh: '空闲' },
+  alert:          { en: 'Alert',                    zh: '告警' },
+  offline:        { en: 'Offline',                  zh: '离线' },
+
+  // Trading-specific HUD texts
+  ticker:         { en: 'Ticker',                   zh: '股票代码' },
+  strategy:       { en: 'Strategy',                 zh: '策略' },
+  decision:       { en: 'Decision',                 zh: '决策' },
+  sharpe:         { en: 'Sharpe',                   zh: '夏普比率' },
+  totalReturn:    { en: 'Total Return',             zh: '总收益' },
+  maxDrawdown:    { en: 'Max Drawdown',             zh: '最大回撤' },
+  newTask:        { en: 'New Task',                 zh: '新建任务' },
+  runAnalysis:    { en: 'Run Analysis',             zh: '运行分析' },
+  resetState:     { en: 'Reset',                    zh: '重置状态' },
+  viewReport:     { en: 'View Report',              zh: '查看报告' },
+  taskSubmitted:  { en: 'Task submitted.',           zh: '任务已提交。' },
+  taskRunning:    { en: 'Analysis running...',       zh: '分析运行中...' },
+  taskDone:       { en: 'Analysis complete.',        zh: '分析完成。' },
+  taskError:      { en: 'Analysis failed.',          zh: '分析失败。' },
+} as const;
+
+export function resourceLabel(id: string, locale: UiLocale): string {
+  return RESOURCE_LABELS[id]?.[locale] ?? id;
+}
+
+export function uiText<K extends keyof typeof UI_TEXT>(key: K, locale: UiLocale): string {
+  return UI_TEXT[key][locale];
+}

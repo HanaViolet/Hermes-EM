@@ -1,17 +1,17 @@
 {
   "mode": "live",
-  "generatedAt": "2026-06-04T10:14:07.767761+00:00",
+  "generatedAt": "2026-06-04T12:09:19.486904+00:00",
   "resources": [
     {
       "id": "document",
       "title": "Reports & Analysis",
-      "status": "done",
+      "status": "idle",
       "items": [
         {
           "id": "rp-1",
           "title": "Report: SPY",
           "meta": "document",
-          "excerpt": "# Trading Agent Report: SPY\n\n## Final Decision\n- Decision: Hold\n- Confidence: Low\n\n## Strategy\n- Selected Strategy: momentum\n- Latest Signal: Cash\n\n## Backtest\n- Total Return: 43.16%\n- Benchmark Total"
+          "excerpt": "No report yet"
         }
       ],
       "itemCount": 1,
@@ -69,7 +69,7 @@
     {
       "id": "skills",
       "title": "Strategy Lab",
-      "status": "done",
+      "status": "idle",
       "items": [
         {
           "id": "st-1",
@@ -79,30 +79,12 @@
         },
         {
           "id": "st-2",
-          "title": "Signal: Hold",
+          "title": "Signal: N/A",
           "meta": "metric",
           "excerpt": "Trade signal"
-        },
-        {
-          "id": "sc-ma",
-          "title": "ma: score=0.342",
-          "meta": "metric",
-          "excerpt": "Return 42.36% | Sharpe 0.589 | Buy"
-        },
-        {
-          "id": "sc-rsi",
-          "title": "rsi: score=0.446",
-          "meta": "metric",
-          "excerpt": "Return 39.72% | Sharpe 0.633 | Buy"
-        },
-        {
-          "id": "sc-momentum",
-          "title": "momentum: score=0.466",
-          "meta": "metric",
-          "excerpt": "Return 43.16% | Sharpe 0.64 | Buy"
         }
       ],
-      "itemCount": 5,
+      "itemCount": 2,
       "stats": [
         {
           "label": "en",
@@ -129,9 +111,9 @@
         },
         {
           "id": "gw-2",
-          "title": "Rows loaded: 14",
+          "title": "Rows loaded: 4",
           "meta": "metric",
-          "excerpt": "Loaded 14 rows for SPY"
+          "excerpt": "Loaded 4 rows for SPY"
         }
       ],
       "itemCount": 2,
@@ -170,7 +152,7 @@
     {
       "id": "mcp",
       "title": "Indicator Lab",
-      "status": "done",
+      "status": "active",
       "items": [
         {
           "id": "ind-rows",
@@ -269,17 +251,17 @@
     {
       "id": "alarm",
       "title": "Risk Alert Room",
-      "status": "done",
+      "status": "idle",
       "items": [
         {
           "id": "rk-1",
-          "title": "Max DD: -15.42%",
+          "title": "Max DD: 0%",
           "meta": "metric",
           "excerpt": "Maximum drawdown"
         },
         {
           "id": "rk-2",
-          "title": "Confidence: Low",
+          "title": "Confidence: N/A",
           "meta": "metric",
           "excerpt": "Decision confidence"
         }
@@ -305,13 +287,13 @@
       "items": [
         {
           "id": "ag-1",
-          "title": "Stage: Done",
+          "title": "Stage: Indicator",
           "meta": "info",
           "excerpt": "Current workflow stage"
         },
         {
           "id": "ag-2",
-          "title": "Progress: 100%",
+          "title": "Progress: 30%",
           "meta": "metric",
           "excerpt": "Workflow progress"
         }
@@ -333,17 +315,17 @@
     {
       "id": "task_queues",
       "title": "Backtest Lab",
-      "status": "done",
+      "status": "idle",
       "items": [
         {
           "id": "bt-1",
-          "title": "Sharpe: 0.64",
+          "title": "Sharpe: 0",
           "meta": "metric",
           "excerpt": "Risk-adjusted return"
         },
         {
           "id": "bt-2",
-          "title": "Return: 43.16%",
+          "title": "Return: 0%",
           "meta": "metric",
           "excerpt": "Total return"
         },
@@ -355,7 +337,7 @@
         },
         {
           "id": "bt-4",
-          "title": "Trades: 98",
+          "title": "Trades: ?",
           "meta": "metric",
           "excerpt": "Number of trades"
         }
@@ -377,22 +359,9 @@
     {
       "id": "break_room",
       "title": "Break Room",
-      "status": "done",
-      "items": [
-        {
-          "id": "br-1",
-          "title": "Last: SPY",
-          "meta": "info",
-          "excerpt": "Completed analysis for SPY"
-        },
-        {
-          "id": "br-2",
-          "title": "Decision: Hold",
-          "meta": "metric",
-          "excerpt": "Final trading decision"
-        }
-      ],
-      "itemCount": 2,
+      "status": "idle",
+      "items": [],
+      "itemCount": 0,
       "stats": [
         {
           "label": "en",
@@ -409,137 +378,323 @@
   ],
   "recentEvents": [
     {
-      "resourceId": "break_room",
+      "resourceId": "mcp",
+      "type": "access",
+      "detail": "Task: SPY auto",
+      "timestamp": "2026-06-04T12:09:19.486904+00:00"
+    },
+    {
+      "resourceId": "mcp",
+      "type": "access",
+      "detail": "Start loading market data",
+      "timestamp": "2026-06-04T12:09:19.486904+00:00"
+    },
+    {
+      "resourceId": "mcp",
       "type": "access",
       "detail": "Loaded 1258 rows",
-      "timestamp": "2026-06-04T10:14:07.767761+00:00"
+      "timestamp": "2026-06-04T12:09:19.486904+00:00"
     },
     {
-      "resourceId": "break_room",
+      "resourceId": "mcp",
       "type": "access",
       "detail": "Start calculating MA, RSI, MACD and volatility",
-      "timestamp": "2026-06-04T10:14:07.767761+00:00"
-    },
-    {
-      "resourceId": "break_room",
-      "type": "access",
-      "detail": "Compare candidate strategies",
-      "timestamp": "2026-06-04T10:14:07.767761+00:00"
-    },
-    {
-      "resourceId": "break_room",
-      "type": "access",
-      "detail": "Apply volatility filter and stop-loss to ma signal",
-      "timestamp": "2026-06-04T10:14:07.767761+00:00"
-    },
-    {
-      "resourceId": "break_room",
-      "type": "access",
-      "detail": "Calculate ma strategy returns vs benchmark",
-      "timestamp": "2026-06-04T10:14:07.767761+00:00"
-    },
-    {
-      "resourceId": "break_room",
-      "type": "access",
-      "detail": "Apply volatility filter and stop-loss to rsi signal",
-      "timestamp": "2026-06-04T10:14:07.767761+00:00"
-    },
-    {
-      "resourceId": "break_room",
-      "type": "access",
-      "detail": "Calculate rsi strategy returns vs benchmark",
-      "timestamp": "2026-06-04T10:14:07.767761+00:00"
-    },
-    {
-      "resourceId": "break_room",
-      "type": "access",
-      "detail": "Apply volatility filter and stop-loss to momentum signal",
-      "timestamp": "2026-06-04T10:14:07.767761+00:00"
-    },
-    {
-      "resourceId": "break_room",
-      "type": "access",
-      "detail": "Calculate momentum strategy returns vs benchmark",
-      "timestamp": "2026-06-04T10:14:07.767761+00:00"
-    },
-    {
-      "resourceId": "break_room",
-      "type": "access",
-      "detail": "Strategies compared: 3 candidates",
-      "timestamp": "2026-06-04T10:14:07.767761+00:00"
-    },
-    {
-      "resourceId": "break_room",
-      "type": "access",
-      "detail": "Generate performance summary and risk analysis",
-      "timestamp": "2026-06-04T10:14:07.767761+00:00"
-    },
-    {
-      "resourceId": "break_room",
-      "type": "access",
-      "detail": "Workflow completed",
-      "timestamp": "2026-06-04T10:14:07.767761+00:00"
+      "timestamp": "2026-06-04T12:09:19.486904+00:00"
     }
   ],
   "focus": {
-    "resourceId": "break_room",
-    "detail": "Completed. Decision: Hold",
-    "reason": "Complete",
-    "actorState": "resting"
+    "resourceId": "mcp",
+    "detail": "",
+    "reason": "Indicator Calc",
+    "actorState": "researching"
   },
-  "activeAgents": [],
+  "activeAgents": [
+    {
+      "id": "calculating_indicators",
+      "label": "Indicator Calc",
+      "status": "active",
+      "focus": "mcp"
+    }
+  ],
   "activeProcesses": [],
   "mainActorContext": {
-    "tokens": 100,
+    "tokens": 30,
     "maxTokens": 100,
-    "remaining": 0
+    "remaining": 70
   },
   "trading": {
     "ticker": "SPY",
     "strategy": "auto",
-    "global_status": "done",
-    "current_stage": "completed",
-    "progress": 100,
-    "summary": {
-      "selected_strategy": "momentum",
-      "decision": "Hold",
-      "confidence": "Low",
-      "total_return": 0.4316457687816986,
-      "benchmark_return": 1.3126825875009498,
-      "sharpe_ratio": 0.6401191629090021,
-      "max_drawdown": -0.15422775261995003,
-      "trades": 98
-    },
-    "report": {
-      "markdown": "# Trading Agent Report: SPY\n\n## Final Decision\n- Decision: Hold\n- Confidence: Low\n\n## Strategy\n- Selected Strategy: momentum\n- Latest Signal: Cash\n\n## Backtest\n- Total Return: 43.16%\n- Benchmark Total Return: 131.27%\n- Annual Return: 7.84%\n- Annual Volatility: 12.25%\n- Sharpe Ratio: 0.64\n- Max Drawdown: -15.42%\n- Benchmark Max Drawdown: -25.36%\n- Win Rate: 37.98%\n- Number of Trades: 98\n\n## Risk Notice\nThis result is based on historical backtesting and is for educational use only. It is not financial advice.\n",
-      "path": ""
-    },
+    "global_status": "running",
+    "current_stage": "calculating_indicators",
+    "progress": 30,
+    "summary": {},
+    "report": null,
     "error": null,
-    "decision": "Hold",
+    "decision": null,
     "logs": [
       "Task: SPY auto",
       "Start loading market data",
       "Loaded 1258 rows",
-      "Start calculating MA, RSI, MACD and volatility",
-      "Compare candidate strategies",
-      "Apply volatility filter and stop-loss to ma signal",
-      "Calculate ma strategy returns vs benchmark",
-      "Apply volatility filter and stop-loss to rsi signal",
-      "Calculate rsi strategy returns vs benchmark",
-      "Apply volatility filter and stop-loss to momentum signal",
-      "Calculate momentum strategy returns vs benchmark",
-      "Strategies compared: 3 candidates",
-      "Generate performance summary and risk analysis",
-      "Workflow completed"
+      "Start calculating MA, RSI, MACD and volatility"
     ],
     "visited_rooms": [
       "gateway",
-      "mcp",
-      "skills",
-      "alarm",
-      "task_queues",
-      "document",
-      "break_room"
-    ]
+      "mcp"
+    ],
+    "room_artifacts": {
+      "document": {
+        "room_id": "document",
+        "room_name": "报告与分析室",
+        "status": "idle",
+        "type": "report",
+        "primary": {
+          "label": "",
+          "value": "",
+          "unit": "",
+          "level": "neutral"
+        },
+        "summary": "",
+        "insight": "",
+        "metrics": [],
+        "details": {
+          "input": [],
+          "output": [],
+          "reasoning": []
+        },
+        "updated_at": ""
+      },
+      "images": {
+        "room_id": "images",
+        "room_name": "图表分析室",
+        "status": "idle",
+        "type": "chart",
+        "primary": {
+          "label": "",
+          "value": "",
+          "unit": "",
+          "level": "neutral"
+        },
+        "summary": "",
+        "insight": "",
+        "metrics": [],
+        "details": {
+          "input": [],
+          "output": [],
+          "reasoning": []
+        },
+        "updated_at": ""
+      },
+      "memory": {
+        "room_id": "memory",
+        "room_name": "策略记忆库",
+        "status": "idle",
+        "type": "memory",
+        "primary": {
+          "label": "",
+          "value": "",
+          "unit": "",
+          "level": "neutral"
+        },
+        "summary": "",
+        "insight": "",
+        "metrics": [],
+        "details": {
+          "input": [],
+          "output": [],
+          "reasoning": []
+        },
+        "updated_at": ""
+      },
+      "skills": {
+        "room_id": "skills",
+        "room_name": "策略实验室",
+        "status": "idle",
+        "type": "strategy",
+        "primary": {
+          "label": "",
+          "value": "",
+          "unit": "",
+          "level": "neutral"
+        },
+        "summary": "",
+        "insight": "",
+        "metrics": [],
+        "details": {
+          "input": [],
+          "output": [],
+          "reasoning": []
+        },
+        "updated_at": ""
+      },
+      "gateway": {
+        "room_id": "gateway",
+        "room_name": "市场数据室",
+        "status": "active",
+        "type": "data",
+        "primary": {
+          "label": "",
+          "value": "",
+          "unit": "",
+          "level": "neutral"
+        },
+        "summary": "Processing: 市场数据室",
+        "insight": "",
+        "metrics": [],
+        "details": {
+          "input": [],
+          "output": [],
+          "reasoning": []
+        },
+        "updated_at": "2026-06-04T12:09:15.425403+00:00"
+      },
+      "log": {
+        "room_id": "log",
+        "room_name": "执行日志台",
+        "status": "idle",
+        "type": "execution",
+        "primary": {
+          "label": "",
+          "value": "",
+          "unit": "",
+          "level": "neutral"
+        },
+        "summary": "",
+        "insight": "",
+        "metrics": [],
+        "details": {
+          "input": [],
+          "output": [],
+          "reasoning": []
+        },
+        "updated_at": ""
+      },
+      "mcp": {
+        "room_id": "mcp",
+        "room_name": "指标实验室",
+        "status": "active",
+        "type": "indicator",
+        "primary": {
+          "label": "",
+          "value": "",
+          "unit": "",
+          "level": "neutral"
+        },
+        "summary": "Processing: 指标实验室",
+        "insight": "",
+        "metrics": [],
+        "details": {
+          "input": [],
+          "output": [],
+          "reasoning": []
+        },
+        "updated_at": "2026-06-04T12:09:19.484891+00:00"
+      },
+      "schedule": {
+        "room_id": "schedule",
+        "room_name": "决策调度台",
+        "status": "idle",
+        "type": "decision",
+        "primary": {
+          "label": "",
+          "value": "",
+          "unit": "",
+          "level": "neutral"
+        },
+        "summary": "",
+        "insight": "",
+        "metrics": [],
+        "details": {
+          "input": [],
+          "output": [],
+          "reasoning": []
+        },
+        "updated_at": ""
+      },
+      "alarm": {
+        "room_id": "alarm",
+        "room_name": "风险报警室",
+        "status": "idle",
+        "type": "risk",
+        "primary": {
+          "label": "",
+          "value": "",
+          "unit": "",
+          "level": "neutral"
+        },
+        "summary": "",
+        "insight": "",
+        "metrics": [],
+        "details": {
+          "input": [],
+          "output": [],
+          "reasoning": []
+        },
+        "updated_at": ""
+      },
+      "agent": {
+        "room_id": "agent",
+        "room_name": "运行监控室",
+        "status": "idle",
+        "type": "monitor",
+        "primary": {
+          "label": "",
+          "value": "",
+          "unit": "",
+          "level": "neutral"
+        },
+        "summary": "",
+        "insight": "",
+        "metrics": [],
+        "details": {
+          "input": [],
+          "output": [],
+          "reasoning": []
+        },
+        "updated_at": ""
+      },
+      "task_queues": {
+        "room_id": "task_queues",
+        "room_name": "回测实验室",
+        "status": "idle",
+        "type": "backtest",
+        "primary": {
+          "label": "",
+          "value": "",
+          "unit": "",
+          "level": "neutral"
+        },
+        "summary": "",
+        "insight": "",
+        "metrics": [],
+        "details": {
+          "input": [],
+          "output": [],
+          "reasoning": []
+        },
+        "updated_at": ""
+      },
+      "break_room": {
+        "room_id": "break_room",
+        "room_name": "休息室",
+        "status": "idle",
+        "type": "idle",
+        "primary": {
+          "label": "",
+          "value": "",
+          "unit": "",
+          "level": "neutral"
+        },
+        "summary": "",
+        "insight": "",
+        "metrics": [],
+        "details": {
+          "input": [],
+          "output": [],
+          "reasoning": []
+        },
+        "updated_at": ""
+      }
+    }
   }
 }

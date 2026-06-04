@@ -78,6 +78,75 @@ ROOM_LABELS: dict[str, dict[str, str]] = {
 }
 
 
+def _make_artifact(room_id: str, room_name: str, room_type: str) -> dict:
+    """Create an initial idle artifact for one room."""
+    return {
+        "room_id": room_id,
+        "room_name": room_name,
+        "status": "idle",
+        "type": room_type,
+        "primary": {"label": "", "value": "", "unit": "", "level": "neutral"},
+        "summary": "",
+        "insight": "",
+        "metrics": [],
+        "details": {"input": [], "output": [], "reasoning": []},
+        "updated_at": "",
+    }
+
+ROOM_TYPES = {
+    "gateway": "data", "mcp": "indicator", "skills": "strategy",
+    "memory": "memory", "images": "chart", "alarm": "risk",
+    "schedule": "decision", "log": "execution", "agent": "monitor",
+    "document": "report", "task_queues": "backtest", "break_room": "idle",
+}
+
+def _init_all_artifacts() -> dict:
+    """Create idle artifacts for all 12 rooms."""
+    return {
+        rid: _make_artifact(rid, ROOM_LABELS[rid]["zh"], ROOM_TYPES.get(rid, "idle"))
+        for rid in ROOM_LABELS
+    }
+
+def set_room_active(room_id: str, message: str = "") -> None:
+    """Mark a room as active (Agent is working here)."""
+    artifacts = _telemetry_state.setdefault("room_artifacts", _init_all_artifacts())
+    if room_id in artifacts:
+        a = artifacts[room_id]
+        a["status"] = "active"
+        a["summary"] = message or f"Processing {a['room_name']}..."
+        a["updated_at"] = datetime.now(timezone.utc).isoformat()
+    _persist_telemetry()
+
+def set_room_done(room_id: str, artifact: dict) -> None:
+    """Mark a room as done with full artifact data."""
+    artifacts = _telemetry_state.setdefault("room_artifacts", _init_all_artifacts())
+    if room_id in artifacts:
+        artifacts[room_id] = artifact
+        artifacts[room_id]["status"] = "done"
+        artifacts[room_id]["updated_at"] = datetime.now(timezone.utc).isoformat()
+    _persist_telemetry()
+
+def set_room_warning(room_id: str, artifact: dict) -> None:
+    """Mark a room with a warning status."""
+    artifacts = _telemetry_state.setdefault("room_artifacts", _init_all_artifacts())
+    if room_id in artifacts:
+        artifacts[room_id] = artifact
+        artifacts[room_id]["status"] = "warning"
+        artifacts[room_id]["updated_at"] = datetime.now(timezone.utc).isoformat()
+    _persist_telemetry()
+
+def set_room_error(room_id: str, message: str = "") -> None:
+    """Mark a room as error."""
+    artifacts = _telemetry_state.setdefault("room_artifacts", _init_all_artifacts())
+    if room_id in artifacts:
+        a = artifacts[room_id]
+        a["status"] = "error"
+        a["summary"] = message or "Error"
+        a["insight"] = message
+        a["updated_at"] = datetime.now(timezone.utc).isoformat()
+    _persist_telemetry()
+
+
 def _build_snapshot() -> dict:
     """Build an OpenClawSnapshot-compatible dict from the internal state."""
     stage: str = _telemetry_state.get("current_stage", "waiting")
@@ -213,6 +282,7 @@ def _build_snapshot() -> dict:
             "decision": _telemetry_state.get("decision"),
             "logs": _telemetry_state.get("logs", []),
             "visited_rooms": _telemetry_state.get("visited_rooms", []),
+            "room_artifacts": _telemetry_state.get("room_artifacts", {}),
         },
     }
 
@@ -261,6 +331,7 @@ def reset_telemetry(task: dict | None = None) -> None:
     _telemetry_state["metrics"] = {}
     _telemetry_state["visited_rooms"] = []
     _telemetry_state["strategy_compare"] = []
+    _telemetry_state["room_artifacts"] = _init_all_artifacts()
     _telemetry_state["updated_at"] = datetime.now(timezone.utc).isoformat()
     _persist_telemetry()
 
@@ -286,8 +357,12 @@ def update_workflow(
         _telemetry_state["current_stage"] = current_stage
         # Track which room this stage maps to
         room = STAGE_TO_ROOM.get(current_stage)
-        if room and room not in _telemetry_state.setdefault("visited_rooms", []):
-            _telemetry_state["visited_rooms"].append(room)
+        if room:
+            if room not in _telemetry_state.setdefault("visited_rooms", []):
+                _telemetry_state["visited_rooms"].append(room)
+            # Mark room as active in artifacts
+            zh_name = ROOM_LABELS.get(room, {}).get("zh", room)
+            set_room_active(room, f"Processing: {zh_name}")
     if progress is not None:
         _telemetry_state["progress"] = progress
     if result_summary:

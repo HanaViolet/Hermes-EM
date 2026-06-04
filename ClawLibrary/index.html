@@ -2666,7 +2666,7 @@
         left: 8px;
         top: 70px;
         width: 260px;
-        bottom: 48px;
+        bottom: 8px;
         display: flex;
         flex-direction: column;
         gap: 10px;
@@ -2777,60 +2777,183 @@
       .decision-badge.sell { background: rgba(251,113,133,0.18); color: #fb7185; border: 1px solid rgba(251,113,133,0.4); }
       .decision-badge.hold { background: rgba(251,191,36,0.18); color: #fbbf24; border: 1px solid rgba(251,191,36,0.4); }
 
-      /* ── Trading Dashboard: Bottom Chat Drawer ────────────────── */
-      .chat-drawer {
-        position: fixed;
-        bottom: 0;
-        left: 8px;
-        right: 8px;
-        z-index: 100;
-        font-family: var(--font-sans);
-      }
-      .chat-drawer-bar {
-        background: rgba(15, 23, 32, 0.96);
-        border: 1px solid #2a3a4a;
-        border-radius: 8px 8px 0 0;
-        padding: 10px 16px;
-        cursor: pointer;
-        font-size: 13px;
-        color: #94a3b8;
-        text-align: center;
-        transition: color 0.2s;
-      }
-      .chat-drawer-bar:hover { color: #36d399; }
-      .chat-drawer-body {
-        background: rgba(15, 23, 32, 0.96);
-        border: 1px solid #2a3a4a;
-        border-top: none;
-        border-radius: 0 0 8px 8px;
-        max-height: 200px;
-        overflow-y: auto;
-      }
-      .chat-drawer-body.hidden { display: none !important; }
+      /* ── Trading Dashboard: Bottom Chat Drawer (hidden) ─────── */
+      .chat-drawer, .chat-drawer-bar, .chat-drawer-body,
+      .drawer-tabs, .drawer-tab, .drawer-content,
+      .drawer-overview-empty, .drawer-overview-grid,
+      .drawer-hero, .drawer-hero-value, .drawer-hero-meta, .drawer-hero-insight,
+      .drawer-metrics-section, .drawer-insight, .drawer-details,
+      .drawer-details-grid, .drawer-details-label, .drawer-details-value { display: none; }
 
-      /* Drawer tabs */
-      .drawer-tabs {
-        display: flex;
-        gap: 0;
-        border-bottom: 1px solid #2a3a4a;
+      /* Status colors */
+      .status-dot-sm {
+        display: inline-block;
+        width: 7px; height: 7px;
+        border-radius: 50%;
+        margin-right: 5px;
+        vertical-align: middle;
       }
-      .drawer-tab {
-        flex: 1;
-        background: transparent;
+      .status-dot-sm.idle    { background: #64748b; }
+      .status-dot-sm.active  { background: #38bdf8; }
+      .status-dot-sm.done    { background: #36d399; }
+      .status-dot-sm.warning { background: #fbbf24; }
+      .status-dot-sm.error   { background: #fb7185; }
+
+      /* Action buttons */
+      .drawer-actions {
+        display: flex;
+        gap: 8px;
+        padding: 8px 12px 4px;
+      }
+      .drawer-action-primary {
+        background: #22d3ee;
+        color: #06111a;
         border: none;
-        color: #64748b;
-        font-family: var(--font-display);
-        font-size: 13px;
-        padding: 10px 16px;
+        border-radius: 8px;
+        padding: 6px 16px;
+        font-weight: 700;
+        font-size: 12px;
         cursor: pointer;
-        border-bottom: 2px solid transparent;
+      }
+      .drawer-action-secondary {
+        background: transparent;
+        color: #94a3b8;
+        border: 1px solid rgba(72,104,128,0.5);
+        border-radius: 8px;
+        padding: 6px 12px;
+        font-size: 11px;
+        cursor: pointer;
+      }
+      .drawer-action-secondary:hover { color: #e5edf5; border-color: #22d3ee; }
+
+      /* Timeline item */
+      .timeline-item {
+        display: grid;
+        grid-template-columns: 72px 1fr;
+        gap: 12px;
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(72,104,128,0.25);
+        font-size: 12px;
+      }
+      .timeline-time { color: #94a3b8; font-family: monospace; }
+      .timeline-content-text { color: #e5edf5; }
+
+      /* AI quick questions */
+      .ai-quick-btn {
+        background: rgba(34,211,238,0.08);
+        border: 1px solid rgba(34,211,238,0.25);
+        color: #22d3ee;
+        border-radius: 14px;
+        padding: 4px 14px;
+        font-size: 11px;
+        cursor: pointer;
+      }
+      .ai-quick-btn:hover { background: rgba(34,211,238,0.16); }
+
+      /* Hide old sub-tab styles */
+      .drawer-subtabs, .drawer-subtab { display: none; }
+
+      /* ══════ Room Modal ══════ */
+      .room-modal-backdrop {
+        position: fixed; inset: 0;
+        background: rgba(0,0,0,0.58);
+        backdrop-filter: blur(4px);
+        display: flex; justify-content: center; align-items: center;
+        z-index: 999;
+      }
+      .room-modal-backdrop.hidden { display: none; }
+
+      .room-modal {
+        width: min(960px, 90vw);
+        max-height: 82vh;
+        overflow: hidden;
+        border-radius: 16px;
+        background: rgba(8,18,28,0.98);
+        border: 1px solid rgba(56,189,248,0.28);
+        box-shadow: 0 24px 80px rgba(0,0,0,0.48);
+        color: #e5edf5;
+        display: flex; flex-direction: column;
+      }
+
+      .room-modal-header {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 16px 22px 10px;
+      }
+      .room-modal-title { font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 8px; color: #e5edf5; }
+      .room-modal-meta { font-size: 12px; color: #8ea4b8; flex: 1; text-align: center; }
+      .room-modal-close {
+        width: 28px; height: 28px; border-radius: 50%;
+        border: 1px solid rgba(72,104,128,0.5);
+        background: rgba(15,30,44,0.8); color: #94a3b8;
+        font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+        transition: background 0.2s, border-color 0.2s, color 0.2s;
+      }
+      .room-modal-close:hover { background: rgba(251,113,133,0.15); border-color: #fb7185; color: #fb7185; }
+
+      .room-modal-tabs {
+        display: flex; gap: 28px; padding: 0 22px 0;
+        border-bottom: 1px solid rgba(72,104,128,0.2);
+      }
+      .room-modal-tab {
+        background: transparent; border: none;
+        padding: 10px 0; font-size: 13px; cursor: pointer;
+        color: #8ea4b8; border-bottom: 2px solid transparent;
         transition: color 0.2s, border-color 0.2s;
       }
-      .drawer-tab:hover { color: #94a3b8; }
-      .drawer-tab.active { color: #36d399; border-bottom-color: #36d399; }
+      .room-modal-tab:hover { color: #cbd5e1; }
+      .room-modal-tab.active { color: #22d3ee; border-bottom-color: #22d3ee; }
 
-      .drawer-content { max-height: 200px; overflow-y: auto; }
-      .drawer-content.hidden { display: none; }
+      .room-modal-content {
+        padding: 18px 20px 22px; max-height: calc(82vh - 110px); overflow-y: auto;
+      }
+      .room-modal-content.hidden { display: none; }
+
+      /* Hero */
+      .room-hero-summary {
+        padding: 16px; border-radius: 14px;
+        background: linear-gradient(135deg, rgba(34,211,238,0.10), rgba(15,30,44,0.92));
+        border: 1px solid rgba(34,211,238,0.26); margin-bottom: 14px;
+      }
+      .room-hero-value { font-size: 38px; line-height: 1; font-weight: 900; letter-spacing: 0.04em; }
+      .room-hero-value.buy  { color: #36d399; } .room-hero-value.sell { color: #fb7185; } .room-hero-value.hold { color: #fbbf24; }
+      .room-hero-text { margin-top: 8px; font-size: 14px; color: #cbd5e1; }
+      .room-hero-insight-line { margin-top: 6px; color: #dbeafe; font-size: 13px; }
+
+      /* Metric grid */
+      .room-metric-grid {
+        display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px;
+      }
+      .room-metric-card {
+        padding: 12px; border-radius: 12px;
+        background: rgba(15,30,44,0.88); border: 1px solid rgba(72,104,128,0.42);
+      }
+      .room-metric-label { font-size: 11px; color: #8ea4b8; }
+      .room-metric-value { margin-top: 6px; font-size: 19px; font-weight: 800; }
+      .room-metric-value.positive { color: #36d399; } .room-metric-value.neutral { color: #38bdf8; }
+      .room-metric-value.warning { color: #fbbf24; } .room-metric-value.danger  { color: #fb7185; }
+
+      /* Insight block */
+      .room-insight-block {
+        padding: 14px 16px; border-radius: 12px;
+        background: rgba(34,211,238,0.07); border-left: 3px solid rgba(34,211,238,0.85); margin-bottom: 14px;
+      }
+      .room-insight-title { font-size: 13px; font-weight: 700; color: #67e8f9; margin-bottom: 6px; }
+      .room-insight-text { font-size: 13px; line-height: 1.7; color: #dbeafe; }
+      .room-insight-reason { margin-top: 4px; font-size: 12px; color: #94a3b8; padding-left: 8px; }
+
+      /* Details block */
+      .room-details-block { display: grid; grid-template-columns: 1fr 1fr 1.4fr; gap: 10px; }
+      .room-detail-card { padding: 12px; border-radius: 12px; background: rgba(8,18,28,0.72); border: 1px solid rgba(72,104,128,0.35); }
+      .room-detail-title { font-size: 11px; color: #94a3b8; margin-bottom: 6px; }
+      .room-detail-list { margin: 0; padding-left: 14px; font-size: 12px; line-height: 1.6; color: #e5edf5; }
+
+      /* Lightweight room cards in sidebar */
+      .resource-menu button .room-card-primary {
+        font-size: 10px; color: #94a3b8; margin-left: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      }
+
+      /* Hide old asset-modal (replaced by Room Modal) */
+      .asset-modal { display: none !important; }
       .chat-messages {
         padding: 12px;
         min-height: 60px;
@@ -3049,43 +3172,31 @@
     <!-- Right panel restore tab (visible when panel is hidden) -->
     <div class="right-panel-tab" id="right-panel-tab" onclick="document.querySelector('.menu-panel').classList.remove('collapsed');this.classList.remove('visible');document.getElementById('archive-hide-btn').textContent='◀';document.documentElement.style.setProperty('--stage-right-gutter','194px');setTimeout(function(){window.dispatchEvent(new Event('resize'));},350);" title="Show Control Panel">▶ Control Panel</div>
 
-    <!-- Trading Dashboard: Bottom Drawer -->
-    <div class="chat-drawer" id="chat-drawer">
-      <div class="chat-drawer-bar" id="chat-toggle" onclick="var b=document.getElementById('chat-body');if(b.classList.contains('hidden')){b.classList.remove('hidden');this.textContent='▼ Close';}else{b.classList.add('hidden');this.textContent='▲ Room · Timeline · AI';}">▲ Room · Timeline · AI</div>
-      <div class="chat-drawer-body hidden" id="chat-body">
-        <div class="drawer-tabs" id="drawer-tabs">
-          <button class="drawer-tab active" data-tab="room" onclick="switchDrawerTab('room')">Room Details</button>
-          <button class="drawer-tab" data-tab="timeline" onclick="switchDrawerTab('timeline')">Timeline</button>
-          <button class="drawer-tab" data-tab="history" onclick="switchDrawerTab('history')">History</button>
-          <button class="drawer-tab" data-tab="chat" onclick="switchDrawerTab('chat')">AI Chat</button>
+    <!-- Room Modal -->
+    <div class="room-modal-backdrop hidden" id="room-modal-backdrop" onclick="if(event.target===this)closeRoomModal()">
+      <div class="room-modal" id="room-modal">
+        <div class="room-modal-header">
+          <div class="room-modal-title"><span class="status-dot-sm" id="rm-dot"></span><span id="rm-name">Room</span></div>
+          <div class="room-modal-meta"><span id="rm-status">idle</span> · <span id="rm-time"></span></div>
+          <button class="room-modal-close" onclick="closeRoomModal()" title="Close (ESC)">✕</button>
         </div>
-        <div class="drawer-content" id="drawer-content-room">
-          <div class="drawer-subtabs" style="display:flex;gap:0;border-bottom:1px solid rgba(42,58,74,0.3);">
-            <button class="drawer-subtab active" data-subtab="summary" onclick="switchRoomSubtab('summary')" style="flex:1;background:transparent;border:none;color:#64748b;font-size:11px;padding:6px 8px;cursor:pointer;border-bottom:2px solid transparent;">Summary</button>
-            <button class="drawer-subtab" data-subtab="metrics" onclick="switchRoomSubtab('metrics')" style="flex:1;background:transparent;border:none;color:#64748b;font-size:11px;padding:6px 8px;cursor:pointer;border-bottom:2px solid transparent;">Metrics</button>
-            <button class="drawer-subtab" data-subtab="decision" onclick="switchRoomSubtab('decision')" style="flex:1;background:transparent;border:none;color:#64748b;font-size:11px;padding:6px 8px;cursor:pointer;border-bottom:2px solid transparent;">Decision</button>
-          </div>
-          <div id="room-sub-summary" style="padding:10px 12px;color:#94a3b8;font-size:12px;">Click a room on the map to view its details.</div>
-          <div id="room-sub-metrics" style="padding:10px 12px;color:#94a3b8;font-size:12px;display:none;"></div>
-          <div id="room-sub-decision" style="padding:10px 12px;color:#94a3b8;font-size:12px;display:none;"></div>
+        <div class="room-modal-tabs">
+          <button class="room-modal-tab active" data-rmtab="overview" onclick="switchRoomModalTab('overview')">概览</button>
+          <button class="room-modal-tab" data-rmtab="timeline" onclick="switchRoomModalTab('timeline')">时间轴</button>
+          <button class="room-modal-tab" data-rmtab="history" onclick="switchRoomModalTab('history')">历史</button>
+          <button class="room-modal-tab" data-rmtab="ai" onclick="switchRoomModalTab('ai')">AI解释</button>
         </div>
-        <div class="drawer-content hidden" id="drawer-content-timeline">
-          <div style="padding:12px;color:#94a3b8;font-size:12px;" id="timeline-content">Run an analysis to see the execution timeline.</div>
-        </div>
-        <div class="drawer-content hidden" id="drawer-content-history">
-          <div style="padding:12px;color:#94a3b8;font-size:12px;" id="history-content">Loading history...</div>
-        </div>
-        <div class="drawer-content hidden" id="drawer-content-chat">
-          <div class="chat-messages" id="chat-messages">
-            <div style="color:#94a3b8;font-size:11px;">AI trading analyst · LLM coming soon.<br>Quick questions: Why this decision? Main risks? Explain indicators.</div>
-          </div>
-          <div class="chat-input-row">
-            <input id="chat-input" type="text" placeholder="Ask about this decision..." disabled />
-            <button id="chat-send" type="button" disabled>Send</button>
-          </div>
-        </div>
+        <!-- Overview Content -->
+        <div class="room-modal-content" id="rm-content-overview"></div>
+        <!-- Timeline Content -->
+        <div class="room-modal-content hidden" id="rm-content-timeline"></div>
+        <!-- History Content -->
+        <div class="room-modal-content hidden" id="rm-content-history"></div>
+        <!-- AI Explain Content -->
+        <div class="room-modal-content hidden" id="rm-content-ai"></div>
       </div>
     </div>
+
     <div class="hud-title">
       <div class="hud-title-main" id="hud-title-main">量化交易 Agent 控制室</div>
     </div>
@@ -3759,18 +3870,212 @@
         });
       })();
     </script>
-    <!-- Trading Dashboard: Panel Update Script -->
+    <!-- Room Modal + Panel Update Script -->
     <script>
       // ── Drawer tab switching ────────────────────────────────
       function switchDrawerTab(tab) {
         document.querySelectorAll('.drawer-tab').forEach(function(t) { t.classList.toggle('active', t.dataset.tab === tab); });
         document.querySelectorAll('.drawer-content').forEach(function(c) { c.classList.toggle('hidden', c.id !== 'drawer-content-' + tab); });
       }
-      function switchRoomSubtab(subtab) {
-        document.querySelectorAll('.drawer-subtab').forEach(function(t) { t.classList.toggle('active', t.dataset.subtab === subtab); t.style.borderBottomColor = t.dataset.subtab === subtab ? '#36d399' : 'transparent'; t.style.color = t.dataset.subtab === subtab ? '#36d399' : '#64748b'; });
-        document.getElementById('room-sub-summary').style.display = subtab === 'summary' ? '' : 'none';
-        document.getElementById('room-sub-metrics').style.display = subtab === 'metrics' ? '' : 'none';
-        document.getElementById('room-sub-decision').style.display = subtab === 'decision' ? '' : 'none';
+
+      // ── Room Modal ───────────────────────────────────────────
+      function openRoomModal(roomId) {
+        var backdrop = document.getElementById('room-modal-backdrop');
+        fetch('/api/trading/snapshot?t=' + Date.now(), { cache: 'no-store' })
+          .then(function(r) { return r.json(); })
+          .then(function(snap) {
+            var arts = (snap.trading || {}).room_artifacts || {};
+            var a = arts[roomId];
+            // Fallback from resources
+            if (!a) {
+              var room = (snap.resources || []).find(function(r){ return r.id === roomId; });
+              if (room) {
+                var zh = ''; (room.stats||[]).forEach(function(s){ if(s.label==='zh')zh=s.value; });
+                a = {room_id:roomId, room_name:zh||room.title, status:room.status||'idle', type:'info',
+                  primary:{label:'',value:'',level:'neutral'}, summary:'', insight:'Run an analysis.',
+                  metrics:[], details:{input:[],output:[],reasoning:[]}, updated_at:''};
+              }
+            }
+            if (!a) return;
+            populateRoomModal(a);
+            backdrop.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+          });
+      }
+
+      function closeRoomModal() {
+        document.getElementById('room-modal-backdrop').classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+
+      function switchRoomModalTab(tab) {
+        document.querySelectorAll('.room-modal-tab').forEach(function(t){ t.classList.toggle('active', t.dataset.rmtab === tab); });
+        document.querySelectorAll('.room-modal-content').forEach(function(c){ c.classList.toggle('hidden', c.id !== 'rm-content-' + tab); });
+        // Populate tab content on switch
+        if (tab === 'timeline') populateTimelineTab();
+        if (tab === 'history') loadHistoryContent();
+        if (tab === 'ai') populateAITab();
+      }
+
+      // ESC key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeRoomModal();
+      });
+
+      function populateRoomModal(a) {
+        // Header
+        document.getElementById('rm-dot').className = 'status-dot-sm ' + (a.status || 'idle');
+        document.getElementById('rm-name').textContent = a.room_name || a.room_id;
+        document.getElementById('rm-status').textContent = a.status || 'idle';
+        document.getElementById('rm-time').textContent = (a.updated_at || '').slice(0,19) || '';
+
+        // Overview content
+        var html = '';
+        // Hero
+        var hv = String(a.primary && a.primary.value ? a.primary.value : '-');
+        var hcls = hv.toLowerCase().indexOf('buy')>=0?'buy':hv.toLowerCase().indexOf('sell')>=0?'sell':'hold';
+        html += '<div class="room-hero-summary">';
+        var heroUnit = a.primary && a.primary.unit ? ' '+a.primary.unit : '';
+        html += '<div class="room-hero-value '+hcls+'">'+hv+heroUnit+'</div>';
+        html += '<div class="room-hero-text">'+(a.primary?String(a.primary.label||''):'')+'</div>';
+        if (a.summary) html += '<div class="room-hero-text" style="color:#94a3b8;">'+(a.summary||'')+'</div>';
+        if (a.insight) html += '<div class="room-hero-insight-line">'+(a.insight||'')+'</div>';
+        html += '</div>';
+
+        // Key Metrics grid
+        var metrics = a.metrics || [];
+        if (metrics.length > 0) {
+          html += '<div class="room-metric-grid">';
+          metrics.slice(0,6).forEach(function(m) {
+            var lv = m.level || 'neutral';
+            html += '<div class="room-metric-card"><div class="room-metric-label">'+m.label+'</div><div class="room-metric-value '+lv+'">'+(m.value||'-')+(m.unit||'')+'</div>';
+            if (m.display === 'bar') {
+              var pct = Math.min(100, Math.max(0, parseFloat(m.value)||0));
+              html += '<div class="metric-bar-track" style="margin-top:6px;"><div class="metric-bar-fill '+lv+'" style="width:'+pct+'%"></div></div>';
+            }
+            if (m.signal) html += '<div style="font-size:10px;color:#94a3b8;margin-top:4px;">Signal: '+(m.signal||'').toUpperCase()+'</div>';
+            html += '</div>';
+          });
+          html += '</div>';
+        }
+
+        // Insight
+        html += '<div class="room-insight-block"><div class="room-insight-title">Insight</div><div class="room-insight-text">'+(a.insight||'No insight available.')+'</div>';
+        var reasoning = (a.details||{}).reasoning || [];
+        if (reasoning.length > 0) {
+          reasoning.forEach(function(r,i){ html += '<div class="room-insight-reason">'+(i+1)+'. '+r+'</div>'; });
+        }
+        html += '</div>';
+
+        // Details
+        var det = a.details || {};
+        html += '<div class="room-details-block">';
+        html += '<div class="room-detail-card"><div class="room-detail-title">Input</div><ul class="room-detail-list">'+(det.input||[]).map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div>';
+        html += '<div class="room-detail-card"><div class="room-detail-title">Output</div><ul class="room-detail-list">'+(det.output||[]).map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div>';
+        html += '<div class="room-detail-card"><div class="room-detail-title">Reasoning</div><ul class="room-detail-list">'+(det.reasoning||[]).map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div>';
+        html += '</div>';
+
+        document.getElementById('rm-content-overview').innerHTML = html;
+        switchRoomModalTab('overview');
+        populateTimelineTab();
+        populateAITab(a);
+        loadHistoryContent();
+      }
+
+      function populateTimelineTab() {
+        var el = document.getElementById('rm-content-timeline');
+        fetch('/api/trading/snapshot?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json();}).then(function(snap){
+          var visited = (snap.trading||{}).visited_rooms || [];
+          var rooms = snap.resources || [];
+          var map = {}; rooms.forEach(function(r){ map[r.id] = r; });
+          if (visited.length === 0) { el.innerHTML = '<div style="color:#64748b;font-size:12px;padding:12px;">No execution timeline yet.</div>'; return; }
+          var html = '';
+          visited.forEach(function(rid, i) {
+            var r = map[rid]; var zh = '';
+            if (r&&r.stats) r.stats.forEach(function(s){ if(s.label==='zh')zh=s.value; });
+            html += '<div class="timeline-item"><span class="timeline-time">Step '+(i+1)+'</span><span class="timeline-content-text">'+(zh||rid)+'</span></div>';
+          });
+          el.innerHTML = html;
+        });
+      }
+
+      function populateAITab(a) {
+        var el = document.getElementById('rm-content-ai');
+        var insight = (a||{}).insight || 'Run an analysis to see insights.';
+        var html = '<div style="padding:12px;font-size:13px;color:#94a3b8;">';
+        html += '<div style="font-size:14px;color:#22d3ee;margin-bottom:8px;">Rule-based Insight</div>';
+        html += '<div style="margin-bottom:6px;">'+insight+'</div>';
+        html += '<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">';
+        ['Why this decision?','What are the main risks?','Explain indicators','Suggest next action'].forEach(function(q){
+          html += '<button class="ai-quick-btn" onclick="document.getElementById(\'rm-ai-answer\').textContent=\'Rule-based: '+(insight||'').replace(/'/g,"\\'")+'\';">'+q+'</button>';
+        });
+        html += '</div><div id="rm-ai-answer" style="margin-top:10px;font-size:12px;color:#dbeafe;"></div></div>';
+        el.innerHTML = html;
+      }
+
+      function loadHistoryContent() {
+        var el = document.getElementById('rm-content-history');
+        fetch('/api/trading/history?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json();}).then(function(data){
+          if (!data.history||data.history.length===0){ el.innerHTML='<div style="color:#64748b;font-size:12px;padding:12px;">No history yet.</div>'; return; }
+          var html = '';
+          data.history.forEach(function(h,i){
+            html += '<div style="padding:6px 12px;font-size:12px;border-bottom:1px solid rgba(72,104,128,0.2);display:flex;justify-content:space-between;"><span style="color:#e5edf5;">'+(i+1)+'. '+h.ticker+'</span><span style="color:#94a3b8;">'+h.strategy+'</span><span style="color:#64748b;font-size:10px;">'+(h.completed_at||'').slice(0,19)+'</span></div>';
+          });
+          el.innerHTML = html;
+        });
+      }
+
+      // ── Room click → open Room Modal (capture phase to beat ClawLibrary) ──
+      var _lastClickedRoomId = null;
+      document.addEventListener('click', function(e) {
+        var btn = e.target.closest ? e.target.closest('button[data-resource-id]') : null;
+        if (!btn) return;
+        var roomId = btn.getAttribute('data-resource-id');
+        if (!roomId) return;
+        if (roomId === _lastClickedRoomId) return;
+        _lastClickedRoomId = roomId;
+        setTimeout(function(){ _lastClickedRoomId = null; }, 2000);
+        openRoomModal(roomId);
+      }, true);  // capture phase
+
+      // Backup: poll for room selection (fallback if capture fails)
+      var _lastSelectedRoom = null;
+      setInterval(function() {
+        var sel = document.querySelector('.resource-menu button[data-selected=\"true\"]');
+        if (!sel) return;
+        var rid = sel.getAttribute('data-resource-id');
+        if (!rid || rid === _lastSelectedRoom) return;
+        _lastSelectedRoom = rid;
+        openRoomModal(rid);
+      }, 800);
+
+      // Unified MetricRenderer (used in modal + drawer)
+      function renderMetricRow(m) {
+        var val = m.value != null ? String(m.value) : '?';
+        var unit = m.unit || '';
+        var display = m.display || 'number';
+        var level = m.level || 'neutral';
+        if (display === 'bar') {
+          var pct = Math.min(100, Math.max(0, parseFloat(val) || 0));
+          if (m.label.toLowerCase().indexOf('sharpe')>=0) pct = Math.min(100, (parseFloat(val)||0)*30+20);
+          if (m.label.toLowerCase().indexOf('dd')>=0||m.label.toLowerCase().indexOf('drawdown')>=0) pct = Math.min(100, Math.abs(parseFloat(val)||0)*3);
+          return '<div class="metric-row"><span class="metric-label">'+m.label+'</span><div class="metric-bar-track"><div class="metric-bar-fill '+level+'" style="width:'+pct+'%"></div></div><span class="metric-value">'+val+unit+'</span></div>';
+        }
+        if (display === 'badge') {
+          var cls = (val+'').toLowerCase().indexOf('buy')>=0?'buy':(val+'').toLowerCase().indexOf('sell')>=0?'sell':'hold';
+          return '<div class="metric-row"><span class="metric-label">'+m.label+'</span><span></span><span class="decision-badge '+cls+'" style="font-size:10px;padding:1px 8px;">'+val+'</span></div>';
+        }
+        if (display === 'strategy_score') {
+          var signal = m.signal || 'hold';
+          var sCls = signal === 'buy' ? 'buy' : signal === 'sell' ? 'sell' : 'hold';
+          return '<div class="metric-row"><span class="metric-label">'+m.label+'</span><span></span><span><span class="decision-badge '+sCls+'" style="font-size:10px;padding:1px 6px;">'+signal.toUpperCase()+'</span> <span style="color:#e5edf5;font-size:11px;">'+val+'</span></span></div>';
+        }
+        if (display === 'gauge') {
+          var gpct = Math.min(100, Math.max(0, parseFloat(val)||0));
+          var gLevel = gpct > 70 ? 'danger' : gpct > 40 ? 'warning' : 'positive';
+          return '<div class="metric-row"><span class="metric-label">'+m.label+'</span><div class="metric-bar-track"><div class="metric-bar-fill '+gLevel+'" style="width:'+gpct+'%"></div></div><span class="metric-value">'+val+unit+'</span></div>';
+        }
+        return '<div class="metric-row"><span class="metric-label">'+m.label+'</span><span></span><span class="metric-value">'+val+(unit?' '+unit:'')+'</span></div>';
       }
     </script>
     <script>
@@ -3836,95 +4141,6 @@
             }
           }
         }, 1500);
-
-        // ── Room click → Bottom Drawer ──────────────────────────
-        document.addEventListener('click', function(e) {
-          var btn = e.target.closest ? e.target.closest('button[data-resource-id]') : null;
-          if (!btn) return;
-          var roomId = btn.getAttribute('data-resource-id');
-          if (!roomId) return;
-
-          // Fetch latest snapshot and update Room Details drawer tab
-          fetch('/api/trading/snapshot?t=' + Date.now(), { cache: 'no-store' })
-            .then(function(r) { return r.json(); })
-            .then(function(snap) {
-              var resources = snap.resources || [];
-              var room = resources.find(function(r) { return r.id === roomId; });
-              if (!room) return;
-
-              var detailEl = document.getElementById('drawer-content-room');
-              var zhName = '';
-              (room.stats || []).forEach(function(st) { if (st.label === 'zh') zhName = st.value; });
-
-              // Summary tab
-              var sumHtml = '<div style="font-size:15px;color:#36d399;margin-bottom:4px;">' + (zhName || room.title) + '</div>';
-              sumHtml += '<div style="font-size:11px;color:#64748b;margin-bottom:8px;">Status: <span style="color:' + (room.status==='active'?'#38bdf8':room.status==='done'?'#36d399':room.status==='alert'?'#fb7185':'#94a3b8') + ';">' + (room.status || 'idle') + '</span></div>';
-              if (room.items && room.items.length > 0) {
-                // Summary: show info items first, then key metrics (max 6)
-                var infoItems = room.items.filter(function(i){ return i.meta === 'info'; });
-                var metricItems = room.items.filter(function(i){ return i.meta === 'metric'; });
-                var summaryItems = infoItems.concat(metricItems).slice(0, 6);
-                summaryItems.forEach(function(item) {
-                  var icon = item.meta === 'metric' ? '' : '';
-                  sumHtml += '<div style="display:flex;justify-content:space-between;padding:4px 0;font-size:11px;border-bottom:1px solid rgba(42,58,74,0.2);"><span style="color:#94a3b8;">' + icon + ' ' + (item.title || '') + '</span><span style="color:#e5e7eb;font-weight:500;">' + (item.excerpt || '') + '</span></div>';
-                });
-                if (room.items.length > 6) sumHtml += '<div style="color:#64748b;font-size:10px;text-align:center;padding:4px;">+ ' + (room.items.length - 6) + ' more items in Metrics tab</div>';
-              } else { sumHtml += '<div style="color:#64748b;">No data yet.</div>'; }
-              document.getElementById('room-sub-summary').innerHTML = sumHtml;
-
-              // Metrics tab - progress bars with gauge visualization
-              var metHtml = '<div style="font-size:11px;color:#64748b;margin-bottom:6px;">Gauge visualization of all numeric metrics</div>';
-              if (room.items && room.items.length > 0) {
-                room.items.forEach(function(item) {
-                  var match = (item.title || '').match(/([\d.-]+)/);
-                  if (match) {
-                    var val = parseFloat(match[1]);
-                    var pct = 50;
-                    if ((item.title||'').toLowerCase().indexOf('rsi') >= 0) { pct = Math.min(100, Math.max(0, val)); }
-                    else if ((item.title||'').toLowerCase().indexOf('sharpe') >= 0) { pct = Math.min(100, Math.max(0, val * 30 + 20)); }
-                    else if ((item.title||'').toLowerCase().indexOf('return') >= 0) { pct = Math.min(100, Math.max(0, Math.abs(val))); }
-                    else if ((item.title||'').toLowerCase().indexOf('dd') >= 0) { pct = Math.min(100, Math.abs(val) * 3); }
-                    else if ((item.title||'').toLowerCase().indexOf('volatility') >= 0) { pct = Math.min(100, val * 100); }
-                    else if ((item.title||'').toLowerCase().indexOf('win rate') >= 0) { pct = Math.min(100, Math.abs(val) * 100); }
-                    else { pct = Math.min(100, Math.abs(val) * 20); }
-                    var barC = pct > 75 ? '#fb7185' : pct > 45 ? '#fbbf24' : '#36d399';
-                    metHtml += '<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:3px;"><span style="color:#94a3b8;">' + (item.title || '') + '</span><span style="color:#e5e7eb;">' + (item.excerpt || val) + '</span></div><div style="background:rgba(42,58,74,0.3);height:8px;border-radius:4px;"><div style="background:' + barC + ';width:' + pct + '%;height:100%;border-radius:4px;transition:width 0.6s ease;box-shadow:0 0 6px ' + barC + '44;"></div></div></div>';
-                  }
-                });
-              }
-              if (!metHtml) metHtml = '<div style="color:#64748b;">No numeric metrics available.</div>';
-              document.getElementById('room-sub-metrics').innerHTML = metHtml;
-
-              // Decision tab
-              var decHtml = '<div style="font-size:13px;color:#36d399;margin-bottom:8px;">Decision Summary</div>';
-              if (room.items && room.items.length > 0) {
-                var hasDecision = false;
-                room.items.forEach(function(item) {
-                  var t = (item.title || '').toLowerCase();
-                  if (t.indexOf('decision') >= 0 || t.indexOf('signal') >= 0 || t.indexOf('strategy') >= 0) {
-                    hasDecision = true;
-                    var act = (item.excerpt || '').toLowerCase();
-                    var cls = act.indexOf('buy') >= 0 ? 'buy' : act.indexOf('sell') >= 0 ? 'sell' : 'hold';
-                    decHtml += '<div style="margin-bottom:6px;"><span class="decision-badge ' + cls + '" style="font-size:11px;">' + (item.excerpt || item.title || '') + '</span></div>';
-                  }
-                });
-                if (!hasDecision) decHtml += '<div style="color:#64748b;">No trading decision in this room.</div>';
-              } else { decHtml += '<div style="color:#64748b;">Run analysis to see decisions.</div>'; }
-              decHtml += '<div style="margin-top:12px;padding:8px 10px;background:rgba(56,189,248,0.08);border:1px dashed rgba(56,189,248,0.3);border-radius:6px;font-size:10px;color:#38bdf8;text-align:center;cursor:pointer;" title="LLM Coming Soon" onclick="this.textContent=\'🤖 LLM analysis coming soon — will explain trading decisions in real-time.\';">🤖 Explain This Decision (Coming Soon)</div>';
-              document.getElementById('room-sub-decision').innerHTML = decHtml;
-
-              detailEl = document.getElementById('drawer-content-room');
-
-              // Switch to Room Details tab and open drawer
-              switchDrawerTab('room');
-              var body = document.getElementById('chat-body');
-              var toggle = document.getElementById('chat-toggle');
-              if (body.classList.contains('hidden')) {
-                body.classList.remove('hidden');
-                toggle.textContent = '▼ Close';
-              }
-            });
-        });
 
         // ── Poll and update ────────────────────────────────────
         window.updatePanels = function updatePanels() {
@@ -4080,7 +4296,6 @@
             var body = document.getElementById('chat-body');
             var toggle = document.getElementById('chat-toggle');
             if (body.classList.contains('hidden')) { body.classList.remove('hidden'); toggle.textContent = '▼ Close'; }
-            switchDrawerTab('room');
           }
           // T key: switch to Timeline
           if (e.key === 't' && !e.ctrlKey && !e.metaKey && !e.target.closest('input,textarea,select')) {

@@ -311,6 +311,42 @@ def run_trading_agent(
         result_summary = {"selected_strategy": strategy_name, "decision": decision_result["decision"], "confidence": decision_result["confidence"], "total_return": result["total_return"], "benchmark_return": result["benchmark_total_return"], "sharpe_ratio": result["sharpe_ratio"], "max_drawdown": result["max_drawdown"], "trades": result["number_of_trades"], "decision_score": decision_result["decision_score"], "risk_score": risk_result["risk_score"]}
         update_workflow(global_status="done", current_stage="completed", progress=100, cat_id="trading_cat", cat_status="done", summary=f"Completed. Decision: {decision_result['decision']}", result_summary=result_summary, report={"markdown": report_md, "path": ""}, logs=["Workflow completed"])
 
+        # ── Write full room artifacts directly (fallback if runner.py fails) ──
+        try:
+            _P = Path(__file__).resolve().parent.parent.parent
+            _tp = _P / "ClawLibrary" / "src" / "data" / "trading-telemetry.json"
+            if _tp.exists():
+                import json as _j
+                _snap = _j.loads(_tp.read_text(encoding="utf-8"))
+                _task = {"ticker": ticker, "strategy": strategy_name}
+                _full = {
+                    "ticker": ticker, "strategy": strategy_name,
+                    "indicator_result": indicator_result,
+                    "regime_result": regime_result,
+                    "news_result": news_result,
+                    "risk_result": risk_result,
+                    "backtest_result": result,
+                    "memory_result": memory_result,
+                    "decision": decision_result,
+                    "explanation": explanation,
+                    "strategy_scores": strategy_scores,
+                }
+                sys.path.insert(0, str(_P / "trading_server"))
+                from artifact_builder import build_room_artifacts
+                _all = build_room_artifacts(_task, _full)
+                _snap.setdefault("trading", {})["room_artifacts"] = _all
+                for _r in _snap.setdefault("resources", []):
+                    a = _all.get(_r["id"])
+                    if a:
+                        _r["items"] = [{"id": a["room_id"]+"-"+str(i), "title": m["label"]+": "+str(m["value"]), "meta": m.get("display","metric"), "excerpt": a.get("insight","")} for i,m in enumerate(a.get("metrics",[]))]
+                        _r["itemCount"] = len(_r["items"])
+                        _r["status"] = a["status"]
+                _tmp = _tp.with_suffix(".tmp")
+                _tmp.write_text(_j.dumps(_snap, ensure_ascii=False, indent=2), encoding="utf-8")
+                _tmp.replace(_tp)
+        except Exception:
+            pass
+
         # (indicator_result + regime_result + news_result already collected above)
 
         full_result = {

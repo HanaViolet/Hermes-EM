@@ -53,7 +53,7 @@ def _run_agent_in_background(task: dict, task_id: str) -> None:
         try:
             from artifact_builder import build_room_artifacts
             _all = build_room_artifacts(task, result)
-            _path = _AGENT_PARENT / "ClawLibrary" / "src" / "data" / "trading-telemetry.json"
+            _path = _PROJECT_ROOT / "ClawLibrary" / "src" / "data" / "trading-telemetry.json"
             if _path.exists():
                 _snap = _json.loads(_path.read_text(encoding="utf-8"))
                 _snap.setdefault("trading", {})["room_artifacts"] = _all
@@ -66,8 +66,12 @@ def _run_agent_in_background(task: dict, task_id: str) -> None:
                 _tmp = _path.with_suffix(".tmp")
                 _tmp.write_text(_json.dumps(_snap, ensure_ascii=False, indent=2), encoding="utf-8")
                 _tmp.replace(_path)
-        except Exception:
-            pass
+        except Exception as _e:
+            _err = Path(__file__).resolve().parent / "artifact_error.log"
+            try:
+                _err.write_text(f"artifact write error: {_e}", encoding="utf-8")
+            except Exception:
+                pass
 
         decision = result.get("decision", {})
         backtest = result.get("backtest_result", {})

@@ -12,15 +12,14 @@ def compute_decision_score(
     memory: dict,
     indicators: dict,
     backtest: dict,
+    news_result: dict | None = None,
 ) -> dict:
-    """
-    Compute a weighted decision score and derive Buy/Sell/Hold.
-    """
+    """Compute a weighted decision score and derive Buy/Sell/Hold."""
     # Strategy: best score from candidates (0-100)
     best_strategy = strategy_scores[0] if strategy_scores else {"name": "?", "score": 50}
     strategy_score = best_strategy.get("score", 50)
 
-    # Regime fit: use strategy-specific fit from regime (0-100)
+    # Regime fit
     strategy_name = best_strategy.get("name", "ma")
     regime_fit = regime.get("strategy_fit", {}).get(strategy_name, 50)
 
@@ -28,11 +27,14 @@ def compute_decision_score(
     risk_score_val = risk.get("risk_score", 40)
     risk_adjusted = 100 - risk_score_val
 
-    # Backtest: normalize Sharpe to 0-100
+    # News score (0-100, default 50)
+    news_score = float((news_result or {}).get("news_score", 50))
+
+    # Backtest: normalize Sharpe
     sharpe = backtest.get("sharpe_ratio", 0)
     backtest_score = min(100, max(0, (sharpe + 0.5) * 60))
 
-    # Indicator: signal strength
+    # Indicator signal strength
     rsi = indicators.get("rsi", 50)
     ind_score = 50
     if rsi is not None:
@@ -48,11 +50,12 @@ def compute_decision_score(
 
     # Weighted total
     decision_score = (
-        0.35 * strategy_score
-        + 0.20 * regime_fit
-        + 0.20 * risk_adjusted
+        0.30 * strategy_score
+        + 0.18 * regime_fit
+        + 0.18 * risk_adjusted
         + 0.10 * backtest_score
         + 0.10 * ind_score
+        + 0.09 * news_score
         + 0.05 * max(-10, min(10, mem))
     )
 
@@ -82,6 +85,7 @@ def compute_decision_score(
             "risk_adjusted": round(risk_adjusted),
             "backtest_score": round(backtest_score),
             "indicator_score": round(ind_score),
+            "news_score": round(news_score),
             "memory_boost": mem,
         },
         "reason": _reason(action, decision_score, risk_score_val, regime, best_strategy),

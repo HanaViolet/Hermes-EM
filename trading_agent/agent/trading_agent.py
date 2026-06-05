@@ -9,7 +9,7 @@ from trading_agent.tools.chart_tool import make_equity_curve_fig, make_drawdown_
 from trading_agent.tools.memory_tool import compute_memory_score
 from trading_agent.tools.decision_score_tool import compute_decision_score
 from trading_agent.tools.explain_tool import explain_decision
-from trading_agent.tools.report_tool import make_final_decision, generate_report
+from trading_agent.tools.report_tool import generate_report
 from trading_agent.utils.logger import get_logger
 from trading_agent.utils.office_bridge import update_workflow, ROOM_LABELS, _telemetry_state, _persist_telemetry
 
@@ -29,7 +29,16 @@ def _load_history_for_memory() -> list:
     return []
 
 
-def _write_room_artifacts_to_file(*, ticker, strategy_name, task, indicator_result, strategy_scores, backtest, decision, report_md):
+# (Former _write_room_artifacts_to_file removed — use build_room_artifacts from trading_server/artifact_builder.py)
+
+
+def _dummy_removed(): pass  # placeholder
+
+
+def _dummy_removed_2(): pass  # placeholder
+
+
+def select_best_strategy(data, strategies, transaction_cost=0.001):
     """Write room_artifacts directly using the same _telemetry_state as update_workflow."""
     try:
         now_ts = str(__import__('datetime').datetime.now())[:19]

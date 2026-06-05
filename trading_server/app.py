@@ -91,25 +91,19 @@ def trading_run():
     except ValueError as e:
         return jsonify({"ok": False, "message": str(e)}), 400
 
-    ticker = ticker  # already validated
-    start_date = str(data.get("start_date", "2020-01-01")).strip()
-    end_date = str(data.get("end_date", "2024-12-31")).strip()
-    strategy = str(data.get("strategy", "auto")).strip().lower()
-    transaction_cost = float(data.get("transaction_cost", 0.001))
-
-    task = {
+    task_data = {
         "ticker": ticker,
         "start_date": start_date,
         "end_date": end_date,
         "strategy": strategy,
         "transaction_cost": transaction_cost,
     }
-    task_id = start_task(task)
+    task_id = start_task(task_data)
 
     return jsonify({
         "ok": True,
         "task_id": task_id,
-        "task": task,
+        "task": task_data,
         "message": f"Task started: {ticker} {strategy}",
     })
 

@@ -52,6 +52,19 @@ def trading_state():
     })
 
 
+def _parse_float(value, default):
+    try:
+        if value in (None, ""): return default
+        return float(value)
+    except Exception:
+        raise ValueError(f"Invalid float: {value}")
+
+def _validate_date(value: str, name: str):
+    from datetime import datetime
+    try: return datetime.strptime(value, "%Y-%m-%d")
+    except Exception: raise ValueError(f"Invalid {name}: {value}")
+
+
 @app.post("/api/trading/run")
 def trading_run():
     """Submit a trading analysis task. Only one task runs at a time."""
@@ -60,13 +73,25 @@ def trading_run():
     t = snap.get("trading", {})
     status = t.get("global_status", "idle")
     if status in ("syncing", "running", "writing"):
-        return jsonify({
-            "ok": False,
-            "message": f"A task is already running ({t.get('ticker')} {t.get('strategy')}). Please wait.",
-        }), 409
+        return jsonify({"ok": False, "message": f"A task is already running ({t.get('ticker')} {t.get('strategy')}). Please wait."}), 409
 
     data = request.get_json(silent=True) or {}
-    ticker = str(data.get("ticker", "QQQ")).upper().strip()
+    try:
+        ticker = str(data.get("ticker", "SPY")).upper().strip()
+        strategy = str(data.get("strategy", "auto")).strip()
+        start_date = str(data.get("start_date", "2020-01-01"))
+        end_date = str(data.get("end_date", "2024-12-31"))
+        transaction_cost = _parse_float(data.get("transaction_cost", 0.001), 0.001)
+        start_dt = _validate_date(start_date, "start_date")
+        end_dt = _validate_date(end_date, "end_date")
+        if start_dt >= end_dt:
+            return jsonify({"ok": False, "message": "start_date must be before end_date"}), 400
+        if not ticker:
+            return jsonify({"ok": False, "message": "ticker is required"}), 400
+    except ValueError as e:
+        return jsonify({"ok": False, "message": str(e)}), 400
+
+    ticker = ticker  # already validated
     start_date = str(data.get("start_date", "2020-01-01")).strip()
     end_date = str(data.get("end_date", "2024-12-31")).strip()
     strategy = str(data.get("strategy", "auto")).strip().lower()

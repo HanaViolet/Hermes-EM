@@ -10,8 +10,10 @@ def calculate_rsi(close: pd.Series, window: int = 14) -> pd.Series:
     avg_gain = gain.rolling(window).mean()
     avg_loss = loss.rolling(window).mean()
 
+    avg_loss = avg_loss.replace(0, np.nan)
     rs = avg_gain / avg_loss
-    return 100 - 100 / (1 + rs)
+    rsi = 100 - 100 / (1 + rs)
+    return rsi.fillna(50)
 
 
 def add_technical_indicators(data: pd.DataFrame) -> pd.DataFrame:
@@ -31,4 +33,7 @@ def add_technical_indicators(data: pd.DataFrame) -> pd.DataFrame:
     data["volatility_20d"] = data["daily_return"].rolling(20).std() * np.sqrt(252)
     data["return_20d"] = data["close"].pct_change(20)
 
-    return data.dropna().reset_index(drop=True)
+    data = data.dropna().reset_index(drop=True)
+    if data.empty:
+        raise ValueError("Not enough data after indicator calculation. Please use at least 90 trading days.")
+    return data

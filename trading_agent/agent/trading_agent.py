@@ -80,7 +80,8 @@ def _write_room_artifacts_to_file(*, ticker, strategy_name, task, indicator_resu
         _persist_telemetry()
     except Exception as _e:
         import traceback as _tb
-        _err = _P2(__file__).resolve().parent.parent.parent / "trading_server" / "artifact_error.log"
+        from pathlib import Path as _Pfix
+        _err = _Pfix(__file__).resolve().parent.parent.parent / "trading_server" / "artifact_error.log"
         _err.write_text(f"{_e}\n{_tb.format_exc()}", encoding="utf-8")
 
 logger = get_logger()

@@ -6,7 +6,8 @@ from pathlib import Path
 import pandas as pd
 import requests
 
-DATA_CACHE_DIR = Path("data/cache")
+DATA_CACHE_DIR = Path(__file__).resolve().parents[2] / "trading_server" / "data" / "cache"
+DATA_CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
 YAHOO_HEADERS = {
     "User-Agent": (

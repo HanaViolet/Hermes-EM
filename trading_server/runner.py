@@ -10,10 +10,11 @@ import threading
 from datetime import datetime, timezone
 from pathlib import Path
 
-# Ensure both agent/ and trading_agent/ are on sys.path
-_AGENT_PARENT = Path(__file__).resolve().parent.parent
-_TRADING_AGENT_DIR = _AGENT_PARENT / "trading_agent"
-for _p in (str(_AGENT_PARENT), str(_TRADING_AGENT_DIR)):
+# Robust project-root discovery so this works whether run directly or via start_server.py
+_THIS_FILE = Path(__file__).resolve()
+_PROJECT_ROOT = _THIS_FILE.parent.parent
+_TRADING_AGENT_DIR = _PROJECT_ROOT / "trading_agent"
+for _p in (str(_PROJECT_ROOT), str(_TRADING_AGENT_DIR), str(_THIS_FILE.parent)):
     if _p not in sys.path:
         sys.path.insert(0, _p)
 

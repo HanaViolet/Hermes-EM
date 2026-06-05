@@ -13,10 +13,12 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-# Ensure sibling modules are importable
-_THIS_DIR = Path(__file__).resolve().parent
-if str(_THIS_DIR) not in sys.path:
-    sys.path.insert(0, str(_THIS_DIR))
+# Robust project-root discovery so this works whether run directly or via start_server.py
+_THIS_FILE = Path(__file__).resolve()
+_PROJECT_ROOT = _THIS_FILE.parent.parent
+for _p in (str(_PROJECT_ROOT), str(_PROJECT_ROOT / "trading_agent"), str(_THIS_FILE.parent)):
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS

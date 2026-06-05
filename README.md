@@ -15,6 +15,9 @@
 │   ├── src/runtime/    # Phaser 场景
 │   ├── index.html      # HTML 入口（含 Room Modal、左侧面板）
 │   └── package.json
+├── requirements.txt    # 统一依赖（推荐直接安装这个）
+├── start_server.py     # 一键启动 Flask 后端
+├── start_streamlit.py  # 一键启动 Streamlit 独立界面
 ├── trading_agent/      # 算法引擎：策略、指标、回测
 │   ├── agent/          # run_trading_agent() 编排
 │   ├── tools/          # data/indicator/strategy/risk/backtest/report
@@ -43,10 +46,10 @@ git clone https://github.com/HanaViolet/algorithmic_trade.git
 cd algorithmic_trade
 ```
 
-### 2. 安装后端依赖
+### 2. 安装依赖
 
 ```bash
-pip install flask flask-cors pandas numpy requests plotly pyyaml scipy
+pip install -r requirements.txt
 ```
 
 ### 3. 安装前端依赖
@@ -59,10 +62,17 @@ cd ..
 
 ### 4. 启动后端（终端 1）
 
+从项目根目录启动：
+
 ```bash
-cd trading_server
-python app.py
+python start_server.py
 # 输出: Trading Agent Server · http://127.0.0.1:5000
+```
+
+或者仅启动 Streamlit 独立界面（不需要前端）：
+
+```bash
+python start_streamlit.py
 ```
 
 ### 5. 启动前端（终端 2）

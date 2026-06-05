@@ -223,7 +223,7 @@ def run_trading_agent(
         update_workflow(
             current_stage="calculating_indicators",
             progress=30,
-            summary=f"Indicators: RSI={indicator_metrics.get('RSI','?')}, MACD={indicator_metrics.get('MACD','?')}",
+            summary=f"Indicators: RSI={indicator_metrics.get('rsi','?')}, MACD={indicator_metrics.get('macd','?')}",
             details=indicator_metrics,
         )
 

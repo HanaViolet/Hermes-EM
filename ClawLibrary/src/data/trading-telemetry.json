@@ -1,6 +1,6 @@
 {
   "mode": "live",
-  "generatedAt": "2026-06-05T01:34:20.163843+00:00",
+  "generatedAt": "2026-06-05T01:36:58.885212+00:00",
   "resources": [
     {
       "id": "document",
@@ -11,7 +11,7 @@
           "id": "rp-1",
           "title": "Report: AAPL",
           "meta": "document",
-          "excerpt": "# Trading Agent Report: AAPL\n\n## Final Decision\n- Decision: Buy\n- Confidence: Medium\n\n## Strategy\n- Selected Strategy: ma\n- Latest Signal: Long\n\n## Backtest\n- Total Return: 119.36%\n- Benchmark Total R"
+          "excerpt": "# Trading Agent Report: AAPL\n\n## Final Decision\n- Decision: Buy\n- Confidence: Medium\n\n## Strategy\n- Selected Strategy: momentum\n- Latest Signal: Long\n\n## Backtest\n- Total Return: 142.80%\n- Benchmark T"
         }
       ],
       "itemCount": 1,
@@ -73,7 +73,7 @@
       "items": [
         {
           "id": "st-1",
-          "title": "Strategy: ma",
+          "title": "Strategy: auto",
           "meta": "info",
           "excerpt": "Selected trading strategy"
         },
@@ -82,9 +82,27 @@
           "title": "Signal: N/A",
           "meta": "metric",
           "excerpt": "Trade signal"
+        },
+        {
+          "id": "sc-ma",
+          "title": "ma: score=0.787",
+          "meta": "metric",
+          "excerpt": "Return 119.36% | Sharpe 0.872 | Buy"
+        },
+        {
+          "id": "sc-rsi",
+          "title": "rsi: score=-0.289",
+          "meta": "metric",
+          "excerpt": "Return 9.74% | Sharpe 0.107 | Buy"
+        },
+        {
+          "id": "sc-momentum",
+          "title": "momentum: score=0.921",
+          "meta": "metric",
+          "excerpt": "Return 142.8% | Sharpe 1.031 | Buy"
         }
       ],
-      "itemCount": 2,
+      "itemCount": 5,
       "stats": [
         {
           "label": "en",
@@ -111,9 +129,9 @@
         },
         {
           "id": "gw-2",
-          "title": "Rows loaded: 10",
+          "title": "Rows loaded: 15",
           "meta": "metric",
-          "excerpt": "Loaded 10 rows for AAPL"
+          "excerpt": "Loaded 15 rows for AAPL"
         }
       ],
       "itemCount": 2,
@@ -393,62 +411,74 @@
     {
       "resourceId": "skills",
       "type": "access",
-      "detail": "Task: AAPL ma",
-      "timestamp": "2026-06-05T01:34:20.163843+00:00"
-    },
-    {
-      "resourceId": "skills",
-      "type": "access",
-      "detail": "Start loading market data",
-      "timestamp": "2026-06-05T01:34:20.163843+00:00"
-    },
-    {
-      "resourceId": "skills",
-      "type": "access",
-      "detail": "Loaded 1258 rows",
-      "timestamp": "2026-06-05T01:34:20.163843+00:00"
-    },
-    {
-      "resourceId": "skills",
-      "type": "access",
       "detail": "Start calculating MA, RSI, MACD and volatility",
-      "timestamp": "2026-06-05T01:34:20.163843+00:00"
+      "timestamp": "2026-06-05T01:36:58.885212+00:00"
     },
     {
       "resourceId": "skills",
       "type": "access",
       "detail": "Compare candidate strategies",
-      "timestamp": "2026-06-05T01:34:20.163843+00:00"
+      "timestamp": "2026-06-05T01:36:58.885212+00:00"
     },
     {
       "resourceId": "skills",
       "type": "access",
-      "detail": "Apply volatility filter and stop-loss rule",
-      "timestamp": "2026-06-05T01:34:20.163843+00:00"
+      "detail": "Apply volatility filter and stop-loss to ma signal",
+      "timestamp": "2026-06-05T01:36:58.885212+00:00"
     },
     {
       "resourceId": "skills",
       "type": "access",
-      "detail": "Calculate strategy returns and benchmark returns",
-      "timestamp": "2026-06-05T01:34:20.163843+00:00"
+      "detail": "Calculate ma strategy returns vs benchmark",
+      "timestamp": "2026-06-05T01:36:58.885212+00:00"
+    },
+    {
+      "resourceId": "skills",
+      "type": "access",
+      "detail": "Apply volatility filter and stop-loss to rsi signal",
+      "timestamp": "2026-06-05T01:36:58.885212+00:00"
+    },
+    {
+      "resourceId": "skills",
+      "type": "access",
+      "detail": "Calculate rsi strategy returns vs benchmark",
+      "timestamp": "2026-06-05T01:36:58.885212+00:00"
+    },
+    {
+      "resourceId": "skills",
+      "type": "access",
+      "detail": "Apply volatility filter and stop-loss to momentum signal",
+      "timestamp": "2026-06-05T01:36:58.885212+00:00"
+    },
+    {
+      "resourceId": "skills",
+      "type": "access",
+      "detail": "Calculate momentum strategy returns vs benchmark",
+      "timestamp": "2026-06-05T01:36:58.885212+00:00"
+    },
+    {
+      "resourceId": "skills",
+      "type": "access",
+      "detail": "Strategies compared: 3 candidates",
+      "timestamp": "2026-06-05T01:36:58.885212+00:00"
     },
     {
       "resourceId": "skills",
       "type": "access",
       "detail": "Generate performance summary and risk analysis",
-      "timestamp": "2026-06-05T01:34:20.163843+00:00"
+      "timestamp": "2026-06-05T01:36:58.885212+00:00"
     },
     {
       "resourceId": "skills",
       "type": "access",
       "detail": "Workflow completed",
-      "timestamp": "2026-06-05T01:34:20.163843+00:00"
+      "timestamp": "2026-06-05T01:36:58.885212+00:00"
     },
     {
       "resourceId": "skills",
       "type": "access",
       "detail": "Regime: 市场处于上升趋势，波动率偏低，适合跟随趋势策略。",
-      "timestamp": "2026-06-05T01:34:20.163843+00:00"
+      "timestamp": "2026-06-05T01:36:58.885212+00:00"
     }
   ],
   "focus": {
@@ -473,25 +503,30 @@
   },
   "trading": {
     "ticker": "AAPL",
-    "strategy": "ma",
+    "strategy": "auto",
     "global_status": "done",
     "current_stage": "selecting_strategy",
     "progress": 48,
     "summary": {},
     "report": {
-      "markdown": "# Trading Agent Report: AAPL\n\n## Final Decision\n- Decision: Buy\n- Confidence: Medium\n\n## Strategy\n- Selected Strategy: ma\n- Latest Signal: Long\n\n## Backtest\n- Total Return: 119.36%\n- Benchmark Total Return: 304.33%\n- Annual Return: 17.97%\n- Annual Volatility: 20.61%\n- Sharpe Ratio: 0.87\n- Max Drawdown: -22.54%\n- Benchmark Max Drawdown: -31.31%\n- Win Rate: 31.30%\n- Number of Trades: 39\n\n## Risk Notice\nThis result is based on historical backtesting and is for educational use only. It is not financial advice.\n",
+      "markdown": "# Trading Agent Report: AAPL\n\n## Final Decision\n- Decision: Buy\n- Confidence: Medium\n\n## Strategy\n- Selected Strategy: momentum\n- Latest Signal: Long\n\n## Backtest\n- Total Return: 142.80%\n- Benchmark Total Return: 304.33%\n- Annual Return: 20.51%\n- Annual Volatility: 19.89%\n- Sharpe Ratio: 1.03\n- Max Drawdown: -20.82%\n- Benchmark Max Drawdown: -31.31%\n- Win Rate: 31.14%\n- Number of Trades: 107\n\n## Risk Notice\nThis result is based on historical backtesting and is for educational use only. It is not financial advice.\n",
       "path": ""
     },
     "error": null,
     "decision": "Buy",
     "logs": [
-      "Task: AAPL ma",
+      "Task: AAPL auto",
       "Start loading market data",
       "Loaded 1258 rows",
       "Start calculating MA, RSI, MACD and volatility",
       "Compare candidate strategies",
-      "Apply volatility filter and stop-loss rule",
-      "Calculate strategy returns and benchmark returns",
+      "Apply volatility filter and stop-loss to ma signal",
+      "Calculate ma strategy returns vs benchmark",
+      "Apply volatility filter and stop-loss to rsi signal",
+      "Calculate rsi strategy returns vs benchmark",
+      "Apply volatility filter and stop-loss to momentum signal",
+      "Calculate momentum strategy returns vs benchmark",
+      "Strategies compared: 3 candidates",
       "Generate performance summary and risk analysis",
       "Workflow completed",
       "Regime: 市场处于上升趋势，波动率偏低，适合跟随趋势策略。"
@@ -543,7 +578,7 @@
             "数据从缓存或远程源加载。"
           ]
         },
-        "updated_at": "2026-06-05 09:34:22"
+        "updated_at": "2026-06-05 09:37:00"
       },
       "mcp": {
         "room_id": "mcp",
@@ -602,7 +637,7 @@
             "MACD 动能待确认。"
           ]
         },
-        "updated_at": "2026-06-05 09:34:22"
+        "updated_at": "2026-06-05 09:37:00"
       },
       "skills": {
         "room_id": "skills",
@@ -612,12 +647,34 @@
         "primary": {
           "label": "Top 策略",
           "value": "ma",
-          "unit": "",
+          "unit": "0.787",
           "level": "positive"
         },
-        "summary": "Strategy: ma",
+        "summary": "ma · Score 0.787",
         "insight": "策略比较完成。",
-        "metrics": [],
+        "metrics": [
+          {
+            "label": "ma",
+            "value": 0.787,
+            "display": "strategy_score",
+            "signal": "buy",
+            "unit": "score"
+          },
+          {
+            "label": "rsi",
+            "value": -0.289,
+            "display": "strategy_score",
+            "signal": "buy",
+            "unit": "score"
+          },
+          {
+            "label": "momentum",
+            "value": 0.921,
+            "display": "strategy_score",
+            "signal": "buy",
+            "unit": "score"
+          }
+        ],
         "details": {
           "input": [
             "MA / RSI / MACD indicators"
@@ -630,7 +687,7 @@
             "比较各策略的历史表现。"
           ]
         },
-        "updated_at": "2026-06-05 09:34:22"
+        "updated_at": "2026-06-05 09:37:00"
       },
       "alarm": {
         "room_id": "alarm",
@@ -639,23 +696,23 @@
         "type": "risk",
         "primary": {
           "label": "Risk",
-          "value": 56,
+          "value": 52,
           "unit": "/100",
           "level": "warning"
         },
-        "summary": "Medium · 56/100",
+        "summary": "Medium · 52/100",
         "insight": "最大回撤较高，建议降低仓位或保持观望。",
         "metrics": [
           {
             "label": "Risk Score",
-            "value": 56,
+            "value": 52,
             "unit": "/100",
             "display": "gauge",
             "level": "warning"
           },
           {
             "label": "Max Drawdown",
-            "value": -22.5,
+            "value": -20.8,
             "unit": "%",
             "display": "bar",
             "level": "warning"
@@ -674,7 +731,7 @@
             "检查仓位限制和止损线。"
           ]
         },
-        "updated_at": "2026-06-05 09:34:22"
+        "updated_at": "2026-06-05 09:37:00"
       },
       "task_queues": {
         "room_id": "task_queues",
@@ -683,28 +740,28 @@
         "type": "backtest",
         "primary": {
           "label": "Sharpe",
-          "value": 0.87,
+          "value": 1.03,
           "unit": "",
           "level": "positive"
         },
-        "summary": "Return 119.4% · Sharpe 0.87",
-        "insight": "回测总收益 119.4%，夏普 0.87。",
+        "summary": "Return 142.8% · Sharpe 1.03",
+        "insight": "回测总收益 142.8%，夏普 1.03。",
         "metrics": [
           {
             "label": "Total Return",
-            "value": "119.4",
+            "value": "142.8",
             "unit": "%",
             "display": "bar",
             "level": "positive"
           },
           {
             "label": "Sharpe",
-            "value": "0.87",
+            "value": "1.03",
             "display": "number"
           },
           {
             "label": "Max Drawdown",
-            "value": "-22.5",
+            "value": "-20.8",
             "unit": "%",
             "display": "bar",
             "level": "warning"
@@ -722,7 +779,7 @@
             "基于历史数据模拟策略表现。"
           ]
         },
-        "updated_at": "2026-06-05 09:34:22"
+        "updated_at": "2026-06-05 09:37:00"
       },
       "schedule": {
         "room_id": "schedule",
@@ -758,7 +815,7 @@
             "综合各策略得分和风险约束后做出决策。"
           ]
         },
-        "updated_at": "2026-06-05 09:34:22"
+        "updated_at": "2026-06-05 09:37:00"
       },
       "document": {
         "room_id": "document",
@@ -791,7 +848,7 @@
             "基于各步骤结果生成综合报告。"
           ]
         },
-        "updated_at": "2026-06-05 09:34:22"
+        "updated_at": "2026-06-05 09:37:00"
       },
       "agent": {
         "room_id": "agent",
@@ -819,7 +876,7 @@
           "output": [],
           "reasoning": []
         },
-        "updated_at": "2026-06-05 09:34:22"
+        "updated_at": "2026-06-05 09:37:00"
       },
       "log": {
         "room_id": "log",
@@ -840,7 +897,7 @@
           "output": [],
           "reasoning": []
         },
-        "updated_at": "2026-06-05 09:34:22"
+        "updated_at": "2026-06-05 09:37:00"
       },
       "images": {
         "room_id": "images",
@@ -858,7 +915,7 @@
         "metrics": [
           {
             "label": "Strategy Return",
-            "value": "119.4%",
+            "value": "142.8%",
             "display": "number",
             "level": "positive"
           },
@@ -869,13 +926,13 @@
           },
           {
             "label": "Max Drawdown",
-            "value": "-22.5%",
+            "value": "-20.8%",
             "display": "bar",
             "level": "warning"
           },
           {
             "label": "Win Rate",
-            "value": "31.3%",
+            "value": "31.1%",
             "display": "bar"
           }
         ],
@@ -895,7 +952,7 @@
             "最大回撤分析识别风险集中区间。"
           ]
         },
-        "updated_at": "2026-06-05 09:34:22"
+        "updated_at": "2026-06-05 09:37:00"
       },
       "memory": {
         "room_id": "memory",
@@ -916,7 +973,7 @@
           "output": [],
           "reasoning": []
         },
-        "updated_at": "2026-06-05 09:34:22"
+        "updated_at": "2026-06-05 09:37:00"
       },
       "break_room": {
         "room_id": "break_room",
@@ -944,7 +1001,7 @@
           "output": [],
           "reasoning": []
         },
-        "updated_at": "2026-06-05 09:34:22"
+        "updated_at": "2026-06-05 09:37:00"
       }
     }
   }

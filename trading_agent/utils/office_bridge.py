@@ -47,6 +47,11 @@ STAGE_TO_ROOM: dict[str, str] = {
     "checking_risk": "alarm",
     "running_backtest": "task_queues",
     "writing_report": "document",
+    "detecting_regime": "skills",
+    "analyzing_news": "images",
+    "using_memory": "memory",
+    "making_decision": "schedule",
+    "explaining_decision": "schedule",
     "completed": "break_room",
     "failed": "alarm",
 }

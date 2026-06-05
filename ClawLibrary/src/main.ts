@@ -3351,6 +3351,11 @@ const bindSceneTimer = window.setInterval(() => {
     window.clearInterval(bindSceneTimer);
   }
 }, 250);
+// Expose room artifact accessor for Room Modal integration
+(window as any).getRoomArtifact = function (resourceId: string) {
+  return (lastSnapshot as any)?.trading?.room_artifacts?.[resourceId] ?? null;
+};
+
 void refreshTelemetry();
 window.setInterval(() => {
   void refreshTelemetry();

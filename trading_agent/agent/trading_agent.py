@@ -228,7 +228,16 @@ def run_trading_agent(
             details=indicator_metrics,
         )
 
-        # ── Stage 3-6: Strategy / Risk / Backtest ──
+        # ── Stage 3: Regime Detection ──
+        regime_result = detect_market_regime(data)
+        update_workflow(current_stage="detecting_regime", progress=35, summary=f"Regime: {regime_result['trend_regime']} + {regime_result['volatility_regime']}", logs=[regime_result.get("interpretation","")])
+
+        # ── Stage 4: News LLM Agent ──
+        from trading_agent.tools.news_tool import run_news_agent
+        news_result = run_news_agent(asset=ticker, indicators=indicator_result, regime=regime_result)
+        update_workflow(current_stage="analyzing_news", progress=42, summary=f"News: {news_result.get('news_sentiment','neutral')} ({news_result.get('news_score',50)}/100)", logs=[news_result.get("summary","")])
+
+        # ── Stage 5-7: Strategy / Risk / Backtest ──
         update_workflow(
             current_stage="selecting_strategy",
             progress=45,
@@ -272,85 +281,35 @@ def run_trading_agent(
 
         logger.info(f"Backtest done: sharpe={result['sharpe_ratio']:.2f}")
 
-        # ── Stage 7: Writing Report ──
-        update_workflow(
-            current_stage="writing_report",
-            progress=90,
-            cat_id="report_cat",
-            cat_status="writing",
-            summary="Generating final report.",
-            logs=["Generate performance summary and risk analysis"]
-        )
+        # ── Stage 7: Dynamic Risk ──
+        risk_result = compute_dynamic_risk_score(backtest=result, indicators=indicator_result, regime=regime_result)
+        update_workflow(current_stage="checking_risk", progress=72, summary=f"Risk: {risk_result['risk_level']} ({risk_result['risk_score']}/100)")
 
+        # ── Stage 8: Memory ──
+        history_data = _load_history_for_memory()
+        memory_result = compute_memory_score(history_data, ticker, strategy_name)
+        update_workflow(current_stage="using_memory", progress=78, summary=f"Memory: {memory_result.get('memory_score',0)} boost", logs=[memory_result.get("evidence","")])
+
+        # ── Stage 9: Score-based Decision ──
+        decision_result = compute_decision_score(regime=regime_result, risk=risk_result, strategy_scores=strategy_scores, memory=memory_result, indicators=indicator_result, backtest=result)
+        update_workflow(current_stage="making_decision", progress=88, summary=f"Decision: {decision_result['decision'].upper()} (score={decision_result['decision_score']})")
+
+        # ── Stage 10: Explain ──
+        explanation = explain_decision({"decision_result": decision_result, "risk_result": risk_result, "regime_result": regime_result, "strategy_scores": strategy_scores, "indicator_result": indicator_result})
+        update_workflow(current_stage="explaining_decision", progress=94, summary=explanation.get("short",""))
+
+        # ── Stage 11: Report ──
         latest_signal = int(final_signal.iloc[-1])
-        decision_result = make_final_decision(latest_signal, result)
-
-        report_md = generate_report(
-            ticker=ticker,
-            strategy_name=strategy_name,
-            latest_signal=latest_signal,
-            result=result,
-            decision_result=decision_result
-        )
-
+        report_md = generate_report(ticker=ticker, strategy_name=strategy_name, latest_signal=latest_signal, result=result, decision_result=decision_result)
         save_backtest_result(result, ticker, strategy_name, start_date, end_date)
 
-        result_summary = {
-            "selected_strategy": strategy_name,
-            "decision": decision_result["decision"],
-            "confidence": decision_result["confidence"],
-            "total_return": result["total_return"],
-            "benchmark_return": result["benchmark_total_return"],
-            "sharpe_ratio": result["sharpe_ratio"],
-            "max_drawdown": result["max_drawdown"],
-            "trades": result["number_of_trades"]
-        }
+        # ── Stage 12: Completed (MUST be last update_workflow) ──
+        result_summary = {"selected_strategy": strategy_name, "decision": decision_result["decision"], "confidence": decision_result["confidence"], "total_return": result["total_return"], "benchmark_return": result["benchmark_total_return"], "sharpe_ratio": result["sharpe_ratio"], "max_drawdown": result["max_drawdown"], "trades": result["number_of_trades"], "decision_score": decision_result["decision_score"], "risk_score": risk_result["risk_score"]}
+        update_workflow(global_status="done", current_stage="completed", progress=100, cat_id="trading_cat", cat_status="done", summary=f"Completed. Decision: {decision_result['decision']}", result_summary=result_summary, report={"markdown": report_md, "path": ""}, logs=["Workflow completed"])
 
-        # ── Stage 8: Completed ──
-        update_workflow(
-            global_status="done",
-            current_stage="completed",
-            progress=100,
-            cat_id="trading_cat",
-            cat_status="done",
-            summary=f"Completed. Decision: {decision_result['decision']}",
-            result_summary=result_summary,
-            report={"markdown": report_md, "path": ""},
-            logs=["Workflow completed"]
-        )
+        # (indicator_result + regime_result + news_result already collected above)
 
-        # Collect indicator values from the data frame
-        indicator_result = {}
-        last = data.iloc[-1]
-        for col in ["close","ma20","ma60","rsi","macd","macd_signal","volatility_20d","daily_return","return_20d"]:
-            if col in data.columns:
-                try:
-                    v = float(last[col])
-                    if not _math.isnan(v):
-                        indicator_result[col] = round(v, 6)
-                except Exception:
-                    pass
-        indicator_result["rows"] = len(data)
-
-        # Phase 2: Detect market regime
-        regime_result = detect_market_regime(data)
-        update_workflow(
-            current_stage="selecting_strategy",
-            progress=48,
-            summary=f"Market: {regime_result['trend_regime']} / {regime_result['volatility_regime']}",
-            logs=[f"Regime: {regime_result['interpretation']}"]
-        )
-
-        # Write room_artifacts directly to telemetry JSON before returning
-        _write_room_artifacts_to_file(
-            ticker=ticker, strategy_name=strategy_name,
-            task=task, indicator_result=indicator_result,
-            strategy_scores=strategy_scores,
-            backtest=result, decision=decision_result,
-            report_md=report_md,
-        )
-
-        return {
+        full_result = {
             "ticker": ticker,
             "strategy": strategy_name,
             "data": data,
@@ -360,7 +319,23 @@ def run_trading_agent(
             "report": report_md,
             "strategy_scores": strategy_scores,
             "indicator_result": indicator_result,
+            "regime_result": regime_result,
+            "news_result": news_result,
+            "risk_result": risk_result,
+            "memory_result": memory_result,
+            "explanation": explanation,
         }
+
+        # Build room_artifacts using the unified builder
+        try:
+            from trading_server.artifact_builder import build_room_artifacts
+            _all = build_room_artifacts(task, full_result)
+            _telemetry_state["room_artifacts"] = _all
+            _persist_telemetry()
+        except Exception:
+            pass
+
+        return full_result
 
     except Exception as exc:
         logger.error(f"Trading agent failed: {exc}")

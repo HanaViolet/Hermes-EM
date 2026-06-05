@@ -1,5 +1,17 @@
 [
   {
+    "task_id": "05ce4290a3cd",
+    "ticker": "TSLA",
+    "strategy": "ma",
+    "completed_at": "2026-06-05 01:28:15"
+  },
+  {
+    "task_id": "75dd06235dc5",
+    "ticker": "SPY",
+    "strategy": "auto",
+    "completed_at": "2026-06-05 01:21:43"
+  },
+  {
     "task_id": "20c5504d0ecc",
     "ticker": "QQQ",
     "strategy": "ma",

@@ -5,6 +5,7 @@ from trading_agent.tools.strategy_tool import generate_signal
 from trading_agent.tools.risk_tool import apply_risk_control
 from trading_agent.tools.risk_scoring import compute_dynamic_risk_score
 from trading_agent.tools.backtest_tool import run_backtest, save_backtest_result
+from trading_agent.tools.chart_tool import make_equity_curve_fig, make_drawdown_fig
 from trading_agent.tools.memory_tool import compute_memory_score
 from trading_agent.tools.decision_score_tool import compute_decision_score
 from trading_agent.tools.explain_tool import explain_decision
@@ -69,7 +70,7 @@ def _write_room_artifacts_to_file(*, ticker, strategy_name, task, indicator_resu
             "document": _a("document","报告与分析室","report","done","Report","Ready","","positive","Report ready · "+ticker,ticker+" 策略分析完成。",[{"label":"Decision","value":dec_str.upper(),"display":"badge"}],["全部房间产物"],[ticker+" 分析报告"],["基于各步骤结果生成综合报告。"]),
             "agent": _a("agent","运行监控室","monitor","done","Agent 状态","完成","","positive","6 stages done","所有 Agent 阶段已执行完毕。",[{"label":"Pipeline","value":"已完成","display":"badge","level":"positive"}],[],[],[]),
             "log": _a("log","执行日志台","execution","done","Order","Simulated","","neutral","No order · Simulated","模拟执行模式，无实际订单产生。",[],[],[],[]),
-            "images": _a("images","图表分析室","chart","done","Charts","Ready","","positive","收益曲线 · K线图 ready","图表已生成。",[],[],[],[]),
+            "images": _a("images","图表分析室","chart","done","Charts","Ready","","positive","收益曲线 · K线图 ready","图表已生成，可查看策略与基准对比的权益曲线和回撤分析。",[{"label":"Strategy Return","value":str(_v(total_ret,".1f"))+"%","display":"number","level":"positive" if total_ret>0 else "danger"},{"label":"Benchmark Return","value":str(_v((backtest.get("benchmark_total_return") or 0)*100,".1f"))+"%","display":"number"},{"label":"Max Drawdown","value":str(_v(-dd_pct,".1f"))+"%","display":"bar","level":"danger" if dd_pct>25 else "warning"},{"label":"Win Rate","value":str(_v(((backtest.get("win_rate") or 0)*100),".1f"))+"%","display":"bar"}],["OHLCV data","Strategy signal","Backtest returns"],["Price trend","Return curve","Indicator chart"],["权益曲线对比策略与基准表现。","最大回撤分析识别风险集中区间。"]),
             "memory": _a("memory","策略记忆库","memory","done","策略记忆","已记录","","positive","Last: "+ticker+" · "+dec_str.upper(),ticker+" 分析记录已保存。",[],[],[],[]),
             "break_room": _a("break_room","休息室","idle","done","Last Task",ticker,"","positive",ticker+" · "+dec_str.upper(),"最新分析 "+ticker+" 已完成。Agent 返回休息室待命。",[{"label":"Decision","value":dec_str.upper(),"display":"badge","level":dec_level}],[],[],[]),
         }

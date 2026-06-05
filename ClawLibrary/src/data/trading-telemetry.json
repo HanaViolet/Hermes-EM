@@ -1,6 +1,6 @@
 {
   "mode": "live",
-  "generatedAt": "2026-06-05T01:28:12.998776+00:00",
+  "generatedAt": "2026-06-05T01:34:20.163843+00:00",
   "resources": [
     {
       "id": "document",
@@ -9,9 +9,9 @@
       "items": [
         {
           "id": "rp-1",
-          "title": "Report: TSLA",
+          "title": "Report: AAPL",
           "meta": "document",
-          "excerpt": "# Trading Agent Report: TSLA\n\n## Final Decision\n- Decision: Hold\n- Confidence: Low\n\n## Strategy\n- Selected Strategy: ma\n- Latest Signal: Cash\n\n## Backtest\n- Total Return: 49.63%\n- Benchmark Total Retu"
+          "excerpt": "# Trading Agent Report: AAPL\n\n## Final Decision\n- Decision: Buy\n- Confidence: Medium\n\n## Strategy\n- Selected Strategy: ma\n- Latest Signal: Long\n\n## Backtest\n- Total Return: 119.36%\n- Benchmark Total R"
         }
       ],
       "itemCount": 1,
@@ -113,7 +113,7 @@
           "id": "gw-2",
           "title": "Rows loaded: 10",
           "meta": "metric",
-          "excerpt": "Loaded 10 rows for TSLA"
+          "excerpt": "Loaded 10 rows for AAPL"
         }
       ],
       "itemCount": 2,
@@ -162,57 +162,57 @@
         },
         {
           "id": "ind-ma20",
-          "title": "ma20: 418.905",
+          "title": "ma20: 249.8095",
           "meta": "metric",
-          "excerpt": "418.905"
+          "excerpt": "249.8095"
         },
         {
           "id": "ind-ma60",
-          "title": "ma60: 326.5625",
+          "title": "ma60: 236.297",
           "meta": "metric",
-          "excerpt": "326.5625"
+          "excerpt": "236.297"
         },
         {
           "id": "ind-rsi",
-          "title": "rsi: 50.5685",
+          "title": "rsi: 53.9826",
           "meta": "metric",
-          "excerpt": "50.5685"
+          "excerpt": "53.9826"
         },
         {
           "id": "ind-macd",
-          "title": "macd: 23.8365",
+          "title": "macd: 5.0872",
           "meta": "metric",
-          "excerpt": "23.8365"
+          "excerpt": "5.0872"
         },
         {
           "id": "ind-macd_signal",
-          "title": "macd_signal: 30.9007",
+          "title": "macd_signal: 5.5499",
           "meta": "metric",
-          "excerpt": "30.9007"
+          "excerpt": "5.5499"
         },
         {
           "id": "ind-volatility_20d",
-          "title": "volatility_20d: 0.6719",
+          "title": "volatility_20d: 0.1649",
           "meta": "metric",
-          "excerpt": "0.6719"
+          "excerpt": "0.1649"
         },
         {
           "id": "ind-daily_return",
-          "title": "daily_return: -0.0325",
+          "title": "daily_return: -0.0071",
           "meta": "metric",
-          "excerpt": "-0.0325"
+          "excerpt": "-0.0071"
         },
         {
           "id": "ind-return_20d",
-          "title": "return_20d: 0.1309",
+          "title": "return_20d: 0.0452",
           "meta": "metric",
-          "excerpt": "0.1309"
+          "excerpt": "0.0452"
         },
         {
           "id": "ind-close",
-          "title": "close: 403.84",
+          "title": "close: 250.42",
           "meta": "metric",
-          "excerpt": "403.84"
+          "excerpt": "250.42"
         }
       ],
       "itemCount": 10,
@@ -363,9 +363,9 @@
       "items": [
         {
           "id": "br-1",
-          "title": "Last: TSLA",
+          "title": "Last: AAPL",
           "meta": "info",
-          "excerpt": "Completed analysis for TSLA"
+          "excerpt": "Completed analysis for AAPL"
         },
         {
           "id": "br-2",
@@ -393,62 +393,62 @@
     {
       "resourceId": "skills",
       "type": "access",
-      "detail": "Task: TSLA ma",
-      "timestamp": "2026-06-05T01:28:12.998776+00:00"
+      "detail": "Task: AAPL ma",
+      "timestamp": "2026-06-05T01:34:20.163843+00:00"
     },
     {
       "resourceId": "skills",
       "type": "access",
       "detail": "Start loading market data",
-      "timestamp": "2026-06-05T01:28:12.998776+00:00"
+      "timestamp": "2026-06-05T01:34:20.163843+00:00"
     },
     {
       "resourceId": "skills",
       "type": "access",
       "detail": "Loaded 1258 rows",
-      "timestamp": "2026-06-05T01:28:12.998776+00:00"
+      "timestamp": "2026-06-05T01:34:20.163843+00:00"
     },
     {
       "resourceId": "skills",
       "type": "access",
       "detail": "Start calculating MA, RSI, MACD and volatility",
-      "timestamp": "2026-06-05T01:28:12.998776+00:00"
+      "timestamp": "2026-06-05T01:34:20.163843+00:00"
     },
     {
       "resourceId": "skills",
       "type": "access",
       "detail": "Compare candidate strategies",
-      "timestamp": "2026-06-05T01:28:12.998776+00:00"
+      "timestamp": "2026-06-05T01:34:20.163843+00:00"
     },
     {
       "resourceId": "skills",
       "type": "access",
       "detail": "Apply volatility filter and stop-loss rule",
-      "timestamp": "2026-06-05T01:28:12.998776+00:00"
+      "timestamp": "2026-06-05T01:34:20.163843+00:00"
     },
     {
       "resourceId": "skills",
       "type": "access",
       "detail": "Calculate strategy returns and benchmark returns",
-      "timestamp": "2026-06-05T01:28:12.998776+00:00"
+      "timestamp": "2026-06-05T01:34:20.163843+00:00"
     },
     {
       "resourceId": "skills",
       "type": "access",
       "detail": "Generate performance summary and risk analysis",
-      "timestamp": "2026-06-05T01:28:12.998776+00:00"
+      "timestamp": "2026-06-05T01:34:20.163843+00:00"
     },
     {
       "resourceId": "skills",
       "type": "access",
       "detail": "Workflow completed",
-      "timestamp": "2026-06-05T01:28:12.998776+00:00"
+      "timestamp": "2026-06-05T01:34:20.163843+00:00"
     },
     {
       "resourceId": "skills",
       "type": "access",
-      "detail": "Regime: 市场处于上升趋势，波动率正常，适合跟随趋势策略。",
-      "timestamp": "2026-06-05T01:28:12.998776+00:00"
+      "detail": "Regime: 市场处于上升趋势，波动率偏低，适合跟随趋势策略。",
+      "timestamp": "2026-06-05T01:34:20.163843+00:00"
     }
   ],
   "focus": {
@@ -472,20 +472,20 @@
     "remaining": 52
   },
   "trading": {
-    "ticker": "TSLA",
+    "ticker": "AAPL",
     "strategy": "ma",
     "global_status": "done",
     "current_stage": "selecting_strategy",
     "progress": 48,
     "summary": {},
     "report": {
-      "markdown": "# Trading Agent Report: TSLA\n\n## Final Decision\n- Decision: Hold\n- Confidence: Low\n\n## Strategy\n- Selected Strategy: ma\n- Latest Signal: Cash\n\n## Backtest\n- Total Return: 49.63%\n- Benchmark Total Return: 1077.70%\n- Annual Return: 8.85%\n- Annual Volatility: 21.92%\n- Sharpe Ratio: 0.40\n- Max Drawdown: -39.44%\n- Benchmark Max Drawdown: -73.63%\n- Win Rate: 8.93%\n- Number of Trades: 40\n\n## Risk Notice\nThis result is based on historical backtesting and is for educational use only. It is not financial advice.\n",
+      "markdown": "# Trading Agent Report: AAPL\n\n## Final Decision\n- Decision: Buy\n- Confidence: Medium\n\n## Strategy\n- Selected Strategy: ma\n- Latest Signal: Long\n\n## Backtest\n- Total Return: 119.36%\n- Benchmark Total Return: 304.33%\n- Annual Return: 17.97%\n- Annual Volatility: 20.61%\n- Sharpe Ratio: 0.87\n- Max Drawdown: -22.54%\n- Benchmark Max Drawdown: -31.31%\n- Win Rate: 31.30%\n- Number of Trades: 39\n\n## Risk Notice\nThis result is based on historical backtesting and is for educational use only. It is not financial advice.\n",
       "path": ""
     },
     "error": null,
-    "decision": "Hold",
+    "decision": "Buy",
     "logs": [
-      "Task: TSLA ma",
+      "Task: AAPL ma",
       "Start loading market data",
       "Loaded 1258 rows",
       "Start calculating MA, RSI, MACD and volatility",
@@ -494,7 +494,7 @@
       "Calculate strategy returns and benchmark returns",
       "Generate performance summary and risk analysis",
       "Workflow completed",
-      "Regime: 市场处于上升趋势，波动率正常，适合跟随趋势策略。"
+      "Regime: 市场处于上升趋势，波动率偏低，适合跟随趋势策略。"
     ],
     "visited_rooms": [
       "gateway",
@@ -537,13 +537,13 @@
             "Yahoo Finance / Stooq"
           ],
           "output": [
-            "TSLA OHLCV daily data"
+            "AAPL OHLCV daily data"
           ],
           "reasoning": [
             "数据从缓存或远程源加载。"
           ]
         },
-        "updated_at": "2026-06-05 09:28:15"
+        "updated_at": "2026-06-05 09:34:22"
       },
       "mcp": {
         "room_id": "mcp",
@@ -552,36 +552,36 @@
         "type": "indicator",
         "primary": {
           "label": "RSI",
-          "value": "50.6",
+          "value": "54.0",
           "unit": "",
           "level": "neutral"
         },
-        "summary": "RSI 50.6 · MACD 23.84",
+        "summary": "RSI 54.0 · MACD 5.09",
         "insight": "指标计算完成，可继续后续分析。",
         "metrics": [
           {
             "label": "RSI",
-            "value": "50.6",
+            "value": "54.0",
             "display": "bar",
             "level": "neutral"
           },
           {
             "label": "MACD",
-            "value": "23.836",
+            "value": "5.087",
             "display": "number",
             "level": "neutral"
           },
           {
             "label": "MA20",
-            "value": "418.9",
+            "value": "249.8",
             "display": "number",
             "level": "positive"
           },
           {
             "label": "Volatility",
-            "value": "67.2%",
+            "value": "16.5%",
             "display": "bar",
-            "level": "warning"
+            "level": "neutral"
           }
         ],
         "details": {
@@ -602,7 +602,7 @@
             "MACD 动能待确认。"
           ]
         },
-        "updated_at": "2026-06-05 09:28:15"
+        "updated_at": "2026-06-05 09:34:22"
       },
       "skills": {
         "room_id": "skills",
@@ -630,7 +630,7 @@
             "比较各策略的历史表现。"
           ]
         },
-        "updated_at": "2026-06-05 09:28:15"
+        "updated_at": "2026-06-05 09:34:22"
       },
       "alarm": {
         "room_id": "alarm",
@@ -639,26 +639,26 @@
         "type": "risk",
         "primary": {
           "label": "Risk",
-          "value": 98,
+          "value": 56,
           "unit": "/100",
-          "level": "danger"
+          "level": "warning"
         },
-        "summary": "High · 98/100",
+        "summary": "Medium · 56/100",
         "insight": "最大回撤较高，建议降低仓位或保持观望。",
         "metrics": [
           {
             "label": "Risk Score",
-            "value": 98,
+            "value": 56,
             "unit": "/100",
             "display": "gauge",
-            "level": "danger"
+            "level": "warning"
           },
           {
             "label": "Max Drawdown",
-            "value": -39.4,
+            "value": -22.5,
             "unit": "%",
             "display": "bar",
-            "level": "danger"
+            "level": "warning"
           }
         ],
         "details": {
@@ -674,7 +674,7 @@
             "检查仓位限制和止损线。"
           ]
         },
-        "updated_at": "2026-06-05 09:28:15"
+        "updated_at": "2026-06-05 09:34:22"
       },
       "task_queues": {
         "room_id": "task_queues",
@@ -683,28 +683,28 @@
         "type": "backtest",
         "primary": {
           "label": "Sharpe",
-          "value": 0.4,
+          "value": 0.87,
           "unit": "",
-          "level": "neutral"
+          "level": "positive"
         },
-        "summary": "Return 49.6% · Sharpe 0.40",
-        "insight": "回测总收益 49.6%，夏普 0.40。",
+        "summary": "Return 119.4% · Sharpe 0.87",
+        "insight": "回测总收益 119.4%，夏普 0.87。",
         "metrics": [
           {
             "label": "Total Return",
-            "value": "49.6",
+            "value": "119.4",
             "unit": "%",
             "display": "bar",
             "level": "positive"
           },
           {
             "label": "Sharpe",
-            "value": "0.40",
+            "value": "0.87",
             "display": "number"
           },
           {
             "label": "Max Drawdown",
-            "value": "-39.4",
+            "value": "-22.5",
             "unit": "%",
             "display": "bar",
             "level": "warning"
@@ -722,7 +722,7 @@
             "基于历史数据模拟策略表现。"
           ]
         },
-        "updated_at": "2026-06-05 09:28:15"
+        "updated_at": "2026-06-05 09:34:22"
       },
       "schedule": {
         "room_id": "schedule",
@@ -731,18 +731,18 @@
         "type": "decision",
         "primary": {
           "label": "Decision",
-          "value": "HOLD",
+          "value": "BUY",
           "unit": "",
-          "level": "warning"
+          "level": "positive"
         },
-        "summary": "HOLD · Conf 62%",
+        "summary": "BUY · Conf 62%",
         "insight": "综合策略得分与风险约束后做出决策。",
         "metrics": [
           {
             "label": "Decision",
-            "value": "HOLD",
+            "value": "BUY",
             "display": "badge",
-            "level": "warning"
+            "level": "positive"
           }
         ],
         "details": {
@@ -758,7 +758,7 @@
             "综合各策略得分和风险约束后做出决策。"
           ]
         },
-        "updated_at": "2026-06-05 09:28:15"
+        "updated_at": "2026-06-05 09:34:22"
       },
       "document": {
         "room_id": "document",
@@ -771,12 +771,12 @@
           "unit": "",
           "level": "positive"
         },
-        "summary": "Report ready · TSLA",
-        "insight": "TSLA 策略分析完成。",
+        "summary": "Report ready · AAPL",
+        "insight": "AAPL 策略分析完成。",
         "metrics": [
           {
             "label": "Decision",
-            "value": "HOLD",
+            "value": "BUY",
             "display": "badge"
           }
         ],
@@ -785,13 +785,13 @@
             "全部房间产物"
           ],
           "output": [
-            "TSLA 分析报告"
+            "AAPL 分析报告"
           ],
           "reasoning": [
             "基于各步骤结果生成综合报告。"
           ]
         },
-        "updated_at": "2026-06-05 09:28:15"
+        "updated_at": "2026-06-05 09:34:22"
       },
       "agent": {
         "room_id": "agent",
@@ -819,7 +819,7 @@
           "output": [],
           "reasoning": []
         },
-        "updated_at": "2026-06-05 09:28:15"
+        "updated_at": "2026-06-05 09:34:22"
       },
       "log": {
         "room_id": "log",
@@ -840,7 +840,7 @@
           "output": [],
           "reasoning": []
         },
-        "updated_at": "2026-06-05 09:28:15"
+        "updated_at": "2026-06-05 09:34:22"
       },
       "images": {
         "room_id": "images",
@@ -858,24 +858,24 @@
         "metrics": [
           {
             "label": "Strategy Return",
-            "value": "49.6%",
+            "value": "119.4%",
             "display": "number",
             "level": "positive"
           },
           {
             "label": "Benchmark Return",
-            "value": "1077.7%",
+            "value": "304.3%",
             "display": "number"
           },
           {
             "label": "Max Drawdown",
-            "value": "-39.4%",
+            "value": "-22.5%",
             "display": "bar",
-            "level": "danger"
+            "level": "warning"
           },
           {
             "label": "Win Rate",
-            "value": "8.9%",
+            "value": "31.3%",
             "display": "bar"
           }
         ],
@@ -895,7 +895,7 @@
             "最大回撤分析识别风险集中区间。"
           ]
         },
-        "updated_at": "2026-06-05 09:28:15"
+        "updated_at": "2026-06-05 09:34:22"
       },
       "memory": {
         "room_id": "memory",
@@ -908,15 +908,15 @@
           "unit": "",
           "level": "positive"
         },
-        "summary": "Last: TSLA · HOLD",
-        "insight": "TSLA 分析记录已保存。",
+        "summary": "Last: AAPL · BUY",
+        "insight": "AAPL 分析记录已保存。",
         "metrics": [],
         "details": {
           "input": [],
           "output": [],
           "reasoning": []
         },
-        "updated_at": "2026-06-05 09:28:15"
+        "updated_at": "2026-06-05 09:34:22"
       },
       "break_room": {
         "room_id": "break_room",
@@ -925,18 +925,18 @@
         "type": "idle",
         "primary": {
           "label": "Last Task",
-          "value": "TSLA",
+          "value": "AAPL",
           "unit": "",
           "level": "positive"
         },
-        "summary": "TSLA · HOLD",
-        "insight": "最新分析 TSLA 已完成。Agent 返回休息室待命。",
+        "summary": "AAPL · BUY",
+        "insight": "最新分析 AAPL 已完成。Agent 返回休息室待命。",
         "metrics": [
           {
             "label": "Decision",
-            "value": "HOLD",
+            "value": "BUY",
             "display": "badge",
-            "level": "warning"
+            "level": "positive"
           }
         ],
         "details": {
@@ -944,7 +944,7 @@
           "output": [],
           "reasoning": []
         },
-        "updated_at": "2026-06-05 09:28:15"
+        "updated_at": "2026-06-05 09:34:22"
       }
     }
   }

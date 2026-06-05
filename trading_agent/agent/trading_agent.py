@@ -3,13 +3,29 @@ from trading_agent.tools.indicator_tool import add_technical_indicators
 from trading_agent.tools.regime_tool import detect_market_regime
 from trading_agent.tools.strategy_tool import generate_signal
 from trading_agent.tools.risk_tool import apply_risk_control
+from trading_agent.tools.risk_scoring import compute_dynamic_risk_score
 from trading_agent.tools.backtest_tool import run_backtest, save_backtest_result
+from trading_agent.tools.memory_tool import compute_memory_score
+from trading_agent.tools.decision_score_tool import compute_decision_score
+from trading_agent.tools.explain_tool import explain_decision
 from trading_agent.tools.report_tool import make_final_decision, generate_report
 from trading_agent.utils.logger import get_logger
 from trading_agent.utils.office_bridge import update_workflow, ROOM_LABELS, _telemetry_state
 
 import math as _math
 import json as _json
+
+
+def _load_history_for_memory() -> list:
+    """Load trading history for memory agent."""
+    try:
+        from pathlib import Path as _P3
+        _hp = _P3(__file__).resolve().parent.parent.parent / "trading_server" / "trading_history.json"
+        if _hp.exists():
+            return _json.loads(_hp.read_text(encoding="utf-8"))
+    except Exception:
+        pass
+    return []
 
 
 def _write_room_artifacts_to_file(*, ticker, strategy_name, task, indicator_result, strategy_scores, backtest, decision, report_md):

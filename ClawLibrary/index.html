@@ -4002,12 +4002,26 @@
       function populateAITab(a) {
         var el = document.getElementById('rm-content-ai');
         var insight = (a||{}).insight || 'Run an analysis to see insights.';
+        var reasoning = ((a||{}).details || {}).reasoning || [];
+        var counterfactual = ((a||{}).details || {}).counterfactual || [];
+
         var html = '<div style="padding:12px;font-size:13px;color:#94a3b8;">';
         html += '<div style="font-size:14px;color:#22d3ee;margin-bottom:8px;">Rule-based Insight</div>';
-        html += '<div style="margin-bottom:6px;">'+insight+'</div>';
+        html += '<div style="margin-bottom:12px;line-height:1.6;">'+insight+'</div>';
+
+        if (reasoning.length > 0) {
+          html += '<div style="font-size:12px;font-weight:700;color:#67e8f9;margin-bottom:4px;">Reasons</div>';
+          reasoning.forEach(function(r,i){ html += '<div style="font-size:12px;padding:3px 0;">'+(i+1)+'. '+r+'</div>'; });
+        }
+
+        if (counterfactual.length > 0) {
+          html += '<div style="font-size:12px;font-weight:700;color:#67e8f9;margin-top:10px;margin-bottom:4px;">Counterfactual</div>';
+          counterfactual.forEach(function(c,i){ html += '<div style="font-size:12px;padding:3px 0;color:#94a3b8;">'+(i+1)+'. '+c+'</div>'; });
+        }
+
         html += '<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">';
-        ['Why this decision?','What are the main risks?','Explain indicators','Suggest next action'].forEach(function(q){
-          html += '<button class="ai-quick-btn" onclick="document.getElementById(\'rm-ai-answer\').textContent=\'Rule-based: '+(insight||'').replace(/'/g,"\\'")+'\';">'+q+'</button>';
+        ['Why this decision?','What changes it?','Which strategy is best?'].forEach(function(q){
+          html += '<button class="ai-quick-btn" onclick="document.getElementById(\'rm-ai-answer\').textContent=\'Based on current analysis: '+(insight||'').replace(/'/g,'\\u2019').slice(0,150)+'\';">'+q+'</button>';
         });
         html += '</div><div id="rm-ai-answer" style="margin-top:10px;font-size:12px;color:#dbeafe;"></div></div>';
         el.innerHTML = html;

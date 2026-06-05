@@ -1,122 +1,14 @@
 [
   {
-    "task_id": "21ff88f3e338",
-    "ticker": "SPY",
-    "strategy": "auto",
-    "completed_at": "2026-06-04 12:02:31"
-  },
-  {
-    "task_id": "0629d652c64f",
-    "ticker": "SPY",
-    "strategy": "auto",
-    "completed_at": "2026-06-04 11:52:04"
-  },
-  {
-    "task_id": "663101c5ab6a",
-    "ticker": "SPY",
-    "strategy": "auto",
-    "completed_at": "2026-06-04 11:24:07"
-  },
-  {
-    "task_id": "6e5bef6c2c5d",
-    "ticker": "SPY",
-    "strategy": "auto",
-    "completed_at": "2026-06-04 11:00:57"
-  },
-  {
-    "task_id": "060e3426c866",
-    "ticker": "SPY",
-    "strategy": "auto",
-    "completed_at": "2026-06-04 11:00:03"
-  },
-  {
-    "task_id": "c1ac7ab4cbe7",
-    "ticker": "AAPL",
-    "strategy": "ma",
-    "completed_at": "2026-06-04 10:58:18"
-  },
-  {
-    "task_id": "4fb95db236e1",
-    "ticker": "SPY",
-    "strategy": "ma",
-    "completed_at": "2026-06-04 10:57:02"
-  },
-  {
-    "task_id": "eac30e2a9dd9",
+    "task_id": "fd2d7657a52a",
     "ticker": "QQQ",
     "strategy": "ma",
-    "completed_at": "2026-06-04 10:54:07"
+    "completed_at": "2026-06-05 00:52:21"
   },
   {
-    "task_id": "827bfe7a2058",
+    "task_id": "1780657ca935",
     "ticker": "SPY",
     "strategy": "ma",
-    "completed_at": "2026-06-04 10:52:41"
-  },
-  {
-    "task_id": "d75cf2de28be",
-    "ticker": "QQQ",
-    "strategy": "ma",
-    "completed_at": "2026-06-04 10:51:42"
-  },
-  {
-    "task_id": "18066a2a3b35",
-    "ticker": "SPY",
-    "strategy": "ma",
-    "completed_at": "2026-06-04 10:50:46"
-  },
-  {
-    "task_id": "3d22718a5319",
-    "ticker": "TSLA",
-    "strategy": "auto",
-    "completed_at": "2026-06-04 08:53:28"
-  },
-  {
-    "task_id": "4ac4d3281a29",
-    "ticker": "AAPL",
-    "strategy": "auto",
-    "completed_at": "2026-06-04 08:51:35"
-  },
-  {
-    "task_id": "0e6c8d345b62",
-    "ticker": "SPY",
-    "strategy": "auto",
-    "completed_at": "2026-06-04 08:49:57"
-  },
-  {
-    "task_id": "60007d63b7c4",
-    "ticker": "AAPL",
-    "strategy": "auto",
-    "completed_at": "2026-06-04 08:45:56"
-  },
-  {
-    "task_id": "db3555ccaa3e",
-    "ticker": "NVDA",
-    "strategy": "auto",
-    "completed_at": "2026-06-04 08:43:52"
-  },
-  {
-    "task_id": "fb733417e263",
-    "ticker": "SPY",
-    "strategy": "auto",
-    "completed_at": "2026-06-04 08:42:00"
-  },
-  {
-    "task_id": "76c3bbec5a83",
-    "ticker": "QQQ",
-    "strategy": "auto",
-    "completed_at": "2026-06-04 08:39:00"
-  },
-  {
-    "task_id": "791612183481",
-    "ticker": "AAPL",
-    "strategy": "auto",
-    "completed_at": "2026-06-04 08:35:59"
-  },
-  {
-    "task_id": "6c810d786f46",
-    "ticker": "SPY",
-    "strategy": "auto",
-    "completed_at": "2026-06-04 08:33:55"
+    "completed_at": "2026-06-05 00:51:10"
   }
 ]

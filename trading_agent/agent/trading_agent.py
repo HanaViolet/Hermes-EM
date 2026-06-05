@@ -129,26 +129,27 @@ def select_best_strategy(data, strategies, transaction_cost=0.001):
 
         result = run_backtest(data, final_signal, transaction_cost)
 
-        score = (
+        raw_score = (
             result["sharpe_ratio"]
             + result["annual_return"]
             + result["max_drawdown"]
             - 0.001 * result["number_of_trades"]
         )
-
         if result["max_drawdown"] < -0.40:
-            score -= 1.0
+            raw_score -= 1.0
+        normalized_score = max(0, min(100, 50 + raw_score * 20))
 
         strategy_scores.append({
             "name": strategy_name,
-            "score": round(score, 3),
+            "raw_score": round(raw_score, 4),
+            "score": round(normalized_score, 2),
             "sharpe": round(result["sharpe_ratio"], 3),
             "return": round(result["total_return"] * 100, 2),
             "trades": result["number_of_trades"],
         })
 
-        if score > best_score:
-            best_score = score
+        if normalized_score > best_score:
+            best_score = normalized_score
             best_strategy = strategy_name
             best_signal = final_signal
             best_result = result
@@ -220,22 +221,16 @@ def run_trading_agent(
 
         # Extract indicator values for room artifacts display
         last_row = data.iloc[-1]
-        indicator_metrics = {}
-        for col in ["ma20","ma60","rsi","macd","macd_signal","volatility_20d","daily_return","return_20d","close"]:
+        indicator_result = {}
+        for col in ["close","ma20","ma60","rsi","macd","macd_signal","volatility_20d","daily_return","return_20d"]:
             if col in data.columns:
                 try:
-                    val = float(last_row[col])
-                    if not _math.isnan(val):
-                        indicator_metrics[col] = round(val, 4)
-                except Exception:
-                    pass
-        # Push indicator values as telemetry metrics
-        update_workflow(
-            current_stage="calculating_indicators",
-            progress=30,
-            summary=f"Indicators: RSI={indicator_metrics.get('rsi','?')}, MACD={indicator_metrics.get('macd','?')}",
-            details=indicator_metrics,
-        )
+                    v = float(last_row[col])
+                    if not _math.isnan(v):
+                        indicator_result[col] = round(v, 6)
+                except Exception: pass
+        indicator_result["rows"] = len(data)
+        update_workflow(current_stage="calculating_indicators", progress=30, summary=f"Indicators: RSI={indicator_result.get('rsi','?')}, MACD={indicator_result.get('macd','?')}", details=indicator_result)
 
         # ── Stage 3: Regime Detection ──
         regime_result = detect_market_regime(data)
@@ -300,7 +295,7 @@ def run_trading_agent(
         update_workflow(current_stage="using_memory", progress=78, summary=f"Memory: {memory_result.get('memory_score',0)} boost", logs=[memory_result.get("evidence","")])
 
         # ── Stage 9: Score-based Decision ──
-        decision_result = compute_decision_score(regime=regime_result, risk=risk_result, strategy_scores=strategy_scores, memory=memory_result, indicators=indicator_result, backtest=result)
+        decision_result = compute_decision_score(regime=regime_result, risk=risk_result, strategy_scores=strategy_scores, memory=memory_result, indicators=indicator_result, backtest=result, news_result=news_result)
         update_workflow(current_stage="making_decision", progress=88, summary=f"Decision: {decision_result['decision'].upper()} (score={decision_result['decision_score']})")
 
         # ── Stage 10: Explain ──
@@ -334,15 +329,6 @@ def run_trading_agent(
             "memory_result": memory_result,
             "explanation": explanation,
         }
-
-        # Build room_artifacts using the unified builder
-        try:
-            from trading_server.artifact_builder import build_room_artifacts
-            _all = build_room_artifacts(task, full_result)
-            _telemetry_state["room_artifacts"] = _all
-            _persist_telemetry()
-        except Exception:
-            pass
 
         return full_result
 

@@ -48,6 +48,26 @@ def _run_agent_in_background(task: dict, task_id: str) -> None:
             transaction_cost=transaction_cost,
         )
 
+        # Build room_artifacts and write to telemetry
+        try:
+            from artifact_builder import build_room_artifacts
+            _all = build_room_artifacts(task, result)
+            _path = _AGENT_PARENT / "ClawLibrary" / "src" / "data" / "trading-telemetry.json"
+            if _path.exists():
+                _snap = _json.loads(_path.read_text(encoding="utf-8"))
+                _snap.setdefault("trading", {})["room_artifacts"] = _all
+                for _r in _snap.setdefault("resources", []):
+                    a = _all.get(_r["id"])
+                    if a:
+                        _r["items"] = [{"id": a["room_id"]+"-"+str(i), "title": m["label"]+": "+str(m["value"]), "meta": m.get("display","metric"), "excerpt": a.get("insight","")} for i,m in enumerate(a.get("metrics",[]))]
+                        _r["itemCount"] = len(_r["items"])
+                        _r["status"] = a["status"]
+                _tmp = _path.with_suffix(".tmp")
+                _tmp.write_text(_json.dumps(_snap, ensure_ascii=False, indent=2), encoding="utf-8")
+                _tmp.replace(_path)
+        except Exception:
+            pass
+
         decision = result.get("decision", {})
         backtest = result.get("backtest_result", {})
         report_md = result.get("report", "")

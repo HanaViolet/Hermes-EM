@@ -1,0 +1,917 @@
+{
+  "mode": "live",
+  "generatedAt": "2026-06-05T01:18:40.774748+00:00",
+  "resources": [
+    {
+      "id": "document",
+      "title": "Reports & Analysis",
+      "status": "done",
+      "items": [
+        {
+          "id": "rp-1",
+          "title": "Report: QQQ",
+          "meta": "document",
+          "excerpt": "# Trading Agent Report: QQQ\n\n## Final Decision\n- Decision: Hold\n- Confidence: Low\n\n## Strategy\n- Selected Strategy: ma\n- Latest Signal: Long\n\n## Backtest\n- Total Return: 37.03%\n- Benchmark Total Retur"
+        }
+      ],
+      "itemCount": 1,
+      "stats": [
+        {
+          "label": "en",
+          "value": "Reports & Analysis",
+          "tone": "neutral"
+        },
+        {
+          "label": "zh",
+          "value": "报告与分析室",
+          "tone": "neutral"
+        }
+      ]
+    },
+    {
+      "id": "images",
+      "title": "Chart Room",
+      "status": "idle",
+      "items": [],
+      "itemCount": 0,
+      "stats": [
+        {
+          "label": "en",
+          "value": "Chart Room",
+          "tone": "neutral"
+        },
+        {
+          "label": "zh",
+          "value": "图表分析室",
+          "tone": "neutral"
+        }
+      ]
+    },
+    {
+      "id": "memory",
+      "title": "Strategy Memory",
+      "status": "idle",
+      "items": [],
+      "itemCount": 0,
+      "stats": [
+        {
+          "label": "en",
+          "value": "Strategy Memory",
+          "tone": "neutral"
+        },
+        {
+          "label": "zh",
+          "value": "策略记忆库",
+          "tone": "neutral"
+        }
+      ]
+    },
+    {
+      "id": "skills",
+      "title": "Strategy Lab",
+      "status": "done",
+      "items": [
+        {
+          "id": "st-1",
+          "title": "Strategy: ma",
+          "meta": "info",
+          "excerpt": "Selected trading strategy"
+        },
+        {
+          "id": "st-2",
+          "title": "Signal: N/A",
+          "meta": "metric",
+          "excerpt": "Trade signal"
+        }
+      ],
+      "itemCount": 2,
+      "stats": [
+        {
+          "label": "en",
+          "value": "Strategy Lab",
+          "tone": "neutral"
+        },
+        {
+          "label": "zh",
+          "value": "策略实验室",
+          "tone": "neutral"
+        }
+      ]
+    },
+    {
+      "id": "gateway",
+      "title": "Market Data Room",
+      "status": "done",
+      "items": [
+        {
+          "id": "gw-1",
+          "title": "Data Source: Yahoo Finance",
+          "meta": "info",
+          "excerpt": "OHLCV daily data"
+        },
+        {
+          "id": "gw-2",
+          "title": "Rows loaded: 10",
+          "meta": "metric",
+          "excerpt": "Loaded 10 rows for QQQ"
+        }
+      ],
+      "itemCount": 2,
+      "stats": [
+        {
+          "label": "en",
+          "value": "Market Data Room",
+          "tone": "neutral"
+        },
+        {
+          "label": "zh",
+          "value": "市场数据室",
+          "tone": "neutral"
+        }
+      ]
+    },
+    {
+      "id": "log",
+      "title": "Execution Logs",
+      "status": "idle",
+      "items": [],
+      "itemCount": 0,
+      "stats": [
+        {
+          "label": "en",
+          "value": "Execution Logs",
+          "tone": "neutral"
+        },
+        {
+          "label": "zh",
+          "value": "执行日志台",
+          "tone": "neutral"
+        }
+      ]
+    },
+    {
+      "id": "mcp",
+      "title": "Indicator Lab",
+      "status": "done",
+      "items": [
+        {
+          "id": "ind-rows",
+          "title": "rows: 1258.0",
+          "meta": "metric",
+          "excerpt": "1258.0"
+        },
+        {
+          "id": "ind-ma20",
+          "title": "ma20: 523.6725",
+          "meta": "metric",
+          "excerpt": "523.6725"
+        },
+        {
+          "id": "ind-ma60",
+          "title": "ma60: 507.3153",
+          "meta": "metric",
+          "excerpt": "507.3153"
+        },
+        {
+          "id": "ind-rsi",
+          "title": "rsi: 44.3507",
+          "meta": "metric",
+          "excerpt": "44.3507"
+        },
+        {
+          "id": "ind-macd",
+          "title": "macd: 2.4002",
+          "meta": "metric",
+          "excerpt": "2.4002"
+        },
+        {
+          "id": "ind-macd_signal",
+          "title": "macd_signal: 4.617",
+          "meta": "metric",
+          "excerpt": "4.617"
+        },
+        {
+          "id": "ind-volatility_20d",
+          "title": "volatility_20d: 0.2008",
+          "meta": "metric",
+          "excerpt": "0.2008"
+        },
+        {
+          "id": "ind-daily_return",
+          "title": "daily_return: -0.0085",
+          "meta": "metric",
+          "excerpt": "-0.0085"
+        },
+        {
+          "id": "ind-return_20d",
+          "title": "return_20d: -0.0079",
+          "meta": "metric",
+          "excerpt": "-0.0079"
+        },
+        {
+          "id": "ind-close",
+          "title": "close: 511.23",
+          "meta": "metric",
+          "excerpt": "511.23"
+        }
+      ],
+      "itemCount": 10,
+      "stats": [
+        {
+          "label": "en",
+          "value": "Indicator Lab",
+          "tone": "neutral"
+        },
+        {
+          "label": "zh",
+          "value": "指标实验室",
+          "tone": "neutral"
+        }
+      ]
+    },
+    {
+      "id": "schedule",
+      "title": "Decision Desk",
+      "status": "idle",
+      "items": [],
+      "itemCount": 0,
+      "stats": [
+        {
+          "label": "en",
+          "value": "Decision Desk",
+          "tone": "neutral"
+        },
+        {
+          "label": "zh",
+          "value": "决策调度台",
+          "tone": "neutral"
+        }
+      ]
+    },
+    {
+      "id": "alarm",
+      "title": "Risk Alert Room",
+      "status": "done",
+      "items": [
+        {
+          "id": "rk-1",
+          "title": "Max DD: 0%",
+          "meta": "metric",
+          "excerpt": "Maximum drawdown"
+        },
+        {
+          "id": "rk-2",
+          "title": "Confidence: N/A",
+          "meta": "metric",
+          "excerpt": "Decision confidence"
+        }
+      ],
+      "itemCount": 2,
+      "stats": [
+        {
+          "label": "en",
+          "value": "Risk Alert Room",
+          "tone": "neutral"
+        },
+        {
+          "label": "zh",
+          "value": "风险报警室",
+          "tone": "neutral"
+        }
+      ]
+    },
+    {
+      "id": "agent",
+      "title": "Agent Monitor",
+      "status": "idle",
+      "items": [
+        {
+          "id": "ag-1",
+          "title": "Stage: Strategy",
+          "meta": "info",
+          "excerpt": "Current workflow stage"
+        },
+        {
+          "id": "ag-2",
+          "title": "Progress: 48%",
+          "meta": "metric",
+          "excerpt": "Workflow progress"
+        }
+      ],
+      "itemCount": 2,
+      "stats": [
+        {
+          "label": "en",
+          "value": "Agent Monitor",
+          "tone": "neutral"
+        },
+        {
+          "label": "zh",
+          "value": "运行监控室",
+          "tone": "neutral"
+        }
+      ]
+    },
+    {
+      "id": "task_queues",
+      "title": "Backtest Lab",
+      "status": "done",
+      "items": [
+        {
+          "id": "bt-1",
+          "title": "Sharpe: 0",
+          "meta": "metric",
+          "excerpt": "Risk-adjusted return"
+        },
+        {
+          "id": "bt-2",
+          "title": "Return: 0%",
+          "meta": "metric",
+          "excerpt": "Total return"
+        },
+        {
+          "id": "bt-3",
+          "title": "Win Rate: 0%",
+          "meta": "metric",
+          "excerpt": "Trade win rate"
+        },
+        {
+          "id": "bt-4",
+          "title": "Trades: ?",
+          "meta": "metric",
+          "excerpt": "Number of trades"
+        }
+      ],
+      "itemCount": 4,
+      "stats": [
+        {
+          "label": "en",
+          "value": "Backtest Lab",
+          "tone": "neutral"
+        },
+        {
+          "label": "zh",
+          "value": "回测实验室",
+          "tone": "neutral"
+        }
+      ]
+    },
+    {
+      "id": "break_room",
+      "title": "Break Room",
+      "status": "done",
+      "items": [
+        {
+          "id": "br-1",
+          "title": "Last: QQQ",
+          "meta": "info",
+          "excerpt": "Completed analysis for QQQ"
+        },
+        {
+          "id": "br-2",
+          "title": "Decision: ?",
+          "meta": "metric",
+          "excerpt": "Final trading decision"
+        }
+      ],
+      "itemCount": 2,
+      "stats": [
+        {
+          "label": "en",
+          "value": "Break Room",
+          "tone": "neutral"
+        },
+        {
+          "label": "zh",
+          "value": "休息室",
+          "tone": "neutral"
+        }
+      ]
+    }
+  ],
+  "recentEvents": [
+    {
+      "resourceId": "skills",
+      "type": "access",
+      "detail": "Task: QQQ ma",
+      "timestamp": "2026-06-05T01:18:40.774748+00:00"
+    },
+    {
+      "resourceId": "skills",
+      "type": "access",
+      "detail": "Start loading market data",
+      "timestamp": "2026-06-05T01:18:40.774748+00:00"
+    },
+    {
+      "resourceId": "skills",
+      "type": "access",
+      "detail": "Loaded 1258 rows",
+      "timestamp": "2026-06-05T01:18:40.774748+00:00"
+    },
+    {
+      "resourceId": "skills",
+      "type": "access",
+      "detail": "Start calculating MA, RSI, MACD and volatility",
+      "timestamp": "2026-06-05T01:18:40.774748+00:00"
+    },
+    {
+      "resourceId": "skills",
+      "type": "access",
+      "detail": "Compare candidate strategies",
+      "timestamp": "2026-06-05T01:18:40.774748+00:00"
+    },
+    {
+      "resourceId": "skills",
+      "type": "access",
+      "detail": "Apply volatility filter and stop-loss rule",
+      "timestamp": "2026-06-05T01:18:40.774748+00:00"
+    },
+    {
+      "resourceId": "skills",
+      "type": "access",
+      "detail": "Calculate strategy returns and benchmark returns",
+      "timestamp": "2026-06-05T01:18:40.774748+00:00"
+    },
+    {
+      "resourceId": "skills",
+      "type": "access",
+      "detail": "Generate performance summary and risk analysis",
+      "timestamp": "2026-06-05T01:18:40.774748+00:00"
+    },
+    {
+      "resourceId": "skills",
+      "type": "access",
+      "detail": "Workflow completed",
+      "timestamp": "2026-06-05T01:18:40.774748+00:00"
+    },
+    {
+      "resourceId": "skills",
+      "type": "access",
+      "detail": "Regime: 市场处于震荡状态，波动率正常，趋势信号不强，不适合激进追涨。",
+      "timestamp": "2026-06-05T01:18:40.774748+00:00"
+    }
+  ],
+  "focus": {
+    "resourceId": "skills",
+    "detail": "",
+    "reason": "Strategy Selection",
+    "actorState": "cataloging"
+  },
+  "activeAgents": [
+    {
+      "id": "selecting_strategy",
+      "label": "Strategy Selector",
+      "status": "active",
+      "focus": "skills"
+    }
+  ],
+  "activeProcesses": [],
+  "mainActorContext": {
+    "tokens": 48,
+    "maxTokens": 100,
+    "remaining": 52
+  },
+  "trading": {
+    "ticker": "QQQ",
+    "strategy": "ma",
+    "global_status": "done",
+    "current_stage": "selecting_strategy",
+    "progress": 48,
+    "summary": {},
+    "report": {
+      "markdown": "# Trading Agent Report: QQQ\n\n## Final Decision\n- Decision: Hold\n- Confidence: Low\n\n## Strategy\n- Selected Strategy: ma\n- Latest Signal: Long\n\n## Backtest\n- Total Return: 37.03%\n- Benchmark Total Return: 175.89%\n- Annual Return: 6.85%\n- Annual Volatility: 16.88%\n- Sharpe Ratio: 0.41\n- Max Drawdown: -35.19%\n- Benchmark Max Drawdown: -35.62%\n- Win Rate: 37.81%\n- Number of Trades: 29\n\n## Risk Notice\nThis result is based on historical backtesting and is for educational use only. It is not financial advice.\n",
+      "path": ""
+    },
+    "error": null,
+    "decision": "Hold",
+    "logs": [
+      "Task: QQQ ma",
+      "Start loading market data",
+      "Loaded 1258 rows",
+      "Start calculating MA, RSI, MACD and volatility",
+      "Compare candidate strategies",
+      "Apply volatility filter and stop-loss rule",
+      "Calculate strategy returns and benchmark returns",
+      "Generate performance summary and risk analysis",
+      "Workflow completed",
+      "Regime: 市场处于震荡状态，波动率正常，趋势信号不强，不适合激进追涨。"
+    ],
+    "visited_rooms": [
+      "gateway",
+      "mcp",
+      "skills",
+      "alarm",
+      "task_queues",
+      "document",
+      "break_room"
+    ],
+    "room_artifacts": {
+      "gateway": {
+        "room_id": "gateway",
+        "room_name": "市场数据室",
+        "status": "done",
+        "type": "data",
+        "primary": {
+          "label": "数据条数",
+          "value": "1199",
+          "unit": "bars",
+          "level": "positive"
+        },
+        "summary": "1199 bars",
+        "insight": "行情数据完整，无明显缺失。",
+        "metrics": [
+          {
+            "label": "时间区间",
+            "value": "2020-01-01 ~ 2024-12-31",
+            "display": "text"
+          },
+          {
+            "label": "缺失值",
+            "value": 0,
+            "display": "number",
+            "level": "positive"
+          }
+        ],
+        "details": {
+          "input": [
+            "Yahoo Finance / Stooq"
+          ],
+          "output": [
+            "QQQ OHLCV daily data"
+          ],
+          "reasoning": [
+            "数据从缓存或远程源加载。"
+          ]
+        },
+        "updated_at": "2026-06-05 09:18:42"
+      },
+      "mcp": {
+        "room_id": "mcp",
+        "room_name": "指标实验室",
+        "status": "done",
+        "type": "indicator",
+        "primary": {
+          "label": "RSI",
+          "value": "44.4",
+          "unit": "",
+          "level": "neutral"
+        },
+        "summary": "RSI 44.4 · MACD 2.40",
+        "insight": "指标计算完成，可继续后续分析。",
+        "metrics": [
+          {
+            "label": "RSI",
+            "value": "44.4",
+            "display": "bar",
+            "level": "neutral"
+          },
+          {
+            "label": "MACD",
+            "value": "2.400",
+            "display": "number",
+            "level": "neutral"
+          },
+          {
+            "label": "MA20",
+            "value": "523.7",
+            "display": "number",
+            "level": "positive"
+          },
+          {
+            "label": "Volatility",
+            "value": "20.1%",
+            "display": "bar",
+            "level": "neutral"
+          }
+        ],
+        "details": {
+          "input": [
+            "close price",
+            "volume",
+            "returns"
+          ],
+          "output": [
+            "RSI",
+            "MACD",
+            "MA20",
+            "MA60",
+            "Volatility"
+          ],
+          "reasoning": [
+            "RSI 未进入超买或超卖区间。",
+            "MACD 动能待确认。"
+          ]
+        },
+        "updated_at": "2026-06-05 09:18:42"
+      },
+      "skills": {
+        "room_id": "skills",
+        "room_name": "策略实验室",
+        "status": "done",
+        "type": "strategy",
+        "primary": {
+          "label": "Top 策略",
+          "value": "ma",
+          "unit": "",
+          "level": "positive"
+        },
+        "summary": "Strategy: ma",
+        "insight": "策略比较完成。",
+        "metrics": [],
+        "details": {
+          "input": [
+            "MA / RSI / MACD indicators"
+          ],
+          "output": [
+            "Signal",
+            "Score"
+          ],
+          "reasoning": [
+            "比较各策略的历史表现。"
+          ]
+        },
+        "updated_at": "2026-06-05 09:18:42"
+      },
+      "alarm": {
+        "room_id": "alarm",
+        "room_name": "风险报警室",
+        "status": "warning",
+        "type": "risk",
+        "primary": {
+          "label": "Risk",
+          "value": 87,
+          "unit": "/100",
+          "level": "danger"
+        },
+        "summary": "High · 87/100",
+        "insight": "最大回撤较高，建议降低仓位或保持观望。",
+        "metrics": [
+          {
+            "label": "Risk Score",
+            "value": 87,
+            "unit": "/100",
+            "display": "gauge",
+            "level": "danger"
+          },
+          {
+            "label": "Max Drawdown",
+            "value": -35.2,
+            "unit": "%",
+            "display": "bar",
+            "level": "danger"
+          }
+        ],
+        "details": {
+          "input": [
+            "策略信号",
+            "风控参数"
+          ],
+          "output": [
+            "风险评分",
+            "最大回撤"
+          ],
+          "reasoning": [
+            "检查仓位限制和止损线。"
+          ]
+        },
+        "updated_at": "2026-06-05 09:18:42"
+      },
+      "task_queues": {
+        "room_id": "task_queues",
+        "room_name": "回测实验室",
+        "status": "done",
+        "type": "backtest",
+        "primary": {
+          "label": "Sharpe",
+          "value": 0.41,
+          "unit": "",
+          "level": "neutral"
+        },
+        "summary": "Return 37.0% · Sharpe 0.41",
+        "insight": "回测总收益 37.0%，夏普 0.41。",
+        "metrics": [
+          {
+            "label": "Total Return",
+            "value": "37.0",
+            "unit": "%",
+            "display": "bar",
+            "level": "positive"
+          },
+          {
+            "label": "Sharpe",
+            "value": "0.41",
+            "display": "number"
+          },
+          {
+            "label": "Max Drawdown",
+            "value": "-35.2",
+            "unit": "%",
+            "display": "bar",
+            "level": "warning"
+          }
+        ],
+        "details": {
+          "input": [
+            "交易信号序列"
+          ],
+          "output": [
+            "权益曲线",
+            "成交列表"
+          ],
+          "reasoning": [
+            "基于历史数据模拟策略表现。"
+          ]
+        },
+        "updated_at": "2026-06-05 09:18:42"
+      },
+      "schedule": {
+        "room_id": "schedule",
+        "room_name": "决策调度台",
+        "status": "done",
+        "type": "decision",
+        "primary": {
+          "label": "Decision",
+          "value": "HOLD",
+          "unit": "",
+          "level": "warning"
+        },
+        "summary": "HOLD · Conf 62%",
+        "insight": "综合策略得分与风险约束后做出决策。",
+        "metrics": [
+          {
+            "label": "Decision",
+            "value": "HOLD",
+            "display": "badge",
+            "level": "warning"
+          }
+        ],
+        "details": {
+          "input": [
+            "策略排序",
+            "风险评估"
+          ],
+          "output": [
+            "Buy/Sell/Hold",
+            "Confidence"
+          ],
+          "reasoning": [
+            "综合各策略得分和风险约束后做出决策。"
+          ]
+        },
+        "updated_at": "2026-06-05 09:18:42"
+      },
+      "document": {
+        "room_id": "document",
+        "room_name": "报告与分析室",
+        "status": "done",
+        "type": "report",
+        "primary": {
+          "label": "Report",
+          "value": "Ready",
+          "unit": "",
+          "level": "positive"
+        },
+        "summary": "Report ready · QQQ",
+        "insight": "QQQ 策略分析完成。",
+        "metrics": [
+          {
+            "label": "Decision",
+            "value": "HOLD",
+            "display": "badge"
+          }
+        ],
+        "details": {
+          "input": [
+            "全部房间产物"
+          ],
+          "output": [
+            "QQQ 分析报告"
+          ],
+          "reasoning": [
+            "基于各步骤结果生成综合报告。"
+          ]
+        },
+        "updated_at": "2026-06-05 09:18:42"
+      },
+      "agent": {
+        "room_id": "agent",
+        "room_name": "运行监控室",
+        "status": "done",
+        "type": "monitor",
+        "primary": {
+          "label": "Agent 状态",
+          "value": "完成",
+          "unit": "",
+          "level": "positive"
+        },
+        "summary": "6 stages done",
+        "insight": "所有 Agent 阶段已执行完毕。",
+        "metrics": [
+          {
+            "label": "Pipeline",
+            "value": "已完成",
+            "display": "badge",
+            "level": "positive"
+          }
+        ],
+        "details": {
+          "input": [],
+          "output": [],
+          "reasoning": []
+        },
+        "updated_at": "2026-06-05 09:18:42"
+      },
+      "log": {
+        "room_id": "log",
+        "room_name": "执行日志台",
+        "status": "done",
+        "type": "execution",
+        "primary": {
+          "label": "Order",
+          "value": "Simulated",
+          "unit": "",
+          "level": "neutral"
+        },
+        "summary": "No order · Simulated",
+        "insight": "模拟执行模式，无实际订单产生。",
+        "metrics": [],
+        "details": {
+          "input": [],
+          "output": [],
+          "reasoning": []
+        },
+        "updated_at": "2026-06-05 09:18:42"
+      },
+      "images": {
+        "room_id": "images",
+        "room_name": "图表分析室",
+        "status": "done",
+        "type": "chart",
+        "primary": {
+          "label": "Charts",
+          "value": "Ready",
+          "unit": "",
+          "level": "positive"
+        },
+        "summary": "收益曲线 · K线图 ready",
+        "insight": "图表已生成。",
+        "metrics": [],
+        "details": {
+          "input": [],
+          "output": [],
+          "reasoning": []
+        },
+        "updated_at": "2026-06-05 09:18:42"
+      },
+      "memory": {
+        "room_id": "memory",
+        "room_name": "策略记忆库",
+        "status": "done",
+        "type": "memory",
+        "primary": {
+          "label": "策略记忆",
+          "value": "已记录",
+          "unit": "",
+          "level": "positive"
+        },
+        "summary": "Last: QQQ · HOLD",
+        "insight": "QQQ 分析记录已保存。",
+        "metrics": [],
+        "details": {
+          "input": [],
+          "output": [],
+          "reasoning": []
+        },
+        "updated_at": "2026-06-05 09:18:42"
+      },
+      "break_room": {
+        "room_id": "break_room",
+        "room_name": "休息室",
+        "status": "done",
+        "type": "idle",
+        "primary": {
+          "label": "Last Task",
+          "value": "QQQ",
+          "unit": "",
+          "level": "positive"
+        },
+        "summary": "QQQ · HOLD",
+        "insight": "最新分析 QQQ 已完成。Agent 返回休息室待命。",
+        "metrics": [
+          {
+            "label": "Decision",
+            "value": "HOLD",
+            "display": "badge",
+            "level": "warning"
+          }
+        ],
+        "details": {
+          "input": [],
+          "output": [],
+          "reasoning": []
+        },
+        "updated_at": "2026-06-05 09:18:42"
+      }
+    }
+  }
+}

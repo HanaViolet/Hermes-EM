@@ -10,7 +10,7 @@ from trading_agent.tools.decision_score_tool import compute_decision_score
 from trading_agent.tools.explain_tool import explain_decision
 from trading_agent.tools.report_tool import make_final_decision, generate_report
 from trading_agent.utils.logger import get_logger
-from trading_agent.utils.office_bridge import update_workflow, ROOM_LABELS, _telemetry_state
+from trading_agent.utils.office_bridge import update_workflow, ROOM_LABELS, _telemetry_state, _persist_telemetry
 
 import math as _math
 import json as _json
@@ -64,7 +64,7 @@ def _write_room_artifacts_to_file(*, ticker, strategy_name, task, indicator_resu
             "mcp": _a("mcp","指标实验室","indicator","done","RSI",_v(rsi_val,".1f"),"","warning" if rsi_val and (rsi_val>70 or rsi_val<30) else "neutral",f'RSI {_v(rsi_val,".1f")} · MACD {_v(macd_val,".2f")}',"指标计算完成，可继续后续分析。",[{"label":"RSI","value":_v(rsi_val,".1f"),"display":"bar","level":"warning" if rsi_val and (rsi_val>70 or rsi_val<30) else "neutral"},{"label":"MACD","value":_v(macd_val,".3f"),"display":"number","level":"neutral"},{"label":"MA20","value":_v(ma20_val,".1f"),"display":"number","level":"positive"},{"label":"Volatility","value":(str(round(float(vol_val)*100,1))+"%") if vol_val is not None else "N/A","display":"bar","level":"warning" if vol_val and vol_val>0.3 else "neutral"}],["close price","volume","returns"],["RSI","MACD","MA20","MA60","Volatility"],["RSI 未进入超买或超卖区间。","MACD 动能待确认。"]),
             "skills": _a("skills","策略实验室","strategy","done","Top 策略",top_name,top_score,"positive",(top_name+" · Score "+top_score) if strategy_scores else "Strategy: "+strategy_name,"策略比较完成。",[{"label":sc.get("name","?"),"value":sc.get("score",0),"display":"strategy_score","signal":"buy" if sc.get("return",0)>5 else "sell" if sc.get("return",0)<-5 else "hold","unit":"score"} for sc in strategy_scores],["MA / RSI / MACD indicators"],["Signal","Score"],["比较各策略的历史表现。"]),
             "alarm": _a("alarm","风险报警室","risk","warning","Risk",risk_score,"/100",risk_level,("High" if risk_score>70 else "Medium" if risk_score>35 else "Low")+" · "+str(risk_score)+"/100","最大回撤较高，建议降低仓位或保持观望。",[{"label":"Risk Score","value":risk_score,"unit":"/100","display":"gauge","level":risk_level},{"label":"Max Drawdown","value":round(-dd_pct,1),"unit":"%","display":"bar","level":"danger" if dd_pct>25 else "warning"}],["策略信号","风控参数"],["风险评分","最大回撤"],["检查仓位限制和止损线。"]),
-            "task_queues": _a("task_queues","回测实验室","backtest","done","Sharpe",round(backtest.get("sharpe_ratio",0),2),"","positive" if backtest.get("sharpe_ratio",0)>0.5 else "neutral",f'Return {_v(total_ret,".1f")}% · Sharpe {_v(backtest.get(\"sharpe_ratio\",0),\".2f\")}',f'回测总收益 {_v(total_ret,".1f")}%，夏普 {_v(backtest.get(\"sharpe_ratio\",0),\".2f\")}。',[{"label":"Total Return","value":_v(total_ret,".1f"),"unit":"%","display":"bar","level":"positive" if total_ret>0 else "danger"},{"label":"Sharpe","value":_v(backtest.get("sharpe_ratio",0),".2f"),"display":"number"},{"label":"Max Drawdown","value":_v(-dd_pct,".1f"),"unit":"%","display":"bar","level":"warning"}],["交易信号序列"],["权益曲线","成交列表"],["基于历史数据模拟策略表现。"]),
+            "task_queues": _a("task_queues","回测实验室","backtest","done","Sharpe",round(backtest.get("sharpe_ratio",0),2),"","positive" if backtest.get("sharpe_ratio",0)>0.5 else "neutral","Return "+str(_v(total_ret,".1f"))+"% · Sharpe "+str(_v(backtest.get("sharpe_ratio",0),".2f")),"回测总收益 "+str(_v(total_ret,".1f"))+"%，夏普 "+str(_v(backtest.get("sharpe_ratio",0),".2f"))+"。",[{"label":"Total Return","value":_v(total_ret,".1f"),"unit":"%","display":"bar","level":"positive" if total_ret>0 else "danger"},{"label":"Sharpe","value":_v(backtest.get("sharpe_ratio",0),".2f"),"display":"number"},{"label":"Max Drawdown","value":_v(-dd_pct,".1f"),"unit":"%","display":"bar","level":"warning"}],["交易信号序列"],["权益曲线","成交列表"],["基于历史数据模拟策略表现。"]),
             "schedule": _a("schedule","决策调度台","decision","done","Decision",dec_str.upper(),"",dec_level,dec_str.upper()+" · Conf 62%","综合策略得分与风险约束后做出决策。",[{"label":"Decision","value":dec_str.upper(),"display":"badge","level":dec_level}],["策略排序","风险评估"],["Buy/Sell/Hold","Confidence"],["综合各策略得分和风险约束后做出决策。"]),
             "document": _a("document","报告与分析室","report","done","Report","Ready","","positive","Report ready · "+ticker,ticker+" 策略分析完成。",[{"label":"Decision","value":dec_str.upper(),"display":"badge"}],["全部房间产物"],[ticker+" 分析报告"],["基于各步骤结果生成综合报告。"]),
             "agent": _a("agent","运行监控室","monitor","done","Agent 状态","完成","","positive","6 stages done","所有 Agent 阶段已执行完毕。",[{"label":"Pipeline","value":"已完成","display":"badge","level":"positive"}],[],[],[]),
@@ -74,22 +74,9 @@ def _write_room_artifacts_to_file(*, ticker, strategy_name, task, indicator_resu
             "break_room": _a("break_room","休息室","idle","done","Last Task",ticker,"","positive",ticker+" · "+dec_str.upper(),"最新分析 "+ticker+" 已完成。Agent 返回休息室待命。",[{"label":"Decision","value":dec_str.upper(),"display":"badge","level":dec_level}],[],[],[]),
         }
 
-        # Write directly to JSON file (bypasses dual-module issues)
-        import json as _j
-        from pathlib import Path as _P2
-        _path = _P2(__file__).resolve().parent.parent.parent / "ClawLibrary" / "src" / "data" / "trading-telemetry.json"
-        if _path.exists():
-            _snap = _j.loads(_path.read_text(encoding="utf-8"))
-            _snap["trading"]["room_artifacts"] = room_artifacts
-            for _r in _snap.setdefault("resources", []):
-                a = room_artifacts.get(_r["id"])
-                if a:
-                    _r["items"] = [{"id": a["room_id"]+"-"+str(i), "title": m["label"]+": "+str(m["value"]), "meta": "metric", "excerpt": a.get("insight","")} for i,m in enumerate(a.get("metrics",[]))]
-                    _r["itemCount"] = len(_r["items"])
-                    _r["status"] = a["status"]
-            _tmp = _path.with_suffix(".tmp")
-            _tmp.write_text(_j.dumps(_snap, ensure_ascii=False, indent=2), encoding="utf-8")
-            _tmp.replace(_path)
+        # Store in shared telemetry state and persist
+        _telemetry_state["room_artifacts"] = room_artifacts
+        _persist_telemetry()
     except Exception as _e:
         import traceback as _tb
         _err = _P2(__file__).resolve().parent.parent.parent / "trading_server" / "artifact_error.log"

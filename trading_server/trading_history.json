@@ -1,5 +1,11 @@
 [
   {
+    "task_id": "20c5504d0ecc",
+    "ticker": "QQQ",
+    "strategy": "ma",
+    "completed_at": "2026-06-05 01:18:42"
+  },
+  {
     "task_id": "fd2d7657a52a",
     "ticker": "QQQ",
     "strategy": "ma",

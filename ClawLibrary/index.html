@@ -2777,6 +2777,122 @@
       .decision-badge.sell { background: rgba(251,113,133,0.18); color: #fb7185; border: 1px solid rgba(251,113,133,0.4); }
       .decision-badge.hold { background: rgba(251,191,36,0.18); color: #fbbf24; border: 1px solid rgba(251,191,36,0.4); }
 
+      /* ── Schedule Dashboard (decision desk modal) ─────────────── */
+      .schedule-dashboard {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        padding: 4px 2px;
+      }
+      .schedule-section {
+        background: linear-gradient(180deg, rgba(12,30,27,0.72), rgba(8,21,19,0.52));
+        border: 1px solid rgba(171,218,201,0.14);
+        border-radius: 10px;
+        padding: 12px 14px;
+      }
+      .schedule-section-title {
+        font-family: var(--font-display);
+        font-size: 15px;
+        color: rgba(236,247,243,0.88);
+        margin-bottom: 10px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid rgba(171,218,201,0.10);
+      }
+      .schedule-decision {
+        margin-bottom: 10px;
+      }
+      .schedule-kv-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 4px 0;
+        border-bottom: 1px solid rgba(148,163,184,0.06);
+      }
+      .schedule-kv-label { color: #94a3b8; font-size: 12px; }
+      .schedule-kv-value { color: #e5e7eb; font-weight: 600; font-size: 12px; }
+      .schedule-votes {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .schedule-vote-row {
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        align-items: center;
+        gap: 10px;
+        padding: 5px 8px;
+        border-radius: 6px;
+        background: rgba(8,20,19,0.4);
+      }
+      .schedule-vote-agent { color: rgba(236,247,243,0.82); font-size: 12px; }
+      .schedule-vote-score { color: rgba(152,181,172,0.84); font-size: 11px; font-family: var(--font-mono); min-width: 36px; text-align: right; }
+      .schedule-list {
+        margin: 0;
+        padding-left: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .schedule-list li {
+        color: rgba(236,247,243,0.78);
+        font-size: 12px;
+        line-height: 1.5;
+      }
+      .schedule-priority {
+        font-size: 9px;
+        padding: 1px 6px;
+        border-radius: 4px;
+        text-transform: uppercase;
+        font-family: var(--font-mono);
+      }
+      .schedule-priority[data-priority="high"] { background: rgba(251,113,133,0.18); color: #fb7185; border: 1px solid rgba(251,113,133,0.35); }
+      .schedule-priority[data-priority="medium"] { background: rgba(251,191,36,0.18); color: #fbbf24; border: 1px solid rgba(251,191,36,0.35); }
+      .schedule-priority[data-priority="low"] { background: rgba(148,163,184,0.14); color: #94a3b8; border: 1px solid rgba(148,163,184,0.25); }
+
+      /* ── News Panel (images room modal) ───────────────────────── */
+      .news-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        padding: 4px 2px;
+      }
+      .news-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .news-list-item {
+        background: linear-gradient(180deg, rgba(12,30,27,0.56), rgba(8,21,19,0.38));
+        border: 1px solid rgba(171,218,201,0.12);
+        border-radius: 8px;
+        padding: 10px 12px;
+      }
+      .news-title {
+        color: #7cf0d0;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        line-height: 1.4;
+        display: block;
+        margin-bottom: 4px;
+      }
+      .news-title:hover { text-decoration: underline; color: #a6f5d8; }
+      .news-meta {
+        color: rgba(152,181,172,0.72);
+        font-size: 10px;
+        margin-bottom: 4px;
+      }
+      .news-summary {
+        color: rgba(236,247,243,0.68);
+        font-size: 11px;
+        line-height: 1.4;
+      }
+      .news-evidence {
+        color: rgba(126,202,184,0.6);
+        font-size: 10px;
+        font-family: var(--font-mono);
+      }
+
       /* ── Trading Dashboard: Bottom Chat Drawer (hidden) ─────── */
       .chat-drawer, .chat-drawer-bar, .chat-drawer-body,
       .drawer-tabs, .drawer-tab, .drawer-content,

@@ -2636,6 +2636,170 @@ async function openRecentActivityEntry(
   });
 }
 
+function renderScheduleDashboard(artifact: any): string {
+  const details = artifact.details ?? {};
+  const panel = details.decision_panel ?? {};
+  const votes = details.agent_votes_table ?? [];
+  const whyNot = details.why_not ?? {};
+  const triggers = details.trigger_conditions ?? [];
+  const plan = details.next_plan ?? [];
+
+  const decision = (panel.decision || 'hold').toLowerCase();
+  const decisionMode = panel.decision_mode || '';
+  const decisionScore = panel.decision_score ?? 50;
+  const confidence = panel.confidence ?? 0.62;
+  const positionPct = panel.position_pct ?? 35;
+
+  const decisionBadgeCls = decision === 'buy' ? 'buy' : decision === 'sell' ? 'sell' : 'hold';
+  const decisionTitle = decision.toUpperCase() + (decisionMode ? ' · ' + decisionMode.replace(/_/g, ' ') : '');
+
+  let html = '<div class="schedule-dashboard">';
+
+  // Decision Panel
+  html += '<div class="schedule-section">';
+  html += '<div class="schedule-decision">';
+  html += `<span class="decision-badge ${decisionBadgeCls}" style="font-size:14px;padding:4px 14px;">${escapeHtml(decisionTitle)}</span>`;
+  html += '</div>';
+  html += '<div class="schedule-kv-row"><span class="schedule-kv-label">Decision Score</span><span class="schedule-kv-value">' + escapeHtml(String(decisionScore)) + '/100</span></div>';
+  html += '<div class="schedule-kv-row"><span class="schedule-kv-label">Confidence</span><span class="schedule-kv-value">' + escapeHtml(String(Math.round(confidence * 100))) + '%</span></div>';
+  html += '<div class="schedule-kv-row"><span class="schedule-kv-label">Position</span><span class="schedule-kv-value">' + escapeHtml(String(positionPct)) + '%</span></div>';
+  html += '</div>';
+
+  // Agent Votes
+  if (votes.length > 0) {
+    html += '<div class="schedule-section">';
+    html += '<div class="schedule-section-title">Agent Votes</div>';
+    html += '<div class="schedule-votes">';
+    for (const v of votes) {
+      const voteCls = v.vote === 'buy' ? 'buy' : v.vote === 'sell' ? 'sell' : 'hold';
+      html += '<div class="schedule-vote-row">';
+      html += `<span class="schedule-vote-agent">${escapeHtml(v.agent)}</span>`;
+      html += `<span class="decision-badge ${voteCls}" style="font-size:11px;padding:2px 8px;">${escapeHtml(v.vote.toUpperCase())}</span>`;
+      html += `<span class="schedule-vote-score">${escapeHtml(String(v.score))}%</span>`;
+      html += '</div>';
+    }
+    html += '</div>';
+    html += '</div>';
+  }
+
+  // Why Not
+  if (whyNot.reasons && whyNot.reasons.length > 0) {
+    html += '<div class="schedule-section">';
+    html += `<div class="schedule-section-title">${escapeHtml(whyNot.title || 'Why not?')}</div>`;
+    html += '<ul class="schedule-list">';
+    for (const r of whyNot.reasons) {
+      html += `<li>${escapeHtml(r)}</li>`;
+    }
+    html += '</ul>';
+    html += '</div>';
+  }
+
+  // Trigger Conditions
+  if (triggers.length > 0) {
+    html += '<div class="schedule-section">';
+    html += '<div class="schedule-section-title">Trigger Conditions</div>';
+    html += '<ul class="schedule-list">';
+    for (const t of triggers) {
+      html += `<li>${escapeHtml(t.condition || '')}</li>`;
+    }
+    html += '</ul>';
+    html += '</div>';
+  }
+
+  // Next Plan
+  if (plan.length > 0) {
+    html += '<div class="schedule-section">';
+    html += '<div class="schedule-section-title">Next Plan</div>';
+    html += '<ul class="schedule-list">';
+    for (const p of plan) {
+      const priorityLabel = p.priority ? ` <span class="schedule-priority" data-priority="${escapeHtml(p.priority)}">${escapeHtml(p.priority)}</span>` : '';
+      html += `<li>${escapeHtml(p.action || '')}${priorityLabel}</li>`;
+    }
+    html += '</ul>';
+    html += '</div>';
+  }
+
+  html += '</div>';
+  return html;
+}
+
+function renderNewsPanel(artifact: any): string {
+  const details = artifact.details ?? {};
+  const rawNews = details.raw_news ?? [];
+  const keyEvents = details.key_events ?? [];
+  const riskEvents = details.risk_events ?? [];
+
+  let html = '<div class="news-panel">';
+
+  // News articles list
+  if (rawNews.length > 0) {
+    html += '<div class="schedule-section">';
+    html += `<div class="schedule-section-title">News (${rawNews.length})</div>`;
+    html += '<div class="news-list">';
+    for (const item of rawNews) {
+      const url = item.url || '';
+      const title = item.title || '';
+      const source = item.source || '';
+      const published = item.published_at || '';
+      const summary = item.summary || '';
+
+      html += '<div class="news-list-item">';
+      if (url) {
+        html += `<a href="${escapeHtml(url)}" target="_blank" rel="noreferrer" class="news-title">${escapeHtml(title)}</a>`;
+      } else {
+        html += `<div class="news-title">${escapeHtml(title)}</div>`;
+      }
+      html += '<div class="news-meta">';
+      if (source) html += `<span>${escapeHtml(source)}</span>`;
+      if (published) html += `<span> · ${escapeHtml(published)}</span>`;
+      html += '</div>';
+      if (summary && summary !== title) {
+        html += `<div class="news-summary">${escapeHtml(summary)}</div>`;
+      }
+      html += '</div>';
+    }
+    html += '</div>';
+    html += '</div>';
+  }
+
+  // Key events with evidence
+  if (keyEvents.length > 0) {
+    html += '<div class="schedule-section">';
+    html += '<div class="schedule-section-title">Key Events</div>';
+    html += '<ul class="schedule-list">';
+    for (const ev of keyEvents) {
+      const text = typeof ev === 'string' ? ev : (ev.event || '');
+      const ids = (typeof ev === 'object' && ev.evidence_ids) ? ev.evidence_ids : [];
+      const impact = (typeof ev === 'object' && ev.impact) ? ev.impact : 'neutral';
+      const impactBadge = impact !== 'neutral' ? ` <span class="decision-badge ${impact === 'positive' ? 'buy' : 'sell'}" style="font-size:10px;padding:1px 6px;">${escapeHtml(impact)}</span>` : '';
+      const evidenceLabel = ids.length > 0 ? ` <span class="news-evidence">[#${ids.join(', #')}]</span>` : '';
+      html += `<li>${escapeHtml(text)}${impactBadge}${evidenceLabel}</li>`;
+    }
+    html += '</ul>';
+    html += '</div>';
+  }
+
+  // Risk events with evidence
+  if (riskEvents.length > 0) {
+    html += '<div class="schedule-section">';
+    html += '<div class="schedule-section-title">Risk Events</div>';
+    html += '<ul class="schedule-list">';
+    for (const ev of riskEvents) {
+      const text = typeof ev === 'string' ? ev : (ev.event || '');
+      const ids = (typeof ev === 'object' && ev.evidence_ids) ? ev.evidence_ids : [];
+      const impact = (typeof ev === 'object' && ev.impact) ? ev.impact : 'negative';
+      const impactBadge = ` <span class="decision-badge ${impact === 'positive' ? 'buy' : 'sell'}" style="font-size:10px;padding:1px 6px;">${escapeHtml(impact)}</span>`;
+      const evidenceLabel = ids.length > 0 ? ` <span class="news-evidence">[#${ids.join(', #')}]</span>` : '';
+      html += `<li>${escapeHtml(text)}${impactBadge}${evidenceLabel}</li>`;
+    }
+    html += '</ul>';
+    html += '</div>';
+  }
+
+  html += '</div>';
+  return html;
+}
+
 function renderRoomModal(): void {
   if (!assetModal || !assetModalTitle || !assetModalSub || !assetModalItems) {
     return;
@@ -2763,6 +2927,23 @@ function renderRoomModal(): void {
     ? (uiLocale === 'zh' ? `显示 ${items.length} / ${filteredItems.length}` : `showing ${items.length} of ${filteredItems.length}`)
     : (uiLocale === 'zh' ? `显示 ${items.length}` : `showing ${items.length}`);
   assetModalSub.textContent = `${resource.itemCount} ${uiLocale === 'zh' ? '项' : 'items'} · ${showingLabel} · ${humanizeTelemetryText(resource.summary)}${filterNotes.length ? ` · ${filterNotes.join(' · ')}` : ''} · ${clockOf(resource.lastAccessAt)}`;
+
+  // Special rendering for schedule / images rooms (dashboard panels)
+  if (resource.id === 'schedule' || resource.id === 'images') {
+    const artifact = getRoomArtifact(resource.id);
+    if (artifact) {
+      assetModalItems.classList.toggle('grid', false);
+      if (resource.id === 'schedule') {
+        assetModalItems.innerHTML = renderScheduleDashboard(artifact);
+      } else {
+        assetModalItems.innerHTML = renderNewsPanel(artifact);
+      }
+      assetModal.classList.remove('hidden');
+      assetModal.setAttribute('aria-hidden', 'false');
+      return;
+    }
+  }
+
   assetModalItems.classList.toggle('grid', modalViewMode === 'grid');
   assetModalItems.innerHTML = items.length
     ? items.map((entry, index) => {

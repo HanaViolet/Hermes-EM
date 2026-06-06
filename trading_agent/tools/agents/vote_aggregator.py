@@ -38,18 +38,27 @@ def aggregate_votes(
         elif macd < 0 and ind_vote == "hold":
             ind_vote = "sell"
             ind_score = min(ind_score, 45)
-    votes.append({"agent": "Indicator", "vote": ind_vote, "score": round(min(100, max(0, ind_score))), "confidence": round(abs(ind_score - 50) / 50, 2)})
+    ind_reason = f"RSI {round(rsi, 1)} {'超卖' if rsi < 30 else '超买' if rsi > 70 else '中性'}"
+    if macd is not None:
+        ind_reason += f"，MACD {'>0' if macd > 0 else '<0'}"
+    votes.append({"agent": "Indicator", "vote": ind_vote, "score": round(min(100, max(0, ind_score))), "confidence": round(abs(ind_score - 50) / 50, 2), "reason": ind_reason})
 
     # ── News Vote ──
     news_score = float(news.get("news_score", 50))
     news_sentiment = news.get("news_sentiment", "neutral")
-    if news_score > 60:
-        news_vote, news_conf = "buy", min(0.95, (news_score - 50) / 50)
-    elif news_score < 40:
-        news_vote, news_conf = "sell", min(0.95, (50 - news_score) / 50)
+    news_confidence = news.get("news_confidence")
+    if news_confidence is None:
+        news_confidence = abs(news_score - 50) / 50
     else:
-        news_vote, news_conf = "hold", 0.5
-    votes.append({"agent": "News", "vote": news_vote, "score": round(news_score), "confidence": round(news_conf, 2)})
+        news_confidence = float(news_confidence)
+    if news_score >= 60:
+        news_vote = "buy"
+    elif news_score <= 40:
+        news_vote = "sell"
+    else:
+        news_vote = "hold"
+    news_reason = f"新闻情绪 {news_sentiment}，Score {round(news_score)}"
+    votes.append({"agent": "News", "vote": news_vote, "score": round(news_score), "confidence": round(min(0.95, news_confidence), 2), "reason": news_reason})
 
     # ── Risk Vote ──
     risk_score_val = risk.get("risk_score", 40)
@@ -60,7 +69,8 @@ def aggregate_votes(
         risk_vote, risk_conf = "sell", min(0.95, (risk_score_val - 50) / 50)
     else:
         risk_vote, risk_conf = "hold", 0.5
-    votes.append({"agent": "Risk", "vote": risk_vote, "score": round(100 - risk_score_val), "confidence": round(risk_conf, 2)})
+    risk_reason = f"Risk Score {risk_score_val}，{'低风险' if risk_score_val < 35 else '高风险' if risk_score_val > 65 else '中等风险'}"
+    votes.append({"agent": "Risk", "vote": risk_vote, "score": round(100 - risk_score_val), "confidence": round(risk_conf, 2), "reason": risk_reason})
 
     # ── Backtest Vote ──
     sharpe = backtest.get("sharpe_ratio", 0)
@@ -71,7 +81,8 @@ def aggregate_votes(
         bt_vote, bt_score = "sell", max(0, 50 + sharpe * 30 + total_ret * 30)
     else:
         bt_vote, bt_score = "hold", 50
-    votes.append({"agent": "Backtest", "vote": bt_vote, "score": round(bt_score), "confidence": round(abs(bt_score - 50) / 50, 2)})
+    bt_reason = f"Sharpe {round(sharpe, 2)}，Return {round(total_ret * 100, 1)}%"
+    votes.append({"agent": "Backtest", "vote": bt_vote, "score": round(bt_score), "confidence": round(abs(bt_score - 50) / 50, 2), "reason": bt_reason})
 
     # ── Meta summary ──
     buy_count = sum(1 for v in votes if v["vote"] == "buy")

@@ -234,6 +234,46 @@ def run_trading_agent(
         decision_result = compute_decision_score(regime=regime_result, risk=risk_result, strategy_scores=strategy_scores, memory=memory_result, indicators=indicator_result, backtest=result, news_result=news_result)
         update_workflow(current_stage="making_decision", progress=88, summary=f"Decision: {decision_result['decision'].upper()} (score={decision_result['decision_score']})")
 
+        # ── Stage 9.5: Agent Analysis ──
+        from trading_agent.tools.agents.vote_aggregator import aggregate_votes
+        from trading_agent.tools.agents.critic_agent import review_decision
+        from trading_agent.tools.agents.strategy_adjustment import suggest_adjustments
+        from trading_agent.tools.agents.plan_agent import generate_plan
+
+        vote_result = aggregate_votes(
+            indicators=indicator_result,
+            news=news_result,
+            risk=risk_result,
+            backtest=result,
+            strategy_scores=strategy_scores,
+        )
+        critic_result = review_decision(
+            votes=vote_result["agent_votes"],
+            decision=decision_result["decision"],
+            indicators=indicator_result,
+            risk=risk_result,
+            backtest=result,
+        )
+        adjustment_result = suggest_adjustments(
+            critic_review=critic_result["critic_review"],
+            risk=risk_result,
+            backtest=result,
+        )
+        plan_result = generate_plan(
+            decision=decision_result["decision"],
+            indicators=indicator_result,
+            risk=risk_result,
+            critic_review=critic_result["critic_review"],
+        )
+        agent_analysis = {
+            "agent_votes": vote_result["agent_votes"],
+            "critic_review": critic_result["critic_review"],
+            "strategy_adjustments": adjustment_result["strategy_adjustments"],
+            "monitor_plan": plan_result["monitor_plan"],
+            "trigger_conditions": plan_result["trigger_conditions"],
+        }
+        update_workflow(current_stage="agent_analysis", progress=90, summary=f"Agents: {vote_result['summary']['dominant']} ({vote_result['summary']['buy_count']}B/{vote_result['summary']['sell_count']}S/{vote_result['summary']['hold_count']}H)")
+
         # ── Stage 10: Explain ──
         explanation = explain_decision({"decision_result": decision_result, "risk_result": risk_result, "regime_result": regime_result, "strategy_scores": strategy_scores, "indicator_result": indicator_result})
         update_workflow(current_stage="explaining_decision", progress=94, summary=explanation.get("short",""))
@@ -262,6 +302,7 @@ def run_trading_agent(
             "risk_result": risk_result,
             "memory_result": memory_result,
             "explanation": explanation,
+            "agent_analysis": agent_analysis,
         }
 
         return full_result

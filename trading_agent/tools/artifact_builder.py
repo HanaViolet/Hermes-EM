@@ -19,6 +19,7 @@ def build_room_artifacts(task: dict, result: dict) -> dict[str, dict]:
     explanation = result.get("explanation", {}) or {}
     strategy_scores = result.get("strategy_scores", [])
     llm_advice = result.get("llm_strategy_advice", {}) or {}
+    agent_analysis = result.get("agent_analysis", {}) or {}
 
     def _v(val, fmt=".2f", default="N/A"):
         if val is None: return default
@@ -27,6 +28,71 @@ def build_room_artifacts(task: dict, result: dict) -> dict[str, dict]:
 
     def _lv(prefix, val, unit=""):
         return {"label": prefix, "value": str(val), "unit": unit, "display": "number", "level": "neutral"}
+
+    def _build_schedule_artifact(now_ts, dec_str, dec_level, decision, explanation, position_pct, agent_analysis):
+        votes = agent_analysis.get("agent_votes", [])
+        critic = agent_analysis.get("critic_review", {})
+        triggers = agent_analysis.get("trigger_conditions", [])
+        plan = agent_analysis.get("monitor_plan", [])
+        adjustments = agent_analysis.get("strategy_adjustments", [])
+
+        # Metrics: Decision + each agent vote
+        metrics = [
+            _lv("Decision", dec_str.upper()),
+            _lv("Confidence", _v((decision.get("confidence", 0.62) if isinstance(decision, dict) else 0.62) * 100, ".0f") + "%"),
+            _lv("Score", _v(decision.get("decision_score", 50), ".0f") if isinstance(decision, dict) else "50"),
+            _lv("Position", str(round(position_pct * 100)) + "%"),
+        ]
+        for v in votes:
+            vote_cls = "positive" if v["vote"] == "buy" else "danger" if v["vote"] == "sell" else "warning"
+            metrics.append({"label": v["agent"], "value": v["vote"].upper(), "unit": str(v["score"]), "display": "badge", "level": vote_cls})
+
+        # Reasoning: critic concerns + why-nots
+        reasoning = []
+        if critic.get("verdict"):
+            reasoning.append(f"Critic verdict: {critic['verdict']}")
+        reasoning.extend(critic.get("concerns", []))
+        for w in critic.get("why_not_buy", []):
+            reasoning.append(f"Why not Buy: {w}")
+        for w in critic.get("why_not_sell", []):
+            reasoning.append(f"Why not Sell: {w}")
+        if not reasoning:
+            reasoning = explanation.get("reasons", ["综合评分决定最终决策。"])
+
+        # Insight: critic recommendation
+        insight = critic.get("recommendation", explanation.get("short_explanation", f"最终选择 {dec_str.upper()}。"))
+
+        # Details input/output
+        details_input = ["Strategy", "Risk", "Regime", "News"]
+        details_output = ["Final Decision", "Confidence", "Position"]
+        if votes:
+            details_output.append("Agent Votes")
+        if triggers:
+            details_output.append("Trigger Conditions")
+        if plan:
+            details_output.append("Monitoring Plan")
+
+        return {
+            "room_id": "schedule",
+            "room_name": "决策调度台",
+            "status": "done",
+            "type": "decision",
+            "primary": {"label": "Decision", "value": dec_str.upper(), "unit": "", "level": dec_level},
+            "summary": f"{dec_str.upper()} · Conf {_v((decision.get('confidence', 0.62) if isinstance(decision, dict) else 0.62) * 100, '.0f')}%",
+            "insight": insight,
+            "metrics": metrics,
+            "details": {
+                "input": details_input,
+                "output": details_output,
+                "reasoning": reasoning,
+                "agent_votes": votes,
+                "critic_review": critic,
+                "trigger_conditions": triggers,
+                "monitor_plan": plan,
+                "strategy_adjustments": adjustments,
+            },
+            "updated_at": now_ts,
+        }
 
     # Build common metrics
     dd_pct = abs(backtest.get("max_drawdown", 0)) * 100
@@ -57,7 +123,7 @@ def build_room_artifacts(task: dict, result: dict) -> dict[str, dict]:
 
         "task_queues": {"room_id":"task_queues","room_name":"回测评估室","status":"done","type":"backtest", "primary":{"label":"Sharpe","value":_v(sharpe,".2f"),"unit":"","level":"positive" if sharpe>0.5 else "neutral"}, "summary":f'Return {_v(total_ret,".1f")}% · Sharpe {_v(sharpe,".2f")}', "insight":f'回测总收益 {_v(total_ret,".1f")}%，夏普 {_v(sharpe,".2f")}，最大回撤 {_v(-dd_pct,".1f")}%。', "metrics":[_lv("Total Return",_v(total_ret,".1f")+"%"),_lv("Sharpe",_v(sharpe,".2f")),_lv("Max Drawdown",_v(-dd_pct,".1f")+"%"),_lv("Win Rate",_v((backtest.get("win_rate")or 0)*100,".1f")+"%"),_lv("Trades",str(backtest.get("trades")or backtest.get("number_of_trades","?")))], "details":{"input":["Strategy Signal","Price Data"],"output":["Return","Sharpe","Drawdown","Win Rate"],"reasoning":["基于历史数据模拟策略表现。"]}, "updated_at":now_ts},
 
-        "schedule": {"room_id":"schedule","room_name":"决策调度台","status":"done","type":"decision", "primary":{"label":"Decision","value":dec_str.upper(),"unit":"","level":dec_level}, "summary":f'{dec_str.upper()} · Conf {_v(decision.get("confidence",0)*100,".0f") if isinstance(decision,dict) else "62"}%', "insight":explanation.get("short_explanation",f'最终选择 {dec_str.upper()}。'), "metrics":[_lv("Decision",dec_str.upper()),_lv("Confidence",_v((decision.get("confidence",0.62) if isinstance(decision,dict) else 0.62)*100,".0f")+"%"),_lv("Score",_v(decision.get("decision_score",50),".0f") if isinstance(decision,dict) else "50"),_lv("Position",str(round(position_pct*100))+"%")], "details":{"input":["Strategy","Risk","Regime","News"],"output":["Final Decision","Confidence","Position"],"reasoning":explanation.get("reasons",["综合评分决定最终决策。"])}, "updated_at":now_ts},
+        "schedule": _build_schedule_artifact(now_ts, dec_str, dec_level, decision, explanation, position_pct, agent_analysis),
 
         "document": {"room_id":"document","room_name":"报告与分析室","status":"done","type":"report", "primary":{"label":"Report","value":"Ready","unit":"","level":"positive"}, "summary":f'Report ready · {ticker}', "insight":f'{ticker} {strategy_name} 策略分析完成。', "metrics":[_lv("Decision",dec_str.upper()),_lv("Return",_v(total_ret,".1f")+"%"),_lv("Sharpe",_v(sharpe,".2f"))], "details":{"input":["All room artifacts"],"output":[ticker+" Report"],"reasoning":["基于各步骤结果生成综合报告。"]}, "updated_at":now_ts},
 

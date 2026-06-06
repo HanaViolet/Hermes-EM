@@ -3975,6 +3975,43 @@
         html += '<div class="room-detail-card"><div class="room-detail-title">Reasoning</div><ul class="room-detail-list">'+(det.reasoning||[]).map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div>';
         html += '</div>';
 
+        // Agent Analysis (V1.2)
+        if (det.agent_votes && det.agent_votes.length > 0) {
+          html += '<div class="room-agent-block" style="margin-bottom:14px;">';
+          html += '<div style="font-size:13px;font-weight:700;color:#22d3ee;margin-bottom:6px;">Agent Votes</div>';
+          html += '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">';
+          det.agent_votes.forEach(function(v) {
+            var vcls = v.vote === 'buy' ? 'buy' : v.vote === 'sell' ? 'sell' : 'hold';
+            html += '<div style="padding:10px;border-radius:10px;background:rgba(15,30,44,0.88);border:1px solid rgba(72,104,128,0.42);">';
+            html += '<div style="font-size:10px;color:#8ea4b8;">'+v.agent+'</div>';
+            html += '<div style="font-size:18px;font-weight:800;margin-top:4px;" class="room-hero-value '+vcls+'">'+v.vote.toUpperCase()+'</div>';
+            html += '<div style="font-size:11px;color:#94a3b8;margin-top:2px;">Score: '+v.score+'</div>';
+            html += '</div>';
+          });
+          html += '</div></div>';
+        }
+        if (det.critic_review && det.critic_review.concerns && det.critic_review.concerns.length > 0) {
+          html += '<div class="room-insight-block" style="border-left-color:rgba(255,123,123,0.85);background:rgba(255,123,123,0.07);">';
+          html += '<div class="room-insight-title" style="color:#fb7185;">Critic Review</div>';
+          html += '<div style="font-size:11px;color:#fb7185;margin-bottom:4px;">Verdict: '+det.critic_review.verdict+'</div>';
+          det.critic_review.concerns.forEach(function(c,i){ html += '<div class="room-insight-reason" style="color:#ffb1b1;">'+(i+1)+'. '+c+'</div>'; });
+          html += '</div>';
+        }
+        if (det.trigger_conditions && det.trigger_conditions.length > 0) {
+          html += '<div style="padding:14px 16px;border-radius:12px;background:rgba(34,211,238,0.07);border-left:3px solid rgba(34,211,238,0.85);margin-bottom:14px;">';
+          html += '<div style="font-size:13px;font-weight:700;color:#67e8f9;margin-bottom:6px;">Trigger Conditions</div>';
+          html += '<ul style="margin:0;padding-left:14px;font-size:12px;line-height:1.6;color:#e5edf5;">';
+          det.trigger_conditions.forEach(function(t){ html += '<li>['+t.type+'] '+t.condition+'</li>'; });
+          html += '</ul></div>';
+        }
+        if (det.monitor_plan && det.monitor_plan.length > 0) {
+          html += '<div style="padding:14px 16px;border-radius:12px;background:rgba(100,215,176,0.07);border-left:3px solid rgba(100,215,176,0.85);margin-bottom:14px;">';
+          html += '<div style="font-size:13px;font-weight:700;color:#64d7b0;margin-bottom:6px;">Next Monitoring Plan</div>';
+          html += '<ul style="margin:0;padding-left:14px;font-size:12px;line-height:1.6;color:#e5edf5;">';
+          det.monitor_plan.forEach(function(p){ html += '<li>['+p.priority+'] '+p.action+'</li>'; });
+          html += '</ul></div>';
+        }
+
         document.getElementById('rm-content-overview').innerHTML = html;
         switchRoomModalTab('overview');
         populateTimelineTab();

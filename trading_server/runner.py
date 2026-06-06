@@ -54,22 +54,48 @@ def _run_agent_in_background(task: dict, task_id: str) -> None:
             from trading_server.artifact_builder import build_room_artifacts
             _all = build_room_artifacts(task, result)
             _path = _PROJECT_ROOT / "ClawLibrary" / "src" / "data" / "trading-telemetry.json"
+            import os
+            import time
+
+            # Ensure parent dir exists
+            _path.parent.mkdir(parents=True, exist_ok=True)
+
+            # Read existing snapshot or create empty
             if _path.exists():
                 _snap = _json.loads(_path.read_text(encoding="utf-8"))
-                _snap.setdefault("trading", {})["room_artifacts"] = _all
-                for _r in _snap.setdefault("resources", []):
-                    a = _all.get(_r["id"])
-                    if a:
-                        _r["items"] = [{"id": a["room_id"]+"-"+str(i), "title": m["label"]+": "+str(m["value"]), "meta": m.get("display","metric"), "excerpt": a.get("insight","")} for i,m in enumerate(a.get("metrics",[]))]
-                        _r["itemCount"] = len(_r["items"])
-                        _r["status"] = a["status"]
-                _tmp = _path.with_suffix(".tmp")
-                _tmp.write_text(_json.dumps(_snap, ensure_ascii=False, indent=2), encoding="utf-8")
-                _tmp.replace(_path)
+            else:
+                _snap = {"mode": "live", "generatedAt": str(datetime.now(timezone.utc)), "resources": [], "recentEvents": [], "focus": {"resourceId": "break_room", "detail": "", "reason": "Ready"}, "trading": {}}
+
+            _snap.setdefault("trading", {})["room_artifacts"] = _all
+            for _r in _snap.setdefault("resources", []):
+                a = _all.get(_r["id"])
+                if a:
+                    _r["items"] = [{"id": a["room_id"]+"-"+str(i), "title": m["label"]+": "+str(m["value"]), "meta": m.get("display","metric"), "excerpt": a.get("insight","")} for i,m in enumerate(a.get("metrics",[]))]
+                    _r["itemCount"] = len(_r["items"])
+                    _r["status"] = a["status"]
+
+            _payload = _json.dumps(_snap, ensure_ascii=False, indent=2)
+            _tmp = _path.with_suffix(".tmp")
+
+            # Atomic write with retry for Windows file locks
+            for _attempt in range(5):
+                try:
+                    _tmp.write_text(_payload, encoding="utf-8")
+                    os.replace(str(_tmp), str(_path))
+                    break
+                except PermissionError:
+                    if _attempt < 4:
+                        time.sleep(0.05 * (_attempt + 1))
+                    else:
+                        raise
+
+            _log = Path(__file__).resolve().parent / "artifact_write.log"
+            _log.write_text(f"[{datetime.now(timezone.utc).isoformat()}] wrote {len(_all)} room artifacts OK", encoding="utf-8")
         except Exception as _e:
+            import traceback as _tb
             _err = Path(__file__).resolve().parent / "artifact_error.log"
             try:
-                _err.write_text(f"artifact write error: {_e}", encoding="utf-8")
+                _err.write_text(f"[{datetime.now(timezone.utc).isoformat()}] artifact write error: {_e}\n{_tb.format_exc()}", encoding="utf-8")
             except Exception:
                 pass
 

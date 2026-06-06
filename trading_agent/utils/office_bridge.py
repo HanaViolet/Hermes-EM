@@ -200,6 +200,26 @@ def _build_snapshot() -> dict:
             stage_label = {"loading_data":"Data","calculating_indicators":"Indicator","selecting_strategy":"Strategy","checking_risk":"Risk","running_backtest":"Backtest","writing_report":"Report","completed":"Done"}.get(stage,"Idle")
             items.append({"id":"ag-1","title":"Stage: " + stage_label,"meta":"info","excerpt":"Current workflow stage"})
             items.append({"id":"ag-2","title":"Progress: " + str(_telemetry_state.get("progress",0))+"%","meta":"metric","excerpt":"Workflow progress"})
+        elif room_id == "schedule":  # Decision Desk V1.5
+            dec = summary.get("decision", "?")
+            mode = summary.get("decision_mode", "proceed")
+            watch = summary.get("watch_priority", "low")
+            critic_sc = summary.get("critic_score", 70)
+            init_dec = summary.get("initial_decision", dec)
+            rev = summary.get("revision_applied", False)
+            mode_label = {"proceed": "Proceed", "proceed_with_caution": "Caution", "wait_for_confirmation": "Wait", "risk_off": "Risk Off", "watchlist": "Watch"}.get(mode, mode)
+            items.append({"id":"sc-1","title":f"Decision: {dec.upper()} · {mode_label}","meta":"metric","excerpt":f"Final decision with mode"})
+            items.append({"id":"sc-2","title":f"Watch Priority: {watch.upper()}","meta":"metric","excerpt":f"Monitoring priority level"})
+            items.append({"id":"sc-3","title":f"Critic Score: {critic_sc}","meta":"metric","excerpt":f"Critic Agent confidence"})
+            if rev and init_dec != dec:
+                items.append({"id":"sc-4","title":f"Revised: {init_dec.upper()} → {dec.upper()}","meta":"info","excerpt":"Decision was revised after critic review"})
+            items.append({"id":"sc-5","title":f"Score: {summary.get('decision_score','?')}","meta":"metric","excerpt":"Weighted decision score"})
+            items.append({"id":"sc-6","title":f"Position: {int(summary.get('position_pct',0.35)*100)}%","meta":"metric","excerpt":"Suggested position size"})
+
+        elif room_id == "images":  # News Room V1.5
+            items.append({"id":"nw-1","title":f"News Score: {summary.get('news_score','?')}","meta":"metric","excerpt":"Overall news sentiment score"})
+            items.append({"id":"nw-2","title":f"Sentiment: {summary.get('news_sentiment','neutral')}","meta":"metric","excerpt":"News sentiment classification"})
+
         elif room_id == "break_room":
             if status == "done":
                 items.append({"id":"br-1","title":"Last: " + ticker,"meta":"info","excerpt":"Completed analysis for " + ticker})
@@ -245,7 +265,8 @@ def _build_snapshot() -> dict:
     elif stage == "completed":
         focus_detail = f"Completed. Decision: {summary.get('decision', 'N/A')}"
     elif stage == "failed":
-        focus_detail = _telemetry_state.get("error", {}).get("message", "Error")
+        err = _telemetry_state.get("error")
+        focus_detail = err.get("message", "Error") if isinstance(err, dict) else str(err)
 
     # Active agents
     stage_to_agent = {

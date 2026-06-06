@@ -2800,6 +2800,578 @@ function renderNewsPanel(artifact: any): string {
   return html;
 }
 
+// ─── Advanced Room Panel Renderers ───
+
+function _levelClass(level?: string): string {
+  if (level === 'positive') return 'positive';
+  if (level === 'danger') return 'danger';
+  if (level === 'warning') return 'warning';
+  return 'neutral';
+}
+
+function _renderHero(artifact: any): string {
+  const p = artifact.primary ?? {};
+  const unit = p.unit || '';
+  const sub = artifact.summary || '';
+  return `
+    <div class="room-hero">
+      <div class="room-hero-main ${escapeHtml(_levelClass(p.level))}">${escapeHtml(String(p.value))}${unit ? `<span class="room-hero-unit">${escapeHtml(unit)}</span>` : ''}</div>
+      <div class="room-hero-label">${escapeHtml(p.label || '')}</div>
+      ${sub ? `<div class="room-hero-sub">${escapeHtml(sub)}</div>` : ''}
+    </div>
+  `;
+}
+
+function _renderMetricsGrid(metrics: any[]): string {
+  if (!metrics || metrics.length === 0) return '';
+  return `
+    <div class="room-metrics-grid">
+      ${metrics.map((m: any) => {
+        const level = _levelClass(m.level);
+        const unit = m.unit || '';
+        let display = `<span class="room-metric-value ${level}">${escapeHtml(String(m.value))}${unit ? `<span class="room-metric-unit">${escapeHtml(unit)}</span>` : ''}</span>`;
+        if (m.display === 'bar') {
+          const pct = Math.max(0, Math.min(100, Number(m.value) || 0));
+          display = `<div class="metric-bar-track"><div class="metric-bar-fill" style="width:${pct}%"></div></div><span class="room-metric-value ${level}">${escapeHtml(String(m.value))}${unit ? escapeHtml(unit) : ''}</span>`;
+        }
+        if (m.display === 'badge') {
+          display = `<span class="room-metric-badge ${level}">${escapeHtml(String(m.value))}</span>`;
+        }
+        if (m.display === 'strategy_score') {
+          const pct = Math.max(0, Math.min(100, Number(m.value) || 0));
+          const signal = m.signal || 'hold';
+          display = `<div class="metric-bar-track"><div class="metric-bar-fill" style="width:${pct}%"></div></div><span class="room-metric-badge ${signal === 'buy' ? 'positive' : signal === 'sell' ? 'danger' : 'neutral'}">${escapeHtml(String(m.value))}</span>`;
+        }
+        return `
+          <div class="room-metric-card">
+            <div class="room-metric-label">${escapeHtml(m.label || '')}</div>
+            <div class="room-metric-display">${display}</div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+
+function _renderInsight(artifact: any): string {
+  if (!artifact.insight) return '';
+  return `<div class="room-insight">${escapeHtml(artifact.insight)}</div>`;
+}
+
+function _renderActionPlan(artifact: any): string {
+  const impact = artifact.impact_on_decision || '';
+  const next = artifact.next_action || '';
+  const focus = artifact.monitor_focus || [];
+  if (!impact && !next && focus.length === 0) return '';
+  return `
+    <div class="room-action-plan">
+      ${impact ? `<div class="room-action-card"><div class="room-action-title">Impact</div><div class="room-action-body">${escapeHtml(impact)}</div></div>` : ''}
+      ${next ? `<div class="room-action-card"><div class="room-action-title">Next Action</div><div class="room-action-body">${escapeHtml(next)}</div></div>` : ''}
+      ${focus.length > 0 ? `<div class="room-action-card"><div class="room-action-title">Monitor</div><div class="room-action-body"><ul>${focus.map((f: string) => `<li>${escapeHtml(f)}</li>`).join('')}</ul></div></div>` : ''}
+    </div>
+  `;
+}
+
+function renderDataHealthPanel(artifact: any): string {
+  const visual = artifact.visual?.data ?? {};
+  return `
+    <section class="advanced-room-panel">
+      ${_renderHero(artifact)}
+      <div class="room-visual">
+        <div class="room-visual-title">Data Coverage</div>
+        <div class="room-visual-sub">${escapeHtml(visual.date_range || '')}</div>
+        ${visual.sparkline && visual.sparkline.length > 0
+          ? `<svg class="mini-chart" viewBox="0 0 ${visual.sparkline.length} 100" preserveAspectRatio="none"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="${visual.sparkline.map((v: number, i: number) => `${i},${100 - Math.max(0, Math.min(100, v))}`).join(' ')}"/></svg>`
+          : '<div class="room-visual-placeholder">Sparkline unavailable</div>'}
+      </div>
+      ${_renderMetricsGrid(artifact.metrics)}
+      ${_renderInsight(artifact)}
+      ${_renderActionPlan(artifact)}
+    </section>
+  `;
+}
+
+function renderChartPanel(artifact: any): string {
+  const visual = artifact.visual?.data ?? {};
+  const hasChart = visual.dates && visual.close && visual.dates.length > 0;
+
+  let chartSvg = '';
+  if (hasChart) {
+    const len = visual.dates.length;
+    const closePts = visual.close.map((v: number, i: number) => `${i},${100 - v}`).join(' ');
+    const ma20Pts = visual.ma20 ? visual.ma20.map((v: number, i: number) => `${i},${100 - v}`).join(' ') : '';
+    const ma60Pts = visual.ma60 ? visual.ma60.map((v: number, i: number) => `${i},${100 - v}`).join(' ') : '';
+
+    chartSvg = '<div class="room-chart-legend">' +
+      '<span class="legend-close">Close</span>' +
+      '<span class="legend-ma20">MA20</span>' +
+      '<span class="legend-ma60">MA60</span>' +
+      '</div>';
+    chartSvg += `<svg class="mini-chart" viewBox="0 0 ${len} 100" preserveAspectRatio="none">`;
+    chartSvg += `<polyline fill="none" stroke="#81a8ff" stroke-width="1.2" points="${closePts}"/>`;
+    if (ma20Pts) {
+      chartSvg += `<polyline fill="none" stroke="#7ce6c7" stroke-width="1" stroke-dasharray="3,2" points="${ma20Pts}"/>`;
+    }
+    if (ma60Pts) {
+      chartSvg += `<polyline fill="none" stroke="#f4d06f" stroke-width="1" stroke-dasharray="5,3" points="${ma60Pts}"/>`;
+    }
+    chartSvg += '</svg>';
+  }
+
+  return `
+    <section class="advanced-room-panel">
+      ${_renderHero(artifact)}
+      <div class="room-visual">
+        <div class="room-visual-title">Price Chart</div>
+        ${hasChart ? chartSvg : '<div class="room-visual-placeholder">Chart data unavailable</div>'}
+      </div>
+      ${_renderMetricsGrid(artifact.metrics)}
+      ${_renderInsight(artifact)}
+      ${_renderActionPlan(artifact)}
+    </section>
+  `;
+}
+
+function renderIndicatorDashboard(artifact: any): string {
+  const visual = artifact.visual?.data ?? {};
+  const cards = visual.cards || [];
+  return `
+    <section class="advanced-room-panel">
+      ${_renderHero(artifact)}
+      <div class="room-visual">
+        <div class="indicator-card-grid">
+          ${cards.map((c: any) => `
+            <div class="indicator-card">
+              <div class="indicator-card-label">${escapeHtml(c.label || '')}</div>
+              <div class="indicator-card-value ${_levelClass(c.level)}">${escapeHtml(String(c.value || ''))}</div>
+              <div class="indicator-card-state">${escapeHtml(c.state || '')}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      ${_renderMetricsGrid(artifact.metrics)}
+      ${_renderInsight(artifact)}
+      ${_renderActionPlan(artifact)}
+    </section>
+  `;
+}
+
+function renderNewsEvidencePanel(artifact: any): string {
+  const visual = artifact.visual?.data ?? {};
+  const keyEvents = visual.key_events || [];
+  const riskEvents = visual.risk_events || [];
+  const rawNews = visual.raw_news || [];
+  return `
+    <section class="advanced-room-panel">
+      ${_renderHero(artifact)}
+      <div class="room-visual">
+        <div class="room-visual-title">News Sentiment · ${escapeHtml(String(visual.news_score || 0))}/100 · Confidence ${escapeHtml(String(Math.round((visual.news_confidence || 0) * 100)))}%</div>
+        ${keyEvents.length > 0 ? `
+          <div class="news-section-title">Key Events</div>
+          <div class="news-evidence-list">
+            ${keyEvents.map((ev: any) => {
+              const text = typeof ev === 'string' ? ev : (ev.event || '');
+              const impact = typeof ev === 'object' ? (ev.impact || 'neutral') : 'neutral';
+              const ids = (typeof ev === 'object' && ev.evidence_ids) ? ev.evidence_ids : [];
+              return `<div class="news-evidence-card"><span class="evidence-badge ${impact === 'positive' ? 'positive' : impact === 'negative' ? 'danger' : 'neutral'}">${escapeHtml(impact)}</span><span class="evidence-text">${escapeHtml(text)}</span>${ids.length > 0 ? `<span class="evidence-ids">[#${ids.join(', #')}]</span>` : ''}</div>`;
+            }).join('')}
+          </div>
+        ` : ''}
+        ${riskEvents.length > 0 ? `
+          <div class="news-section-title">Risk Events</div>
+          <div class="news-evidence-list">
+            ${riskEvents.map((ev: any) => {
+              const text = typeof ev === 'string' ? ev : (ev.event || '');
+              const impact = typeof ev === 'object' ? (ev.impact || 'negative') : 'negative';
+              const ids = (typeof ev === 'object' && ev.evidence_ids) ? ev.evidence_ids : [];
+              return `<div class="news-evidence-card"><span class="evidence-badge ${impact === 'positive' ? 'positive' : impact === 'negative' ? 'danger' : 'neutral'}">${escapeHtml(impact)}</span><span class="evidence-text">${escapeHtml(text)}</span>${ids.length > 0 ? `<span class="evidence-ids">[#${ids.join(', #')}]</span>` : ''}</div>`;
+            }).join('')}
+          </div>
+        ` : ''}
+        ${rawNews.length > 0 ? `
+          <div class="news-section-title">Raw News (${rawNews.length})</div>
+          <div class="news-raw-list">
+            ${rawNews.slice(0, 5).map((item: any) => `
+              <div class="news-raw-item">
+                ${item.url ? `<a href="${escapeHtml(item.url)}" target="_blank" rel="noreferrer" class="evidence-link">${escapeHtml(item.title || '')}</a>` : `<span>${escapeHtml(item.title || '')}</span>`}
+                <span class="news-raw-meta">${escapeHtml(item.source || '')}${item.published_at ? ` · ${escapeHtml(item.published_at)}` : ''}</span>
+              </div>
+            `).join('')}
+          </div>
+        ` : ''}
+      </div>
+      ${_renderMetricsGrid(artifact.metrics)}
+      ${_renderInsight(artifact)}
+      ${_renderActionPlan(artifact)}
+    </section>
+  `;
+}
+
+function renderStrategyRankingPanel(artifact: any): string {
+  const visual = artifact.visual?.data ?? {};
+  const strategies = visual.strategies || [];
+  const maxScore = Math.max(1, ...strategies.map((s: any) => s.final_score || 0));
+  return `
+    <section class="advanced-room-panel">
+      ${_renderHero(artifact)}
+      <div class="room-visual">
+        <div class="room-visual-title">Strategy Ranking</div>
+        <div class="strategy-ranking-list">
+          ${strategies.map((s: any) => {
+            const basePct = Math.round(((s.base_score || 0) / maxScore) * 100);
+            const finalPct = Math.round(((s.final_score || 0) / maxScore) * 100);
+            const adj = s.llm_adjustment || 0;
+            return `
+              <div class="strategy-row">
+                <span class="strategy-name">${escapeHtml(s.name || '')}</span>
+                <div class="strategy-bar-track">
+                  <div class="strategy-bar-fill" style="width:${finalPct}%"></div>
+                  ${adj !== 0 ? `<div class="strategy-bar-adjustment" style="left:${Math.min(basePct, finalPct)}%;width:${Math.abs(finalPct - basePct)}%"></div>` : ''}
+                </div>
+                <span class="strategy-score">${escapeHtml(String(s.final_score || 0))}</span>
+              </div>
+              <div class="strategy-meta">Base: ${s.base_score || 0}${adj !== 0 ? ` · LLM: ${adj > 0 ? '+' : ''}${adj}` : ''}</div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+      ${_renderMetricsGrid(artifact.metrics)}
+      ${_renderInsight(artifact)}
+      ${_renderActionPlan(artifact)}
+    </section>
+  `;
+}
+
+function renderMemoryPanel(artifact: any): string {
+  const visual = artifact.visual?.data ?? {};
+  const records = visual.records || [];
+  return `
+    <section class="advanced-room-panel">
+      ${_renderHero(artifact)}
+      <div class="room-visual">
+        <div class="room-visual-title">Related Records</div>
+        <div class="timeline-list">
+          ${records.map((r: any) => `
+            <div class="timeline-item">
+              <span class="timeline-date">${escapeHtml(r.date || '')}</span>
+              <div class="timeline-body">
+                <strong>${escapeHtml(r.ticker || '')}</strong> · ${escapeHtml(r.strategy || '')} · <span class="timeline-decision ${(r.decision || '').toLowerCase() === 'buy' ? 'positive' : (r.decision || '').toLowerCase() === 'sell' ? 'danger' : 'neutral'}">${escapeHtml(r.decision || '')}</span>
+                ${r.return ? `<span class="timeline-return">${escapeHtml(r.return)}</span>` : ''}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      ${_renderMetricsGrid(artifact.metrics)}
+      ${_renderInsight(artifact)}
+      ${_renderActionPlan(artifact)}
+    </section>
+  `;
+}
+
+function renderRiskGaugePanel(artifact: any): string {
+  const visual = artifact.visual?.data ?? {};
+  const score = visual.risk_score || 0;
+  const level = visual.risk_level || 'medium';
+  const sources = visual.sources || [];
+  return `
+    <section class="advanced-room-panel">
+      ${_renderHero(artifact)}
+      <div class="room-visual">
+        <div class="room-visual-title">Risk Gauge · ${escapeHtml(String(score))}/100 · ${escapeHtml(level)}</div>
+        <div class="risk-gauge-bar">
+          <div class="risk-gauge-track">
+            <div class="risk-gauge-fill ${score >= 70 ? 'danger' : score >= 40 ? 'warning' : 'neutral'}" style="width:${Math.min(100, score)}%"></div>
+          </div>
+          <div class="risk-gauge-labels"><span>0</span><span>35</span><span>70</span><span>100</span></div>
+        </div>
+        <div class="risk-sources">
+          ${sources.map((s: any) => `
+            <div class="risk-source-row">
+              <span class="risk-source-label">${escapeHtml(s.label || '')}</span>
+              <span class="risk-source-value">${escapeHtml(String(s.value || ''))}${escapeHtml(s.unit || '')}</span>
+              <span class="risk-source-impact ${s.impact === 'high' ? 'danger' : s.impact === 'medium' ? 'warning' : 'neutral'}">${escapeHtml(s.impact || '')}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      ${_renderMetricsGrid(artifact.metrics)}
+      ${_renderInsight(artifact)}
+      ${_renderActionPlan(artifact)}
+    </section>
+  `;
+}
+
+function renderBacktestCurvePanel(artifact: any): string {
+  const visual = artifact.visual?.data ?? {};
+  const strategyCurve = visual.strategy_curve || [];
+  const benchmarkCurve = visual.benchmark_curve || [];
+  const len = Math.max(strategyCurve.length, benchmarkCurve.length);
+  return `
+    <section class="advanced-room-panel">
+      ${_renderHero(artifact)}
+      <div class="room-visual">
+        <div class="room-visual-title">Equity Curve</div>
+        ${len > 1
+          ? `<svg class="mini-chart" viewBox="0 0 ${len - 1} 100" preserveAspectRatio="none">
+              ${benchmarkCurve.length > 1 ? `<polyline fill="none" stroke="rgba(148,163,184,.5)" stroke-width="1" points="${benchmarkCurve.map((v: number, i: number) => `${i},${100 - (v - 1) * 50}`).join(' ')}"/>` : ''}
+              <polyline fill="none" stroke="currentColor" stroke-width="1.5" points="${strategyCurve.map((v: number, i: number) => `${i},${100 - (v - 1) * 50}`).join(' ')}"/>
+            </svg>`
+          : '<div class="room-visual-placeholder">Curve data unavailable</div>'}
+        <div class="curve-legend"><span class="legend-strategy">Strategy</span><span class="legend-benchmark">Benchmark</span></div>
+      </div>
+      ${_renderMetricsGrid(artifact.metrics)}
+      ${_renderInsight(artifact)}
+      ${_renderActionPlan(artifact)}
+    </section>
+  `;
+}
+
+function renderDecisionDashboard(artifact: any): string {
+  const details = artifact.details ?? {};
+  const panel = details.decision_panel ?? {};
+  const votes = details.agent_votes_table ?? [];
+  const whyNot = details.why_not ?? {};
+  const triggers = details.trigger_conditions ?? [];
+  const plan = details.next_plan ?? [];
+  const conflicts = details.vote_conflicts ?? artifact.visual?.data?.vote_conflicts ?? [];
+
+  const decision = (panel.decision || 'hold').toLowerCase();
+  const decisionMode = panel.decision_mode || '';
+  const decisionScore = panel.decision_score ?? 50;
+  const confidence = panel.confidence ?? 0.62;
+  const positionPct = panel.position_pct ?? 35;
+
+  const decisionBadgeCls = decision === 'buy' ? 'positive' : decision === 'sell' ? 'danger' : 'neutral';
+  const decisionTitle = decision.toUpperCase() + (decisionMode ? ' · ' + decisionMode.replace(/_/g, ' ') : '');
+
+  return `
+    <section class="advanced-room-panel">
+      ${_renderHero(artifact)}
+      <div class="room-visual">
+        <div class="decision-hero">
+          <span class="decision-badge ${decisionBadgeCls}" style="font-size:16px;padding:6px 18px;">${escapeHtml(decisionTitle)}</span>
+          <div class="decision-kv-row"><span class="decision-kv-label">Score</span><span class="decision-kv-value">${escapeHtml(String(decisionScore))}/100</span></div>
+          <div class="decision-kv-row"><span class="decision-kv-label">Confidence</span><span class="decision-kv-value">${escapeHtml(String(Math.round(confidence * 100)))}%</span></div>
+          <div class="decision-kv-row"><span class="decision-kv-label">Position</span><span class="decision-kv-value">${escapeHtml(String(positionPct))}%</span></div>
+        </div>
+        ${votes.length > 0 ? `
+          <div class="dashboard-section">
+            <div class="dashboard-section-title">Agent Votes</div>
+            <div class="vote-table">
+              ${votes.map((v: any) => {
+                const voteCls = v.vote === 'buy' ? 'positive' : v.vote === 'sell' ? 'danger' : 'neutral';
+                return `
+                  <div class="vote-row">
+                    <span class="vote-agent">${escapeHtml(v.agent)}</span>
+                    <span class="vote-bar-track"><span class="vote-bar-fill ${voteCls}" style="width:${Math.min(100, v.score || 0)}%"></span></span>
+                    <span class="vote-score ${voteCls}">${escapeHtml(String(v.score))}%</span>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        ` : ''}
+        ${conflicts.length > 0 ? `
+          <div class="dashboard-section">
+            <div class="dashboard-section-title">Conflict Resolution</div>
+            <div class="conflict-list">
+              ${conflicts.map((c: any) => `<div class="conflict-row"><span class="conflict-name">${escapeHtml(c.conflict || '')}</span><span class="conflict-resolution">→ ${escapeHtml(c.resolution || '')}</span></div>`).join('')}
+            </div>
+          </div>
+        ` : ''}
+        ${whyNot.reasons && whyNot.reasons.length > 0 ? `
+          <div class="dashboard-section">
+            <div class="dashboard-section-title">${escapeHtml(whyNot.title || 'Why not?')}</div>
+            <ul class="dashboard-list">
+              ${whyNot.reasons.map((r: string) => `<li>${escapeHtml(r)}</li>`).join('')}
+            </ul>
+          </div>
+        ` : ''}
+        ${triggers.length > 0 ? `
+          <div class="dashboard-section">
+            <div class="dashboard-section-title">Trigger Conditions</div>
+            <div class="trigger-table">
+              ${triggers.map((t: any) => `
+                <div class="trigger-row">
+                  <span class="trigger-condition">${escapeHtml(t.condition || '')}</span>
+                  <span class="trigger-current">${escapeHtml(String(t.current_value ?? ''))}</span>
+                  <span class="trigger-target">→ ${escapeHtml(String(t.target_value ?? ''))}</span>
+                  <span class="trigger-status ${t.status === 'met' ? 'positive' : 'warning'}">${escapeHtml(t.status || '')}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        ` : ''}
+        ${plan.length > 0 ? `
+          <div class="dashboard-section">
+            <div class="dashboard-section-title">Next Plan</div>
+            <ul class="dashboard-list">
+              ${plan.map((p: any) => `<li>${escapeHtml(p.action || '')}${p.priority ? ` <span class="schedule-priority" data-priority="${escapeHtml(p.priority)}">${escapeHtml(p.priority)}</span>` : ''}</li>`).join('')}
+            </ul>
+          </div>
+        ` : ''}
+      </div>
+      ${_renderMetricsGrid(artifact.metrics)}
+      ${_renderInsight(artifact)}
+      ${_renderActionPlan(artifact)}
+    </section>
+  `;
+}
+
+function renderExecutionTimelinePanel(artifact: any): string {
+  const visual = artifact.visual?.data ?? {};
+  const events = visual.events || [];
+  return `
+    <section class="advanced-room-panel">
+      ${_renderHero(artifact)}
+      <div class="room-visual">
+        <div class="room-visual-title">Execution Timeline</div>
+        <div class="timeline-list">
+          ${events.map((e: any) => `
+            <div class="timeline-item">
+              <span class="timeline-time">${escapeHtml(e.time || '')}</span>
+              <div class="timeline-body">
+                <span class="timeline-stage">${escapeHtml(e.stage || '')}</span>
+                <span class="timeline-message">${escapeHtml(e.message || '')}</span>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      ${_renderMetricsGrid(artifact.metrics)}
+      ${_renderInsight(artifact)}
+      ${_renderActionPlan(artifact)}
+    </section>
+  `;
+}
+
+function renderAgentMonitorPanel(artifact: any): string {
+  const visual = artifact.visual?.data ?? {};
+  const agents = visual.agents || [];
+  return `
+    <section class="advanced-room-panel">
+      ${_renderHero(artifact)}
+      <div class="room-visual">
+        <div class="agent-status-grid">
+          ${agents.map((a: any) => `
+            <div class="agent-status-card ${a.status || 'done'}">
+              <div class="agent-status-name">${escapeHtml(a.name || '')}</div>
+              <div class="agent-status-badge ${a.status || 'done'}">${escapeHtml(a.status || 'done')}</div>
+              <div class="agent-status-latency">${a.latency_ms ?? '?'}ms</div>
+              <div class="agent-status-summary">${escapeHtml(a.summary || '')}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      ${_renderMetricsGrid(artifact.metrics)}
+      ${_renderInsight(artifact)}
+      ${_renderActionPlan(artifact)}
+    </section>
+  `;
+}
+
+function renderReportSummaryPanel(artifact: any): string {
+  const visual = artifact.visual?.data ?? {};
+  const data = visual;
+  return `
+    <section class="advanced-room-panel">
+      ${_renderHero(artifact)}
+      <div class="room-visual">
+        <div class="report-summary-grid">
+          <div class="report-summary-card">
+            <div class="report-summary-label">Final Decision</div>
+            <div class="report-summary-value ${(data.final_decision || '').toLowerCase() === 'buy' ? 'positive' : (data.final_decision || '').toLowerCase() === 'sell' ? 'danger' : 'neutral'}">${escapeHtml(data.final_decision || 'HOLD')}</div>
+          </div>
+          <div class="report-summary-card">
+            <div class="report-summary-label">Suggested Action</div>
+            <div class="report-summary-value">${escapeHtml(data.suggested_action || '')}</div>
+          </div>
+        </div>
+        ${data.key_drivers && data.key_drivers.length > 0 ? `
+          <div class="dashboard-section">
+            <div class="dashboard-section-title">Key Drivers</div>
+            <ul class="dashboard-list">${data.key_drivers.map((d: string) => `<li>${escapeHtml(d)}</li>`).join('')}</ul>
+          </div>
+        ` : ''}
+        ${data.key_risks && data.key_risks.length > 0 ? `
+          <div class="dashboard-section">
+            <div class="dashboard-section-title">Key Risks</div>
+            <ul class="dashboard-list">${data.key_risks.map((r: string) => `<li>${escapeHtml(r)}</li>`).join('')}</ul>
+          </div>
+        ` : ''}
+      </div>
+      ${_renderMetricsGrid(artifact.metrics)}
+      ${_renderInsight(artifact)}
+      ${_renderActionPlan(artifact)}
+    </section>
+  `;
+}
+
+function renderIdleSummaryPanel(artifact: any): string {
+  const visual = artifact.visual?.data ?? {};
+  const data = visual;
+  return `
+    <section class="advanced-room-panel">
+      ${_renderHero(artifact)}
+      <div class="room-visual">
+        <div class="idle-status-card">
+          <div class="idle-status-icon">${data.next_ready ? '◉' : '○'}</div>
+          <div class="idle-status-text">${data.next_ready ? 'System Ready' : 'Processing'}</div>
+          <div class="idle-last-task">Last: <strong>${escapeHtml(data.last_asset || '')}</strong> · ${escapeHtml(data.last_decision || '')}</div>
+        </div>
+      </div>
+      ${_renderMetricsGrid(artifact.metrics)}
+      ${_renderInsight(artifact)}
+      ${_renderActionPlan(artifact)}
+    </section>
+  `;
+}
+
+function renderGenericRoomPanel(artifact: any): string {
+  return `
+    <section class="advanced-room-panel">
+      ${_renderHero(artifact)}
+      ${_renderMetricsGrid(artifact.metrics)}
+      ${_renderInsight(artifact)}
+      ${_renderActionPlan(artifact)}
+    </section>
+  `;
+}
+
+function renderAdvancedRoomPanel(artifact: any): string {
+  switch (artifact.panel_type) {
+    case 'data_health':
+      return renderDataHealthPanel(artifact);
+    case 'chart_panel':
+      return renderChartPanel(artifact);
+    case 'indicator_dashboard':
+      return renderIndicatorDashboard(artifact);
+    case 'news_evidence':
+      return renderNewsEvidencePanel(artifact);
+    case 'strategy_ranking':
+      return renderStrategyRankingPanel(artifact);
+    case 'memory_panel':
+      return renderMemoryPanel(artifact);
+    case 'risk_gauge':
+      return renderRiskGaugePanel(artifact);
+    case 'backtest_curve':
+      return renderBacktestCurvePanel(artifact);
+    case 'decision_dashboard':
+      return renderDecisionDashboard(artifact);
+    case 'execution_timeline':
+      return renderExecutionTimelinePanel(artifact);
+    case 'agent_monitor':
+      return renderAgentMonitorPanel(artifact);
+    case 'report_summary':
+      return renderReportSummaryPanel(artifact);
+    case 'idle_summary':
+      return renderIdleSummaryPanel(artifact);
+    default:
+      return renderGenericRoomPanel(artifact);
+  }
+}
+
 function renderRoomModal(): void {
   if (!assetModal || !assetModalTitle || !assetModalSub || !assetModalItems) {
     return;
@@ -2928,20 +3500,14 @@ function renderRoomModal(): void {
     : (uiLocale === 'zh' ? `显示 ${items.length}` : `showing ${items.length}`);
   assetModalSub.textContent = `${resource.itemCount} ${uiLocale === 'zh' ? '项' : 'items'} · ${showingLabel} · ${humanizeTelemetryText(resource.summary)}${filterNotes.length ? ` · ${filterNotes.join(' · ')}` : ''} · ${clockOf(resource.lastAccessAt)}`;
 
-  // Special rendering for schedule / images rooms (dashboard panels)
-  if (resource.id === 'schedule' || resource.id === 'images') {
-    const artifact = getRoomArtifact(resource.id);
-    if (artifact) {
-      assetModalItems.classList.toggle('grid', false);
-      if (resource.id === 'schedule') {
-        assetModalItems.innerHTML = renderScheduleDashboard(artifact);
-      } else {
-        assetModalItems.innerHTML = renderNewsPanel(artifact);
-      }
-      assetModal.classList.remove('hidden');
-      assetModal.setAttribute('aria-hidden', 'false');
-      return;
-    }
+  // Advanced room panel rendering (artifact-first dashboard)
+  const artifact = getRoomArtifact(resource.id);
+  if (artifact && artifact.panel_type) {
+    assetModalItems.classList.toggle('grid', false);
+    assetModalItems.innerHTML = renderAdvancedRoomPanel(artifact);
+    assetModal.classList.remove('hidden');
+    assetModal.setAttribute('aria-hidden', 'false');
+    return;
   }
 
   assetModalItems.classList.toggle('grid', modalViewMode === 'grid');
@@ -3558,3 +4124,6 @@ window.setInterval(() => {
 window.setInterval(() => {
   renderActorLiveStatus();
 }, 250);
+
+// Expose advanced room panel renderer for the inline room-modal script
+(window as typeof window & { renderAdvancedRoomPanel?: typeof renderAdvancedRoomPanel }).renderAdvancedRoomPanel = renderAdvancedRoomPanel;

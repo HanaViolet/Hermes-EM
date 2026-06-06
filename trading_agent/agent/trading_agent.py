@@ -230,13 +230,16 @@ def run_trading_agent(
         memory_result = compute_memory_score(history_data, ticker, strategy_name)
         update_workflow(current_stage="using_memory", progress=78, summary=f"Memory: {memory_result.get('memory_score',0)} boost", logs=[memory_result.get("evidence","")])
 
-        # ── Stage 9: Score-based Decision ──
-        decision_result = compute_decision_score(regime=regime_result, risk=risk_result, strategy_scores=strategy_scores, memory=memory_result, indicators=indicator_result, backtest=result, news_result=news_result)
-        update_workflow(current_stage="making_decision", progress=88, summary=f"Decision: {decision_result['decision'].upper()} (score={decision_result['decision_score']})")
+        # ── Stage 9: Score-based Decision (Initial) ──
+        initial_decision_result = compute_decision_score(regime=regime_result, risk=risk_result, strategy_scores=strategy_scores, memory=memory_result, indicators=indicator_result, backtest=result, news_result=news_result)
+        update_workflow(current_stage="making_decision", progress=85, summary=f"Initial: {initial_decision_result['decision'].upper()} (score={initial_decision_result['decision_score']})")
 
-        # ── Stage 9.5: Agent Analysis ──
+        # ── Stage 9.2: Agent Votes ──
         from trading_agent.tools.agents.vote_aggregator import aggregate_votes
         from trading_agent.tools.agents.critic_agent import review_decision
+        from trading_agent.tools.agents.conflict_resolver import resolve_conflicts
+        from trading_agent.tools.agents.decision_reviser import revise_decision
+        from trading_agent.tools.agents.trigger_evaluator import evaluate_triggers
         from trading_agent.tools.agents.strategy_adjustment import suggest_adjustments
         from trading_agent.tools.agents.plan_agent import generate_plan
 
@@ -247,32 +250,86 @@ def run_trading_agent(
             backtest=result,
             strategy_scores=strategy_scores,
         )
+
+        # ── Stage 9.3: Critic Agent ──
         critic_result = review_decision(
             votes=vote_result["agent_votes"],
-            decision=decision_result["decision"],
+            decision=initial_decision_result["decision"],
             indicators=indicator_result,
             risk=risk_result,
             backtest=result,
+            news=news_result,
         )
-        adjustment_result = suggest_adjustments(
-            critic_review=critic_result["critic_review"],
+        update_workflow(current_stage="agent_analysis", progress=88, summary=f"Critic: {critic_result['critic_review']['verdict']} (score={critic_result['critic_review']['critic_score']})")
+
+        # ── Stage 9.4: Conflict Resolver ──
+        conflict_result = resolve_conflicts(
+            votes=vote_result["agent_votes"],
+            final_decision=initial_decision_result["decision"],
             risk=risk_result,
-            backtest=result,
+            indicators=indicator_result,
         )
+
+        # ── Stage 9.5: Decision Reviser (two-stage) ──
+        revision_result = revise_decision(
+            initial_decision=initial_decision_result["decision"],
+            decision_score=initial_decision_result["decision_score"],
+            confidence=initial_decision_result["confidence"],
+            critic_review=critic_result,
+            risk=risk_result,
+            indicators=indicator_result,
+            backtest=result,
+            news=news_result,
+        )
+        decision_result = {
+            **initial_decision_result,
+            "decision": revision_result["final_decision"],
+            "confidence": revision_result["final_confidence"],
+            "suggested_position_pct": revision_result["final_position_pct"],
+            "initial_decision": revision_result["decision_revision"]["initial_decision"],
+            "decision_mode": revision_result["decision_revision"]["decision_mode"],
+            "watch_priority": revision_result["decision_revision"]["watch_priority"],
+            "revision_applied": revision_result["decision_revision"]["revision_applied"],
+            "revision_reason": revision_result["decision_revision"]["revision_reason"],
+        }
+        update_workflow(current_stage="making_decision", progress=90, summary=f"Final: {decision_result['decision'].upper()} · {decision_result['decision_mode']}")
+
+        # ── Stage 9.6: Plan Agent (based on final decision) ──
         plan_result = generate_plan(
             decision=decision_result["decision"],
             indicators=indicator_result,
             risk=risk_result,
             critic_review=critic_result["critic_review"],
         )
+
+        # ── Stage 9.7: Trigger Evaluator ──
+        trigger_eval = evaluate_triggers(
+            triggers=plan_result["trigger_conditions"],
+            indicators=indicator_result,
+            risk=risk_result,
+            backtest=result,
+            news=news_result,
+        )
+
+        # ── Stage 9.8: Strategy Adjustment ──
+        adjustment_result = suggest_adjustments(
+            critic_review=critic_result["critic_review"],
+            risk=risk_result,
+            backtest=result,
+        )
+
         agent_analysis = {
             "agent_votes": vote_result["agent_votes"],
+            "vote_summary": vote_result["summary"],
             "critic_review": critic_result["critic_review"],
+            "vote_conflicts": conflict_result["vote_conflicts"],
+            "decision_revision": revision_result["decision_revision"],
             "strategy_adjustments": adjustment_result["strategy_adjustments"],
             "monitor_plan": plan_result["monitor_plan"],
             "trigger_conditions": plan_result["trigger_conditions"],
+            "trigger_status": trigger_eval["trigger_status"],
         }
-        update_workflow(current_stage="agent_analysis", progress=90, summary=f"Agents: {vote_result['summary']['dominant']} ({vote_result['summary']['buy_count']}B/{vote_result['summary']['sell_count']}S/{vote_result['summary']['hold_count']}H)")
+        update_workflow(current_stage="agent_analysis", progress=92, summary=f"Agents: {vote_result['summary']['dominant']} ({vote_result['summary']['buy_count']}B/{vote_result['summary']['sell_count']}S/{vote_result['summary']['hold_count']}H) · Mode: {decision_result['decision_mode']}")
 
         # ── Stage 10: Explain ──
         explanation = explain_decision({"decision_result": decision_result, "risk_result": risk_result, "regime_result": regime_result, "strategy_scores": strategy_scores, "indicator_result": indicator_result})
@@ -284,8 +341,24 @@ def run_trading_agent(
         save_backtest_result(result, ticker, strategy_name, start_date, end_date)
 
         # ── Stage 12: Completed (MUST be last update_workflow) ──
-        result_summary = {"selected_strategy": strategy_name, "decision": decision_result["decision"], "confidence": decision_result["confidence"], "total_return": result["total_return"], "benchmark_return": result["benchmark_total_return"], "sharpe_ratio": result["sharpe_ratio"], "max_drawdown": result["max_drawdown"], "trades": result["number_of_trades"], "decision_score": decision_result["decision_score"], "risk_score": risk_result["risk_score"]}
-        update_workflow(global_status="done", current_stage="completed", progress=100, cat_id="trading_cat", cat_status="done", summary=f"Completed. Decision: {decision_result['decision']}", result_summary=result_summary, report={"markdown": report_md, "path": ""}, logs=["Workflow completed"])
+        result_summary = {
+            "selected_strategy": strategy_name,
+            "decision": decision_result["decision"],
+            "initial_decision": decision_result.get("initial_decision", decision_result["decision"]),
+            "decision_mode": decision_result.get("decision_mode", "proceed"),
+            "watch_priority": decision_result.get("watch_priority", "low"),
+            "revision_applied": decision_result.get("revision_applied", False),
+            "confidence": decision_result["confidence"],
+            "critic_score": critic_result["critic_review"].get("critic_score", 70),
+            "total_return": result["total_return"],
+            "benchmark_return": result["benchmark_total_return"],
+            "sharpe_ratio": result["sharpe_ratio"],
+            "max_drawdown": result["max_drawdown"],
+            "trades": result["number_of_trades"],
+            "decision_score": decision_result["decision_score"],
+            "risk_score": risk_result["risk_score"],
+        }
+        update_workflow(global_status="done", current_stage="completed", progress=100, cat_id="trading_cat", cat_status="done", summary=f"Completed. Decision: {decision_result['decision']} · {decision_result.get('decision_mode','proceed')}", result_summary=result_summary, report={"markdown": report_md, "path": ""}, logs=["Workflow completed"])
 
         full_result = {
             "ticker": ticker,
@@ -304,6 +377,21 @@ def run_trading_agent(
             "explanation": explanation,
             "agent_analysis": agent_analysis,
         }
+
+        # Build advanced room artifacts and persist directly via office_bridge
+        try:
+            from trading_server.artifact_builder import build_room_artifacts
+            _task = {"ticker": ticker, "strategy": strategy_name, "start_date": start_date, "end_date": end_date}
+            _artifacts = build_room_artifacts(_task, full_result)
+            _telemetry_state["room_artifacts"] = _artifacts
+            _persist_telemetry()
+        except Exception as _e:
+            import traceback as _tb
+            try:
+                from pathlib import Path
+                Path("trading_server/agent_artifact_error.log").write_text(f"[{datetime.now().isoformat()}] build error: {_e}\n{_tb.format_exc()}", encoding="utf-8")
+            except Exception:
+                pass
 
         return full_result
 

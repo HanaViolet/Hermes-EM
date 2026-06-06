@@ -3241,6 +3241,456 @@
       }
       .right-panel-tab.visible { display: block; }
 
+      /* ── Advanced Room Panel Styles ───────────────────────────── */
+      .advanced-room-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        padding: 2px 2px 6px;
+      }
+
+      .room-hero {
+        padding: 16px 18px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, rgba(34,211,238,.10), rgba(8,18,28,.92));
+        border: 1px solid rgba(34,211,238,.22);
+      }
+      .room-hero-main {
+        font-size: 32px;
+        font-weight: 900;
+        letter-spacing: .02em;
+        line-height: 1;
+        color: rgba(236,247,243,0.94);
+      }
+      .room-hero-main.positive { color: #36d399; }
+      .room-hero-main.warning { color: #fbbf24; }
+      .room-hero-main.danger { color: #fb7185; }
+      .room-hero-main.neutral { color: #38bdf8; }
+      .room-hero-unit {
+        font-size: 16px;
+        font-weight: 500;
+        margin-left: 6px;
+        color: rgba(152,181,172,0.72);
+      }
+      .room-hero-label {
+        margin-top: 6px;
+        font-size: 11px;
+        color: #8ea4b8;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+      .room-hero-sub {
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .room-visual {
+        padding: 14px 16px;
+        border-radius: 12px;
+        background: rgba(8,18,28,.72);
+        border: 1px solid rgba(72,104,128,.35);
+      }
+      .room-visual-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: rgba(236,247,243,0.88);
+        margin-bottom: 10px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid rgba(72,104,128,.18);
+      }
+      .room-visual-sub {
+        font-size: 11px;
+        color: #94a3b8;
+        margin-bottom: 8px;
+      }
+      .room-visual-placeholder {
+        padding: 20px;
+        text-align: center;
+        color: rgba(148,163,184,0.5);
+        font-size: 12px;
+      }
+
+      .mini-chart {
+        width: 100%;
+        height: 140px;
+        color: #22d3ee;
+        display: block;
+      }
+      .curve-legend {
+        display: flex;
+        gap: 14px;
+        margin-top: 8px;
+        font-size: 10px;
+      }
+      .curve-legend .legend-strategy { color: #22d3ee; }
+      .curve-legend .legend-strategy::before { content: ''; display: inline-block; width: 12px; height: 3px; background: #22d3ee; border-radius: 2px; margin-right: 4px; vertical-align: middle; }
+      .curve-legend .legend-benchmark { color: rgba(148,163,184,0.6); }
+      .curve-legend .legend-benchmark::before { content: ''; display: inline-block; width: 12px; height: 3px; background: rgba(148,163,184,0.5); border-radius: 2px; margin-right: 4px; vertical-align: middle; }
+
+      .room-metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+      }
+      @media (max-width: 700px) {
+        .room-metrics-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      }
+      .room-metric-card {
+        padding: 12px 14px;
+        border-radius: 12px;
+        background: rgba(15,30,44,.88);
+        border: 1px solid rgba(72,104,128,.42);
+      }
+      .room-metric-label {
+        font-size: 10px;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      .room-metric-display {
+        margin-top: 6px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .room-metric-value {
+        font-size: 18px;
+        font-weight: 800;
+        color: rgba(236,247,243,0.92);
+      }
+      .room-metric-value.positive { color: #36d399; }
+      .room-metric-value.warning { color: #fbbf24; }
+      .room-metric-value.danger { color: #fb7185; }
+      .room-metric-value.neutral { color: #38bdf8; }
+      .room-metric-unit {
+        font-size: 12px;
+        font-weight: 500;
+        color: rgba(152,181,172,0.72);
+      }
+      .room-metric-badge {
+        display: inline-flex;
+        padding: 3px 10px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 700;
+        font-family: var(--font-mono);
+      }
+      .room-metric-badge.positive { background: rgba(54,211,153,0.14); color: #36d399; border: 1px solid rgba(54,211,153,0.35); }
+      .room-metric-badge.warning { background: rgba(251,191,36,0.14); color: #fbbf24; border: 1px solid rgba(251,191,36,0.35); }
+      .room-metric-badge.danger { background: rgba(251,113,133,0.14); color: #fb7185; border: 1px solid rgba(251,113,133,0.35); }
+      .room-metric-badge.neutral { background: rgba(56,189,248,0.14); color: #38bdf8; border: 1px solid rgba(56,189,248,0.35); }
+
+      .metric-bar-track {
+        flex: 1;
+        height: 7px;
+        border-radius: 999px;
+        background: rgba(148,163,184,.14);
+        overflow: hidden;
+      }
+      .metric-bar-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #38bdf8, #22d3ee);
+      }
+      .metric-bar-fill.positive { background: linear-gradient(90deg, #36d399, #64d7b0); }
+      .metric-bar-fill.warning { background: linear-gradient(90deg, #fbbf24, #fcd34d); }
+      .metric-bar-fill.danger { background: linear-gradient(90deg, #fb7185, #f87171); }
+
+      .room-insight {
+        padding: 14px 16px;
+        border-radius: 12px;
+        background: rgba(34,211,238,.06);
+        border-left: 3px solid rgba(34,211,238,.75);
+        line-height: 1.7;
+        color: #dbeafe;
+        font-size: 13px;
+      }
+
+      .room-action-plan {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      @media (max-width: 700px) {
+        .room-action-plan { grid-template-columns: 1fr; }
+      }
+      .room-action-card {
+        padding: 12px 14px;
+        border-radius: 12px;
+        background: rgba(8,18,28,.72);
+        border: 1px solid rgba(72,104,128,.38);
+      }
+      .room-action-title {
+        font-size: 10px;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 6px;
+      }
+      .room-action-body {
+        font-size: 12px;
+        color: #e5edf5;
+        line-height: 1.6;
+      }
+      .room-action-body ul {
+        margin: 0;
+        padding-left: 16px;
+      }
+      .room-action-body li {
+        margin-bottom: 2px;
+      }
+
+      /* Indicator cards */
+      .indicator-card-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+      .indicator-card {
+        padding: 14px;
+        border-radius: 12px;
+        background: rgba(15,30,44,.88);
+        border: 1px solid rgba(72,104,128,.42);
+      }
+      .indicator-card-label {
+        font-size: 10px;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      .indicator-card-value {
+        margin-top: 6px;
+        font-size: 22px;
+        font-weight: 800;
+      }
+      .indicator-card-value.positive { color: #36d399; }
+      .indicator-card-value.warning { color: #fbbf24; }
+      .indicator-card-value.danger { color: #fb7185; }
+      .indicator-card-value.neutral { color: #38bdf8; }
+      .indicator-card-state {
+        margin-top: 4px;
+        font-size: 11px;
+        color: rgba(152,181,172,0.8);
+      }
+
+      /* News evidence */
+      .news-evidence-list { display: flex; flex-direction: column; gap: 8px; }
+      .news-evidence-card {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(72,104,128,.28);
+        background: rgba(8,18,28,.62);
+      }
+      .evidence-badge {
+        flex-shrink: 0;
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+      .evidence-badge.positive { background: rgba(54,211,153,0.14); color: #36d399; border: 1px solid rgba(54,211,153,0.3); }
+      .evidence-badge.negative { background: rgba(251,113,133,0.14); color: #fb7185; border: 1px solid rgba(251,113,133,0.3); }
+      .evidence-badge.neutral { background: rgba(148,163,184,0.12); color: #94a3b8; border: 1px solid rgba(148,163,184,0.25); }
+      .evidence-text { font-size: 12px; color: #e5edf5; line-height: 1.5; }
+      .evidence-ids { font-size: 10px; color: rgba(126,202,184,0.6); font-family: var(--font-mono); }
+      .news-section-title {
+        font-size: 11px;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin: 10px 0 6px;
+        padding-bottom: 4px;
+        border-bottom: 1px solid rgba(72,104,128,.15);
+      }
+      .news-raw-list { display: flex; flex-direction: column; gap: 6px; }
+      .news-raw-item {
+        padding: 6px 8px;
+        border-radius: 8px;
+        background: rgba(8,18,28,.5);
+        font-size: 11px;
+      }
+      .news-raw-item a { color: #7cf0d0; text-decoration: none; font-weight: 600; }
+      .news-raw-item a:hover { text-decoration: underline; }
+      .news-raw-meta { display: block; color: #64748b; font-size: 10px; margin-top: 2px; }
+
+      /* Strategy ranking */
+      .strategy-ranking-list { display: flex; flex-direction: column; gap: 10px; }
+      .strategy-row {
+        display: grid;
+        grid-template-columns: 120px 1fr 50px;
+        gap: 10px;
+        align-items: center;
+        padding: 6px 0;
+      }
+      .strategy-name { font-size: 12px; color: #e5edf5; }
+      .strategy-bar-track {
+        height: 8px;
+        border-radius: 999px;
+        background: rgba(148,163,184,.12);
+        position: relative;
+        overflow: hidden;
+      }
+      .strategy-bar-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #22d3ee, #38bdf8);
+      }
+      .strategy-bar-adjustment {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        border-radius: 999px;
+        background: rgba(251,191,36,0.5);
+      }
+      .strategy-score { font-size: 12px; font-weight: 700; color: #e5edf5; text-align: right; }
+      .strategy-meta { font-size: 10px; color: #64748b; margin-top: -6px; margin-left: 130px; }
+
+      /* Risk gauge */
+      .risk-gauge-bar { padding: 10px 0; }
+      .risk-gauge-track { height: 10px; border-radius: 999px; background: rgba(148,163,184,.12); overflow: hidden; }
+      .risk-gauge-fill { height: 100%; border-radius: 999px; transition: width 0.4s ease; }
+      .risk-gauge-fill.danger { background: linear-gradient(90deg, #fb7185, #f87171); }
+      .risk-gauge-fill.warning { background: linear-gradient(90deg, #fbbf24, #fcd34d); }
+      .risk-gauge-fill.neutral { background: linear-gradient(90deg, #36d399, #64d7b0); }
+      .risk-gauge-labels { display: flex; justify-content: space-between; font-size: 10px; color: #64748b; margin-top: 4px; }
+      .risk-sources { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+      .risk-source-row { display: flex; align-items: center; gap: 10px; padding: 6px 8px; border-radius: 8px; background: rgba(8,18,28,.5); }
+      .risk-source-label { flex: 1; font-size: 12px; color: #e5edf5; }
+      .risk-source-value { font-size: 12px; font-weight: 700; color: #cbd5e1; }
+      .risk-source-impact { font-size: 10px; padding: 2px 8px; border-radius: 6px; font-weight: 700; text-transform: uppercase; }
+      .risk-source-impact.high { background: rgba(251,113,133,0.14); color: #fb7185; border: 1px solid rgba(251,113,133,0.3); }
+      .risk-source-impact.medium { background: rgba(251,191,36,0.14); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+      .risk-source-impact.low { background: rgba(148,163,184,0.12); color: #94a3b8; border: 1px solid rgba(148,163,184,0.25); }
+
+      /* Timeline */
+      .timeline-list { display: flex; flex-direction: column; }
+      .timeline-item {
+        display: grid;
+        grid-template-columns: 80px 1fr;
+        gap: 12px;
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(72,104,128,.2);
+      }
+      .timeline-item:last-child { border-bottom: none; }
+      .timeline-time { font-size: 11px; color: #94a3b8; font-family: var(--font-mono); }
+      .timeline-date { font-size: 11px; color: #94a3b8; font-family: var(--font-mono); }
+      .timeline-body { font-size: 12px; color: #e5edf5; line-height: 1.5; }
+      .timeline-stage { display: block; font-size: 10px; color: #22d3ee; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; }
+      .timeline-message { color: #cbd5e1; }
+      .timeline-decision { font-weight: 700; }
+      .timeline-decision.positive { color: #36d399; }
+      .timeline-decision.danger { color: #fb7185; }
+      .timeline-decision.neutral { color: #fbbf24; }
+      .timeline-return { margin-left: 8px; color: #36d399; font-size: 11px; }
+
+      /* Agent monitor */
+      .agent-status-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      .agent-status-card {
+        padding: 14px;
+        border-radius: 12px;
+        background: rgba(15,30,44,.88);
+        border: 1px solid rgba(72,104,128,.42);
+      }
+      .agent-status-card.done { border-color: rgba(54,211,153,.35); }
+      .agent-status-card.active { border-color: rgba(56,189,248,.35); }
+      .agent-status-card.error { border-color: rgba(251,113,133,.35); }
+      .agent-status-name { font-size: 12px; font-weight: 700; color: #e5edf5; }
+      .agent-status-badge {
+        display: inline-block;
+        margin-top: 6px;
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+      .agent-status-badge.done { background: rgba(54,211,153,0.14); color: #36d399; border: 1px solid rgba(54,211,153,0.3); }
+      .agent-status-badge.active { background: rgba(56,189,248,0.14); color: #38bdf8; border: 1px solid rgba(56,189,248,0.3); }
+      .agent-status-badge.error { background: rgba(251,113,133,0.14); color: #fb7185; border: 1px solid rgba(251,113,133,0.3); }
+      .agent-status-latency { margin-top: 6px; font-size: 11px; color: #64748b; }
+      .agent-status-summary { margin-top: 4px; font-size: 11px; color: #94a3b8; }
+
+      /* Dashboard sections (used in decision/report panels) */
+      .dashboard-section { margin-top: 12px; }
+      .dashboard-section-title {
+        font-size: 12px;
+        font-weight: 700;
+        color: rgba(236,247,243,0.88);
+        margin-bottom: 8px;
+        padding-bottom: 4px;
+        border-bottom: 1px solid rgba(72,104,128,.15);
+      }
+      .dashboard-list { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }
+      .dashboard-list li { color: rgba(236,247,243,0.78); font-size: 12px; line-height: 1.5; }
+      .vote-table { display: flex; flex-direction: column; gap: 6px; }
+      .vote-row {
+        display: grid;
+        grid-template-columns: 90px 1fr 50px;
+        gap: 10px;
+        align-items: center;
+        padding: 5px 8px;
+        border-radius: 8px;
+        background: rgba(8,18,28,.5);
+      }
+      .vote-agent { font-size: 12px; color: #e5edf5; }
+      .vote-bar-track { height: 6px; border-radius: 999px; background: rgba(148,163,184,.12); overflow: hidden; }
+      .vote-bar-fill { height: 100%; border-radius: 999px; }
+      .vote-bar-fill.positive { background: linear-gradient(90deg, #36d399, #64d7b0); }
+      .vote-bar-fill.danger { background: linear-gradient(90deg, #fb7185, #f87171); }
+      .vote-bar-fill.neutral { background: linear-gradient(90deg, #fbbf24, #fcd34d); }
+      .vote-score { font-size: 11px; font-weight: 700; text-align: right; }
+      .vote-score.positive { color: #36d399; }
+      .vote-score.danger { color: #fb7185; }
+      .vote-score.neutral { color: #fbbf24; }
+      .conflict-list { display: flex; flex-direction: column; gap: 6px; }
+      .conflict-row { display: flex; gap: 8px; align-items: center; padding: 5px 8px; border-radius: 8px; background: rgba(8,18,28,.5); font-size: 12px; }
+      .conflict-name { color: #e5edf5; }
+      .conflict-resolution { color: #22d3ee; }
+      .trigger-table { display: flex; flex-direction: column; gap: 6px; }
+      .trigger-row {
+        display: grid;
+        grid-template-columns: 1fr auto auto auto;
+        gap: 10px;
+        align-items: center;
+        padding: 5px 8px;
+        border-radius: 8px;
+        background: rgba(8,18,28,.5);
+        font-size: 12px;
+      }
+      .trigger-condition { color: #e5edf5; }
+      .trigger-current { color: #94a3b8; font-family: var(--font-mono); }
+      .trigger-target { color: #64748b; }
+      .trigger-status { font-size: 10px; padding: 2px 8px; border-radius: 6px; font-weight: 700; text-transform: uppercase; }
+      .trigger-status.positive { background: rgba(54,211,153,0.14); color: #36d399; border: 1px solid rgba(54,211,153,0.3); }
+      .trigger-status.warning { background: rgba(251,191,36,0.14); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+
+      /* Decision hero within visual */
+      .decision-hero { padding: 8px 0 12px; border-bottom: 1px solid rgba(72,104,128,.15); margin-bottom: 8px; }
+      .decision-kv-row { display: flex; justify-content: space-between; gap: 12px; padding: 3px 0; }
+      .decision-kv-label { color: #94a3b8; font-size: 11px; }
+      .decision-kv-value { color: #e5e7eb; font-weight: 600; font-size: 12px; }
+
+      /* Report summary */
+      .report-summary-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      .report-summary-card { padding: 14px; border-radius: 12px; background: rgba(15,30,44,.88); border: 1px solid rgba(72,104,128,.42); }
+      .report-summary-label { font-size: 10px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.06em; }
+      .report-summary-value { margin-top: 6px; font-size: 20px; font-weight: 800; }
+      .report-summary-value.positive { color: #36d399; }
+      .report-summary-value.danger { color: #fb7185; }
+      .report-summary-value.neutral { color: #fbbf24; }
+
+      /* Idle summary */
+      .idle-status-card { padding: 20px; text-align: center; border-radius: 12px; background: rgba(15,30,44,.6); border: 1px solid rgba(72,104,128,.3); }
+      .idle-status-icon { font-size: 28px; color: #36d399; line-height: 1; }
+      .idle-status-text { margin-top: 8px; font-size: 14px; font-weight: 700; color: #e5edf5; }
+      .idle-last-task { margin-top: 8px; font-size: 12px; color: #94a3b8; }
+
     </style>
   </head>
   <body>
@@ -4047,85 +4497,89 @@
 
         // Overview content
         var html = '';
-        // Hero
-        var hv = String(a.primary && a.primary.value ? a.primary.value : '-');
-        var hcls = hv.toLowerCase().indexOf('buy')>=0?'buy':hv.toLowerCase().indexOf('sell')>=0?'sell':'hold';
-        html += '<div class="room-hero-summary">';
-        var heroUnit = a.primary && a.primary.unit ? ' '+a.primary.unit : '';
-        html += '<div class="room-hero-value '+hcls+'">'+hv+heroUnit+'</div>';
-        html += '<div class="room-hero-text">'+(a.primary?String(a.primary.label||''):'')+'</div>';
-        if (a.summary) html += '<div class="room-hero-text" style="color:#94a3b8;">'+(a.summary||'')+'</div>';
-        if (a.insight) html += '<div class="room-hero-insight-line">'+(a.insight||'')+'</div>';
-        html += '</div>';
-
-        // Key Metrics grid
-        var metrics = a.metrics || [];
-        if (metrics.length > 0) {
-          html += '<div class="room-metric-grid">';
-          metrics.slice(0,6).forEach(function(m) {
-            var lv = m.level || 'neutral';
-            html += '<div class="room-metric-card"><div class="room-metric-label">'+m.label+'</div><div class="room-metric-value '+lv+'">'+(m.value||'-')+(m.unit||'')+'</div>';
-            if (m.display === 'bar') {
-              var pct = Math.min(100, Math.max(0, parseFloat(m.value)||0));
-              html += '<div class="metric-bar-track" style="margin-top:6px;"><div class="metric-bar-fill '+lv+'" style="width:'+pct+'%"></div></div>';
-            }
-            if (m.signal) html += '<div style="font-size:10px;color:#94a3b8;margin-top:4px;">Signal: '+(m.signal||'').toUpperCase()+'</div>';
-            html += '</div>';
-          });
+        if (a.panel_type && window.renderAdvancedRoomPanel) {
+          html = window.renderAdvancedRoomPanel(a);
+        } else {
+          // Hero
+          var hv = String(a.primary && a.primary.value ? a.primary.value : '-');
+          var hcls = hv.toLowerCase().indexOf('buy')>=0?'buy':hv.toLowerCase().indexOf('sell')>=0?'sell':'hold';
+          html += '<div class="room-hero-summary">';
+          var heroUnit = a.primary && a.primary.unit ? ' '+a.primary.unit : '';
+          html += '<div class="room-hero-value '+hcls+'">'+hv+heroUnit+'</div>';
+          html += '<div class="room-hero-text">'+(a.primary?String(a.primary.label||''):'')+'</div>';
+          if (a.summary) html += '<div class="room-hero-text" style="color:#94a3b8;">'+(a.summary||'')+'</div>';
+          if (a.insight) html += '<div class="room-hero-insight-line">'+(a.insight||'')+'</div>';
           html += '</div>';
-        }
 
-        // Insight
-        html += '<div class="room-insight-block"><div class="room-insight-title">Insight</div><div class="room-insight-text">'+(a.insight||'No insight available.')+'</div>';
-        var reasoning = (a.details||{}).reasoning || [];
-        if (reasoning.length > 0) {
-          reasoning.forEach(function(r,i){ html += '<div class="room-insight-reason">'+(i+1)+'. '+r+'</div>'; });
-        }
-        html += '</div>';
-
-        // Details
-        var det = a.details || {};
-        html += '<div class="room-details-block">';
-        html += '<div class="room-detail-card"><div class="room-detail-title">Input</div><ul class="room-detail-list">'+(det.input||[]).map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div>';
-        html += '<div class="room-detail-card"><div class="room-detail-title">Output</div><ul class="room-detail-list">'+(det.output||[]).map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div>';
-        html += '<div class="room-detail-card"><div class="room-detail-title">Reasoning</div><ul class="room-detail-list">'+(det.reasoning||[]).map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div>';
-        html += '</div>';
-
-        // Agent Analysis (V1.2)
-        if (det.agent_votes && det.agent_votes.length > 0) {
-          html += '<div class="room-agent-block" style="margin-bottom:14px;">';
-          html += '<div style="font-size:13px;font-weight:700;color:#22d3ee;margin-bottom:6px;">Agent Votes</div>';
-          html += '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">';
-          det.agent_votes.forEach(function(v) {
-            var vcls = v.vote === 'buy' ? 'buy' : v.vote === 'sell' ? 'sell' : 'hold';
-            html += '<div style="padding:10px;border-radius:10px;background:rgba(15,30,44,0.88);border:1px solid rgba(72,104,128,0.42);">';
-            html += '<div style="font-size:10px;color:#8ea4b8;">'+v.agent+'</div>';
-            html += '<div style="font-size:18px;font-weight:800;margin-top:4px;" class="room-hero-value '+vcls+'">'+v.vote.toUpperCase()+'</div>';
-            html += '<div style="font-size:11px;color:#94a3b8;margin-top:2px;">Score: '+v.score+'</div>';
+          // Key Metrics grid
+          var metrics = a.metrics || [];
+          if (metrics.length > 0) {
+            html += '<div class="room-metric-grid">';
+            metrics.slice(0,6).forEach(function(m) {
+              var lv = m.level || 'neutral';
+              html += '<div class="room-metric-card"><div class="room-metric-label">'+m.label+'</div><div class="room-metric-value '+lv+'">'+(m.value||'-')+(m.unit||'')+'</div>';
+              if (m.display === 'bar') {
+                var pct = Math.min(100, Math.max(0, parseFloat(m.value)||0));
+                html += '<div class="metric-bar-track" style="margin-top:6px;"><div class="metric-bar-fill '+lv+'" style="width:'+pct+'%"></div></div>';
+              }
+              if (m.signal) html += '<div style="font-size:10px;color:#94a3b8;margin-top:4px;">Signal: '+(m.signal||'').toUpperCase()+'</div>';
+              html += '</div>';
+            });
             html += '</div>';
-          });
-          html += '</div></div>';
-        }
-        if (det.critic_review && det.critic_review.concerns && det.critic_review.concerns.length > 0) {
-          html += '<div class="room-insight-block" style="border-left-color:rgba(255,123,123,0.85);background:rgba(255,123,123,0.07);">';
-          html += '<div class="room-insight-title" style="color:#fb7185;">Critic Review</div>';
-          html += '<div style="font-size:11px;color:#fb7185;margin-bottom:4px;">Verdict: '+det.critic_review.verdict+'</div>';
-          det.critic_review.concerns.forEach(function(c,i){ html += '<div class="room-insight-reason" style="color:#ffb1b1;">'+(i+1)+'. '+c+'</div>'; });
+          }
+
+          // Insight
+          html += '<div class="room-insight-block"><div class="room-insight-title">Insight</div><div class="room-insight-text">'+(a.insight||'No insight available.')+'</div>';
+          var reasoning = (a.details||{}).reasoning || [];
+          if (reasoning.length > 0) {
+            reasoning.forEach(function(r,i){ html += '<div class="room-insight-reason">'+(i+1)+'. '+r+'</div>'; });
+          }
           html += '</div>';
-        }
-        if (det.trigger_conditions && det.trigger_conditions.length > 0) {
-          html += '<div style="padding:14px 16px;border-radius:12px;background:rgba(34,211,238,0.07);border-left:3px solid rgba(34,211,238,0.85);margin-bottom:14px;">';
-          html += '<div style="font-size:13px;font-weight:700;color:#67e8f9;margin-bottom:6px;">Trigger Conditions</div>';
-          html += '<ul style="margin:0;padding-left:14px;font-size:12px;line-height:1.6;color:#e5edf5;">';
-          det.trigger_conditions.forEach(function(t){ html += '<li>['+t.type+'] '+t.condition+'</li>'; });
-          html += '</ul></div>';
-        }
-        if (det.monitor_plan && det.monitor_plan.length > 0) {
-          html += '<div style="padding:14px 16px;border-radius:12px;background:rgba(100,215,176,0.07);border-left:3px solid rgba(100,215,176,0.85);margin-bottom:14px;">';
-          html += '<div style="font-size:13px;font-weight:700;color:#64d7b0;margin-bottom:6px;">Next Monitoring Plan</div>';
-          html += '<ul style="margin:0;padding-left:14px;font-size:12px;line-height:1.6;color:#e5edf5;">';
-          det.monitor_plan.forEach(function(p){ html += '<li>['+p.priority+'] '+p.action+'</li>'; });
-          html += '</ul></div>';
+
+          // Details
+          var det = a.details || {};
+          html += '<div class="room-details-block">';
+          html += '<div class="room-detail-card"><div class="room-detail-title">Input</div><ul class="room-detail-list">'+(det.input||[]).map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div>';
+          html += '<div class="room-detail-card"><div class="room-detail-title">Output</div><ul class="room-detail-list">'+(det.output||[]).map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div>';
+          html += '<div class="room-detail-card"><div class="room-detail-title">Reasoning</div><ul class="room-detail-list">'+(det.reasoning||[]).map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div>';
+          html += '</div>';
+
+          // Agent Analysis (V1.2)
+          if (det.agent_votes && det.agent_votes.length > 0) {
+            html += '<div class="room-agent-block" style="margin-bottom:14px;">';
+            html += '<div style="font-size:13px;font-weight:700;color:#22d3ee;margin-bottom:6px;">Agent Votes</div>';
+            html += '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">';
+            det.agent_votes.forEach(function(v) {
+              var vcls = v.vote === 'buy' ? 'buy' : v.vote === 'sell' ? 'sell' : 'hold';
+              html += '<div style="padding:10px;border-radius:10px;background:rgba(15,30,44,0.88);border:1px solid rgba(72,104,128,0.42);">';
+              html += '<div style="font-size:10px;color:#8ea4b8;">'+v.agent+'</div>';
+              html += '<div style="font-size:18px;font-weight:800;margin-top:4px;" class="room-hero-value '+vcls+'">'+v.vote.toUpperCase()+'</div>';
+              html += '<div style="font-size:11px;color:#94a3b8;margin-top:2px;">Score: '+v.score+'</div>';
+              html += '</div>';
+            });
+            html += '</div></div>';
+          }
+          if (det.critic_review && det.critic_review.concerns && det.critic_review.concerns.length > 0) {
+            html += '<div class="room-insight-block" style="border-left-color:rgba(255,123,123,0.85);background:rgba(255,123,123,0.07);">';
+            html += '<div class="room-insight-title" style="color:#fb7185;">Critic Review</div>';
+            html += '<div style="font-size:11px;color:#fb7185;margin-bottom:4px;">Verdict: '+det.critic_review.verdict+'</div>';
+            det.critic_review.concerns.forEach(function(c,i){ html += '<div class="room-insight-reason" style="color:#ffb1b1;">'+(i+1)+'. '+c+'</div>'; });
+            html += '</div>';
+          }
+          if (det.trigger_conditions && det.trigger_conditions.length > 0) {
+            html += '<div style="padding:14px 16px;border-radius:12px;background:rgba(34,211,238,0.07);border-left:3px solid rgba(34,211,238,0.85);margin-bottom:14px;">';
+            html += '<div style="font-size:13px;font-weight:700;color:#67e8f9;margin-bottom:6px;">Trigger Conditions</div>';
+            html += '<ul style="margin:0;padding-left:14px;font-size:12px;line-height:1.6;color:#e5edf5;">';
+            det.trigger_conditions.forEach(function(t){ html += '<li>['+t.type+'] '+t.condition+'</li>'; });
+            html += '</ul></div>';
+          }
+          if (det.monitor_plan && det.monitor_plan.length > 0) {
+            html += '<div style="padding:14px 16px;border-radius:12px;background:rgba(100,215,176,0.07);border-left:3px solid rgba(100,215,176,0.85);margin-bottom:14px;">';
+            html += '<div style="font-size:13px;font-weight:700;color:#64d7b0;margin-bottom:6px;">Next Monitoring Plan</div>';
+            html += '<ul style="margin:0;padding-left:14px;font-size:12px;line-height:1.6;color:#e5edf5;">';
+            det.monitor_plan.forEach(function(p){ html += '<li>['+p.priority+'] '+p.action+'</li>'; });
+            html += '</ul></div>';
+          }
         }
 
         document.getElementById('rm-content-overview').innerHTML = html;

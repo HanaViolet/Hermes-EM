@@ -43,7 +43,7 @@ def compute_decision_score(
         elif rsi > 70:
             ind_score = 25  # Overbought → potential sell
         else:
-            ind_score = 50 + (50 - abs(rsi - 50))  # Closer to 50 = less signal
+            ind_score = 50 + (50 - rsi) * 1.25  # Linear from 75@30 to 25@70
 
     # Memory
     mem = memory.get("memory_score", 0)

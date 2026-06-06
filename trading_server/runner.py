@@ -51,7 +51,7 @@ def _run_agent_in_background(task: dict, task_id: str) -> None:
 
         # Build room_artifacts and write to telemetry
         try:
-            from artifact_builder import build_room_artifacts
+            from trading_agent.tools.artifact_builder import build_room_artifacts
             _all = build_room_artifacts(task, result)
             _path = _PROJECT_ROOT / "ClawLibrary" / "src" / "data" / "trading-telemetry.json"
             if _path.exists():

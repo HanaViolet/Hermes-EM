@@ -285,8 +285,27 @@ function hasLoadedResourceDetail(resourceId: ResourcePartitionId): boolean {
   return detailResourceIdsFor(resourceId).every((id) => resourceDetailLoadedById.has(id));
 }
 
+function getRoomArtifact(resourceId: string) {
+  return (lastSnapshot as any)?.trading?.room_artifacts?.[resourceId] ?? null;
+}
+
 function itemsForResourceId(resourceId: ResourcePartitionId): OpenClawResourceItem[] {
-  return resourceDetailItemsById.get(resourceId) ?? [];
+  const cached = resourceDetailItemsById.get(resourceId);
+  if (cached && cached.length > 0) {
+    return cached;
+  }
+  // Artifact-first fallback: build items from room_artifacts when API returns empty
+  const artifact = getRoomArtifact(resourceId);
+  if (artifact && artifact.metrics && artifact.metrics.length > 0) {
+    return artifact.metrics.map((m: any, i: number) => ({
+      id: `${resourceId}-${i}`,
+      title: `${m.label}: ${m.value}${m.unit || ''}`,
+      meta: m.display || 'metric',
+      excerpt: artifact.insight || '',
+      updatedAt: artifact.updated_at,
+    }));
+  }
+  return [];
 }
 
 async function loadResourceDetail(targetResourceId: ResourcePartitionId): Promise<void> {
@@ -3351,11 +3370,6 @@ const bindSceneTimer = window.setInterval(() => {
     window.clearInterval(bindSceneTimer);
   }
 }, 250);
-// Expose room artifact accessor for Room Modal integration
-(window as any).getRoomArtifact = function (resourceId: string) {
-  return (lastSnapshot as any)?.trading?.room_artifacts?.[resourceId] ?? null;
-};
-
 void refreshTelemetry();
 window.setInterval(() => {
   void refreshTelemetry();

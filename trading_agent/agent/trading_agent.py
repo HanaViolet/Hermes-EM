@@ -29,70 +29,6 @@ def _load_history_for_memory() -> list:
     return []
 
 
-# (Former _write_room_artifacts_to_file removed — use build_room_artifacts from trading_server/artifact_builder.py)
-
-
-def _dummy_removed(): pass  # placeholder
-
-
-def _dummy_removed_2(): pass  # placeholder
-
-
-def select_best_strategy(data, strategies, transaction_cost=0.001):
-    """Write room_artifacts directly using the same _telemetry_state as update_workflow."""
-    try:
-        now_ts = str(__import__('datetime').datetime.now())[:19]
-        dd_pct = abs(backtest.get("max_drawdown", 0)) * 100
-        total_ret = (backtest.get("total_return") or 0) * 100
-        risk_score = min(100, int(dd_pct * 2.5)) if dd_pct else 40
-        risk_level = "danger" if dd_pct > 30 else "warning" if dd_pct > 15 else "neutral"
-        period = task.get("start_date", "?") + " ~ " + task.get("end_date", "?")
-
-        rsi_val = indicator_result.get("rsi")
-        macd_val = indicator_result.get("macd")
-        ma20_val = indicator_result.get("ma20")
-        ma60_val = indicator_result.get("ma60")
-        vol_val = indicator_result.get("volatility_20d")
-        close_val = indicator_result.get("close")
-        rows_val = indicator_result.get("rows")
-
-        def _v(val, fmt=".2f"):
-            if val is None: return "N/A"
-            try: return format(float(val), fmt)
-            except: return str(val)
-
-        dec_str = decision.get("decision", "N/A") if isinstance(decision, dict) else str(decision)
-        dec_level = "positive" if "buy" in dec_str.lower() else "danger" if "sell" in dec_str.lower() else "warning"
-        top_name = strategy_scores[0]["name"] if strategy_scores else strategy_name
-        top_score = str(strategy_scores[0].get("score", "")) if strategy_scores else ""
-
-        def _a(rid, name, typ, status, pl, pv, pu, plv, summary, insight, metrics, inp, outp, reas):
-            return {"room_id":rid,"room_name":name,"status":status,"type":typ,"primary":{"label":pl,"value":pv,"unit":pu,"level":plv},"summary":summary,"insight":insight,"metrics":metrics,"details":{"input":inp,"output":outp,"reasoning":reas},"updated_at":now_ts}
-
-        room_artifacts = {
-            "gateway": _a("gateway","市场数据室","data","done","数据条数",_v(rows_val,".0f") if rows_val else "N/A","bars","positive",(f'{_v(rows_val,".0f")} bars' if rows_val else 'Data loaded'),"行情数据完整，无明显缺失。",[{"label":"时间区间","value":period,"display":"text"},{"label":"缺失值","value":0,"display":"number","level":"positive"}],["Yahoo Finance / Stooq"],[ticker+" OHLCV daily data"],["数据从缓存或远程源加载。"]),
-            "mcp": _a("mcp","指标实验室","indicator","done","RSI",_v(rsi_val,".1f"),"","warning" if rsi_val and (rsi_val>70 or rsi_val<30) else "neutral",f'RSI {_v(rsi_val,".1f")} · MACD {_v(macd_val,".2f")}',"指标计算完成，可继续后续分析。",[{"label":"RSI","value":_v(rsi_val,".1f"),"display":"bar","level":"warning" if rsi_val and (rsi_val>70 or rsi_val<30) else "neutral"},{"label":"MACD","value":_v(macd_val,".3f"),"display":"number","level":"neutral"},{"label":"MA20","value":_v(ma20_val,".1f"),"display":"number","level":"positive"},{"label":"Volatility","value":(str(round(float(vol_val)*100,1))+"%") if vol_val is not None else "N/A","display":"bar","level":"warning" if vol_val and vol_val>0.3 else "neutral"}],["close price","volume","returns"],["RSI","MACD","MA20","MA60","Volatility"],["RSI 未进入超买或超卖区间。","MACD 动能待确认。"]),
-            "skills": _a("skills","策略实验室","strategy","done","Top 策略",top_name,top_score,"positive",(top_name+" · Score "+top_score) if strategy_scores else "Strategy: "+strategy_name,"策略比较完成。",[{"label":sc.get("name","?"),"value":sc.get("score",0),"display":"strategy_score","signal":"buy" if sc.get("return",0)>5 else "sell" if sc.get("return",0)<-5 else "hold","unit":"score"} for sc in strategy_scores],["MA / RSI / MACD indicators"],["Signal","Score"],["比较各策略的历史表现。"]),
-            "alarm": _a("alarm","风险报警室","risk","warning","Risk",risk_score,"/100",risk_level,("High" if risk_score>70 else "Medium" if risk_score>35 else "Low")+" · "+str(risk_score)+"/100","最大回撤较高，建议降低仓位或保持观望。",[{"label":"Risk Score","value":risk_score,"unit":"/100","display":"gauge","level":risk_level},{"label":"Max Drawdown","value":round(-dd_pct,1),"unit":"%","display":"bar","level":"danger" if dd_pct>25 else "warning"}],["策略信号","风控参数"],["风险评分","最大回撤"],["检查仓位限制和止损线。"]),
-            "task_queues": _a("task_queues","回测实验室","backtest","done","Sharpe",round(backtest.get("sharpe_ratio",0),2),"","positive" if backtest.get("sharpe_ratio",0)>0.5 else "neutral","Return "+str(_v(total_ret,".1f"))+"% · Sharpe "+str(_v(backtest.get("sharpe_ratio",0),".2f")),"回测总收益 "+str(_v(total_ret,".1f"))+"%，夏普 "+str(_v(backtest.get("sharpe_ratio",0),".2f"))+"。",[{"label":"Total Return","value":_v(total_ret,".1f"),"unit":"%","display":"bar","level":"positive" if total_ret>0 else "danger"},{"label":"Sharpe","value":_v(backtest.get("sharpe_ratio",0),".2f"),"display":"number"},{"label":"Max Drawdown","value":_v(-dd_pct,".1f"),"unit":"%","display":"bar","level":"warning"}],["交易信号序列"],["权益曲线","成交列表"],["基于历史数据模拟策略表现。"]),
-            "schedule": _a("schedule","决策调度台","decision","done","Decision",dec_str.upper(),"",dec_level,dec_str.upper()+" · Conf 62%","综合策略得分与风险约束后做出决策。",[{"label":"Decision","value":dec_str.upper(),"display":"badge","level":dec_level}],["策略排序","风险评估"],["Buy/Sell/Hold","Confidence"],["综合各策略得分和风险约束后做出决策。"]),
-            "document": _a("document","报告与分析室","report","done","Report","Ready","","positive","Report ready · "+ticker,ticker+" 策略分析完成。",[{"label":"Decision","value":dec_str.upper(),"display":"badge"}],["全部房间产物"],[ticker+" 分析报告"],["基于各步骤结果生成综合报告。"]),
-            "agent": _a("agent","运行监控室","monitor","done","Agent 状态","完成","","positive","6 stages done","所有 Agent 阶段已执行完毕。",[{"label":"Pipeline","value":"已完成","display":"badge","level":"positive"}],[],[],[]),
-            "log": _a("log","执行日志台","execution","done","Order","Simulated","","neutral","No order · Simulated","模拟执行模式，无实际订单产生。",[],[],[],[]),
-            "images": _a("images","图表分析室","chart","done","Charts","Ready","","positive","收益曲线 · K线图 ready","图表已生成，可查看策略与基准对比的权益曲线和回撤分析。",[{"label":"Strategy Return","value":str(_v(total_ret,".1f"))+"%","display":"number","level":"positive" if total_ret>0 else "danger"},{"label":"Benchmark Return","value":str(_v((backtest.get("benchmark_total_return") or 0)*100,".1f"))+"%","display":"number"},{"label":"Max Drawdown","value":str(_v(-dd_pct,".1f"))+"%","display":"bar","level":"danger" if dd_pct>25 else "warning"},{"label":"Win Rate","value":str(_v(((backtest.get("win_rate") or 0)*100),".1f"))+"%","display":"bar"}],["OHLCV data","Strategy signal","Backtest returns"],["Price trend","Return curve","Indicator chart"],["权益曲线对比策略与基准表现。","最大回撤分析识别风险集中区间。"]),
-            "memory": _a("memory","策略记忆库","memory","done","策略记忆","已记录","","positive","Last: "+ticker+" · "+dec_str.upper(),ticker+" 分析记录已保存。",[],[],[],[]),
-            "break_room": _a("break_room","休息室","idle","done","Last Task",ticker,"","positive",ticker+" · "+dec_str.upper(),"最新分析 "+ticker+" 已完成。Agent 返回休息室待命。",[{"label":"Decision","value":dec_str.upper(),"display":"badge","level":dec_level}],[],[],[]),
-        }
-
-        # Store in shared telemetry state and persist
-        _telemetry_state["room_artifacts"] = room_artifacts
-        _persist_telemetry()
-    except Exception as _e:
-        import traceback as _tb
-        from pathlib import Path as _Pfix
-        _err = _Pfix(__file__).resolve().parent.parent.parent / "trading_server" / "artifact_error.log"
-        _err.write_text(f"{_e}\n{_tb.format_exc()}", encoding="utf-8")
-
 logger = get_logger()
 
 
@@ -310,44 +246,6 @@ def run_trading_agent(
         # ── Stage 12: Completed (MUST be last update_workflow) ──
         result_summary = {"selected_strategy": strategy_name, "decision": decision_result["decision"], "confidence": decision_result["confidence"], "total_return": result["total_return"], "benchmark_return": result["benchmark_total_return"], "sharpe_ratio": result["sharpe_ratio"], "max_drawdown": result["max_drawdown"], "trades": result["number_of_trades"], "decision_score": decision_result["decision_score"], "risk_score": risk_result["risk_score"]}
         update_workflow(global_status="done", current_stage="completed", progress=100, cat_id="trading_cat", cat_status="done", summary=f"Completed. Decision: {decision_result['decision']}", result_summary=result_summary, report={"markdown": report_md, "path": ""}, logs=["Workflow completed"])
-
-        # ── Write full room artifacts directly (fallback if runner.py fails) ──
-        try:
-            _P = Path(__file__).resolve().parent.parent.parent
-            _tp = _P / "ClawLibrary" / "src" / "data" / "trading-telemetry.json"
-            if _tp.exists():
-                import json as _j
-                _snap = _j.loads(_tp.read_text(encoding="utf-8"))
-                _task = {"ticker": ticker, "strategy": strategy_name}
-                _full = {
-                    "ticker": ticker, "strategy": strategy_name,
-                    "indicator_result": indicator_result,
-                    "regime_result": regime_result,
-                    "news_result": news_result,
-                    "risk_result": risk_result,
-                    "backtest_result": result,
-                    "memory_result": memory_result,
-                    "decision": decision_result,
-                    "explanation": explanation,
-                    "strategy_scores": strategy_scores,
-                }
-                sys.path.insert(0, str(_P / "trading_server"))
-                from artifact_builder import build_room_artifacts
-                _all = build_room_artifacts(_task, _full)
-                _snap.setdefault("trading", {})["room_artifacts"] = _all
-                for _r in _snap.setdefault("resources", []):
-                    a = _all.get(_r["id"])
-                    if a:
-                        _r["items"] = [{"id": a["room_id"]+"-"+str(i), "title": m["label"]+": "+str(m["value"]), "meta": m.get("display","metric"), "excerpt": a.get("insight","")} for i,m in enumerate(a.get("metrics",[]))]
-                        _r["itemCount"] = len(_r["items"])
-                        _r["status"] = a["status"]
-                _tmp = _tp.with_suffix(".tmp")
-                _tmp.write_text(_j.dumps(_snap, ensure_ascii=False, indent=2), encoding="utf-8")
-                _tmp.replace(_tp)
-        except Exception:
-            pass
-
-        # (indicator_result + regime_result + news_result already collected above)
 
         full_result = {
             "ticker": ticker,

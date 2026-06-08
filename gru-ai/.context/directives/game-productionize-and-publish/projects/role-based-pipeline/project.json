@@ -1,0 +1,157 @@
+{
+  "id": "role-based-pipeline",
+  "title": "Convert pipeline from name-based to role-based casting",
+  "status": "completed",
+  "priority": "P0",
+  "agent": [
+    "taylor"
+  ],
+  "reviewers": [
+    "morgan",
+    "sarah"
+  ],
+  "description": "Refactor 507 hardcoded agent name references across 47 files to use role-based language",
+  "source_directive": "game-productionize-and-publish",
+  "scope": {
+    "in": "Pipeline docs, skill definitions, casting rules, agent personality cross-references — all converted from name-based to role-based",
+    "out": "Do not rename agent .md filenames. Do not change agent-registry.json. Do not change game code or dashboard UI. Leave historical lesson references as-is."
+  },
+  "dod": [
+    {
+      "criterion": "Zero prescriptive hardcoded agent name references in .claude/skills/ pipeline docs",
+      "met": true
+    },
+    {
+      "criterion": "Role-resolution preamble in all SKILL.md files",
+      "met": true
+    },
+    {
+      "criterion": "Agent personality cross-references use role titles",
+      "met": true
+    },
+    {
+      "criterion": "Full grep verification report produced",
+      "met": true
+    }
+  ],
+  "browser_test": false,
+  "tasks": [
+    {
+      "id": "role-resolution-preamble",
+      "title": "Add role-resolution preamble to all SKILL.md files",
+      "status": "completed",
+      "agent": [
+        "taylor"
+      ],
+      "dod": [
+        {
+          "criterion": "directive/SKILL.md contains role-resolution preamble that reads agent-registry.json and maps roles to agents",
+          "met": true
+        },
+        {
+          "criterion": "All SKILL.md files have role-resolution instructions",
+          "met": true
+        },
+        {
+          "criterion": "Name references within SKILL.md files converted to role-based language",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "pipeline-docs-high-density",
+      "title": "Convert high-density pipeline docs to role-based references",
+      "status": "completed",
+      "agent": [
+        "taylor"
+      ],
+      "dod": [
+        {
+          "criterion": "09-execute-projects.md, 07-plan-approval.md, 06-technical-audit.md, 00-delegation-and-triage.md, 05-morgan-planning.md — zero prescriptive hardcoded name references",
+          "met": true
+        },
+        {
+          "criterion": "Role references use natural language ('the CTO') not template variables",
+          "met": true
+        },
+        {
+          "criterion": "JSON/code examples use role-based identifiers",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "pipeline-docs-remaining",
+      "title": "Convert remaining pipeline docs and all reference docs",
+      "status": "completed",
+      "agent": [
+        "taylor"
+      ],
+      "dod": [
+        {
+          "criterion": "All remaining pipeline docs (10-wrapup, 07b, 04, 03, 11, 08) converted",
+          "met": true
+        },
+        {
+          "criterion": "casting-rules.md uses role-based casting while preserving logic",
+          "met": true
+        },
+        {
+          "criterion": "All template/prompt and schema docs converted",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "agent-personalities",
+      "title": "Convert agent personality files' cross-references to role-based language",
+      "status": "completed",
+      "agent": [
+        "taylor"
+      ],
+      "dod": [
+        {
+          "criterion": "Cross-references to other agents use role titles not names",
+          "met": true
+        },
+        {
+          "criterion": "Each agent's own name within their own file is preserved",
+          "met": true
+        },
+        {
+          "criterion": "No agent filenames changed",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "lessons-and-remaining",
+      "title": "Convert lessons files and verify full coverage",
+      "status": "completed",
+      "agent": [
+        "taylor"
+      ],
+      "dod": [
+        {
+          "criterion": "All prescriptive name references in lesson files converted",
+          "met": true
+        },
+        {
+          "criterion": "Historical/narrative references preserved as-is",
+          "met": true
+        },
+        {
+          "criterion": "Full-repo grep verification: zero prescriptive name references remain",
+          "met": true
+        },
+        {
+          "criterion": "Verification report produced",
+          "met": true
+        }
+      ]
+    }
+  ],
+  "created": "2026-03-07T00:20:00Z",
+  "updated": "2026-03-07T02:00:00Z",
+  "completed": "2026-03-07T02:00:00Z"
+}

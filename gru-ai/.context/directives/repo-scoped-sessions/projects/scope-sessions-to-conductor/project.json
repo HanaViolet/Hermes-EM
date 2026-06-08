@@ -1,0 +1,51 @@
+{
+  "id": "scope-sessions-to-conductor",
+  "title": "Filter session scanning and watching to agent-conductor project only",
+  "status": "in_progress",
+  "agent": ["devon"],
+  "reviewers": ["sarah"],
+  "auditor": "sarah",
+  "tasks": [
+    {
+      "id": "derive-project-dir",
+      "title": "Derive the project directory name from repo root path",
+      "agent": "devon",
+      "status": "pending",
+      "dod": [
+        { "criterion": "A function exists that converts the repo root path to the Claude project dir name (e.g. /Users/yangyang/Repos/agent-conductor -> -Users-yangyang-Repos-agent-conductor)", "met": false },
+        { "criterion": "The function is used in discoverSessionFiles() and session-watcher to scope scanning", "met": false }
+      ]
+    },
+    {
+      "id": "filter-discovery",
+      "title": "Filter discoverSessionFiles() to only scan the agent-conductor project dir",
+      "agent": "devon",
+      "status": "pending",
+      "dod": [
+        { "criterion": "discoverSessionFiles() accepts a projectFilter parameter (the derived dir name)", "met": false },
+        { "criterion": "Only sessions from the matching project dir are returned", "met": false },
+        { "criterion": "Server bootstrap logs show significantly fewer sessions (only agent-conductor)", "met": false }
+      ]
+    },
+    {
+      "id": "scope-watcher",
+      "title": "Narrow session-watcher to only watch the agent-conductor project subdir",
+      "agent": "devon",
+      "status": "pending",
+      "dod": [
+        { "criterion": "session-watcher watches only ~/.claude/projects/{agent-conductor-dir}/ instead of all projects/", "met": false },
+        { "criterion": "File change events from other project dirs are no longer processed", "met": false }
+      ]
+    },
+    {
+      "id": "cleanup-dead-code",
+      "title": "Remove multi-repo config or scanning logic that is now dead code",
+      "agent": "devon",
+      "status": "pending",
+      "dod": [
+        { "criterion": "Any code that specifically handles multi-project grouping or sw-repo-specific logic is removed or simplified", "met": false },
+        { "criterion": "TypeScript compiles without errors", "met": false }
+      ]
+    }
+  ]
+}

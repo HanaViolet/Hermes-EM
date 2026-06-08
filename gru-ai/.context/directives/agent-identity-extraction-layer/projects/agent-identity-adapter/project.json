@@ -1,0 +1,58 @@
+{
+  "id": "agent-identity-adapter",
+  "title": "Move agent identity resolution behind PlatformAdapter",
+  "status": "completed",
+  "priority": "P0",
+  "agent": ["jordan"],
+  "reviewers": ["sarah"],
+  "description": "Extract the 3 identity-resolution functions and KNOWN_AGENTS registry from session-scanner.ts into ClaudeCodeAdapter. Add resolveAgentIdentity() to PlatformAdapter interface. Rewire all 4 call sites in session-state.ts to use the adapter.",
+  "source_directive": "agent-identity-extraction-layer",
+  "scope": {
+    "in": "Add resolveAgentIdentity() to PlatformAdapter interface. Implement in ClaudeCodeAdapter. Rewire session-state.ts call sites. Keep identity functions in session-scanner.ts as exports.",
+    "out": "Moving non-identity scanner functions. Changing SessionFileState type. Adding other platform adapters. Refactoring parent agent map cache."
+  },
+  "browser_test": false,
+  "dod": [
+    { "criterion": "PlatformAdapter has resolveAgentIdentity() method", "met": true },
+    { "criterion": "ClaudeCodeAdapter implements it using existing detection functions", "met": true },
+    { "criterion": "session-state.ts uses adapter instead of direct scanner imports for identity", "met": true },
+    { "criterion": "npm run type-check passes with zero errors", "met": true }
+  ],
+  "tasks": [
+    {
+      "id": "add-interface-and-implement",
+      "title": "Add resolveAgentIdentity() to PlatformAdapter and implement in ClaudeCodeAdapter",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["jordan"],
+      "user_scenario": "No visible change — internal refactor. Agent names still appear correctly on the dashboard.",
+      "scope": "Add resolveAgentIdentity(filePath, state) to PlatformAdapter interface in types.ts. Implement in ClaudeCodeAdapter by calling existing extractAgentIdentityFromFile, resolveAgentFromParent, resolveAgentFromSetting from session-scanner.ts. Include .meta.json reading as a CC-specific detection path between agent-setting and prompt parsing.",
+      "dod": [
+        { "criterion": "PlatformAdapter has resolveAgentIdentity(filePath, state) returning {name, role} | undefined", "met": true },
+        { "criterion": "ClaudeCodeAdapter implements it with fallback chain: agent-setting entry → .meta.json sidecar → prompt pattern → parent cross-ref", "met": true },
+        { "criterion": "Identity functions remain exported from session-scanner.ts — no breaking changes", "met": true }
+      ]
+    },
+    {
+      "id": "rewire-session-state-callsites",
+      "title": "Rewire session-state.ts identity calls through adapter and verify",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["jordan"],
+      "depends_on": ["add-interface-and-implement"],
+      "user_scenario": "No visible change — agent identity detection works identically.",
+      "scope": "session-state.ts functions (bootstrapFromTail, processFileUpdate, initializeAllFileStates, processEntry) accept PlatformAdapter and use adapter.resolveAgentIdentity(). Remove direct identity imports from session-scanner.ts in session-state.ts.",
+      "dod": [
+        { "criterion": "All 4 call sites in session-state.ts use adapter.resolveAgentIdentity() instead of direct scanner calls", "met": true },
+        { "criterion": "Direct imports of identity functions removed from session-state.ts", "met": true },
+        { "criterion": "npm run type-check passes with zero errors", "met": true }
+      ]
+    }
+  ],
+  "created": "2026-03-09T21:05:00Z",
+  "updated": "2026-03-09T23:00:00Z"
+}

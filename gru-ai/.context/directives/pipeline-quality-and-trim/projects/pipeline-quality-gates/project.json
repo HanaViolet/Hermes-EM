@@ -1,0 +1,112 @@
+{
+  "id": "pipeline-quality-gates",
+  "title": "Pipeline Quality Gates — 5 Surgical Prompt Edits",
+  "status": "completed",
+  "priority": "P0",
+  "agent": ["taylor"],
+  "reviewers": ["sarah", "morgan"],
+  "description": "Make 5 targeted edits to 4 pipeline docs to prevent silent requirement drops, enforce user-centric DOD for UI work, and reweight reviews toward acceptance testing.",
+  "source_directive": "pipeline-quality-and-trim",
+  "scope": {
+    "in": "Edit planner-prompt.md (COO clarification), 07b-project-brainstorm.md (user-centric DOD), 09-execute-projects.md (acceptance review + default-state verification), scope-and-dod.md (DOD rules)",
+    "out": "Context trim (separate directive), builder self-verification (dropped), new schemas/steps/scripts"
+  },
+  "dod": [
+    { "criterion": "COO planning prompt includes clarification/gap-surfacing behavior for ambiguous requirements", "met": true },
+    { "criterion": "Project brainstorm prompt includes user-centric DOD guidance for UI tasks with good/bad examples", "met": true },
+    { "criterion": "Review prompt reweighted to prioritize acceptance testing over code review", "met": true },
+    { "criterion": "Review instructions include default-state verification requirement for UI tasks", "met": true },
+    { "criterion": "scope-and-dod.md includes UI/Visual DOD rules section", "met": true }
+  ],
+  "browser_test": false,
+  "tasks": [
+    {
+      "id": "coo-clarification-behavior",
+      "title": "Add clarification behavior to COO planning prompt",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["taylor"],
+      "user_scenario": "When the CEO issues a directive with ambiguous requirements, the COO asks clarifying questions instead of silently compressing scope.",
+      "scope": "Edit planner-prompt.md to add a clarification/gap-surfacing section after 'CHALLENGE FIRST' and before 'CRITICAL OUTPUT FORMAT'.",
+      "dod": [
+        { "criterion": "planner-prompt.md contains a new section between CHALLENGE FIRST and CRITICAL OUTPUT FORMAT that instructs the COO to identify ambiguous or under-specified requirements", "met": true },
+        { "criterion": "The new section gives 2-3 concrete examples of ambiguity patterns", "met": true },
+        { "criterion": "The instruction tells the COO to surface questions in the challenges.risks array rather than introducing new schema fields", "met": true },
+        { "criterion": "The existing JSON output schema in planner-prompt.md is unchanged — no new fields added", "met": true }
+      ]
+    },
+    {
+      "id": "brainstorm-ui-dod-guidance",
+      "title": "Add user-centric DOD guidance for UI tasks to project brainstorm",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["taylor"],
+      "user_scenario": "When the CTO decomposes a UI project into tasks, DOD criteria describe what the user sees at default state.",
+      "scope": "Edit 07b-project-brainstorm.md to add UI-specific DOD guidance inside TASK DECOMPOSITION RULES.",
+      "dod": [
+        { "criterion": "07b-project-brainstorm.md brainstorm prompt contains new guidance within TASK DECOMPOSITION RULES requiring UI task DOD to describe what user sees at default state", "met": true },
+        { "criterion": "The guidance includes at least 2 contrasting examples: bad UI DOD vs good UI DOD", "met": true },
+        { "criterion": "The guidance is scoped to UI/visual tasks only", "met": true },
+        { "criterion": "No changes to the JSON output schema or process steps outside the brainstorm prompt", "met": true }
+      ]
+    },
+    {
+      "id": "review-acceptance-reweight",
+      "title": "Reweight review prompt toward acceptance testing over code review",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["taylor"],
+      "user_scenario": "Reviewers spend proportionally more effort verifying user experience than checking code quality.",
+      "scope": "Edit 09-execute-projects.md User-Perspective Review section. Reweight so acceptance testing is PRIMARY.",
+      "dod": [
+        { "criterion": "The reviewer prompt leads with user_scenario verification and DOD checking before code quality", "met": true },
+        { "criterion": "The prompt explicitly states that failing user_scenario verification = review_outcome 'fail'", "met": true },
+        { "criterion": "workflow_improvement 'no' is sufficient for 'fail' even if code quality is clean", "met": true },
+        { "criterion": "The code-review phase prompt is NOT modified", "met": true }
+      ]
+    },
+    {
+      "id": "default-state-verification",
+      "title": "Add default-state verification requirement to review instructions",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["taylor"],
+      "user_scenario": "Reviewers explicitly verify UI changes at default zoom, default view, default data.",
+      "scope": "Edit 09-execute-projects.md Review completeness section. Add default-state verification for UI tasks.",
+      "dod": [
+        { "criterion": "Review completeness section includes a default_state_check field in review JSON output", "met": true },
+        { "criterion": "Prompt instructs reviewers to verify at default zoom (100%), default view, representative data", "met": true },
+        { "criterion": "default_state_check is required only for UI file tasks — backend-only tasks skip it", "met": true },
+        { "criterion": "Prompt gives a concrete example of what default-state verification catches", "met": true }
+      ]
+    },
+    {
+      "id": "scope-dod-ui-rules",
+      "title": "Add user-centric DOD rules for UI/visual work to scope-and-dod.md",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["taylor"],
+      "user_scenario": "Pipeline participants referencing DOD rules see explicit guidance for UI task DOD.",
+      "scope": "Edit scope-and-dod.md to add new section after 'Definition of Done Rules'.",
+      "dod": [
+        { "criterion": "scope-and-dod.md contains a new section for UI/Visual DOD rules", "met": true },
+        { "criterion": "Section includes at least 2 contrasting examples: bad vs good UI DOD", "met": true },
+        { "criterion": "Rules specify default-state conditions: default zoom, default view, representative data", "met": true },
+        { "criterion": "New section extends general DOD rules without contradiction", "met": true }
+      ]
+    }
+  ],
+  "completed": "2026-03-09T10:45:00Z",
+  "created": "2026-03-09T10:25:00Z",
+  "updated": "2026-03-09T10:45:00Z"
+}

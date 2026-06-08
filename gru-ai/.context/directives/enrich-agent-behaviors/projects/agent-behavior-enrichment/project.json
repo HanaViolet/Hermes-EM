@@ -1,0 +1,96 @@
+{
+  "id": "agent-behavior-enrichment",
+  "title": "Agent Behavior Enrichment — Status Icons, Idle Tiers, Wandering",
+  "status": "completed",
+  "agent": ["riley"],
+  "reviewers": ["sarah"],
+  "browser_test": true,
+  "tasks": [
+    {
+      "id": "add-offline-status-and-idle-tiers",
+      "title": "Add 'offline' AgentStatus, 3-tier idle detection, and expose idle tier on Character",
+      "status": "completed",
+      "agent": "riley",
+      "phases": ["build", "code-review", "review"],
+      "active_files": [
+        "src/components/game/pixel-types.ts",
+        "src/components/game/types.ts",
+        "src/components/game/engine/characters.ts",
+        "src/components/game/engine/officeState.ts",
+        "src/components/game/GamePage.tsx",
+        "src/components/game/constants.ts"
+      ],
+      "dod": [
+        { "criterion": "AgentStatus type is 'working' | 'idle' | 'offline' in both pixel-types.ts and types.ts", "met": true },
+        { "criterion": "IdleTier type ('recent' | 'moderate' | 'long') exists in pixel-types.ts and Character struct has an idleTier field", "met": true },
+        { "criterion": "characters.ts computes idleTier from sessionInfo.lastActivityMs: <10min='recent', 10-30min='moderate', >=30min='long'. Thresholds are named constants in constants.ts", "met": true },
+        { "criterion": "GamePage.tsx toAgentStatus returns 'offline' for agents with no active session. agentStatuses priority map includes 'offline' ranked below 'idle'", "met": true },
+        { "criterion": "officeState.ts applyAgentStatus handles 'offline' without errors (agents go to desk, stay seated like idle). shouldWander uses idleTier === 'long' instead of raw timestamp comparison", "met": true }
+      ]
+    },
+    {
+      "id": "idle-tier-visual-differentiation",
+      "title": "Distinct visual treatment per idle tier in renderer and panels",
+      "status": "completed",
+      "agent": "riley",
+      "phases": ["build", "code-review", "review"],
+      "active_files": [
+        "src/components/game/engine/renderer.ts",
+        "src/components/game/panels/panelUtils.ts",
+        "src/components/game/panels/TeamPanel.tsx",
+        "src/components/game/panels/AgentPanel.tsx",
+        "src/components/game/constants.ts"
+      ],
+      "dod": [
+        { "criterion": "PILL_DOT_COLORS has entries: working (green), idle-recent (muted green), idle-moderate (amber), idle-long (gray), offline (dark gray)", "met": true },
+        { "criterion": "STATUS_EMOJI differentiates by idle tier: recent=none, moderate=sleepy face, long=coffee (existing)", "met": true },
+        { "criterion": "Character sprites render at full opacity (no alpha dimming)", "met": true },
+        { "criterion": "panelUtils.ts statusBadgeVariant, statusDotColor, and StatusChip handle 'offline' status with distinct styling", "met": true },
+        { "criterion": "Type-checks pass: npm run type-check exits 0", "met": true }
+      ]
+    },
+    {
+      "id": "dead-code-cleanup",
+      "title": "Remove renderStatusIcons and renderInteractionIcons dead code",
+      "status": "completed",
+      "agent": "riley",
+      "phases": ["build", "review"],
+      "active_files": [
+        "src/components/game/engine/renderer.ts"
+      ],
+      "dod": [
+        { "criterion": "renderStatusIcons function definition is deleted from renderer.ts", "met": true },
+        { "criterion": "renderInteractionIcons function definition is deleted from renderer.ts", "met": true },
+        { "criterion": "Both call sites in renderFrame() are removed", "met": true },
+        { "criterion": "No remaining references to renderStatusIcons or renderInteractionIcons exist anywhere in the codebase", "met": true },
+        { "criterion": "Type-checks pass: npm run type-check exits 0", "met": true }
+      ]
+    },
+    {
+      "id": "sensible-idle-behaviors",
+      "title": "Furniture-first wandering, chat facing, activity animations, interaction points",
+      "status": "completed",
+      "agent": "riley",
+      "phases": ["build", "review"],
+      "active_files": [
+        "src/components/game/engine/officeState.ts",
+        "src/components/game/constants.ts",
+        "src/components/game/engine/characters.ts",
+        "src/components/game/engine/roomZones.ts",
+        "src/components/game/engine/renderer.ts",
+        "src/components/game/GamePage.tsx"
+      ],
+      "dod": [
+        { "criterion": "pickWanderDestination: ~85% furniture interaction, ~15% social approach. Fallback to zone waypoints if all points occupied. 3-attempt retry loop for unreachable destinations.", "met": true },
+        { "criterion": "Chat facing: interacting agents face each other via direction override in render loop", "met": true },
+        { "criterion": "Activity animations for all types: exercising bounces, ping pong swings, pool shifts, arcade/couch uses typing sprite, vending uses reading sprite", "met": true },
+        { "criterion": "20+ interaction points: kitchen chairs, couches (arcade/PS5), gym mats (4), pool stools (2), ping pong (2-player above/below), TV, vending machines, break room chairs", "met": true },
+        { "criterion": "30-min idle threshold (WANDER_IDLE_THRESHOLD_MS): agents idle <30min stay at workspace desk, >30min wander to break room/kitchen", "met": true },
+        { "criterion": "No alpha dimming on any agents (charAlpha hardcoded to 1.0)", "met": true },
+        { "criterion": "Mobile: name pills render at minimum 0.7 zoom scale instead of hiding below 0.8. Task info cards and AgentTicker hidden on mobile.", "met": true },
+        { "criterion": "Meeting zone marked restricted to prevent unreachable pathfinding from main area", "met": true },
+        { "criterion": "Type-checks pass: npm run type-check exits 0", "met": true }
+      ]
+    }
+  ]
+}

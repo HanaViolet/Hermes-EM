@@ -1,0 +1,9 @@
+{
+  "dimension": "cli",
+  "status": "pass",
+  "pass_count": 17,
+  "fail_count": 0,
+  "duration_ms": 424,
+  "failures": [],
+  "timestamp": "2026-03-08T03:20:54Z"
+}

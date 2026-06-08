@@ -1,0 +1,24 @@
+{
+  "id": "team-org-dashboard",
+  "title": "Team & Agent Org Dashboard",
+  "status": "cancelled",
+  "source": "ceo",
+  "weight": "tactical",
+  "created": "2026-03-02T00:00:00Z",
+  "updated": "2026-03-02T00:00:00Z",
+  "completed": null,
+  "triage": {
+    "action": "update_existing",
+    "project_id": null,
+    "task_ids": [],
+    "rationale": null,
+    "requires_ceo_approval": false
+  },
+  "plan": null,
+  "phases": null,
+  "cast": null,
+  "dod": null,
+  "report_summary": null,
+  "telemetry": null,
+  "current_step": "cancelled"
+}

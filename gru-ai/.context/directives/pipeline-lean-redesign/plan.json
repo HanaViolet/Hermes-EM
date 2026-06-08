@@ -1,0 +1,65 @@
+{
+  "goal": "Lean pipeline redesign — surgical, incremental fixes to reduce context bloat and resolve conflicts without breaking existing features",
+  "challenges": {
+    "risks": [
+      "Conflict resolution requires design decisions, not just editorial fixes — project-brainstorm must specify resolution direction for each conflict",
+      "09-execute-projects.md wave algorithm is ~900 words — must decide whether to keep inline, compress, or extract before setting trim target",
+      "No verification that trimmed docs still work — need smoke-test DOD"
+    ],
+    "over_engineering_flags": [
+      "First attempt created 7 new files — this plan creates zero new pipeline docs",
+      "Enforcement goes into existing validation scripts, not more prose"
+    ],
+    "recommendation": "Proceed. 3 projects, sequential by dependency. Word target reframed as ceiling (under 4000) per CTO+CPO review."
+  },
+  "projects": [
+    {
+      "id": "resolve-pipeline-conflicts",
+      "title": "Resolve 7 documented pipeline doc conflicts in-place",
+      "priority": "P0",
+      "scope_summary": "Fix all 7 conflicts identified in the brainstorm by editing existing pipeline docs in-place. Each fix is a small edit — no new files, no restructuring. Resolution direction for each conflict must be specified in project-brainstorm.",
+      "complexity": "moderate",
+      "agent": ["taylor"],
+      "reviewers": ["sarah"],
+      "auditor": "sarah",
+      "depends_on": [],
+      "touches_files_hint": [
+        ".claude/skills/directive/docs/pipeline/00-delegation-and-triage.md",
+        ".claude/skills/directive/docs/pipeline/07b-project-brainstorm.md",
+        ".claude/skills/directive/docs/reference/schemas/directive-json.md",
+        ".claude/skills/directive/docs/pipeline/09-execute-projects.md",
+        ".claude/skills/directive/docs/reference/rules/phase-definitions.md",
+        ".claude/skills/directive/docs/pipeline/05-planning.md"
+      ]
+    },
+    {
+      "id": "trim-execute-doc",
+      "title": "Trim 09-execute-projects.md to under 4000 words",
+      "priority": "P0",
+      "scope_summary": "Trim the single largest pipeline doc in-place. Remove redundant restatements, consolidate duplicate blocks, replace verbose prose with bullets. Promote buried project.json update instruction to prominent callout. Wave algorithm: compress inline, do not extract. Target: under 4000 words preserving all critical enforcement content. Add smoke-test DOD.",
+      "complexity": "moderate",
+      "agent": ["taylor"],
+      "reviewers": ["morgan"],
+      "auditor": "sarah",
+      "depends_on": ["resolve-pipeline-conflicts"],
+      "touches_files_hint": [
+        ".claude/skills/directive/docs/pipeline/09-execute-projects.md"
+      ]
+    },
+    {
+      "id": "add-enforcement-gates",
+      "title": "Add 3 critical missing enforcement gates as validation scripts",
+      "priority": "P1",
+      "scope_summary": "Implement 3 highest-impact enforcement gates as mechanical validation (scripts), not prose. Gate 1: project.json update verification. Gate 2: browser test verification. Gate 3: code-review failure blocking. All changes in existing files — no new scripts.",
+      "complexity": "moderate",
+      "agent": ["devon"],
+      "reviewers": ["sarah"],
+      "auditor": "sarah",
+      "depends_on": ["trim-execute-doc"],
+      "touches_files_hint": [
+        ".claude/hooks/validate-project-json.sh",
+        ".claude/skills/directive/docs/pipeline/09-execute-projects.md"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+node_modules
+dist
+dist-cli
+dist-server
+.env
+*.db
+*.tgz
+.DS_Store
+@/
+
+# Generated state files
+.context/state/
+
+# Licensed assets — not redistributable
+# LimeZu (https://limezu.itch.io/moderninteriors + https://limezu.itch.io/modernoffice)
+# GrafxKid MetroCity (https://grafxkid.itch.io/metrocity-character-creator)
+public/assets/metrocity/
+public/assets/office/1_Generic_48x48.png
+public/assets/office/Room_Builder_48x48.png
+public/assets/office/Modern_Office_Black_Shadow_48x48.png
+public/assets/office/16_Grocery_store_Black_Shadow_48x48.png
+public/assets/office/12_Kitchen_Black_Shadow_48x48.png
+
+# Tiled editor files (local project/session state)
+public/*.tsx
+public/*.tiled-project
+public/*.tiled-session
+public/gruai.tmx
+

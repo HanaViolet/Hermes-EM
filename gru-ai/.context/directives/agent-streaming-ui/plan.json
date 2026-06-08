@@ -1,0 +1,40 @@
+{
+  "goal": "Agent streaming UI — live tool activity in game panels, header ticker, and improved sprite status text",
+  "challenges": {
+    "risks": [
+      "1. Header ticker animation complexity — cycling through agents with smooth transitions could become janky if not carefully throttled, especially with many concurrent active agents. Risk of layout shift in the header.",
+      "2. Sprite status text rendering in Canvas 2D is constrained by the bitmap font system — showing tool calls with file paths requires careful truncation and may look unreadable at normal zoom levels. The 20-char limit exists for a reason.",
+      "3. Streaming panel in AgentPanel could cause excessive re-renders if sessionActivities updates are high-frequency. Need to ensure React rendering is throttled or memoized to avoid perf issues in the side panel."
+    ],
+    "over_engineering_flags": [
+      "The directive is well-scoped — all three requirements share the same data pipeline (sessionActivities from WebSocket) and are purely frontend rendering. No over-engineering risk."
+    ],
+    "recommendation": "Proceed as-is. All three requirements are tightly coupled (same data source, same UI layer, same domain). Single project is the correct decomposition."
+  },
+  "projects": [
+    {
+      "id": "agent-streaming-ui",
+      "title": "Agent streaming UI: session panel, header ticker, sprite status",
+      "priority": "P0",
+      "scope_summary": "Three connected frontend changes all driven by the existing sessionActivities WebSocket data. (1) Enhance AgentPanel to show a streaming log of tool calls with file paths, auto-scrolling, styled like a CLI output. (2) Add a rolling status ticker to GameHeader center area that cycles through active agents showing what they're doing. (3) Fix sprite status text in renderer.ts — replace the dim white 0.35-alpha text with better-styled, more useful streaming status using the agent's brand color.",
+      "complexity": "moderate",
+      "agent": [
+        "riley"
+      ],
+      "reviewers": [
+        "quinn",
+        "marcus"
+      ],
+      "auditor": "sarah",
+      "depends_on": [],
+      "touches_files_hint": [
+        "src/components/game/panels/AgentPanel.tsx",
+        "src/components/game/GameHeader.tsx",
+        "src/components/game/engine/renderer.ts",
+        "src/components/shared/ActivityLine.tsx",
+        "src/components/game/GamePage.tsx",
+        "src/components/game/pixel-types.ts"
+      ]
+    }
+  ]
+}

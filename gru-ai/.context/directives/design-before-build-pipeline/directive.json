@@ -1,0 +1,141 @@
+{
+  "id": "design-before-build-pipeline",
+  "title": "Add Design-First Step to Pipeline for UI Tasks",
+  "status": "completed",
+  "created": "2026-03-07",
+  "completed": "2026-03-07",
+  "weight": "medium",
+  "produced_features": [
+    "visual-design-phase",
+    "builder-acceptance-gate",
+    "ceo-design-escalation"
+  ],
+  "report": null,
+  "backlog_sources": [],
+  "started_at": "2026-03-07T10:55:00Z",
+  "updated_at": "2026-03-07T11:32:34.703Z",
+  "current_step": "completion",
+  "revision": 1,
+  "iterations": [],
+  "pipeline": {
+    "triage": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Medium weight — modifies execution pipeline doc to add design-first flow for UI tasks.",
+        "weight": "medium"
+      }
+    },
+    "read": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Directive read — add design step before build for UI tasks, with builder agreement/CEO escalation."
+      }
+    },
+    "context": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Read 09-execute-projects.md, phase-definitions.md, casting-rules.md, lessons/orchestration.md, lessons/skill-design.md."
+      }
+    },
+    "plan": {
+      "status": "completed",
+      "agent": [
+        "morgan"
+      ],
+      "output": {
+        "summary": "Single project: add visual-design phase to execution pipeline with detection heuristic, builder acceptance gate, CEO escalation.",
+        "projects_count": 1
+      }
+    },
+    "audit": {
+      "status": "skipped",
+      "agent": [
+        "sarah"
+      ],
+      "output": {
+        "summary": "Skipped — medium weight doc-only changes, files already read in context step."
+      }
+    },
+    "approve": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "decision": "auto-approved",
+        "summary": "Medium weight — auto-approved per pipeline rules"
+      }
+    },
+    "project-brainstorm": {
+      "status": "completed",
+      "agent": [
+        "sarah",
+        "morgan"
+      ],
+      "output": {
+        "summary": "3 tasks decomposed: visual-design phase in 09-execute, builder prompt update, phase-definitions + casting-rules updates."
+      }
+    },
+    "setup": {
+      "status": "completed",
+      "output": {
+        "summary": "No worktree needed — doc-only changes on current branch."
+      }
+    },
+    "execute": {
+      "status": "completed",
+      "agent": [
+        "morgan"
+      ],
+      "output": {
+        "summary": "All 3 tasks completed. Modified 09-execute-projects.md (visual-design phase, builder acceptance gate, CEO escalation, builder constraint prompt, design-review update), phase-definitions.md (new phase + patterns), casting-rules.md (Quinn pre-build role)."
+      }
+    },
+    "review-gate": {
+      "status": "completed",
+      "output": {
+        "summary": "All 3 tasks have DOD met. Doc changes verified against directive requirements."
+      }
+    },
+    "wrapup": {
+      "status": "completed",
+      "output": {
+        "summary": "No OKRs to persist. No follow-ups. Lessons: visual-design phase pattern mirrors brainstorm constraint pattern."
+      }
+    },
+    "completion": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ]
+    }
+  },
+  "projects": [
+    "design-first-ui-pipeline"
+  ],
+  "planning": {
+    "coo_plan": {
+      "artifact": "plan.json"
+    },
+    "ceo_approval": {
+      "status": "auto-approved",
+      "modifications": []
+    },
+    "worktree_path": null
+  },
+  "wrapup": {
+    "okrs_persisted": false,
+    "follow_ups_processed": false,
+    "digest_path": null,
+    "lessons_updated": false
+  }
+}

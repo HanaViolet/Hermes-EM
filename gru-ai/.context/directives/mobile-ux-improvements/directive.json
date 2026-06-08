@@ -1,0 +1,186 @@
+{
+  "id": "mobile-ux-improvements",
+  "title": "Mobile UX Improvements",
+  "status": "completed",
+  "created": "2026-03-09",
+  "completed": "2026-03-09",
+  "weight": "medium",
+  "produced_features": [],
+  "report": "mobile-ux-improvements-2026-03-09",
+  "backlog_sources": [],
+  "started_at": "2026-03-09T12:00:00Z",
+  "updated_at": "2026-03-09T07:50:19.347Z",
+  "current_step": "completion",
+  "pipeline": {
+    "triage": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "weight": "medium",
+        "rationale": "Frontend-only work across ~7 files in a single domain (game UI)."
+      }
+    },
+    "checkpoint": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "No prior progress found."
+      }
+    },
+    "read": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Created directive.md and directive.json."
+      }
+    },
+    "context": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Read vision.md, lessons/agent-behavior.md, lessons/orchestration.md."
+      }
+    },
+    "challenge": {
+      "status": "skipped",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Skipped for medium weight"
+      }
+    },
+    "brainstorm": {
+      "status": "skipped",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Skipped for medium weight"
+      }
+    },
+    "audit": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ],
+      "output": {
+        "summary": "7 active files, 9 issues found. Critical: zoom bounds broken, touch-none blocks gestures, bottom sheet is overlay.",
+        "findings": 9
+      },
+      "artifacts": [
+        ".context/directives/mobile-ux-improvements/audit-findings.json"
+      ]
+    },
+    "plan": {
+      "status": "completed",
+      "agent": [
+        "morgan"
+      ],
+      "output": {
+        "summary": "1 project (mobile-game-ux), P0, moderate complexity. Riley builds, Sarah reviews.",
+        "projects": [
+          "mobile-game-ux"
+        ]
+      },
+      "artifacts": [
+        ".context/directives/mobile-ux-improvements/plan.json"
+      ]
+    },
+    "approve": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "decision": "auto-approved",
+        "modifications": []
+      }
+    },
+    "project-brainstorm": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ],
+      "output": {
+        "summary": "3 tasks decomposed with DOD: touch gestures, inline panel layout, header/viewport polish."
+      },
+      "artifacts": [
+        ".context/directives/mobile-ux-improvements/projects/mobile-game-ux/project.json"
+      ]
+    },
+    "setup": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "mode": "branch",
+        "branch": "directive/mobile-ux-improvements"
+      }
+    },
+    "execute": {
+      "status": "completed",
+      "agent": [
+        "riley"
+      ],
+      "output": {
+        "progress": "5 of 5 tasks complete (across 2 projects)",
+        "summary": "All tasks built, reviewed, and verified."
+      }
+    },
+    "review-gate": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ],
+      "output": {
+        "summary": "All tasks reviewed. All validation gates passed."
+      }
+    },
+    "wrapup": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "All gates passed. Awaiting CEO completion approval."
+      }
+    },
+    "completion": {
+      "status": "completed"
+    }
+  },
+  "projects": [
+    {
+      "id": "mobile-game-ux",
+      "status": "completed"
+    },
+    {
+      "id": "panel-layout-v2",
+      "status": "completed"
+    }
+  ],
+  "planning": {
+    "coo_plan": {},
+    "ceo_approval": {
+      "status": "auto-approved",
+      "modifications": []
+    },
+    "worktree_path": null
+  },
+  "wrapup": {
+    "okrs_persisted": false,
+    "follow_ups_processed": false,
+    "digest_path": ".context/reports/mobile-ux-improvements-2026-03-09.md",
+    "lessons_updated": false
+  }
+}

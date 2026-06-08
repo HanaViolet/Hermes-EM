@@ -1,0 +1,38 @@
+{
+  "goal": "Scope server to only track agent-conductor sessions and directives, remove multi-repo scanning",
+  "challenges": {
+    "risks": [
+      "1. Hardcoding the project directory name (-Users-yangyang-Repos-agent-conductor) makes the server non-portable if the repo moves or another developer clones it elsewhere. Need to derive it from the actual repo path, not hardcode it.",
+      "2. The ProjectGroup abstraction is used in dashboard types (DashboardState, SessionsPage, SessionTree) and WebSocket messages (projects_updated). Removing it entirely would break the frontend contract. Safer to keep the type but ensure only one group ever exists.",
+      "3. The session-watcher currently watches all of ~/.claude/projects/ via chokidar. Narrowing the watch path to a single subdirectory is straightforward, but if the directory name derivation is wrong, zero sessions get discovered and the dashboard goes blank with no obvious error."
+    ],
+    "over_engineering_flags": [
+      "Don't rip out ProjectGroup from the type system and every frontend component — that's a large refactor for zero user value. Just filter at the discovery layer and the rest naturally produces one group.",
+      "Don't add a config file or environment variable for the project filter. Derive it from the repo path at startup. Keep it simple."
+    ],
+    "recommendation": "Proceed. This is a focused filtering change at two chokepoints: discoverSessionFiles() and session-watcher watch path. The ProjectGroup type stays but only ever contains one entry. Simple, low-risk, high-value — massively reduces startup time (1344 sessions down to ~200) and removes noise from the dashboard."
+  },
+  "projects": [
+    {
+      "id": "scope-sessions-to-conductor",
+      "title": "Filter session scanning and watching to agent-conductor project only",
+      "priority": "P0",
+      "scope_summary": "Modify discoverSessionFiles() to only scan the project directory matching agent-conductor (derived from the repo root path, not hardcoded). Narrow session-watcher to watch only that subdirectory instead of all projects/. Remove any multi-repo config or scanning logic that is now dead code. The ProjectGroup type and frontend components stay as-is — they will naturally contain only one group. Verify startup bootstraps fewer sessions and dashboard shows only agent-conductor sessions.",
+      "complexity": "simple",
+      "agent": [
+        "devon"
+      ],
+      "reviewers": [
+        "sarah"
+      ],
+      "auditor": "sarah",
+      "depends_on": [],
+      "touches_files_hint": [
+        "server/parsers/session-state.ts",
+        "server/watchers/session-watcher.ts",
+        "server/index.ts",
+        "server/state/aggregator.ts"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "files_to_modify": [
+    "src/components/game/panels/OpsPanel.tsx → StatusPanel.tsx (FULL REWRITE)",
+    "src/components/game/panels/index.ts (export rename)",
+    "src/components/game/SidePanel.tsx (HudTab type, TAB_LIST, TAB_ICONS, HUD_TYPES, import, switch case)",
+    "src/components/game/hooks/useBadgeCounts.ts (BadgeCounts key, variable, return)",
+    "src/components/game/GamePage.tsx (FURNITURE_TAB_MAP, typeMap, activePanel switch)",
+    "src/components/game/GameHeader.tsx (HudPanel type, button label/onClick/active/aria)",
+    "src/components/game/types.ts (TileType union member)"
+  ],
+  "rename_items": 22,
+  "risks": [
+    "TileType change is safe — internal only, no persistence",
+    "BadgeCounts used by SidePanel AND GameHeader — must update both in same change",
+    "Velocity section has no pre-computed metric, needs frontend computation"
+  ],
+  "recommended_approach": "Single atomic change across all 7 files. Create StatusPanel.tsx, update all references, delete OpsPanel.tsx."
+}

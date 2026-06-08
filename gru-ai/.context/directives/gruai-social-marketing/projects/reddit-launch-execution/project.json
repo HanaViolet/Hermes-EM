@@ -1,0 +1,60 @@
+{
+  "id": "reddit-launch-execution",
+  "title": "Reddit Launch Execution Plan",
+  "status": "done",
+  "priority": "P0",
+  "agent": ["taylor"],
+  "reviewers": ["priya"],
+  "description": "Finalize the existing Reddit launch guide into execution-ready assets for r/ClaudeCode, r/ChatGPTCoding, r/SideProject.",
+  "source_directive": "gruai-social-marketing",
+  "scope": {
+    "in": "Polish 3 draft posts, embed GIF/demo assets correctly, finalize timing/sequencing plan, prepare comment response templates, produce ready-to-post package.",
+    "out": "No new platform research. No execution (posting) — just preparation."
+  },
+  "dod": [
+    { "criterion": "3 Reddit posts (r/ClaudeCode, r/ChatGPTCoding, r/SideProject) are polished and ready to copy-paste", "met": true },
+    { "criterion": "Each post correctly embeds the demo GIF (1.6MB) and links to the GitHub repo (gru-ai)", "met": true },
+    { "criterion": "Timing plan specifies which subreddit to post first, what day/time, and spacing between posts", "met": true },
+    { "criterion": "Comment response templates cover likely questions (what is this, how does it work, vs competitors)", "met": true }
+  ],
+  "browser_test": false,
+  "tasks": [
+    {
+      "id": "reddit-post-polish-and-assets",
+      "title": "Polish draft posts, fix asset URLs, and verify all links",
+      "status": "done",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["taylor"],
+      "user_scenario": "CEO opens the execution doc, copies a post body, pastes into Reddit, and every link/image/GIF works on the first try with zero edits needed.",
+      "scope": "Review all 3 draft posts in reddit-launch-guide.md. Replace relative GIF paths with absolute GitHub URLs that render on Reddit. Verify GitHub repo URL. Verify npm install command. Tighten post copy: remove AI-sounding phrasing, ensure each post is under Reddit's formatting limits, confirm flair names exist on each subreddit.",
+      "dod": [
+        { "criterion": "All 3 draft posts have GIF embedded via absolute GitHub raw URL (not relative path) that renders when pasted into Reddit markdown", "met": true },
+        { "criterion": "GitHub repo URL in all posts points to the correct repo (verified against actual GitHub URL)", "met": true },
+        { "criterion": "npm install command in posts matches the published package name and version (verified against npmjs.com)", "met": true },
+        { "criterion": "Each post body reviewed for AI-sounding language and edited to use natural developer voice", "met": true }
+      ]
+    },
+    {
+      "id": "reddit-execution-package",
+      "title": "Create single-file execution package with sequencing, checklists, and response playbook",
+      "status": "done",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["taylor"],
+      "user_scenario": "CEO sits down for a 45-minute session, opens one file, and follows it step-by-step to post on r/ClaudeCode. Two days later, same file tells them when and how to post to r/ChatGPTCoding.",
+      "scope": "Create reddit-execution-package.md. Consolidate: pre-flight checklist, exact posting sequence with dates relative to Day 1, copy-paste-ready post bodies, first-hour engagement script, comment response templates, 48-hour monitoring checklist per post.",
+      "dod": [
+        { "criterion": "reddit-execution-package.md exists with pre-flight checklist, 3-subreddit posting sequence (Day 1/3/5 pattern), and copy-paste-ready post bodies", "met": true },
+        { "criterion": "First-hour engagement script covers minute 0-5 (verify), 5-15 (builder note comment), 15-60 (monitor and reply) with specific example text", "met": true },
+        { "criterion": "At least 5 comment response templates covering: Devin comparison, CrewAI/AutoGen comparison, wrapper criticism, model lock-in question, and gimmick pushback", "met": true },
+        { "criterion": "48-hour monitoring checklist per subreddit includes: engagement metrics to track, escalation triggers, and follow-up comment timing", "met": true },
+        { "criterion": "Document is self-contained — CEO can execute without reading any other file", "met": true }
+      ]
+    }
+  ],
+  "created": "2026-03-11T01:05:00Z",
+  "updated": "2026-03-11T02:00:00Z"
+}

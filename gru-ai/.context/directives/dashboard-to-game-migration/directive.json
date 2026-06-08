@@ -1,0 +1,187 @@
+{
+  "id": "dashboard-to-game-migration",
+  "title": "Game-Only UI — Remove All Non-Game Pages and Chrome",
+  "status": "completed",
+  "created": "2026-03-07",
+  "completed": "2026-03-07",
+  "weight": "medium",
+  "produced_features": [
+    "game-only-ui"
+  ],
+  "report": null,
+  "backlog_sources": [],
+  "started_at": "2026-03-07T00:00:00Z",
+  "updated_at": "2026-03-07T16:00:00Z",
+  "current_step": "completion",
+  "pipeline": {
+    "triage": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "weight": "medium",
+        "summary": "Downgraded from strategic to medium after CEO clarification."
+      }
+    },
+    "checkpoint": {
+      "status": "skipped",
+      "output": {
+        "summary": "No prior checkpoint"
+      }
+    },
+    "read": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Read directive.md — CEO decided to remove all non-game UI entirely."
+      }
+    },
+    "context": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Read vision.md, lessons, reviewed all dashboard and game components, router, sidebar."
+      }
+    },
+    "challenge": {
+      "status": "skipped",
+      "output": {
+        "summary": "Skipped — medium weight"
+      }
+    },
+    "brainstorm": {
+      "status": "completed",
+      "agent": [
+        "sarah",
+        "marcus"
+      ],
+      "output": {
+        "summary": "Brainstorm completed but CEO pivoted to full removal of non-game UI.",
+        "decision": "Remove all non-game UI — game is the only view"
+      },
+      "artifacts": [
+        ".context/directives/dashboard-to-game-migration/brainstorm.md"
+      ]
+    },
+    "plan": {
+      "status": "completed",
+      "agent": [
+        "morgan"
+      ],
+      "output": {
+        "summary": "Single project: strip router, delete all non-game pages, verify game works. Riley builds, Sarah reviews.",
+        "projects": 1
+      },
+      "artifacts": [
+        ".context/directives/dashboard-to-game-migration/morgan-plan.json"
+      ]
+    },
+    "audit": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ],
+      "output": {
+        "summary": "5 active files identified. Scope pivoted from toggle to full removal.",
+        "active_files": 5,
+        "risks": 6
+      },
+      "artifacts": [
+        ".context/directives/dashboard-to-game-migration/projects/game-first-toggle/audit-findings.json"
+      ]
+    },
+    "approve": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "CEO approved full removal of all non-game UI."
+      }
+    },
+    "project-brainstorm": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ],
+      "output": {
+        "summary": "3 tasks: strip-router-and-layout, delete-page-components, verify-and-clean."
+      },
+      "artifacts": [
+        ".context/directives/dashboard-to-game-migration/projects/game-first-toggle/project.json"
+      ]
+    },
+    "setup": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Working on existing game branch."
+      }
+    },
+    "execute": {
+      "status": "completed",
+      "agent": [
+        "riley"
+      ],
+      "output": {
+        "summary": "All tasks completed. Router stripped to single game route. Deleted 6 page directories, 13 unused UI components, 7 dead server routes, scheduler/foreman (~280 lines), 4 dead scripts, Sonner, legacy CSS aliases, unused dependencies. TypeScript compiles clean."
+      }
+    },
+    "review-gate": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ],
+      "output": {
+        "summary": "Two review passes. Initial: all 5 DOD criteria pass. Deep audit: found 13 more UI files, dead server routes, dead store properties, unused deps — all cleaned and re-verified."
+      }
+    },
+    "wrapup": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Deep cleanup completed. Scheduler rebuild deferred to future directive."
+      }
+    },
+    "completion": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "CEO approved completion. App is now game-only."
+      }
+    }
+  },
+  "projects": [
+    {
+      "id": "game-first-toggle",
+      "status": "done"
+    }
+  ],
+  "planning": {
+    "morgan_plan": {},
+    "ceo_approval": {
+      "status": "approved",
+      "modifications": [
+        "Pivoted from toggle to full removal of all non-game UI"
+      ]
+    },
+    "worktree_path": null
+  },
+  "wrapup": {
+    "okrs_persisted": false,
+    "follow_ups_processed": true,
+    "digest_path": null,
+    "lessons_updated": false
+  }
+}

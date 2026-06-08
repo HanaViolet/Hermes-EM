@@ -1,0 +1,36 @@
+{
+  "goal": "Extend the /smoke-test skill with multi-weight support (lightweight + medium), worktree isolation, Option B gate simulation in pipeline docs, and concrete test cases per weight class",
+  "challenges": {
+    "risks": [
+      "Option B gate simulation in 04b-clarification.md and 07-plan-approval.md must run the FULL gate logic before defaulting — if the test_mode check short-circuits too early, the test won't exercise the real code path and gives false confidence.",
+      "Worktree isolation adds complexity to cleanup. If the worktree remove fails (e.g., locked files, agent still writing), orphan worktrees accumulate in /tmp. The trap cleanup must handle this gracefully with fallback to manual cleanup instructions.",
+      "Lightweight skip set differs from medium (lightweight skips challenge + brainstorm; medium skips brainstorm only). The weight-dependent skip logic in run-smoke-test.sh must match the actual pipeline skip rules exactly or the test will report false failures for legitimately skipped steps."
+    ],
+    "over_engineering_flags": [
+      "Do NOT build a test case definition DSL or config file for weight-specific behaviors. Hard-code the two concrete test cases (marker file for lightweight, utility module for medium) directly in the bash script.",
+      "Do NOT add heavyweight support. The CEO explicitly deferred it. Only lightweight and medium."
+    ],
+    "recommendation": "Proceed as-is"
+  },
+  "projects": [
+    {
+      "id": "smoke-test-multi-weight",
+      "title": "Multi-weight smoke test with worktree isolation and gate simulation",
+      "priority": "P0",
+      "scope_summary": "Extend run-smoke-test.sh with: (1) weight argument ($1 = lightweight|medium, default medium), weight-dependent skip set and test case selection; (2) git worktree isolation replacing branch checkout; (3) concrete test cases — lightweight creates a marker file, medium creates a utility module with function + config. Extend SKILL.md to pass $ARGUMENTS as weight. Add test_mode check to 04b-clarification.md (run full synthesis then auto-respond) and 07-plan-approval.md (run full plan presentation then auto-approve). All 4 extend items are tightly coupled — same files, same domain.",
+      "complexity": "moderate",
+      "agent": ["devon"],
+      "reviewers": ["sarah"],
+      "auditor": "sarah",
+      "depends_on": [],
+      "touches_files_hint": [
+        ".claude/skills/smoke-test/run-smoke-test.sh",
+        ".claude/skills/smoke-test/SKILL.md",
+        ".claude/skills/smoke-test/scenarios.md",
+        ".claude/skills/directive/docs/pipeline/04b-clarification.md",
+        ".claude/skills/directive/docs/pipeline/07-plan-approval.md",
+        ".claude/skills/directive/docs/reference/schemas/directive-json.md"
+      ]
+    }
+  ]
+}

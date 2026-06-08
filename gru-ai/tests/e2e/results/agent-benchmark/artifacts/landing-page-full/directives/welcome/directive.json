@@ -1,0 +1,8 @@
+{
+  "id": "welcome",
+  "title": "Welcome to gruai",
+  "weight": "lightweight",
+  "current_step": "triage",
+  "status": "pending",
+  "created_at": "2026-03-08T03:20:49.966Z"
+}

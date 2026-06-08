@@ -1,0 +1,82 @@
+{
+  "id": "gruai-map-migration",
+  "title": "Migrate game rendering from office.tmx (32x32/16px) to gruai.tmx (30x20/48px)",
+  "status": "pending",
+  "agent": ["riley"],
+  "reviewers": ["sarah"],
+  "tasks": [
+    {
+      "id": "update-constants",
+      "title": "Update TILE_SIZE and proportional constants",
+      "agent": "riley",
+      "status": "pending",
+      "scope": "In constants.ts: TILE_SIZE 16→48, WALK_SPEED_PX_PER_SEC 48→144 (maintain same tiles/sec), CHARACTER_HIT_HALF_WIDTH 8→24, CHARACTER_HIT_HEIGHT 24→48, CHARACTER_SITTING_OFFSET_PX 6→18, BUBBLE_VERTICAL_OFFSET_PX 24→72, NAME_LABEL_VERTICAL_OFFSET_PX 28→84. Scale all absolute pixel offsets by 3x to maintain visual proportions with 48px tiles.",
+      "dod": [
+        { "criterion": "TILE_SIZE equals 48 in constants.ts", "met": false },
+        { "criterion": "WALK_SPEED_PX_PER_SEC equals 144", "met": false },
+        { "criterion": "All character hit/offset constants scaled 3x", "met": false }
+      ]
+    },
+    {
+      "id": "rewrite-office-layout",
+      "title": "Replace office-layout.ts with new TMX data",
+      "agent": "riley",
+      "status": "pending",
+      "scope": "Complete rewrite of office-layout.ts. Replace 7 layer arrays with 4 new ones (FLOOR, FURNITURE_BASE, FURNITURE_TOP, DECO) using CSV data from public/gruai.tmx. Grid: cols=30, rows=20. Identify WALL_GIDS from floor layer border tiles (Room_Builder GIDs like 1644, 1720, 1789, 3301-3380, etc.). Create new SEAT_POSITIONS by examining furniture_base layer for desk/chair positions — minimum 12 seats for 12 agents. Update OFFICE_LAYOUT export with new cols, rows, tiles, gidLayers, seatPositions.",
+      "dod": [
+        { "criterion": "4 layer arrays match gruai.tmx CSV data exactly", "met": false },
+        { "criterion": "OFFICE_LAYOUT.cols=30, rows=20", "met": false },
+        { "criterion": "WALL_GIDS correctly identifies wall tiles from new tilesets", "met": false },
+        { "criterion": "At least 12 SEAT_POSITIONS within 30x20 bounds", "met": false }
+      ]
+    },
+    {
+      "id": "update-tileset-cache",
+      "title": "Load 5 new tilesets in tilesetCache.ts",
+      "agent": "riley",
+      "status": "pending",
+      "scope": "Replace 3 old tileset loads with 5 new ones: 1_Generic_48x48.png (firstgid=1, 16 cols), Room_Builder_48x48.png (firstgid=1249, 76 cols), Modern_Office_Black_Shadow_48x48.png (firstgid=9837, 16 cols), 16_Grocery_store_Black_Shadow_48x48.png (firstgid=10685, 16 cols), 12_Kitchen_Black_Shadow_48x48.png (firstgid=11933, 16 cols). Update all asset paths to /assets/office/*.png.",
+      "dod": [
+        { "criterion": "5 tilesets registered with correct firstGid and column counts", "met": false },
+        { "criterion": "All 5 PNG paths point to existing files in /assets/office/", "met": false }
+      ]
+    },
+    {
+      "id": "update-renderer-and-loader",
+      "title": "Update renderer and asset loader for new layer structure",
+      "agent": "riley",
+      "status": "pending",
+      "scope": "renderer.ts: Change GID_BASE_LAYER_COUNT from 4 to 2 (floor + furniture_base below characters; furniture_top + deco above). asset-loader.ts: Update loadFloorAssets() to use Room_Builder_48x48.png with 76 cols and 48px tile extraction. Remove loadLimeZuSprites() call and import. Remove applyTilesetToFurniture() call.",
+      "dod": [
+        { "criterion": "GID_BASE_LAYER_COUNT equals 2", "met": false },
+        { "criterion": "loadFloorAssets uses 48px tile extraction from Room_Builder_48x48.png", "met": false },
+        { "criterion": "LimeZu singles loading removed", "met": false }
+      ]
+    },
+    {
+      "id": "update-spatial-data",
+      "title": "Remap room zones, interaction points, and blocking layers",
+      "agent": "riley",
+      "status": "pending",
+      "scope": "roomZones.ts: Remap all zone bounds to 30x20 grid based on visual inspection of TMX layout (3 rooms: left cols 0-7, center cols 8-22, right cols 23-29). constants.ts INTERACTION_POINTS: Remap all 13 points to new grid positions. officeState.ts: Change blocking layer indices from [1,2,3] to [1] (only furniture_base blocks). Update getTileInfoAt() wall/furniture GID checks for new tileset ranges. agent-registry.json: Verify all game.position entries fit within 20-row grid and match SEAT_POSITIONS.",
+      "dod": [
+        { "criterion": "All ROOM_ZONES within 30x20 bounds", "met": false },
+        { "criterion": "All INTERACTION_POINTS within 30x20 bounds", "met": false },
+        { "criterion": "Blocking layers set to [1] only in officeState", "met": false },
+        { "criterion": "Agent registry positions match seat positions", "met": false }
+      ]
+    },
+    {
+      "id": "cleanup-dead-code",
+      "title": "Remove dead LimeZu singles code and old animation entries",
+      "agent": "riley",
+      "status": "pending",
+      "scope": "Delete tileset-loader.ts. Remove all imports of tileset-loader.ts and loadLimeZuSprites from other files. Clean up furnitureCatalog.ts references to singles. Update or clear ANIMATED_TILES in furnitureAnimations.ts — remove entries that reference old Interiors.png GIDs not present in new tilesets.",
+      "dod": [
+        { "criterion": "tileset-loader.ts deleted", "met": false },
+        { "criterion": "No imports of deleted file remain", "met": false },
+        { "criterion": "ANIMATED_TILES entries only reference valid new GIDs", "met": false }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "goal": "Game-First UI with View Toggle",
+  "challenges": {
+    "risks": [
+      "CeoBrief component (344 lines) fetches markdown from an API endpoint — porting it into a game panel means either duplicating the fetch logic or extracting a shared hook. If the hook extraction is sloppy, both UIs break.",
+      "Sidebar simplification could break existing bookmark/deep-link URLs if nav items are removed rather than just hidden. Need to preserve all routes even if nav entries are consolidated.",
+      "Game panel theme (parchment/wood pixel-art via panelUtils.ts) may not render dense markdown content (CEO brief) well — could end up in a rabbit hole of styling a markdown renderer to look good in pixel-art frames."
+    ],
+    "over_engineering_flags": [
+      "Temptation to build a fancy animated toggle with transitions between views — a simple icon button in the corner is sufficient.",
+      "Porting SchedulerCard fully into OpsPanel risks scope creep if the scheduler has interactive controls. Read-only summary is enough for game view."
+    ],
+    "recommendation": "Simplify: One project. The toggle is trivial UI. CeoBrief and SchedulerCard ports should be read-only summaries using shared data hooks, not full component rewrites. Sidebar cleanup is just removing/renaming 2 nav items. No reason to split this."
+  },
+  "projects": [
+    {
+      "id": "game-first-toggle",
+      "title": "View Toggle + Game Panel Gap Fill + Sidebar Cleanup",
+      "priority": "P0",
+      "complexity": "moderate",
+      "agent": [
+        "riley"
+      ],
+      "reviewers": [
+        "sarah"
+      ],
+      "auditor": "sarah",
+      "scope_summary": "Add a small toggle button (likely in AppLayout or Sidebar) to switch between GamePage and DashboardPage. Port CeoBrief content into a game-themed panel (BriefPanel or MailboxPanel extension) using a shared data hook extracted from the existing CeoBrief component. Fold SchedulerCard summary info into OpsPanel as a read-only section. Simplify Sidebar by consolidating Office/Overview nav items into a single entry plus the toggle. Preserve all existing routes.",
+      "depends_on": [],
+      "touches_files_hint": [
+        "src/router.tsx",
+        "src/components/layout/Sidebar.tsx",
+        "src/components/layout/AppLayout.tsx",
+        "src/components/game/panels/OpsPanel.tsx",
+        "src/components/game/panels/BriefPanel.tsx",
+        "src/components/dashboard/CeoBrief.tsx",
+        "src/components/dashboard/SchedulerCard.tsx"
+      ]
+    }
+  ]
+}

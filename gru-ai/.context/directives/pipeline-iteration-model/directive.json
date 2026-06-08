@@ -1,0 +1,175 @@
+{
+  "id": "pipeline-iteration-model",
+  "title": "Pipeline Iteration Model",
+  "status": "completed",
+  "created": "2026-03-09",
+  "completed": null,
+  "weight": "strategic",
+  "produced_features": [],
+  "report": "pipeline-iteration-model-2026-03-09",
+  "backlog_sources": [],
+
+  "started_at": "2026-03-09T12:00:00Z",
+  "updated_at": "2026-03-10T09:00:00Z",
+  "current_step": "completion",
+
+  "dod": {
+    "success_looks_like": [
+      "I give a new directive, the pipeline asks me to verify intent (success/failure/quality_bar/examples) extracted from my brief + audit + brainstorm — not typed by me, I just confirm or correct",
+      "Builder's prompt visibly contains my original brief and the verified intent — no more telephone game",
+      "When review finds bugs, builder actually fixes them and re-review happens (not just logged as non-fatal warnings)",
+      "At completion gate, I see my acceptance scenarios as a checklist with pass/fail and evidence per item",
+      "I can say 'amend' for a small fix without full pipeline restart, 'extend' to add scope with only delta planning",
+      "DOD in project.json reads like user stories ('open game → see X') not technical checklists ('type-check passes')"
+    ],
+    "failure_looks_like": [
+      "The intent fields exist in the schema but nobody reads them — ceremony that agents skip",
+      "DOD examples in docs are still technical ('component renders without errors')",
+      "Review fix cycles exist on paper but are still capped at 1 like before",
+      "Amend/extend are defined in the schema but the completion gate doc doesn't explain the workflow",
+      "Builder prompt template doesn't actually include the CEO brief — it's documented but not wired"
+    ],
+    "quality_bar": "A new directive run with these changes should feel noticeably different — builder has my words, reviewer tests my scenarios, I review once and approve instead of back-and-forth",
+    "examples": [
+      "Like how a good PM writes user stories with given/when/then that the whole team can test against",
+      "Like Devin's auto-fix loop — keeps iterating until tests pass, not just once and ship",
+      "Full workflow example — BEFORE: CEO writes 'optimize mobile' → COO scope_summary loses the why → CTO DOD says 'responsive layout' → builder makes text tiny → CEO reopens. AFTER: CEO writes 'optimize mobile' → audit+brainstorm reveal patterns → system extracts intent (success: playable on phone, touch native; failure: just shrinking desktop) → CEO verifies → builder sees original brief + intent + acceptance scenarios → reviewer traces each scenario through code → completion gate shows pass/fail per scenario → CEO approves or amends specific items"
+    ]
+  },
+
+  "pipeline": {
+    "triage": {
+      "status": "completed",
+      "agent": ["ceo"],
+      "output": {
+        "weight": "strategic",
+        "rationale": "Process-level change to pipeline architecture. Multiple valid approaches, CEO asks question without prescribing solution, lasting consequences."
+      }
+    },
+    "checkpoint": {
+      "status": "completed",
+      "agent": ["ceo"],
+      "output": { "summary": "No prior progress found." }
+    },
+    "read": {
+      "status": "completed",
+      "agent": ["ceo"],
+      "output": { "summary": "Created directive.md and directive.json." }
+    },
+    "context": {
+      "status": "completed",
+      "agent": ["ceo"],
+      "output": { "summary": "Read vision.md, lessons/orchestration.md, lessons/agent-behavior.md, pipeline docs (00-triage, 09-execute, 11-completion, failure-handling, 07b-project-brainstorm, 05-planning), schemas (directive-json, plan-schema), rules (scope-and-dod, phase-definitions, failure-handling)." }
+    },
+    "challenge": {
+      "status": "skipped",
+      "agent": ["ceo"],
+      "output": { "summary": "Brainstorm subsumes challenge for strategic directives." }
+    },
+    "brainstorm": {
+      "status": "completed",
+      "agent": ["sarah", "marcus", "morgan", "research"],
+      "output": {
+        "summary": "2 rounds, 8 agents. Phase 1 proposed cheaper iteration (rejected by CEO). Phase 2 reframed to first-pass quality: unanimous root cause is intent degradation — CEO words never reach builder. Two-layer solution: (1) intent propagation + user-centric DOD + review fix cycles, (2) amend/extend at completion gate. Full discussion with CEO clarifications captured in brainstorm.md.",
+        "phase1_proposals": ["Amendment Loops (CTO)", "Tiered CEO Engagement (CPO)", "Refinement Loops (COO)"],
+        "phase2_proposals": ["Intent-Preserving Autonomous Quality (CTO)", "Acceptance Scenarios Pipeline (CPO)", "Autonomous Quality Loops (COO)"],
+        "industry_patterns": ["Evaluator-Optimizer", "Intent Engineering", "Self-Testing Agents", "Fresh-Context Review", "Failure Memory"]
+      },
+      "artifacts": [".context/directives/pipeline-iteration-model/brainstorm.md"]
+    },
+    "plan": {
+      "status": "completed",
+      "agent": ["morgan"],
+      "output": {
+        "summary": "4 projects: (1) walkthrough-polish (P0, simple, Taylor) — testing tool ships first with pipeline scenarios. (2) first-pass-quality (P0, moderate, Taylor, depends on #1) — intent propagation, user-centric DOD, review fix cycles, pipeline reorder. (3) iteration-fallback (P1, simple, Taylor) — amend/extend/redirect, schema cleanup. (4) orchestrator-split (P2, complex, Devon) — separate orchestrator from CEO session.",
+        "projects": ["walkthrough-polish", "first-pass-quality", "iteration-fallback", "orchestrator-split"]
+      },
+      "artifacts": [".context/directives/pipeline-iteration-model/plan.json"]
+    },
+    "audit": {
+      "status": "skipped",
+      "agent": ["sarah"],
+      "output": { "summary": "Brainstorm Phase 2 thoroughly examined all pipeline docs. CTO's root cause analysis (5 failure points with specific file references) serves as audit." }
+    },
+    "approve": {
+      "status": "completed",
+      "agent": ["ceo"],
+      "output": {
+        "decision": "approved",
+        "modifications": [],
+        "summary": "CEO approved 4-project plan as-is. No modifications requested."
+      }
+    },
+    "project-brainstorm": {
+      "status": "completed",
+      "agent": ["sarah"],
+      "output": {
+        "summary": "CTO decomposed all 4 projects into tasks with user-centric DOD. walkthrough-polish: 3 tasks (scenarios, CTO trace, report template). first-pass-quality: 8 tasks (pipeline reorder, directive DOD, clarification step, scope-and-dod rewrite, brainstorm inputs, execute updates, planner bias removal, failure patterns). iteration-fallback: 3 tasks (schema fields, completion gate rewrite, failure handling). orchestrator-split: 6 tasks (architecture design, agent definition, SKILL.md dispatcher, gate protocol, resume flow, integration test).",
+        "total_tasks": 20
+      },
+      "artifacts": [
+        ".context/directives/pipeline-iteration-model/projects/walkthrough-polish/project.json",
+        ".context/directives/pipeline-iteration-model/projects/first-pass-quality/project.json",
+        ".context/directives/pipeline-iteration-model/projects/iteration-fallback/project.json",
+        ".context/directives/pipeline-iteration-model/projects/orchestrator-split/project.json"
+      ]
+    },
+    "setup": {
+      "status": "completed",
+      "agent": ["ceo"],
+      "output": {
+        "summary": "Working on existing directive/enrich-agent-behaviors branch. No worktree needed — pipeline doc changes overlap with current branch work.",
+        "mode": "branch",
+        "branch": "directive/enrich-agent-behaviors"
+      }
+    },
+    "execute": {
+      "status": "completed",
+      "agent": ["taylor"],
+      "output": {
+        "summary": "3 of 4 projects completed (walkthrough-polish, first-pass-quality, iteration-fallback). Project 4 (orchestrator-split, P2) deferred — all 6 directive DOD items are met by projects 1-3. Total: 14 tasks completed across 3 projects, 1 review fix cycle in first-pass-quality.",
+        "projects_completed": 3,
+        "projects_deferred": 1,
+        "tasks_completed": 14
+      }
+    },
+    "review-gate": {
+      "status": "completed",
+      "agent": ["ceo"],
+      "output": {
+        "summary": "All 3 completed projects passed review validation. 14 tasks across walkthrough-polish, first-pass-quality, iteration-fallback — all have review phases with CTO (sarah) as reviewer, all DOD criteria met.",
+        "reviews_passed": 14,
+        "unresolved_findings": 0
+      }
+    },
+    "wrapup": {
+      "status": "completed",
+      "agent": ["ceo"],
+      "output": {
+        "summary": "Digest written, lessons updated (orchestration.md + skill-design.md), stale docs detected (mostly old directives referencing broadly-modified files). No follow-ups to process (audit was skipped). Deferred project (orchestrator-split) noted in digest.",
+        "digest_path": ".context/reports/pipeline-iteration-model-2026-03-09.md"
+      }
+    },
+    "completion": { "status": "pending" }
+  },
+
+  "projects": [
+    { "id": "walkthrough-polish", "status": "completed" },
+    { "id": "first-pass-quality", "status": "completed" },
+    { "id": "iteration-fallback", "status": "completed" },
+    { "id": "orchestrator-split", "status": "deferred" }
+  ],
+
+  "planning": {
+    "coo_plan": {},
+    "ceo_approval": { "status": "approved", "modifications": [] },
+    "worktree_path": null
+  },
+
+  "wrapup": {
+    "okrs_persisted": false,
+    "follow_ups_processed": true,
+    "digest_path": ".context/reports/pipeline-iteration-model-2026-03-09.md",
+    "lessons_updated": true
+  }
+}

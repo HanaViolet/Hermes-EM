@@ -1,0 +1,42 @@
+{
+  "id": "team-org-dashboard",
+  "title": "Team & Agent Org Dashboard page",
+  "goal_id": "ui",
+  "status": "proposed",
+  "priority": "p2",
+  "agent": [
+    "self"
+  ],
+  "reviewers": [
+    "marcus"
+  ],
+  "description": "Dashboard page showing the org structure \u2014 C-suite agents, their domains, standing responsibilities, and current assignments. Visual team groupings.",
+  "source_directive": "team-org-dashboard",
+  "scope": {
+    "in": [
+      "New dashboard page for org structure",
+      "Agent card components",
+      "Domain assignment visualization"
+    ],
+    "out": [
+      "Agent personality file changes",
+      "Casting logic changes"
+    ]
+  },
+  "dod": [
+    {
+      "criterion": "Org page shows all C-suite agents with their domains and current assignments",
+      "met": false
+    },
+    {
+      "criterion": "Agent cards are clickable and show agent detail (personality summary, recent directives)",
+      "met": false
+    }
+  ],
+  "browser_test": true,
+  "tags": [],
+  "tasks": [],
+  "created": "2026-03-02T00:00:00Z",
+  "updated": "2026-03-02T00:00:00Z",
+  "completed": null
+}

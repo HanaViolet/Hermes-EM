@@ -1,0 +1,15 @@
+{
+  "id": "fix-login-validation",
+  "title": "Fix Login Form Validation Bug",
+  "weight": "lightweight",
+  "status": "pending",
+  "pipeline": {
+    "current_step": "triage",
+    "started_at": "2026-03-08T03:20:45Z"
+  },
+  "scope": {
+    "description": "The login form accepts empty email and password fields without showing validation errors. Add client-side validation that checks for non-empty email (valid format) and password (min 8 chars) before form submission.",
+    "in": [],
+    "out": []
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "id": "office-tmx-redesign",
+  "title": "Office TMX Redesign with Limezu Modern Interiors",
+  "weight": "medium",
+  "status": "cancelled",
+  "created_at": "2026-03-07T00:00:00Z",
+  "updated_at": "2026-03-07T00:00:00Z",
+  "current_step": "completion",
+  "pipeline": {
+    "triage": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Classified as medium weight. Single-domain game category work: asset copying + TMX data editing.",
+        "weight": "medium",
+        "decision": "Medium process — auto-approve, no C-suite challenge"
+      },
+      "artifacts": []
+    },
+    "checkpoint": {
+      "status": "skipped"
+    },
+    "read": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Read directive brief, vision, preferences, lessons, agent registry. Category: game."
+      },
+      "artifacts": []
+    },
+    "context": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Context loaded: TMX is 32x32 @ 16x16px, 2 existing tilesets (room-builder firstgid=1, furniture firstgid=225). Limezu pack at /Users/yangyang/Downloads/moderninteriors-win."
+      },
+      "artifacts": []
+    },
+    "challenge": {
+      "status": "skipped"
+    },
+    "plan": {
+      "status": "completed",
+      "agent": [
+        "morgan"
+      ],
+      "output": {
+        "summary": "Single project: limezu-office-redesign. Builder: devon, Reviewers: quinn + sarah, Auditor: sarah. Use Theme_Sorter PNGs not master sheet."
+      },
+      "artifacts": [
+        ".context/directives/office-tmx-redesign/plan.json"
+      ]
+    },
+    "audit": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ],
+      "output": {
+        "summary": "TMX is NOT parsed at runtime — office-layout.ts has hardcoded gidLayers arrays. tilesetCache.ts loads PNGs with hardcoded firstgid. Next firstgid=1073. Right half and bottom of map nearly empty. .tsx files are Tiled metadata, not React. Must update both TMX and office-layout.ts in lockstep.",
+        "key_files": [
+          "src/components/game/office-layout.ts",
+          "src/components/game/tilesetCache.ts",
+          "src/components/game/tileset-loader.ts",
+          "src/components/game/engine/renderer.ts"
+        ]
+      },
+      "artifacts": []
+    },
+    "approve": {
+      "status": "skipped"
+    },
+    "project-brainstorm": {
+      "status": "cancelled",
+      "output": {
+        "summary": "Superseded by game-ui-tmx-update directive which completed the TMX redesign."
+      }
+    },
+    "setup": {
+      "status": "pending"
+    },
+    "execute": {
+      "status": "pending"
+    },
+    "review-gate": {
+      "status": "pending"
+    },
+    "wrapup": {
+      "status": "pending"
+    },
+    "completion": {
+      "status": "pending"
+    }
+  }
+}

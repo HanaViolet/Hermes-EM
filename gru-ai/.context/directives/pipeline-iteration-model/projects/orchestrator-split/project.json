@@ -1,0 +1,138 @@
+{
+  "id": "orchestrator-split",
+  "title": "Layer 3: Separate orchestrator session from CEO session",
+  "status": "pending",
+  "priority": "P2",
+  "agent": ["devon"],
+  "reviewers": ["sarah", "morgan"],
+  "description": "Architect and implement the split of pipeline orchestration from the CEO session. CEO session only touches approve + completion gates. Dedicated orchestrator handles triage through execute autonomously.",
+  "source_directive": "pipeline-iteration-model",
+  "scope": {
+    "in": [
+      "Architecture design for orchestrator split",
+      "Create orchestrator agent and entry point",
+      "Refactor SKILL.md into thin CEO dispatcher",
+      "Gate handoff protocol in pipeline docs",
+      "Post-gate resume flow",
+      "Integration test walkthrough"
+    ],
+    "out": [
+      "Intent propagation changes (project 2)",
+      "Completion gate iteration (project 3)"
+    ]
+  },
+  "dod": [
+    { "criterion": "CEO session spawns CLI orchestrator instead of running 14 steps inline", "met": false },
+    { "criterion": "Orchestrator halts at approve and completion gates, CEO resumes and decides", "met": false },
+    { "criterion": "Post-gate resume spawns new orchestrator to continue from next step", "met": false },
+    { "criterion": "End-to-end walkthrough validates both lightweight and heavyweight directive flows", "met": false }
+  ],
+  "browser_test": false,
+  "tasks": [
+    {
+      "id": "architecture-design",
+      "title": "Design the orchestrator-CEO session split architecture",
+      "status": "pending",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["design", "review"],
+      "agent": ["devon"],
+      "user_scenario": "CEO invokes /directive and a CLI orchestrator runs autonomously, pausing only at approve and completion gates.",
+      "scope": "Produce architecture design doc: session boundary, handoff protocol, directive.json as shared state, entry point changes. Address all platform constraints.",
+      "dod": [
+        { "criterion": "Design doc exists at projects/orchestrator-split/architecture-design.md", "met": false },
+        { "criterion": "Doc specifies which steps run in orchestrator vs CEO, with rationale", "met": false },
+        { "criterion": "Doc defines gate protocol: how orchestrator signals, how CEO resumes, using directive.json fields", "met": false },
+        { "criterion": "Doc addresses all 4 platform constraints with explicit mitigations", "met": false },
+        { "criterion": "Doc includes step-by-step lifecycle flow for heavyweight directive across both sessions", "met": false }
+      ]
+    },
+    {
+      "id": "orchestrator-agent-definition",
+      "title": "Create orchestrator agent and entry point",
+      "status": "pending",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "code-review", "review"],
+      "agent": ["devon"],
+      "user_scenario": "A .claude/agents/orchestrator.md agent exists that can be CLI-spawned to run pipeline steps autonomously.",
+      "scope": "Create orchestrator agent definition. Register in agent-registry.json. Create or modify SKILL entry point variant.",
+      "dod": [
+        { "criterion": ".claude/agents/orchestrator.md exists with personality, permissions, and pipeline execution instructions", "met": false },
+        { "criterion": "agent-registry.json includes orchestrator with distinct id, title, role", "met": false },
+        { "criterion": "Agent references pipeline docs and specifies step execution loop", "met": false },
+        { "criterion": "STOP gates defined: approve (heavyweight) and completion (all weights)", "met": false }
+      ]
+    },
+    {
+      "id": "skill-md-dispatcher",
+      "title": "Refactor SKILL.md into thin CEO dispatcher",
+      "status": "pending",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "code-review", "review"],
+      "agent": ["devon"],
+      "user_scenario": "CEO invokes /directive and SKILL.md spawns orchestrator and returns immediately instead of running all steps.",
+      "scope": "Refactor SKILL.md: triage + spawn + gate handling. Handle resume case (detect approve/completion in directive.json). Move step execution content to orchestrator-facing doc.",
+      "dod": [
+        { "criterion": "SKILL.md is under 80 lines of active instruction, focused on triage + spawn + gate handling", "met": false },
+        { "criterion": "CEO session spawns orchestrator via spawn-agent.ts with directive context", "met": false },
+        { "criterion": "SKILL.md handles resume: detects approve/completion in directive.json and runs gate inline", "met": false },
+        { "criterion": "Pipeline steps table and execution loop relocated to orchestrator-facing doc", "met": false }
+      ]
+    },
+    {
+      "id": "gate-handoff-protocol",
+      "title": "Implement gate handoff protocol in pipeline docs",
+      "status": "pending",
+      "priority": "P1",
+      "complexity": "simple",
+      "phases": ["build", "code-review", "review"],
+      "agent": ["devon"],
+      "user_scenario": "Orchestrator writes specific status to directive.json at gates and halts. CEO can resume without re-running the pipeline.",
+      "scope": "Update 07-plan-approval.md and 11-completion-gate.md with orchestrator halt behavior. Add awaiting_ceo convention. Update directive-json.md and 00-delegation-and-triage.md.",
+      "dod": [
+        { "criterion": "07-plan-approval.md has orchestrator mode section with halt behavior", "met": false },
+        { "criterion": "11-completion-gate.md has equivalent orchestrator halt behavior", "met": false },
+        { "criterion": "directive-json.md includes any new status values for gate protocol", "met": false },
+        { "criterion": "00-delegation-and-triage.md no longer assumes current session runs all steps", "met": false }
+      ]
+    },
+    {
+      "id": "post-gate-resume",
+      "title": "Implement orchestrator resume after CEO gate decisions",
+      "status": "pending",
+      "priority": "P1",
+      "complexity": "simple",
+      "phases": ["build", "code-review", "review"],
+      "agent": ["devon"],
+      "user_scenario": "After CEO approves, a new orchestrator spawns to continue from the next step.",
+      "scope": "Implement continuation: CEO approve → spawn new orchestrator from project-brainstorm. Completion reopen → spawn orchestrator from plan. Support resume mode in orchestrator.",
+      "dod": [
+        { "criterion": "After approve gate, new orchestrator spawns continuing from project-brainstorm", "met": false },
+        { "criterion": "After completion reopen, new orchestrator spawns from plan step", "met": false },
+        { "criterion": "Orchestrator supports resume: reads directive.json, skips completed steps", "met": false },
+        { "criterion": "Pre-flight cleanup doesn't kill orchestrator's own parent processes", "met": false }
+      ]
+    },
+    {
+      "id": "integration-test-walkthrough",
+      "title": "End-to-end walkthrough test of split pipeline",
+      "status": "pending",
+      "priority": "P2",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["devon"],
+      "user_scenario": "A directive runs end-to-end through the split architecture: CEO triages, orchestrator runs, halts at gates, CEO resumes.",
+      "scope": "Create test walkthrough and dry-run for both lightweight and heavyweight directive flows. Verify state transitions, clean exits, and resume behavior.",
+      "dod": [
+        { "criterion": "Walkthrough report documents tested flows for lightweight and heavyweight paths", "met": false },
+        { "criterion": "directive.json state transitions correct at each handoff point", "met": false },
+        { "criterion": "Orchestrator exits cleanly at gates (no orphaned processes)", "met": false },
+        { "criterion": "Resume flow works: CEO gate decision triggers correct continuation", "met": false }
+      ]
+    }
+  ],
+  "created": "2026-03-09T15:00:00Z",
+  "updated": "2026-03-09T15:10:00Z"
+}

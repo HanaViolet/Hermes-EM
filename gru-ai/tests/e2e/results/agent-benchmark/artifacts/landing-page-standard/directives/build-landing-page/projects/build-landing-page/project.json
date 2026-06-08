@@ -1,0 +1,26 @@
+{
+  "id": "build-landing-page",
+  "title": "Build gruai Landing Page",
+  "status": "pending",
+  "agent": ["frontend"],
+  "reviewers": ["qa", "cpo"],
+  "tasks": [
+    {
+      "id": "build-html",
+      "title": "Create single-file landing page with pixel art aesthetic",
+      "status": "pending",
+      "agent": ["frontend"],
+      "dod": [
+        { "criterion": "Single self-contained HTML file with all CSS/JS inline", "met": false },
+        { "criterion": "Hero section with animated pixel art and CTA", "met": false },
+        { "criterion": "Features grid with 6 feature cards", "met": false },
+        { "criterion": "How It Works 3-step flow", "met": false },
+        { "criterion": "Agent Showcase with pixel art characters", "met": false },
+        { "criterion": "Pricing/Plans with 3 tiers", "met": false },
+        { "criterion": "Footer CTA with links", "met": false },
+        { "criterion": "Responsive design (mobile/tablet/desktop)", "met": false },
+        { "criterion": "8-bit color palette and pixel art CSS techniques", "met": false }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "id": "interaction-type-icons",
+  "title": "Context-specific animated interaction icons",
+  "description": "Replace the generic chat bubble with 5 context-specific animated 8x8 pixel icons for agent interactions. Each interaction type (planning, brainstorming, building, reviewing, auditing) gets its own icon with distinct color and animation.",
+  "status": "pending",
+  "priority": "P0",
+  "complexity": "moderate",
+  "agent": ["riley"],
+  "reviewers": ["quinn", "sarah"],
+  "auditor": "sarah",
+  "scope": {
+    "in": "InteractionType union in types.ts, interactionMap type widening in renderer.ts/CanvasOffice.tsx, GamePage.tsx interaction pair tagging, new interactionIcons.ts sprite file, renderInteractionIcons replacing renderChatBubbles",
+    "out": "Status icons (working/idle/error), meeting room routing logic, review pair routing logic, modifier dots or layered signals"
+  },
+  "dod": [
+    { "criterion": "5 distinct interaction icons render above agent nameplates based on pipeline step type", "met": false },
+    { "criterion": "Each icon is distinguishable by shape at 8x8 pixels", "met": false },
+    { "criterion": "Zoom < 2 fallback shows per-type colored dots", "met": false },
+    { "criterion": "npm run type-check passes with zero errors", "met": false }
+  ],
+  "tasks": [
+    {
+      "id": "widen-interaction-type",
+      "title": "Define InteractionType and widen interactionMap through the data pipeline",
+      "status": "pending",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["riley"],
+      "user_scenario": "No visible change yet — typed data plumbing for subsequent visual work.",
+      "scope": "Add InteractionType union to types.ts. Widen IdentityOverlay.interactionMap from Map<number, number> to Map<number, {partnerId: number, type: InteractionType}>. Update agentInteractions prop from Array<[string, string]> to Array<[string, string, InteractionType]>. Update GamePage.tsx to derive InteractionType from currentStepId. Update all consumers in renderer.ts and CanvasOffice.tsx.",
+      "dod": [
+        { "criterion": "InteractionType union type exported from types.ts with exactly 5 members: planning, brainstorming, building, reviewing, auditing", "met": false },
+        { "criterion": "IdentityOverlay.interactionMap typed as Map<number, {partnerId: number, type: InteractionType}> and all consumers in renderer.ts destructure partnerId correctly", "met": false },
+        { "criterion": "CanvasOffice.tsx builds the widened map from the updated agentInteractions prop and facing-direction logic uses .partnerId", "met": false },
+        { "criterion": "GamePage.tsx tags each interaction pair with the correct InteractionType derived from currentStepId", "met": false },
+        { "criterion": "npm run type-check passes with zero errors", "met": false }
+      ]
+    },
+    {
+      "id": "interaction-icon-sprites",
+      "title": "Create 5 interaction icon sprite sets in interactionIcons.ts",
+      "status": "pending",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["riley"],
+      "user_scenario": "No visible change yet — creates the pixel art assets for the renderer.",
+      "scope": "Create src/components/game/sprites/interactionIcons.ts following the expand()+palette pattern from statusIcons.ts. Define 5 sprite sets: clipboard (blue), lightbulb (amber), hammer (gray), magnifying glass (purple), shield (orange). Each 2-4 animation frames at 8x8. Export INTERACTION_SPRITES and INTERACTION_DOT_COLORS.",
+      "dod": [
+        { "criterion": "interactionIcons.ts exists at src/components/game/sprites/ and exports INTERACTION_SPRITES and INTERACTION_DOT_COLORS", "met": false },
+        { "criterion": "INTERACTION_SPRITES has entries for all 5 InteractionType values, each with 2-4 SpriteData frames", "met": false },
+        { "criterion": "All sprites use the expand()+palette pattern consistent with statusIcons.ts (8x8 grid, '.' for transparent)", "met": false },
+        { "criterion": "INTERACTION_DOT_COLORS maps each InteractionType to a distinct hex color matching the sprite palette primary", "met": false },
+        { "criterion": "npm run type-check passes with zero errors", "met": false }
+      ]
+    },
+    {
+      "id": "render-interaction-icons",
+      "title": "Replace renderChatBubbles with type-aware renderInteractionIcons",
+      "status": "pending",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["riley"],
+      "user_scenario": "When agents interact during a directive, the icon above their heads reflects what they are doing — clipboard for planning, lightbulb for brainstorming, hammer for building, magnifying glass for reviewing, shield for auditing.",
+      "scope": "Replace renderChatBubbles in renderer.ts with renderInteractionIcons. Select sprite set by type from interactionMap, animate frames, render in same position. At zoom < 2 use per-type colored dot. Update call site.",
+      "dod": [
+        { "criterion": "renderChatBubbles removed and replaced by renderInteractionIcons with same positioning logic", "met": false },
+        { "criterion": "renderInteractionIcons selects sprite from INTERACTION_SPRITES based on type and animates frames", "met": false },
+        { "criterion": "Zoom < 2 fallback uses per-type dot color from INTERACTION_DOT_COLORS", "met": false },
+        { "criterion": "CanvasOffice.tsx calls renderInteractionIcons (not renderChatBubbles)", "met": false },
+        { "criterion": "npm run type-check passes with zero errors", "met": false }
+      ]
+    }
+  ],
+  "sequencing_rationale": "Task 1 widens the type system. Task 2 creates sprite assets. Task 3 wires sprites into the renderer, depending on both."
+}

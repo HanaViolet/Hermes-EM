@@ -1,0 +1,23 @@
+{
+  "id": "request-clarify-loops",
+  "title": "Directive: Request-Clarify Loops for Engineers",
+  "status": "completed",
+  "source": "ceo",
+  "weight": "tactical",
+  "created": "2026-03-02T00:00:00Z",
+  "updated": "2026-03-02T00:00:00Z",
+  "completed": "2026-03-02T00:00:00Z",
+  "triage": {
+    "action": "update_existing",
+    "project_id": null,
+    "task_ids": [],
+    "rationale": null,
+    "requires_ceo_approval": false
+  },
+  "plan": null,
+  "phases": null,
+  "cast": null,
+  "dod": null,
+  "report_summary": "request-clarify-loops-2026-03-02",
+  "telemetry": null
+}

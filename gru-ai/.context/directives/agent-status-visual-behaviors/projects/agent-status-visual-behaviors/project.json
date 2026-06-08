@@ -1,0 +1,108 @@
+{
+  "id": "agent-status-visual-behaviors",
+  "title": "Add paused and done visual behaviors to game engine",
+  "description": "Extend the game engine AgentStatus type with paused and done states, wire through data layer, and implement distinct visual behaviors for each status.",
+  "priority": "P0",
+  "status": "pending",
+  "scope": {
+    "in": "AgentStatus enum expansion, toAgentStatus mapping, officeState behavioral logic, roomZones routing, status icon sprites, renderer frame rates, panel badge variants, priority map updates",
+    "out": "Server-side aggregator changes (already done), new character animation frames, sound effects"
+  },
+  "dod": [
+    {
+      "criterion": "AgentStatus type includes paused and done across all definition sites",
+      "met": false
+    },
+    {
+      "criterion": "Paused agents sit at desk in idle pose; done agents linger then walk to break room",
+      "met": false
+    },
+    {
+      "criterion": "Type-check passes with zero errors",
+      "met": false
+    }
+  ],
+  "complexity": "moderate",
+  "agent": [
+    "riley"
+  ],
+  "reviewers": [
+    "sarah"
+  ],
+  "auditor": "sarah",
+  "tasks": [
+    {
+      "id": "extend-agent-status-enum-and-mapping",
+      "title": "Add paused/done to AgentStatus enum and wire through data layer",
+      "priority": "P0",
+      "status": "pending",
+      "complexity": "simple",
+      "phases": [
+        "build",
+        "review"
+      ],
+      "agent": [
+        "riley"
+      ],
+      "user_scenario": "When the server reports an agent as paused or done, the game engine receives the correct distinct status instead of collapsing both to idle.",
+      "scope": "Add 'paused' and 'done' to the AgentStatus enum in both pixel-types.ts and types.ts (or consolidate to one source). Update toAgentStatus in GamePage.tsx to map server paused/done states to the new enum values instead of 'idle'. Update the priority map. Update statusBadgeVariant in panelUtils.ts. Update AgentPanel.tsx, TeamPanel.tsx. Add paused/done cases to renderer frame rate switch. Add sprite entries in statusIcons.ts. Fix all TypeScript exhaustiveness errors.",
+      "dod": [
+        {
+          "criterion": "AgentStatus type includes 'paused' and 'done' in all definition sites",
+          "met": false
+        },
+        {
+          "criterion": "toAgentStatus maps server 'paused' to 'paused' and 'done' to 'done'",
+          "met": false
+        },
+        {
+          "criterion": "npm run type-check passes with zero errors — all switches and Records handle 7 values",
+          "met": false
+        },
+        {
+          "criterion": "statusIcons.ts exports sprite frame data for paused and done icons",
+          "met": false
+        },
+        {
+          "criterion": "panelUtils statusBadgeVariant returns distinct color/label for paused and done",
+          "met": false
+        }
+      ]
+    },
+    {
+      "id": "paused-done-behavioral-logic",
+      "title": "Implement paused stay-at-desk and done linger-then-break-room behaviors",
+      "priority": "P0",
+      "status": "pending",
+      "complexity": "simple",
+      "phases": [
+        "build",
+        "review"
+      ],
+      "agent": [
+        "riley"
+      ],
+      "user_scenario": "A paused agent sits at their desk in idle pose without wandering; a done agent lingers briefly then walks to the break room.",
+      "scope": "In officeState.ts applyAgentStatus, handle paused (isActive=false, no route) and done (trigger linger timer). In roomZones.ts chooseDestination, add paused→null and done→break-room. Ensure linger timer countdown transitions done agents correctly.",
+      "dod": [
+        {
+          "criterion": "Paused agent remains at assigned desk in idle pose — chooseDestination returns null for paused",
+          "met": false
+        },
+        {
+          "criterion": "Done agent stays at desk for LINGER_MIN to LINGER_MAX seconds then walks to break room",
+          "met": false
+        },
+        {
+          "criterion": "Transitioning from done back to working/idle causes normal behavior to resume (no stuck state)",
+          "met": false
+        },
+        {
+          "criterion": "npm run type-check passes with zero errors",
+          "met": false
+        }
+      ]
+    }
+  ],
+  "sequencing_rationale": "Task 1 establishes the type system foundation — every file compiles cleanly with 7 values. Task 2 builds on that to implement behavioral logic in officeState and roomZones."
+}

@@ -1,0 +1,76 @@
+{
+  "id": "x-twitter-research",
+  "title": "X/Twitter Platform Research and Strategy",
+  "status": "in_progress",
+  "priority": "P1",
+  "agent": ["taylor"],
+  "reviewers": ["priya"],
+  "description": "Full platform research for X/Twitter covering algorithm mechanics, audience, competitors, and content format recommendations. Research only — no execution.",
+  "source_directive": "gruai-social-marketing",
+  "scope": {
+    "in": "Algorithm mechanics, audience demographics, competitor analysis (5+ AI tools), content format recommendations, effort estimate, go/no-go with trigger conditions.",
+    "out": "No draft posts, no content calendar, no execution."
+  },
+  "dod": [
+    { "criterion": "Research document covers X/Twitter algorithm mechanics with specific data", "met": false },
+    { "criterion": "Competitor analysis maps at least 5 open-source AI tools' X presence", "met": false },
+    { "criterion": "Content format recommendations specify what works for dev tools on X", "met": false },
+    { "criterion": "Go/no-go verdict includes specific trigger conditions for when to start X execution", "met": false }
+  ],
+  "browser_test": false,
+  "tasks": [
+    {
+      "id": "x-platform-mechanics",
+      "title": "X/Twitter Algorithm Mechanics and Audience Research",
+      "status": "pending",
+      "priority": "P1",
+      "complexity": "simple",
+      "phases": ["research", "review"],
+      "agent": ["taylor"],
+      "user_scenario": "CEO reads a clear breakdown of how X's algorithm works for dev tool content and who the target audience is.",
+      "scope": "Research algorithm mechanics (link penalty, engagement signal hierarchy), audience demographics for AI/developer community, content format performance (threads vs single tweets vs image posts vs video). Save to x-research.md.",
+      "dod": [
+        { "criterion": "Algorithm mechanics section documents link penalty percentage with at least 2 cited sources, reply/repost/bookmark weighting, and For You feed ranking", "met": false },
+        { "criterion": "Audience section identifies AI/developer segment on X with specific accounts or communities as evidence", "met": false },
+        { "criterion": "Content format section compares threads vs single tweets vs image posts vs video with performance data specific to developer/tech content", "met": false },
+        { "criterion": "All claims include source attribution (URL, date, or named source) — no unsourced statistics", "met": false }
+      ]
+    },
+    {
+      "id": "x-competitor-analysis",
+      "title": "Open-Source AI Tool Competitor Presence on X/Twitter",
+      "status": "pending",
+      "priority": "P1",
+      "complexity": "simple",
+      "phases": ["research", "review"],
+      "agent": ["taylor"],
+      "user_scenario": "CEO can see how 5+ comparable AI tools use X and what works vs what doesn't.",
+      "scope": "Map 5+ open-source AI tool X accounts (CrewAI, LangChain, AutoGen, Cursor, Continue.dev, Aider, etc.). For each: follower count, posting frequency, engagement patterns, content mix, growth trajectory. Identify fast-grower tactics. Append to x-research.md.",
+      "dod": [
+        { "criterion": "At least 5 open-source AI tool X accounts analyzed with follower count, posting frequency, and engagement rate", "met": false },
+        { "criterion": "Each competitor entry identifies their highest and lowest performing content types with specific examples", "met": false },
+        { "criterion": "Analysis includes at least one fast-grower account with explanation of what tactics worked", "met": false },
+        { "criterion": "Patterns section synthesizes what works across all analyzed accounts", "met": false }
+      ]
+    },
+    {
+      "id": "x-go-no-go-recommendation",
+      "title": "Effort Estimate and Go/No-Go Recommendation",
+      "status": "pending",
+      "priority": "P1",
+      "complexity": "simple",
+      "phases": ["research", "review"],
+      "agent": ["taylor"],
+      "user_scenario": "CEO reads a 60-second executive summary and knows whether to invest in X now, later, or never, with clear trigger conditions.",
+      "scope": "Synthesize findings into: minimally viable X presence, effort estimate (hours/week), timeline to meaningful engagement, go/no-go verdict, trigger conditions. Add executive summary to top of x-research.md.",
+      "dod": [
+        { "criterion": "Effort estimate specifies hours/week for content creation, hours/week for engagement, and minimum commitment duration", "met": false },
+        { "criterion": "Go/no-go verdict is a clear YES, NO, or NOT YET — not 'it depends' — with 2-3 sentences justifying", "met": false },
+        { "criterion": "Trigger conditions section lists 3-5 specific, measurable conditions that would change the verdict", "met": false },
+        { "criterion": "Executive summary at top of x-research.md readable in 60 seconds with verdict, key numbers, and next action", "met": false }
+      ]
+    }
+  ],
+  "created": "2026-03-11T01:05:00Z",
+  "updated": "2026-03-11T01:15:00Z"
+}

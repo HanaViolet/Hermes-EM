@@ -1,0 +1,107 @@
+{
+  "id": "design-first-ui-pipeline",
+  "title": "Add design-first flow for UI tasks in execution pipeline",
+  "status": "completed",
+  "priority": "P0",
+  "agent": [
+    "morgan"
+  ],
+  "reviewers": [
+    "sarah"
+  ],
+  "auditor": "sarah",
+  "description": "Add a visual-design phase to the execution pipeline that spawns Quinn (designer) before the build phase for UI tasks. Includes detection heuristic, builder acceptance gate, CEO escalation, and doc updates.",
+  "source_directive": "design-before-build-pipeline",
+  "depends_on": [],
+  "scope": {
+    "in": "Modify 09-execute-projects.md, phase-definitions.md, and casting-rules.md to add design-first flow for UI tasks.",
+    "out": "New tooling, schema files, or changes to non-pipeline docs."
+  },
+  "browser_test": false,
+  "tasks": [
+    {
+      "id": "add-visual-design-phase",
+      "title": "Add visual-design phase to 09-execute-projects.md",
+      "status": "completed",
+      "agent": [
+        "morgan"
+      ],
+      "phases": [
+        "build",
+        "review"
+      ],
+      "dod": [
+        {
+          "criterion": "New 'visual-design' phase section exists in 09-execute-projects.md between 'design' and 'build' phases",
+          "met": true
+        },
+        {
+          "criterion": "Phase spawns Quinn (UI/UX designer) with task scope + prior artifacts to produce visual-design.md",
+          "met": true
+        },
+        {
+          "criterion": "Detection heuristic defined: triggers when browser_test=true OR category is game/dashboard OR agent includes frontend engineer and task touches UI files",
+          "met": true
+        },
+        {
+          "criterion": "Builder acceptance gate defined: builder reviews design, accepts or objects with reasons",
+          "met": true
+        },
+        {
+          "criterion": "CEO escalation path defined: when builder objects, both design and objections shown to CEO who decides",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "update-builder-prompt",
+      "title": "Update builder prompt to reference visual-design artifact",
+      "status": "completed",
+      "agent": [
+        "morgan"
+      ],
+      "phases": [
+        "build",
+        "review"
+      ],
+      "dod": [
+        {
+          "criterion": "Builder/engineer agent spawn section in 09-execute-projects.md references visual-design.md artifact when present",
+          "met": true
+        },
+        {
+          "criterion": "Builder gets instruction to follow the design spec and report deviations (similar to brainstorm_alignment)",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "update-phase-and-casting-docs",
+      "title": "Update phase-definitions.md and casting-rules.md",
+      "status": "completed",
+      "agent": [
+        "morgan"
+      ],
+      "phases": [
+        "build",
+        "review"
+      ],
+      "dod": [
+        {
+          "criterion": "phase-definitions.md lists 'visual-design' as a composable phase with description",
+          "met": true
+        },
+        {
+          "criterion": "Common phase patterns in phase-definitions.md include visual-design for UI work (e.g. ['visual-design', 'build', 'code-review', 'review'])",
+          "met": true
+        },
+        {
+          "criterion": "casting-rules.md notes Quinn's pre-build design role for UI tasks",
+          "met": true
+        }
+      ]
+    }
+  ],
+  "created": "2026-03-07T11:00:00Z",
+  "updated": "2026-03-07T11:05:00Z"
+}

@@ -1,0 +1,37 @@
+{
+  "goal": "Improve mobile UX for the game view",
+  "challenges": {
+    "risks": [
+      "Touch gesture conflicts: pinch-to-zoom and single-finger pan both need touch events on the canvas. Getting the gesture disambiguation right (tap vs pan vs pinch) without breaking desktop click-to-select is the hardest part.",
+      "iOS Safari quirks: iOS lacks requestFullscreen, has inconsistent touch event behavior, and viewport-fit=cover interacts with safe-area-inset-* in non-obvious ways.",
+      "Layout integration regression: Replacing the floating bottom sheet with an inline panel changes the entire page layout flow. Must not regress desktop layout while fixing mobile."
+    ],
+    "over_engineering_flags": [
+      "CTO flagged 'split view animation' -- simplify to CSS transitions only, no spring physics.",
+      "No gesture library needed -- raw touch events sufficient for 3 gesture types."
+    ],
+    "recommendation": "Proceed as-is. Simplify layout animation to CSS transitions. Skip gesture library -- raw touch events sufficient."
+  },
+  "projects": [
+    {
+      "id": "mobile-game-ux",
+      "title": "Mobile Game UX — Touch Gestures, Layout Integration, and Polish",
+      "priority": "P0",
+      "scope_summary": "Fix all mobile UX issues in the game view. Workstream 1: Add pinch-to-zoom and single-finger pan to CanvasOffice.tsx, fix broken zoom bounds math, remove touch-none CSS. Workstream 2: Replace floating bottom-sheet SidePanel with inline panel integrated into page layout (same height as game, scrollable), using CSS transitions. Workstream 3: Collapse header buttons to icons on mobile, add viewport-fit=cover meta tag, shrink AgentTicker, hide fullscreen on iOS Safari, clean up dead code, consolidate zoom constants.",
+      "complexity": "moderate",
+      "agent": ["riley"],
+      "reviewers": ["sarah"],
+      "auditor": "sarah",
+      "depends_on": [],
+      "touches_files_hint": [
+        "src/components/game/CanvasOffice.tsx",
+        "src/components/game/GamePage.tsx",
+        "src/components/game/SidePanel.tsx",
+        "src/components/game/GameHeader.tsx",
+        "src/components/game/constants.ts",
+        "src/styles/globals.css",
+        "index.html"
+      ]
+    }
+  ]
+}

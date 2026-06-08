@@ -1,0 +1,18 @@
+{
+  "id": "fix-race-condition",
+  "title": "Fix Race Condition in Async Todo Loading",
+  "status": "pending",
+  "agent": ["fullstack"],
+  "reviewers": ["qa"],
+  "tasks": [
+    {
+      "id": "task-1",
+      "title": "Add fetch cancellation to prevent stale todo list renders",
+      "status": "pending",
+      "agent": ["fullstack"],
+      "dod": [
+        { "criterion": "Rapidly switching between todo categories causes stale data to display because previous fetch responses arrive after newer ones. Add request cancellation or sequence checking to prevent stale renders.", "met": false }
+      ]
+    }
+  ]
+}

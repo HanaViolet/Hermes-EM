@@ -1,0 +1,808 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import type { SessionActivity } from '../types.js';
+import { projectLabel, projectDirFromPath, extractInitialPrompt, extractLatestPrompt, cleanPromptText, isSystemContent, resolveAgentFromSetting } from './session-scanner.js';
+import type { LastEntryType } from './session-scanner.js';
+
+/**
+ * Callback type for resolving agent identity from a session file.
+ * Provided by the PlatformAdapter so session-state.ts doesn't need
+ * direct knowledge of identity detection strategies.
+ */
+export type ResolveIdentityFn = (filePath: string, state: SessionFileState) => { name: string; role: string } | undefined;
+
+// --- Constants ---
+
+const TAIL_SIZE = 65536;
+const ACTIVE_WINDOW_MS = 300_000;
+const TASKS_UUID_RE = /\.claude\/tasks\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/i;
+
+// Tools that always require user action regardless of permission mode
+const INPUT_REQUIRING_TOOLS = new Set(['AskUserQuestion', 'ExitPlanMode', 'EnterPlanMode']);
+
+// --- Types ---
+
+type MachineState = 'working' | 'needs_input' | 'done';
+
+type EventType =
+  | 'USER_PROMPT'
+  | 'TOOL_RESULT'
+  | 'ASSISTANT_TEXT'
+  | 'ASSISTANT_TOOL_USE'
+  | 'TURN_END'
+  | 'SKIP';
+
+interface RawContentBlock {
+  type?: string;
+  text?: string;
+  name?: string;
+  input?: Record<string, unknown>;
+  content?: string | Array<{ type?: string; text?: string; content?: string }>;
+}
+
+interface RawMessage {
+  role?: string;
+  model?: string;
+  content?: RawContentBlock[];
+}
+
+interface RawEntry {
+  type?: string;
+  subtype?: string;
+  sessionId?: string;
+  agentId?: string;
+  agentSetting?: string;
+  timestamp?: string;
+  cwd?: string;
+  version?: string;
+  gitBranch?: string;
+  slug?: string;
+  message?: RawMessage;
+}
+
+export interface SessionFileState {
+  // File tracking
+  byteOffset: number;
+  mtimeMs: number;
+  fileSize: number;
+
+  // Machine state
+  machineState: MachineState;
+  toolUseCount: number;
+  toolResultCount: number;
+  pendingInputTool: boolean;
+  lastActivityAt: string;
+  messageCount: number;
+
+  // Metadata (accumulated, newest wins)
+  sessionId?: string;
+  model?: string;
+  cwd?: string;
+  gitBranch?: string;
+  version?: string;
+  slug?: string;
+  tasksId?: string;
+  initialPrompt?: string;
+  latestPrompt?: string;
+  agentName?: string;
+  agentRole?: string;
+
+  // Activity info
+  lastToolName?: string;
+  lastToolDetail?: string;
+}
+
+export interface DiscoveredFile {
+  filePath: string;
+  sessionId: string;
+  project: string;
+  projectDir: string;
+  isSubagent: boolean;
+  parentSessionId?: string;
+  agentId?: string;
+}
+
+// --- In-memory state ---
+
+const fileStates = new Map<string, SessionFileState>();
+
+// --- Public API ---
+
+export function getFileState(filePath: string, stateMap?: Map<string, SessionFileState>): SessionFileState | undefined {
+  return (stateMap ?? fileStates).get(filePath);
+}
+
+export function getAllFileStates(stateMap?: Map<string, SessionFileState>): Map<string, SessionFileState> {
+  return stateMap ?? fileStates;
+}
+
+export function removeFileState(filePath: string, stateMap?: Map<string, SessionFileState>): void {
+  (stateMap ?? fileStates).delete(filePath);
+}
+
+/**
+ * Get or bootstrap state for a file. If not in the map, does a cold-start bootstrap.
+ */
+export function getOrBootstrap(filePath: string, stateMap?: Map<string, SessionFileState>, resolveIdentity?: ResolveIdentityFn): SessionFileState | null {
+  const map = stateMap ?? fileStates;
+  const existing = map.get(filePath);
+  if (existing) return existing;
+  return bootstrapFromTail(filePath, map, resolveIdentity);
+}
+
+/**
+ * Cold start: read last 64KB, feed through state machine, set byteOffset = fileSize.
+ */
+export function bootstrapFromTail(filePath: string, stateMap?: Map<string, SessionFileState>, resolveIdentity?: ResolveIdentityFn): SessionFileState | null {
+  const map = stateMap ?? fileStates;
+  let fd: number | null = null;
+  try {
+    fd = fs.openSync(filePath, 'r');
+    const stat = fs.fstatSync(fd);
+    if (stat.size === 0) {
+      fs.closeSync(fd);
+      return null;
+    }
+
+    const readSize = Math.min(TAIL_SIZE, stat.size);
+    const buffer = Buffer.allocUnsafe(readSize);
+    fs.readSync(fd, buffer, 0, readSize, stat.size - readSize);
+    fs.closeSync(fd);
+    fd = null;
+
+    const content = buffer.toString('utf-8');
+    const lines = content.split('\n');
+    // Discard first line (likely partial from mid-file read) unless we read the whole file
+    const startIdx = stat.size > TAIL_SIZE ? 1 : 0;
+
+    const state: SessionFileState = {
+      byteOffset: stat.size,
+      mtimeMs: stat.mtimeMs,
+      fileSize: stat.size,
+      machineState: 'done',
+      toolUseCount: 0,
+      toolResultCount: 0,
+      pendingInputTool: false,
+      lastActivityAt: new Date(stat.mtimeMs).toISOString(),
+      messageCount: 0,
+    };
+
+    for (let i = startIdx; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (!line) continue;
+      try {
+        const entry = JSON.parse(line) as RawEntry;
+        processEntry(state, entry);
+      } catch {
+        // skip malformed
+      }
+    }
+
+    // Extract prompts (separate I/O reads for head + expanded tail)
+    state.initialPrompt = extractInitialPrompt(filePath);
+    state.latestPrompt = extractLatestPrompt(filePath);
+
+    // Resolve agent identity through the adapter callback (if provided)
+    if (!state.agentName && resolveIdentity) {
+      const identity = resolveIdentity(filePath, state);
+      if (identity) {
+        state.agentName = identity.name;
+        state.agentRole = identity.role;
+      }
+    }
+
+    map.set(filePath, state);
+    return state;
+  } catch {
+    if (fd !== null) {
+      try { fs.closeSync(fd); } catch { /* ignore */ }
+    }
+    return null;
+  }
+}
+
+/**
+ * Main entry: read new bytes from file, feed through state machine, return updated state.
+ * Returns null if no new data.
+ */
+export function processFileUpdate(filePath: string, stateMap?: Map<string, SessionFileState>, resolveIdentity?: ResolveIdentityFn): SessionFileState | null {
+  const map = stateMap ?? fileStates;
+  const state = map.get(filePath);
+
+  // New file — bootstrap
+  if (!state) {
+    return bootstrapFromTail(filePath, map, resolveIdentity);
+  }
+
+  let stat: fs.Stats;
+  try {
+    stat = fs.statSync(filePath);
+  } catch {
+    // File gone
+    map.delete(filePath);
+    return null;
+  }
+
+  // File truncated (e.g., recreated) — re-bootstrap
+  if (stat.size < state.byteOffset) {
+    map.delete(filePath);
+    return bootstrapFromTail(filePath, map, resolveIdentity);
+  }
+
+  // No new data
+  if (stat.size === state.byteOffset) {
+    // Update mtime even if no new bytes (touch)
+    state.mtimeMs = stat.mtimeMs;
+    return null;
+  }
+
+  // Read new bytes
+  const entries = readNewEntries(filePath, state.byteOffset, stat.size);
+  if (!entries) return null;
+
+  // Feed through state machine
+  for (const entry of entries.parsed) {
+    processEntry(state, entry);
+  }
+
+  state.byteOffset = entries.newOffset;
+  state.mtimeMs = stat.mtimeMs;
+  state.fileSize = stat.size;
+
+  // Re-extract latestPrompt on change (might have new user message)
+  state.latestPrompt = extractLatestPrompt(filePath);
+
+  // Retry agent identity detection if still unknown (common for subagents
+  // where the first update fires before the user prompt is written)
+  if (!state.agentName && resolveIdentity) {
+    const identity = resolveIdentity(filePath, state);
+    if (identity) {
+      state.agentName = identity.name;
+      state.agentRole = identity.role;
+    }
+  }
+
+  return state;
+}
+
+/**
+ * Initialize all file states from disk. Called once at startup.
+ * Only fully parses sessions modified within RECENT_THRESHOLD_MS.
+ * Older sessions get a lightweight stub (idle, mtime only) and are
+ * fully parsed on-demand if they receive a file-change event.
+ */
+const RECENT_THRESHOLD_MS = 24 * 60 * 60 * 1000; // 24 hours
+
+export function initializeAllFileStates(claudeHome: string, projectFilter?: string, stateMap?: Map<string, SessionFileState>, resolveIdentity?: ResolveIdentityFn): Map<string, DiscoveredFile> {
+  const map = stateMap ?? fileStates;
+  const discovered = discoverSessionFiles(claudeHome, projectFilter);
+  const now = Date.now();
+  let fullCount = 0;
+  let stubCount = 0;
+
+  for (const [filePath] of discovered) {
+    let mtime: number;
+    try {
+      mtime = fs.statSync(filePath).mtimeMs;
+    } catch {
+      continue;
+    }
+
+    if (now - mtime < RECENT_THRESHOLD_MS) {
+      // Recent file — full parse
+      bootstrapFromTail(filePath, map, resolveIdentity);
+      fullCount++;
+    } else {
+      // Old file — lightweight stub (skip expensive JSONL parsing)
+      const stat = fs.statSync(filePath);
+      const stub: SessionFileState = {
+        byteOffset: stat.size,
+        mtimeMs: stat.mtimeMs,
+        fileSize: stat.size,
+        machineState: 'done',
+        toolUseCount: 0,
+        toolResultCount: 0,
+        pendingInputTool: false,
+        lastActivityAt: new Date(stat.mtimeMs).toISOString(),
+        messageCount: 0,
+      };
+      // Resolve agent identity through the adapter callback (if provided)
+      if (resolveIdentity) {
+        const identity = resolveIdentity(filePath, stub);
+        if (identity) {
+          stub.agentName = identity.name;
+          stub.agentRole = identity.role;
+        }
+      }
+      map.set(filePath, stub);
+      stubCount++;
+    }
+  }
+
+  console.log(`[session-state] Bootstrapped ${fullCount} recent + ${stubCount} stubs (${discovered.size} total)`);
+  return discovered;
+}
+
+/**
+ * Recursively collect agent-*.jsonl files from a subagents/ directory.
+ * Handles nested subagents (sub-sub-agents spawned by subagents).
+ */
+function collectSubagentFiles(
+  dir: string,
+  parentSessionId: string,
+  project: string,
+  projectDir: string,
+  result: Map<string, DiscoveredFile>,
+): void {
+  let entries: fs.Dirent[];
+  try {
+    entries = fs.readdirSync(dir, { withFileTypes: true });
+  } catch {
+    return;
+  }
+
+  for (const entry of entries) {
+    if (entry.isFile() && entry.name.endsWith('.jsonl') && entry.name.startsWith('agent-')) {
+      if (entry.name.startsWith('agent-acompact-')) continue;
+
+      const agentId = entry.name.replace(/^agent-/, '').replace(/\.jsonl$/, '');
+      const filePath = path.join(dir, entry.name);
+      result.set(filePath, {
+        filePath,
+        sessionId: `${parentSessionId}:${agentId}`,
+        project,
+        projectDir,
+        isSubagent: true,
+        parentSessionId,
+        agentId,
+      });
+
+      // Check for nested subagents under {agent-id}/subagents/
+      const nestedSubagentsDir = path.join(dir, '..', agentId, 'subagents');
+      collectSubagentFiles(nestedSubagentsDir, parentSessionId, project, projectDir, result);
+    }
+
+    // Also recurse into any subdirectories that contain subagents/
+    if (entry.isDirectory() && entry.name === 'subagents') {
+      collectSubagentFiles(path.join(dir, entry.name), parentSessionId, project, projectDir, result);
+    }
+  }
+}
+
+/**
+ * Discover .jsonl session files under ~/.claude/projects/.
+ * When projectFilter is provided, only scan that single project directory
+ * instead of iterating all directories.
+ */
+export function discoverSessionFiles(claudeHome: string, projectFilter?: string): Map<string, DiscoveredFile> {
+  const projectsDir = path.join(claudeHome, 'projects');
+  const result = new Map<string, DiscoveredFile>();
+
+  let projectDirs: string[];
+  try {
+    if (projectFilter) {
+      // Scoped: only scan the single matching project directory
+      const filtered = path.join(projectsDir, projectFilter);
+      if (fs.existsSync(filtered) && fs.statSync(filtered).isDirectory()) {
+        projectDirs = [projectFilter];
+      } else {
+        console.warn(`[session-state] Project filter directory not found: ${filtered}`);
+        projectDirs = [];
+      }
+    } else {
+      projectDirs = fs.readdirSync(projectsDir).filter((d) => {
+        try {
+          return fs.statSync(path.join(projectsDir, d)).isDirectory();
+        } catch {
+          return false;
+        }
+      });
+    }
+  } catch {
+    return result;
+  }
+
+  for (const projectDir of projectDirs) {
+    const projectPath = path.join(projectsDir, projectDir);
+    const label = projectLabel(projectDir);
+
+    let entries: fs.Dirent[];
+    try {
+      entries = fs.readdirSync(projectPath, { withFileTypes: true });
+    } catch {
+      continue;
+    }
+
+    // Top-level .jsonl files (parent sessions)
+    for (const entry of entries) {
+      if (!entry.isFile() || !entry.name.endsWith('.jsonl')) continue;
+      const sessionId = entry.name.replace('.jsonl', '');
+      const filePath = path.join(projectPath, entry.name);
+      result.set(filePath, {
+        filePath,
+        sessionId,
+        project: label,
+        projectDir,
+        isSubagent: false,
+      });
+    }
+
+    // Subagent .jsonl files under {uuid}/subagents/ (recursive for nested subagents)
+    for (const entry of entries) {
+      if (!entry.isDirectory()) continue;
+
+      const parentSessionId = entry.name;
+      const subagentsDir = path.join(projectPath, entry.name, 'subagents');
+      collectSubagentFiles(subagentsDir, parentSessionId, label, projectDir, result);
+    }
+  }
+
+  return result;
+}
+
+/**
+ * Map machine state to SessionActivity for backward compatibility.
+ */
+export function toSessionActivity(state: SessionFileState): SessionActivity | null {
+  const sessionId = state.sessionId;
+  if (!sessionId) return null;
+
+  const ageMs = Date.now() - state.mtimeMs;
+  const active = ageMs < ACTIVE_WINDOW_MS;
+
+  const thinking = state.machineState === 'working' &&
+    !state.lastToolName &&
+    state.toolUseCount === state.toolResultCount;
+
+  return {
+    sessionId,
+    tool: state.lastToolName,
+    detail: state.lastToolDetail,
+    thinking,
+    model: state.model,
+    lastSeen: state.lastActivityAt,
+    active,
+  };
+}
+
+/**
+ * Map machine state to LastEntryType for backward compatibility with deriveSessionStatus.
+ */
+export function machineStateToLastEntryType(state: SessionFileState): LastEntryType {
+  switch (state.machineState) {
+    case 'working':
+      return 'assistant-tool'; // always → 'working' status (no more 'thinking')
+    case 'needs_input':
+      return 'assistant-question';
+    case 'done':
+      return 'assistant-text';
+  }
+}
+
+// --- Internal helpers ---
+
+/**
+ * Classify a JSONL entry into an event type.
+ */
+function classifyEntry(entry: RawEntry): EventType {
+  if (!entry.type) return 'SKIP';
+
+  // Skip noise entries
+  if (entry.type === 'progress' || entry.type === 'queue-operation' ||
+      entry.type === 'file-history-snapshot') {
+    return 'SKIP';
+  }
+
+  // System entry with turn_duration → turn end
+  if (entry.type === 'system') {
+    if (entry.subtype === 'turn_duration') return 'TURN_END';
+    return 'SKIP';
+  }
+
+  if (entry.type === 'user') {
+    const content = entry.message?.content;
+    if (Array.isArray(content) && content.some((c) => c.type === 'tool_result')) {
+      return 'TOOL_RESULT';
+    }
+    return 'USER_PROMPT';
+  }
+
+  if (entry.type === 'assistant') {
+    const content = entry.message?.content;
+    if (Array.isArray(content) && content.some((c) => c.type === 'tool_use')) {
+      return 'ASSISTANT_TOOL_USE';
+    }
+    return 'ASSISTANT_TEXT';
+  }
+
+  return 'SKIP';
+}
+
+/**
+ * Process a single entry through the state machine (mutates state in place).
+ */
+function processEntry(state: SessionFileState, entry: RawEntry): void {
+  // Accumulate metadata from every entry
+  if (entry.sessionId && !state.sessionId) state.sessionId = entry.sessionId;
+  if (entry.message?.model) state.model = entry.message.model;
+  if (entry.cwd) state.cwd = entry.cwd;
+  if (entry.gitBranch) state.gitBranch = entry.gitBranch;
+  if (entry.version) state.version = entry.version;
+  if (entry.slug) state.slug = entry.slug;
+  if (entry.timestamp) state.lastActivityAt = entry.timestamp;
+
+  // CLI-spawned agents: extract agent identity from agentSetting field
+  if (entry.type === 'agent-setting' && entry.agentSetting && !state.agentName) {
+    const identity = resolveAgentFromSetting(entry.agentSetting);
+    if (identity) {
+      state.agentName = identity.name;
+      state.agentRole = identity.role;
+    }
+  }
+
+  // Extract tasksId from entries that reference tasks directories
+  const entryStr = JSON.stringify(entry);
+  const tasksMatch = TASKS_UUID_RE.exec(entryStr);
+  if (tasksMatch) state.tasksId = tasksMatch[1];
+
+  const event = classifyEntry(entry);
+  if (event === 'SKIP') return;
+
+  state.messageCount++;
+
+  switch (event) {
+    case 'USER_PROMPT': {
+      // Extract prompt text from user message
+      const promptContent = entry.message?.content;
+      let promptText: string | undefined;
+      if (Array.isArray(promptContent)) {
+        for (const block of promptContent) {
+          if (block.type === 'tool_result') continue;
+          const text = block.text ?? (typeof block.content === 'string' ? block.content : undefined);
+          if (typeof text === 'string' && text.trim() && !isSystemContent(text)) {
+            promptText = text;
+            break;
+          }
+        }
+      }
+      if (promptText) {
+        const cleaned = cleanPromptText(promptText);
+        if (cleaned) {
+          state.latestPrompt = cleaned;
+          if (!state.initialPrompt) state.initialPrompt = cleaned;
+        }
+      }
+
+      // New user turn — reset tool counts
+      state.toolUseCount = 0;
+      state.toolResultCount = 0;
+      state.pendingInputTool = false;
+      state.lastToolName = undefined;
+      state.lastToolDetail = undefined;
+      state.machineState = 'working';
+      break;
+    }
+
+    case 'ASSISTANT_TOOL_USE': {
+      const content = entry.message?.content;
+      if (Array.isArray(content)) {
+        const toolBlocks = content.filter((c) => c.type === 'tool_use');
+        state.toolUseCount += toolBlocks.length;
+
+        // Track the last tool and check for input-requiring tools
+        for (const block of toolBlocks) {
+          if (block.name) {
+            state.lastToolName = block.name;
+            state.lastToolDetail = extractDetail(block.name, block.input);
+            if (INPUT_REQUIRING_TOOLS.has(block.name)) {
+              state.pendingInputTool = true;
+            }
+          }
+        }
+      }
+      // Input-requiring tools (AskUserQuestion, ExitPlanMode) → needs_input immediately
+      state.machineState = state.pendingInputTool ? 'needs_input' : 'working';
+      break;
+    }
+
+    case 'TOOL_RESULT': {
+      const content = entry.message?.content;
+      if (Array.isArray(content)) {
+        state.toolResultCount += content.filter((c) => c.type === 'tool_result').length;
+      }
+
+      // If all tools resolved, clear pending input tool flag
+      if (state.toolUseCount <= state.toolResultCount) {
+        state.pendingInputTool = false;
+      }
+
+      // Always stay working — turn isn't done until TURN_END
+      state.machineState = 'working';
+      break;
+    }
+
+    case 'ASSISTANT_TEXT': {
+      // Input-requiring tool still pending → needs_input
+      if (state.pendingInputTool) {
+        state.machineState = 'needs_input';
+        break;
+      }
+
+      // Check if last text block looks like it's waiting for user input
+      const content = entry.message?.content;
+      if (Array.isArray(content)) {
+        const lastText = [...content].reverse().find((c) => c.type === 'text' && c.text);
+        if (lastText?.text && looksLikeWaitingForInput(lastText.text)) {
+          state.machineState = 'needs_input';
+          break;
+        }
+      }
+
+      // If tools are still running, stay working
+      if (state.toolUseCount > state.toolResultCount) {
+        state.machineState = 'working';
+        break;
+      }
+
+      // All tools resolved and Claude sent text — turn is done
+      state.machineState = 'done';
+      break;
+    }
+
+    case 'TURN_END':
+      // Turn is over — preserve needs_input if already detected (e.g. question in text)
+      if (state.pendingInputTool || state.machineState === 'needs_input') {
+        state.machineState = 'needs_input';
+        break;
+      }
+      state.machineState = 'done';
+      break;
+  }
+}
+
+/**
+ * Read new entries from a file starting at fromOffset.
+ */
+function readNewEntries(
+  filePath: string,
+  fromOffset: number,
+  toSize: number,
+): { parsed: RawEntry[]; newOffset: number } | null {
+  let fd: number | null = null;
+  try {
+    fd = fs.openSync(filePath, 'r');
+    const readSize = toSize - fromOffset;
+    const buffer = Buffer.allocUnsafe(readSize);
+    fs.readSync(fd, buffer, 0, readSize, fromOffset);
+    fs.closeSync(fd);
+    fd = null;
+
+    const content = buffer.toString('utf-8');
+    const lines = content.split('\n');
+
+    // If content doesn't end with \n, last line is partial — exclude it
+    let newOffset: number;
+    let linesToParse: string[];
+    if (!content.endsWith('\n')) {
+      linesToParse = lines.slice(0, -1);
+      // Calculate offset: exclude the partial last line
+      const partialLineLength = Buffer.byteLength(lines[lines.length - 1], 'utf-8');
+      newOffset = toSize - partialLineLength;
+    } else {
+      linesToParse = lines;
+      newOffset = toSize;
+    }
+
+    const parsed: RawEntry[] = [];
+    for (const line of linesToParse) {
+      const trimmed = line.trim();
+      if (!trimmed) continue;
+      try {
+        parsed.push(JSON.parse(trimmed) as RawEntry);
+      } catch {
+        // skip malformed
+      }
+    }
+
+    return { parsed, newOffset };
+  } catch {
+    if (fd !== null) {
+      try { fs.closeSync(fd); } catch { /* ignore */ }
+    }
+    return null;
+  }
+}
+
+/**
+ * Detect if assistant text looks like it's waiting for user input.
+ *
+ * Uses multiple heuristics beyond just trailing '?':
+ * 1. Last sentence/paragraph ends with '?' (anywhere, not just very end)
+ * 2. Text contains explicit choice/question patterns
+ * 3. Text ends with a prompt-like pattern (colon after a question phrase)
+ */
+function looksLikeWaitingForInput(text: string): boolean {
+  const trimmed = text.trimEnd();
+  if (!trimmed) return false;
+
+  // 1. Check if there's a question mark near the end of the text.
+  //    Look at the last 500 chars to find the final sentence boundary.
+  const tail = trimmed.slice(-500);
+
+  // Find the last question mark, ignoring those inside code blocks or URLs
+  const lastQ = tail.lastIndexOf('?');
+  if (lastQ !== -1) {
+    // Make sure there's no substantial content AFTER the '?' that would
+    // indicate the question was rhetorical or mid-paragraph.
+    const afterQ = tail.slice(lastQ + 1).trim();
+    // Allow trailing markdown, whitespace, closing parens/brackets, or short annotations
+    if (afterQ.length <= 2 || /^[)\]}>*_`~\s]+$/.test(afterQ)) {
+      return true;
+    }
+    // If the text after '?' is just a sources/attribution line, still a question
+    if (/^(\n\s*)+sources?:/i.test(afterQ)) {
+      return true;
+    }
+  }
+
+  // 2. Explicit choice/input patterns at end of text
+  const lastLines = tail.split('\n').filter(l => l.trim()).slice(-3).join(' ').toLowerCase();
+  const waitingPatterns = [
+    /\bwould you (?:like|prefer|want)\b/,
+    /\bshould (?:i|we)\b/,
+    /\bdo you (?:want|prefer|need)\b/,
+    /\bplease (?:choose|select|pick|confirm|specify|provide|let me know)\b/,
+    /\blet me know\b/,
+    /\bwhat (?:do you|would you|should)\b/,
+    /\bwhich (?:one|option|approach)\b/,
+    /\bchoose (?:one|an option|from)\b/,
+    /\bselect (?:one|an option|from)\b/,
+    /\bhow (?:would you like|should|do you want)\b/,
+    /\bready to (?:proceed|continue|start)\b/,
+    /\bshall (?:i|we)\b/,
+    /\bcan you (?:confirm|clarify|provide|specify)\b/,
+  ];
+
+  for (const pattern of waitingPatterns) {
+    if (pattern.test(lastLines)) return true;
+  }
+
+  return false;
+}
+
+/**
+ * Extract human-readable detail from a tool invocation.
+ */
+function extractDetail(toolName: string, input: Record<string, unknown> | undefined): string {
+  if (!input) return toolName;
+
+  switch (toolName) {
+    case 'Read':
+    case 'Edit':
+    case 'Write': {
+      const filePath = input['file_path'];
+      if (typeof filePath === 'string') return path.basename(filePath);
+      return toolName;
+    }
+    case 'Bash': {
+      const command = input['command'];
+      if (typeof command === 'string') return command.slice(0, 40);
+      return 'bash';
+    }
+    case 'Grep': {
+      const pattern = input['pattern'];
+      if (typeof pattern === 'string') return pattern;
+      return 'grep';
+    }
+    case 'Task':
+      return 'Spawned agent';
+    case 'AskUserQuestion':
+      return 'Waiting for answer';
+    case 'ExitPlanMode':
+      return 'Plan ready for review';
+    case 'EnterPlanMode':
+      return 'Requesting plan mode';
+    default:
+      return toolName;
+  }
+}

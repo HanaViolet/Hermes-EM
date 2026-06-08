@@ -1,0 +1,193 @@
+{
+  "id": "game-ui-tmx-update",
+  "title": "Apply New TMX Game UI Design",
+  "status": "completed",
+  "created": "2026-03-09",
+  "completed": "2026-03-09",
+  "weight": "medium",
+  "revision": 3,
+  "produced_features": [
+    "game-tmx-rendering"
+  ],
+  "report": "game-ui-tmx-update-r3-2026-03-09",
+  "backlog_sources": [],
+  "started_at": "2026-03-09T00:15:00Z",
+  "updated_at": "2026-03-09T06:00:00Z",
+  "current_step": "completion",
+  "iterations": [
+    {
+      "revision": 2,
+      "opened_at": "2026-03-09T02:00:00Z",
+      "feedback": "New TMX version with 12 tilesets, object layers for seats (23) and zones (5). Remove server-room and lobby zones. Build TMX parser."
+    },
+    {
+      "revision": 3,
+      "opened_at": "2026-03-09T05:00:00Z",
+      "feedback": "Characters not selectable (hit box not scaled), crossing furniture, names/icons hidden. TMX updated again. Replace bitmap font. Replace status icons with LimeZu UI sprites."
+    }
+  ],
+  "pipeline": {
+    "triage": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "weight": "medium",
+        "summary": "Medium — 4 bug fixes + 2 new features within game rendering system."
+      }
+    },
+    "read": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Reopened directive rev 3."
+      }
+    },
+    "context": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Context files read, game rendering files analyzed."
+      }
+    },
+    "challenge": {
+      "status": "skipped",
+      "output": {
+        "summary": "Skipped for medium weight"
+      }
+    },
+    "brainstorm": {
+      "status": "skipped",
+      "output": {
+        "summary": "Skipped for medium weight"
+      }
+    },
+    "plan": {
+      "status": "completed",
+      "agent": [
+        "morgan"
+      ],
+      "output": {
+        "summary": "Single project: game-rendering-fixes-v3. Riley builds, Sarah reviews."
+      },
+      "artifacts": [
+        ".context/directives/game-ui-tmx-update/plan.json"
+      ]
+    },
+    "audit": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "CEO pre-investigation identified all bugs and analyzed LimeZu sprites."
+      }
+    },
+    "approve": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "decision": "auto-approved",
+        "summary": "Medium weight auto-approved."
+      }
+    },
+    "project-brainstorm": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ],
+      "output": {
+        "summary": "4 tasks with DOD created."
+      },
+      "artifacts": [
+        ".context/directives/game-ui-tmx-update/projects/game-rendering-fixes-v3/project.json"
+      ]
+    },
+    "setup": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "mode": "branch",
+        "branch": "directive/game-ui-tmx-update"
+      }
+    },
+    "execute": {
+      "status": "completed",
+      "agent": [
+        "riley"
+      ],
+      "output": {
+        "summary": "All 4 tasks completed: TMX sync, hit detection fix, label+font replacement, LimeZu icon integration."
+      }
+    },
+    "review-gate": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ],
+      "output": {
+        "summary": "CTO found 1 HIGH (double-scaled hit detection — constants were 3x AND code multiplied by SPRITE_SCALE), 2 LOW (dead bitmapFont.ts, stale comment). All 3 fixed. TSC clean."
+      }
+    },
+    "wrapup": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Digest written. Directive marked awaiting_completion."
+      },
+      "artifacts": [
+        ".context/reports/game-ui-tmx-update-r3-2026-03-09.md"
+      ]
+    },
+    "completion": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "CEO approved completion. All work verified done."
+      }
+    }
+  },
+  "projects": [
+    {
+      "id": "gruai-map-migration",
+      "status": "completed"
+    },
+    {
+      "id": "tmx-office-migration",
+      "status": "completed"
+    },
+    {
+      "id": "game-rendering-fixes-v3",
+      "status": "completed"
+    }
+  ],
+  "planning": {
+    "coo_plan": {
+      "goal": "Fix 4 bugs from TMX v2 migration and deliver 2 new features"
+    },
+    "ceo_approval": {
+      "status": "auto-approved",
+      "modifications": []
+    },
+    "worktree_path": null
+  },
+  "wrapup": {
+    "okrs_persisted": false,
+    "follow_ups_processed": true,
+    "digest_path": ".context/reports/game-ui-tmx-update-r3-2026-03-09.md",
+    "lessons_updated": false
+  }
+}

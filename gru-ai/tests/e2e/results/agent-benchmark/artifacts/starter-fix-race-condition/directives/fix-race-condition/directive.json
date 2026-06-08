@@ -1,0 +1,15 @@
+{
+  "id": "fix-race-condition",
+  "title": "Fix Race Condition in Async Todo Loading",
+  "weight": "lightweight",
+  "status": "pending",
+  "pipeline": {
+    "current_step": "triage",
+    "started_at": "2026-03-08T03:20:45Z"
+  },
+  "scope": {
+    "description": "Rapidly switching between todo categories causes stale data to display because previous fetch responses arrive after newer ones. Add request cancellation or sequence checking to prevent stale renders.",
+    "in": [],
+    "out": []
+  }
+}

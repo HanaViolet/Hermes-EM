@@ -1,0 +1,179 @@
+{
+  "id": "pipeline-stepper-v3",
+  "title": "Pipeline Stepper v3 — Full Dashboard UX Overhaul",
+  "status": "completed",
+  "created": "2026-03-06",
+  "completed": "2026-03-06",
+  "weight": "heavyweight",
+  "produced_features": [
+    "step-icons",
+    "skipped-step-visuals",
+    "action-banners",
+    "artifact-links",
+    "directive-history",
+    "compact-game-summary"
+  ],
+  "produced_projects": [
+    "ui/pipeline-server-data",
+    "ui/pipeline-stepper-ux"
+  ],
+  "report": null,
+  "backlog_sources": [],
+  "started_at": "2026-03-06T12:00:00Z",
+  "updated_at": "2026-03-06T11:11:10.279Z",
+  "current_step": "completion",
+  "pipeline": {
+    "triage": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "weight": "heavyweight"
+      }
+    },
+    "read": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ]
+    },
+    "context": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ]
+    },
+    "challenge": {
+      "status": "skipped",
+      "agent": [
+        "ceo"
+      ]
+    },
+    "brainstorm": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "artifacts": [
+        ".context/directives/pipeline-stepper-v3/brainstorm.md"
+      ]
+    },
+    "plan": {
+      "status": "completed",
+      "agent": [
+        "morgan"
+      ],
+      "artifacts": [
+        ".context/goals/ui/projects/pipeline-stepper-v3/morgan-plan.json"
+      ]
+    },
+    "audit": {
+      "status": "completed",
+      "agent": [
+        "sarah",
+        "marcus"
+      ],
+      "artifacts": [
+        ".context/directives/pipeline-stepper-v3/audit.md"
+      ]
+    },
+    "approve": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "decision": "approved",
+        "modifications": [
+          "Add design prototype phase"
+        ]
+      }
+    },
+    "project-brainstorm": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ],
+      "output": {
+        "summary": "2 tasks for server project, 5 tasks for frontend project"
+      }
+    },
+    "setup": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "mode": "branch",
+        "branch": "game"
+      }
+    },
+    "execute": {
+      "status": "completed",
+      "agent": [
+        "jordan",
+        "riley"
+      ],
+      "output": {
+        "progress": "Both projects complete. 7/7 tasks completed."
+      }
+    },
+    "review-gate": {
+      "status": "completed",
+      "agent": [
+        "marcus"
+      ],
+      "output": {
+        "summary": "All DOD criteria verified. All tasks reviewed and passed."
+      }
+    },
+    "wrapup": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Pipeline stepper v3 delivered: icons, skipped visuals, action banners, artifact links, history, cross-page integration"
+      }
+    },
+    "completion": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ]
+    }
+  },
+  "projects": [
+    {
+      "id": "pipeline-server-data",
+      "status": "completed"
+    },
+    {
+      "id": "pipeline-stepper-ux",
+      "status": "completed"
+    }
+  ],
+  "planning": {
+    "morgan_plan": {
+      "goal": "ui",
+      "projects": [
+        "pipeline-server-data",
+        "pipeline-stepper-ux"
+      ]
+    },
+    "ceo_approval": {
+      "status": "approved",
+      "modifications": [
+        "Add design prototype phase"
+      ]
+    },
+    "worktree_path": null
+  },
+  "wrapup": {
+    "okrs_persisted": true,
+    "follow_ups_processed": true,
+    "digest_path": null,
+    "lessons_updated": true
+  }
+}

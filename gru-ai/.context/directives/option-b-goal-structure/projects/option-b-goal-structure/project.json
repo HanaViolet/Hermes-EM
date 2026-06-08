@@ -1,0 +1,20 @@
+{
+  "id": "option-b-goal-structure",
+  "title": "Option B: JSON as single source of truth for goals, features, backlogs",
+  "goal_id": "data-model",
+  "status": "completed",
+  "priority": "p0",
+  "agent": [
+    "self"
+  ],
+  "reviewers": [
+    "sarah"
+  ],
+  "description": "Established JSON (goal.json) as the single source of truth for goal state, replacing markdown-derived state. Features, backlogs, and OKR references all tracked in structured JSON.",
+  "source_directive": null,
+  "tags": [],
+  "tasks": [],
+  "created": "2026-03-02T00:00:00Z",
+  "updated": "2026-03-02T00:00:00Z",
+  "completed": "2026-03-02T00:00:00Z"
+}

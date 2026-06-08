@@ -1,0 +1,89 @@
+{
+  "id": "remove-goals-layer",
+  "title": "Remove Goals Layer — Categories Replace Goals",
+  "status": "completed",
+  "weight": "heavyweight",
+  "created_at": "2026-03-06",
+  "started_at": "2026-03-06T23:00:00Z",
+  "updated_at": "2026-03-07T00:00:00Z",
+  "current_step": "completion",
+  "triage": {
+    "weight": "heavyweight",
+    "rationale": "Removes a core data model layer, touches CLAUDE.md, vision.md, pipeline docs, dashboard watchers, server types."
+  },
+  "pipeline": {
+    "triage": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ]
+    },
+    "read": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ]
+    },
+    "context": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ]
+    },
+    "brainstorm": {
+      "status": "completed",
+      "agent": [
+        "sarah",
+        "morgan"
+      ]
+    },
+    "plan": {
+      "status": "completed",
+      "agent": [
+        "morgan"
+      ]
+    },
+    "audit": {
+      "status": "skipped"
+    },
+    "approve": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ]
+    },
+    "project-brainstorm": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ]
+    },
+    "setup": {
+      "status": "completed"
+    },
+    "execute": {
+      "status": "completed",
+      "agent": [
+        "devon"
+      ]
+    },
+    "review-gate": {
+      "status": "completed"
+    },
+    "wrapup": {
+      "status": "completed"
+    },
+    "completion": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ]
+    }
+  },
+  "projects": [
+    {
+      "id": "remove-goals-replace-with-categories",
+      "status": "completed"
+    }
+  ]
+}

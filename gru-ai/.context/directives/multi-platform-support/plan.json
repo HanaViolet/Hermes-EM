@@ -1,0 +1,44 @@
+{
+  "goal": "Multi-platform support research and PlatformAdapter interface extraction for gruAI",
+  "challenges": {
+    "risks": [
+      "1. Premature abstraction: Extracting an interface from only one implementation (Claude Code) risks designing the wrong abstractions. Mitigation: the research deliverable catalogs 3-4 platform data formats to validate the interface shape before coding.",
+      "2. session-state.ts is the hardest file (830+ lines, tight coupling to JSONL format). Refactoring it behind an interface while maintaining zero behavior change requires careful test coverage.",
+      "3. Scope creep into foreman.ts and pipeline spawn logic. The adapter should cover session parsing + file watching + config discovery only. Foreman and pipeline adapters are Wave 2."
+    ],
+    "over_engineering_flags": [
+      "Creating adapter interfaces for ALL coupling points when only session parsing and file watching are the core data-flow concern.",
+      "Building a plugin registry or dynamic loader when a simple static import per platform is sufficient for v1.",
+      "Over-specifying the research report with competitive matrices and market sizing when the real deliverable is: what data does each platform emit, and what interface shape covers them?"
+    ],
+    "recommendation": "Simplify. Scope the PlatformAdapter to session parsing + file watching + config discovery only. Foreman spawn adapter and pipeline adapter are Wave 2 concerns. Research should focus on data format comparison, not market analysis (brainstorm already did market sizing)."
+  },
+  "projects": [
+    {
+      "id": "platform-research-and-adapter",
+      "title": "Multi-Platform Research Report + PlatformAdapter Interface Extraction",
+      "priority": "P0",
+      "scope_summary": "Three sequential deliverables in one project. First: research report documenting session data formats, file layouts, and spawn patterns for Claude Code, Codex CLI, Aider, Cursor, Windsurf, and Cline — focused on what each platform emits and where it stores state. Second: architectural plan defining the PlatformAdapter interface shape (session parsing, file watching, config discovery) validated against the research findings. Third: extract the Claude Code-specific code in session-state.ts, session-scanner.ts, session-watcher.ts, claude-watcher.ts, and config.ts behind the PlatformAdapter interface — pure refactor, zero behavior change, all existing tests must pass identically.",
+      "complexity": "complex",
+      "agent": [
+        "devon"
+      ],
+      "reviewers": [
+        "sarah"
+      ],
+      "auditor": "sarah",
+      "depends_on": [],
+      "touches_files_hint": [
+        "server/parsers/session-state.ts",
+        "server/parsers/session-scanner.ts",
+        "server/watchers/session-watcher.ts",
+        "server/watchers/claude-watcher.ts",
+        "server/config.ts",
+        "server/types.ts",
+        "server/state/aggregator.ts",
+        ".context/directives/multi-platform-support/research-report.md",
+        ".context/directives/multi-platform-support/architecture-plan.md"
+      ]
+    }
+  ]
+}

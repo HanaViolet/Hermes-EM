@@ -1,0 +1,42 @@
+{
+  "id": "improve-session-subagent-ui",
+  "title": "Improve session and sub-agent status UI in dashboard",
+  "goal_id": "ui",
+  "status": "proposed",
+  "priority": "p1",
+  "agent": [
+    "self"
+  ],
+  "reviewers": [
+    "marcus"
+  ],
+  "description": "Improve how sessions and sub-agent status are displayed in the conductor dashboard. Better status propagation, clearer hierarchy, and real-time updates.",
+  "source_directive": "improve-session-subagent-ui",
+  "scope": {
+    "in": [
+      "Session status display components",
+      "Sub-agent hierarchy visualization",
+      "Real-time status updates via WebSocket"
+    ],
+    "out": [
+      "Server-side session discovery (already works)",
+      "Terminal integration"
+    ]
+  },
+  "dod": [
+    {
+      "criterion": "Session cards show real-time status (running, idle, needs-you) with sub-agent tree",
+      "met": false
+    },
+    {
+      "criterion": "Sub-agent status propagates to parent session within 2 seconds",
+      "met": false
+    }
+  ],
+  "browser_test": true,
+  "tags": [],
+  "tasks": [],
+  "created": "2026-03-02T00:00:00Z",
+  "updated": "2026-03-02T00:00:00Z",
+  "completed": null
+}

@@ -1,0 +1,18 @@
+{
+  "id": "fix-login-validation",
+  "title": "Fix Login Form Validation Bug",
+  "status": "pending",
+  "agent": ["fullstack"],
+  "reviewers": ["qa"],
+  "tasks": [
+    {
+      "id": "task-1",
+      "title": "Add email format and password length validation to login form",
+      "status": "pending",
+      "agent": ["fullstack"],
+      "dod": [
+        { "criterion": "The login form accepts empty email and password fields without showing validation errors. Add client-side validation that checks for non-empty email (valid format) and password (min 8 chars) before form submission.", "met": false }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "goal": "Remove Category Concept",
+  "challenges": {
+    "risks": [
+      "1. Grep for 'category' will hit false positives — furnitureCatalog.ts, game pixel-types, ActionPanel, LogPanel, StatusPanel all have unrelated 'category' fields for game furniture/items. Builder must be careful to only remove directive/project category references, not game-domain ones.",
+      "2. MCP backlog tool uses category as a required parameter in addBacklogItem and optional filter in listBacklog. Removing it changes the tool's API contract — any existing MCP clients or prompts referencing the category parameter will break silently.",
+      "3. Server compilation — category is woven through work-item-types.ts (4 Zod schemas), aggregator, watchers, and types.ts. Missing one reference will cause TypeScript compile errors that block the server."
+    ],
+    "over_engineering_flags": [
+      "This is already scoped tightly — pure removal, no replacement concept. No over-engineering risk. The directive is appropriately minimal."
+    ],
+    "recommendation": "Proceed as-is. This is a clean removal with well-defined scope. Single project is sufficient since all changes are deletions and the work is straightforward."
+  },
+  "projects": [
+    {
+      "id": "remove-category-field",
+      "title": "Remove category field from framework",
+      "priority": "P0",
+      "scope_summary": "Strip the category field from all directive.json files, server types/watchers/aggregator, MCP tools (status grouping, backlog filtering/adding), frontend store types, pipeline docs/schemas/templates, validate-project-json.sh hook, and CLAUDE.md. All changes are field removals and reference deletions. The MCP backlog add tool drops category as a required param; backlog list drops category filter. Server must compile cleanly after removal. Game furniture category fields are explicitly untouched.",
+      "complexity": "moderate",
+      "agent": ["devon"],
+      "reviewers": ["sarah"],
+      "auditor": "sarah",
+      "depends_on": [],
+      "touches_files_hint": [
+        "server/types.ts",
+        "server/state/work-item-types.ts",
+        "server/state/aggregator.ts",
+        "server/watchers/directive-watcher.ts",
+        "server/watchers/state-watcher.ts",
+        "server/index.ts",
+        "mcp-server/tools/status.ts",
+        "mcp-server/tools/backlog.ts",
+        "mcp-server/index.ts",
+        "src/stores/types.ts",
+        ".claude/hooks/validate-project-json.sh",
+        "CLAUDE.md"
+      ]
+    }
+  ]
+}

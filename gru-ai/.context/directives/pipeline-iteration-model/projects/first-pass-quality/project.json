@@ -1,0 +1,347 @@
+{
+  "id": "first-pass-quality",
+  "title": "Layer 1: Intent propagation, user-centric DOD, review fix cycles, and pipeline reorder",
+  "status": "completed",
+  "priority": "P0",
+  "agent": [
+    "taylor"
+  ],
+  "reviewers": [
+    "sarah"
+  ],
+  "description": "Update pipeline docs to implement first-pass quality improvements: pipeline reorder, directive-level DOD, clarification step, user-centric acceptance scenarios, builder context enrichment, review fix cycles, and phase definitions.",
+  "source_directive": "pipeline-iteration-model",
+  "scope": {
+    "in": [
+      "Reorder pipeline steps (merge challenge into brainstorm, move audit before brainstorm, add clarification step)",
+      "Add directive-level dod to directive-json schema",
+      "Add clarification step with intent extraction and CEO verification",
+      "Rewrite scope-and-dod.md with user-centric acceptance scenarios",
+      "Update project-brainstorm with CEO brief + intent inputs",
+      "Update execute-projects: builder prompt includes CEO brief, 3 code-review fix cycles, 2 standard review fix cycles",
+      "Update phase-definitions with review-fix loop",
+      "Create failure-patterns.md template",
+      "Remove single-project bias from planner prompt",
+      "Audit step outputs weight_recommendation"
+    ],
+    "out": [
+      "Completion gate changes (project 3)",
+      "Orchestrator split (project 4)"
+    ]
+  },
+  "dod": [
+    {
+      "criterion": "Pipeline step order in SKILL.md is: triage, checkpoint, read, context, audit, brainstorm, clarification, plan, approve, project-brainstorm, setup, execute, review-gate, wrapup, completion",
+      "met": true
+    },
+    {
+      "criterion": "directive-json.md contains directive-level dod schema with success_looks_like, failure_looks_like, quality_bar, examples",
+      "met": true
+    },
+    {
+      "criterion": "Clarification step doc exists and is wired into SKILL.md routing table",
+      "met": true
+    },
+    {
+      "criterion": "scope-and-dod.md DOD examples are user-centric acceptance scenarios, not technical checkboxes",
+      "met": true
+    },
+    {
+      "criterion": "Builder prompt in 09-execute-projects.md includes CEO brief + verified intent as required inputs",
+      "met": true
+    },
+    {
+      "criterion": "Code-review fix cycles increased to 3 with convergence detection; standard review fix cycles = 2",
+      "met": true
+    },
+    {
+      "criterion": "planner-prompt.md no longer contains single-project-is-default bias",
+      "met": true
+    }
+  ],
+  "browser_test": false,
+  "tasks": [
+    {
+      "id": "reorder-pipeline-merge-challenge",
+      "title": "Reorder pipeline steps: move audit before brainstorm, merge challenge into brainstorm",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": [
+        "build",
+        "code-review",
+        "review"
+      ],
+      "agent": [
+        "taylor"
+      ],
+      "user_scenario": "When a directive runs, audit fires before brainstorm so brainstorm is grounded in codebase reality, and challenge is handled inside brainstorm rather than as a separate step.",
+      "scope": "Update SKILL.md routing table to new order. Remove challenge row. Update step numbers and current_step enum in directive-json.md. Merge challenge into brainstorm-prompt.md. Delete 04-challenge.md references. Update audit and planning docs for new input dependencies.",
+      "dod": [
+        {
+          "criterion": "SKILL.md routing table lists 14 steps in new order with no 'challenge' row and has 'clarification' step",
+          "met": true
+        },
+        {
+          "criterion": "directive-json.md current_step enum matches new step IDs (no 'challenge', has 'clarification')",
+          "met": true
+        },
+        {
+          "criterion": "06-technical-audit.md depends on 'context' step (not 'plan')",
+          "met": true
+        },
+        {
+          "criterion": "05-planning.md references both audit findings AND brainstorm synthesis as inputs",
+          "met": true
+        },
+        {
+          "criterion": "brainstorm-prompt.md Phase 1 includes challenge instruction block for heavyweight/strategic",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "add-directive-level-dod",
+      "title": "Add directive-level DOD schema with success/failure/quality fields",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": [
+        "build",
+        "review"
+      ],
+      "agent": [
+        "taylor"
+      ],
+      "user_scenario": "When a directive is created, it includes structured DOD fields that define what good looks like and these propagate to project and task DOD downstream.",
+      "scope": "Add top-level 'dod' object to directive-json.md with success_looks_like, failure_looks_like, quality_bar, examples. Update directive.json example. Update read step doc to extract DOD from CEO brief.",
+      "dod": [
+        {
+          "criterion": "directive-json.md schema includes 'dod' object with success_looks_like (string[]), failure_looks_like (string[]), quality_bar (string), examples (array)",
+          "met": true
+        },
+        {
+          "criterion": "directive-json.md example JSON block includes populated dod section",
+          "met": true
+        },
+        {
+          "criterion": "Read step doc instructs orchestrator to extract/derive DOD from CEO brief into directive.json.dod",
+          "met": true
+        },
+        {
+          "criterion": "No existing schema fields are broken \u2014 dod object is additive",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "create-clarification-step",
+      "title": "Create clarification step doc and wire into pipeline",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": [
+        "build",
+        "code-review",
+        "review"
+      ],
+      "agent": [
+        "taylor"
+      ],
+      "user_scenario": "After brainstorm, the pipeline extracts intent from CEO brief + audit + brainstorm and presents it to CEO for piece-by-piece verification before planning begins.",
+      "scope": "Create new clarification step doc. Intent extraction from directive.md + audit + brainstorm into structured intent block. CEO verification gate for heavyweight/strategic, auto-approve for lightweight/medium. Store in directive.json. Wire into SKILL.md.",
+      "dod": [
+        {
+          "criterion": "Clarification step doc exists in docs/pipeline/ with intent extraction, CEO verification, and storage instructions",
+          "met": true
+        },
+        {
+          "criterion": "SKILL.md routing table row for 'clarification' points to new doc with correct step number",
+          "met": true
+        },
+        {
+          "criterion": "Doc specifies inputs (directive.md, audit output, brainstorm output) and output (verified_intent in pipeline.clarification.output)",
+          "met": true
+        },
+        {
+          "criterion": "Heavyweight/strategic: CEO verification gate. Lightweight/medium: auto-approve with logged intent",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "rewrite-scope-and-dod",
+      "title": "Rewrite scope-and-dod.md with user-centric acceptance scenarios",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": [
+        "build",
+        "review"
+      ],
+      "agent": [
+        "taylor"
+      ],
+      "user_scenario": "When the CTO decomposes projects, DOD examples guide them toward acceptance scenarios describing user-observable outcomes instead of technical checkboxes.",
+      "scope": "Rewrite scope-and-dod.md: shift DOD from technical checkboxes to user-centric acceptance scenarios. Add given/when/then examples. Replace technical 'good DOD' examples. Add derivation chain: directive DOD \u2192 project DOD \u2192 task DOD.",
+      "dod": [
+        {
+          "criterion": "scope-and-dod.md contains at least 2 full workflow acceptance scenario examples in given/when/then format",
+          "met": true
+        },
+        {
+          "criterion": "Good DOD examples are user-centric scenarios \u2014 no example says 'type-check passes' or 'Zod schema exists'",
+          "met": true
+        },
+        {
+          "criterion": "Derivation chain section shows directive.dod.success_looks_like \u2192 project DOD \u2192 task definition_of_done",
+          "met": true
+        },
+        {
+          "criterion": "UI/Visual DOD rules preserved and integrated with scenario approach",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "update-project-brainstorm-inputs",
+      "title": "Update project-brainstorm to include CEO brief + intent and derive acceptance scenarios",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": [
+        "build",
+        "review"
+      ],
+      "agent": [
+        "taylor"
+      ],
+      "user_scenario": "When the CTO decomposes a project, they receive CEO's original brief and verified intent, ensuring task DOD traces back to what the CEO actually wanted.",
+      "scope": "Update 07b-project-brainstorm.md: add CEO brief and verified intent to Inputs. Add instruction to derive task DOD from directive-level DOD. Update output schema example with scenario-style DOD.",
+      "dod": [
+        {
+          "criterion": "07b-project-brainstorm.md Inputs section lists CEO brief (directive.md) and verified intent alongside existing inputs",
+          "met": true
+        },
+        {
+          "criterion": "Brainstorm prompt includes instruction to derive task DOD from directive.json.dod.success_looks_like",
+          "met": true
+        },
+        {
+          "criterion": "Output JSON example shows task with scenario-style definition_of_done items",
+          "met": true
+        },
+        {
+          "criterion": "Prompt states task DOD across all tasks should collectively cover directive's success_looks_like",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "update-execute-builder-and-reviews",
+      "title": "Update execute-projects: CEO brief in builder prompt, enhanced fix cycles",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": [
+        "build",
+        "code-review",
+        "review"
+      ],
+      "agent": [
+        "taylor"
+      ],
+      "user_scenario": "Builders see CEO's original brief and intent verbatim. Code-review gets 3 fix cycles with convergence detection. Standard review gets 2 fix cycles.",
+      "scope": "Update 09-execute-projects.md: add CEO brief + intent to builder spawn context. Change code-review max from 1 to 3 with convergence detection. Add standard review fix cycles (max 2). Update phase-definitions.md with review-fix loop.",
+      "dod": [
+        {
+          "criterion": "Builder Context section lists CEO brief and verified intent as required spawn inputs with verbatim instruction",
+          "met": true
+        },
+        {
+          "criterion": "Code-Review section specifies max 3 fix cycles with convergence detection (same bugs recurring = escalate)",
+          "met": true
+        },
+        {
+          "criterion": "New Standard Review Fix Cycles section: fail \u2192 re-spawn builder \u2192 re-review \u2192 max 2 cycles",
+          "met": true
+        },
+        {
+          "criterion": "phase-definitions.md documents review-fix loop under both code-review and review phases",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "remove-single-project-bias-and-weight-upgrade",
+      "title": "Remove single-project bias, add audit weight_recommendation",
+      "status": "completed",
+      "priority": "P1",
+      "complexity": "simple",
+      "phases": [
+        "build",
+        "review"
+      ],
+      "agent": [
+        "taylor"
+      ],
+      "user_scenario": "COO no longer defaults to one project. Audit can upgrade directive weight when it reveals higher complexity.",
+      "scope": "Update planner-prompt.md: remove SINGLE-PROJECT IS THE DEFAULT. Update 06-technical-audit.md: add weight_recommendation. Update pipeline logic to check and upgrade weight after audit.",
+      "dod": [
+        {
+          "criterion": "planner-prompt.md no longer contains 'SINGLE-PROJECT IS THE DEFAULT' or equivalent bias",
+          "met": true
+        },
+        {
+          "criterion": "06-technical-audit.md architect output includes weight_recommendation field",
+          "met": true
+        },
+        {
+          "criterion": "Pipeline logic upgrades directive.json.weight if weight_recommendation suggests higher",
+          "met": true
+        },
+        {
+          "criterion": "audit-output.md schema includes weight_recommendation field",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "create-failure-patterns-and-final-cleanup",
+      "title": "Create failure-patterns.md and cross-file consistency pass",
+      "status": "completed",
+      "priority": "P1",
+      "complexity": "simple",
+      "phases": [
+        "build",
+        "code-review",
+        "review"
+      ],
+      "agent": [
+        "taylor"
+      ],
+      "user_scenario": "A failure-patterns.md exists with recurring patterns, and all cross-references between modified pipeline docs are consistent.",
+      "scope": "Create .context/lessons/failure-patterns.md with 3 pre-populated patterns. Consistency pass: verify step IDs, input/output references, no orphan references to deleted files.",
+      "dod": [
+        {
+          "criterion": "failure-patterns.md exists with 3+ pre-populated patterns each having pattern/symptom/root-cause/mitigation",
+          "met": true
+        },
+        {
+          "criterion": "No file references 04-challenge.md, challenger-output.md, or challenger-prompt.md",
+          "met": true
+        },
+        {
+          "criterion": "Step IDs in SKILL.md, directive-json.md, and pipeline doc headers are all consistent",
+          "met": true
+        },
+        {
+          "criterion": "Every pipeline doc input reference points to correct step in new order",
+          "met": true
+        }
+      ]
+    }
+  ],
+  "created": "2026-03-09T15:00:00Z",
+  "updated": "2026-03-09T16:00:00Z"
+}

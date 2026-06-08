@@ -1,0 +1,64 @@
+{
+  "goal": "Abstract spawn/execution layer so gruAI dispatches work to any AI coding platform",
+  "challenges": {
+    "risks": [
+      "SpawnAdapter may be too Claude-Code-shaped — design from Codex's constraints upward, not Claude's patterns downward",
+      "Pipeline doc updates are high-surface-area changes to production-critical orchestration — a bug breaks all directive execution",
+      "Agent personality compiler gap between Claude's rich frontmatter and Codex's simpler model"
+    ],
+    "over_engineering_flags": [
+      "Auto-detect platforms at gruai init — manual config entry is sufficient for Wave 2",
+      "Personality compiler could spiral into a templating system — keep it to frontmatter field mapping"
+    ],
+    "recommendation": "Proceed as-is"
+  },
+  "projects": [
+    {
+      "id": "spawn-adapter-and-wrapper",
+      "title": "SpawnAdapter interface + Claude Code impl + spawn-agent.ts wrapper + personality compiler",
+      "priority": "P0",
+      "scope_summary": "Define SpawnAdapter as separate interface. Build ClaudeCodeSpawnAdapter. Create scripts/spawn-agent.ts as universal spawn entry point replacing all direct `claude -p --agent` calls in foreman.ts and pipeline docs. Build agent personality compiler. Update 09-execute-projects.md (~4 callsites), foreman.ts, and pre-flight cleanup.",
+      "complexity": "complex",
+      "agent": [
+        "devon"
+      ],
+      "reviewers": [
+        "sarah"
+      ],
+      "auditor": "sarah",
+      "depends_on": [],
+      "touches_files_hint": [
+        "server/platform/types.ts",
+        "server/platform/spawn-adapter.ts",
+        "server/platform/claude-code-spawn.ts",
+        "scripts/spawn-agent.ts",
+        "scripts/personality-compiler.ts",
+        "scripts/foreman.ts",
+        ".claude/skills/directive/docs/pipeline/09-execute-projects.md",
+        ".claude/skills/directive/docs/pipeline/08-worktree-and-state.md"
+      ]
+    },
+    {
+      "id": "codex-cli-proof",
+      "title": "Codex CLI SpawnAdapter implementation + integration proof",
+      "priority": "P1",
+      "scope_summary": "Implement CodexCLISpawnAdapter. Map Codex CLI spawn model to adapter contract. Test personality compiler for Codex. Write proof script spawning a task via spawn-agent.ts targeting Codex CLI. Document capability gaps.",
+      "complexity": "moderate",
+      "agent": [
+        "jordan"
+      ],
+      "reviewers": [
+        "sarah"
+      ],
+      "auditor": "sarah",
+      "depends_on": [
+        "spawn-adapter-and-wrapper"
+      ],
+      "touches_files_hint": [
+        "server/platform/codex-cli-spawn.ts",
+        "scripts/personality-compiler.ts",
+        "scripts/spawn-agent.ts"
+      ]
+    }
+  ]
+}

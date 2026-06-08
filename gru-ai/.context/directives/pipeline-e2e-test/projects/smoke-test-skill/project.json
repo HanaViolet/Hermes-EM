@@ -1,0 +1,85 @@
+{
+  "id": "smoke-test-skill",
+  "title": "Build /smoke-test skill with real pipeline execution",
+  "status": "completed",
+  "priority": "P0",
+  "agent": ["devon"],
+  "reviewers": ["sarah"],
+  "description": "Create a /smoke-test skill that runs a real directive through the pipeline end-to-end, validates each step, and reports pass/fail.",
+  "source_directive": "pipeline-e2e-test",
+  "scope": {
+    "in": [
+      "SKILL.md for /smoke-test with YAML frontmatter and step-by-step instructions",
+      "Bash runner script that creates test directive, spawns /directive session, polls directive.json, validates artifacts, reports results, cleans up",
+      "test_mode support in 11-completion-gate.md for auto-approve during tests",
+      "Migrate pipeline-smoke-test and pipeline-smoke-test-heavyweight scenarios from lessons/scenarios.md to smoke-test skill directory"
+    ],
+    "out": [
+      "Custom test framework or assertion library",
+      "Heavyweight test path with pre-canned CEO responses (future work)",
+      "Trigger testing (whether /directive is auto-invoked)",
+      "Rewriting or expanding migrated scenarios"
+    ]
+  },
+  "dod": [
+    { "criterion": "Running /smoke-test produces a step-by-step report with pass/fail per pipeline step and evidence", "met": false },
+    { "criterion": "Test creates a real directive, runs it through the pipeline, and the builder actually modifies a file", "met": false },
+    { "criterion": "Completion gate auto-approves when test_mode: true is set in directive.json", "met": false },
+    { "criterion": "Test branch and directive artifacts are cleaned up after the test (pass or fail)", "met": false },
+    { "criterion": "Pipeline-mechanical scenarios moved from lessons/scenarios.md to smoke-test skill directory", "met": false }
+  ],
+  "browser_test": false,
+  "tasks": [
+    {
+      "id": "create-smoke-test-skill",
+      "title": "Create SKILL.md and bash runner for /smoke-test",
+      "status": "completed",
+      "agent": ["devon"],
+      "complexity": "simple",
+      "depends_on": [],
+      "phases": ["build", "code-review", "review"],
+      "description": "Create .claude/skills/smoke-test/SKILL.md with YAML frontmatter (name: smoke-test, description) and instructions that invoke the bash runner. Create .claude/skills/smoke-test/run-smoke-test.sh that: creates a test directive (medium weight, trivial task like 'add a comment to a file'), spawns a real /directive session via spawn-agent.ts, polls directive.json every 10s for step progression, runs validate-gate.sh per completed step, enforces 5-minute overall timeout, prints a pass/fail table per pipeline step with evidence, cleans up test branch and directive artifacts via trap on EXIT.",
+      "dod": [
+        { "criterion": "SKILL.md exists at .claude/skills/smoke-test/SKILL.md with valid YAML frontmatter and instructions", "met": true },
+        { "criterion": "run-smoke-test.sh creates a test directive directory with directive.json and directive.md", "met": true },
+        { "criterion": "run-smoke-test.sh spawns a real /directive session and polls directive.json for step progression", "met": true },
+        { "criterion": "run-smoke-test.sh validates each completed step via validate-gate.sh", "met": true },
+        { "criterion": "run-smoke-test.sh prints a pass/fail table per pipeline step", "met": true },
+        { "criterion": "run-smoke-test.sh cleans up test branch and directive artifacts via trap on EXIT", "met": true },
+        { "criterion": "run-smoke-test.sh enforces a 5-minute overall timeout", "met": true }
+      ]
+    },
+    {
+      "id": "add-test-mode-completion-gate",
+      "title": "Add test_mode auto-approve to completion gate",
+      "status": "completed",
+      "agent": ["devon"],
+      "complexity": "simple",
+      "depends_on": ["create-smoke-test-skill"],
+      "phases": ["build", "code-review", "review"],
+      "description": "Add test_mode: true check to 11-completion-gate.md so the completion STOP gate auto-approves during smoke tests instead of waiting for CEO interaction. Add test_mode field to directive-json.md schema. Document test_mode in 00-delegation-and-triage.md.",
+      "dod": [
+        { "criterion": "11-completion-gate.md checks for test_mode: true in directive.json and auto-approves if set", "met": true },
+        { "criterion": "directive-json.md schema documents the test_mode field", "met": true },
+        { "criterion": "00-delegation-and-triage.md mentions test_mode for smoke testing context", "met": true }
+      ]
+    },
+    {
+      "id": "migrate-scenarios-and-integration-test",
+      "title": "Migrate scenarios and dry-run integration test",
+      "status": "completed",
+      "agent": ["devon"],
+      "complexity": "simple",
+      "depends_on": ["add-test-mode-completion-gate"],
+      "phases": ["build", "code-review", "review"],
+      "description": "Move pipeline-smoke-test and pipeline-smoke-test-heavyweight scenario definitions from .context/lessons/scenarios.md to .claude/skills/smoke-test/scenarios.md. Do not rewrite or expand them — just move. Then dry-run the bash runner to verify it starts, creates a test directive, and reports (it may not complete the full pipeline in dry-run but should exercise the setup and polling logic).",
+      "dod": [
+        { "criterion": "pipeline-smoke-test and pipeline-smoke-test-heavyweight scenarios exist in .claude/skills/smoke-test/scenarios.md", "met": true },
+        { "criterion": "The two scenarios are removed from .context/lessons/scenarios.md", "met": true },
+        { "criterion": "Dry-run of run-smoke-test.sh starts successfully, creates test directive artifacts, and begins polling", "met": true }
+      ]
+    }
+  ],
+  "created": "2026-03-10T14:10:00Z",
+  "updated": "2026-03-10T14:50:00Z"
+}

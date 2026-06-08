@@ -1,0 +1,152 @@
+{
+  "id": "codex-cli-proof",
+  "title": "Codex CLI SpawnAdapter implementation + integration proof",
+  "status": "completed",
+  "priority": "P1",
+  "agent": [
+    "jordan"
+  ],
+  "reviewers": [
+    "sarah"
+  ],
+  "description": "Implement CodexCLISpawnAdapter, test personality compiler for Codex, write proof script, document capability gaps.",
+  "source_directive": "multi-platform-wave2-spawn",
+  "scope": {
+    "in": "CodexCLISpawnAdapter, personality compiler Codex output, proof script, capability gap documentation",
+    "out": "Other platform adapters, pipeline changes"
+  },
+  "dod": [
+    {
+      "criterion": "CodexCLISpawnAdapter implements SpawnAdapter and maps to codex -q spawn",
+      "met": true
+    },
+    {
+      "criterion": "Personality compiler Codex output tested — writes correct codex.md content",
+      "met": true
+    },
+    {
+      "criterion": "Proof script runs successfully without Codex installed and outputs valid JSON report",
+      "met": true
+    },
+    {
+      "criterion": "docs/codex-cli-gaps.md documents feature gaps with impact assessment",
+      "met": true
+    }
+  ],
+  "browser_test": false,
+  "tasks": [
+    {
+      "id": "codex-spawn-adapter",
+      "title": "Implement CodexCLISpawnAdapter",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": [
+        "jordan"
+      ],
+      "phases": [
+        "build",
+        "review"
+      ],
+      "scope": "Create server/platform/codex-cli-spawn.ts implementing SpawnAdapter for Codex CLI.",
+      "dod": [
+        {
+          "criterion": "server/platform/codex-cli-spawn.ts exports CodexCLISpawnAdapter implementing SpawnAdapter interface",
+          "met": true
+        },
+        {
+          "criterion": "spawnAgent writes a codex.md file to opts.cwd before spawning the codex process",
+          "met": true
+        },
+        {
+          "criterion": "spawnAgent maps SpawnConfig to spawn('codex', ['-q', prompt]) — detached unrefs child, tracked returns promise",
+          "met": true
+        },
+        {
+          "criterion": "server/platform/index.ts re-exports CodexCLISpawnAdapter",
+          "met": true
+        },
+        {
+          "criterion": "npm run type-check passes with no new errors",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "codex-personality-test",
+      "title": "Test personality compiler Codex output path",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": [
+        "jordan"
+      ],
+      "phases": [
+        "build",
+        "review"
+      ],
+      "scope": "Test coverage for personality compiler Codex output and CodexCLISpawnAdapter integration.",
+      "dod": [
+        {
+          "criterion": "server/platform/__tests__/codex-cli-spawn.test.ts exists with test cases",
+          "met": true
+        },
+        {
+          "criterion": "Test verifies compilePersonality(agentId, 'codex') returns string containing agent personality prose",
+          "met": true
+        },
+        {
+          "criterion": "Test verifies CodexCLISpawnAdapter writes codex.md to configured cwd before spawn attempt",
+          "met": true
+        },
+        {
+          "criterion": "Test verifies ENOENT error (codex not installed) is caught gracefully",
+          "met": true
+        },
+        {
+          "criterion": "All tests pass without Codex CLI installed",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "codex-proof-script",
+      "title": "Write proof script and capability gap documentation",
+      "status": "completed",
+      "priority": "P1",
+      "complexity": "simple",
+      "agent": [
+        "jordan"
+      ],
+      "phases": [
+        "build",
+        "review"
+      ],
+      "scope": "Create scripts/codex-proof.ts and docs/codex-cli-gaps.md.",
+      "dod": [
+        {
+          "criterion": "scripts/codex-proof.ts runs via tsx without error whether or not Codex CLI is installed",
+          "met": true
+        },
+        {
+          "criterion": "Proof script outputs valid JSON with fields: platform, agentId, personalityCompiled, spawnAttempted, spawnSucceeded, error?, capabilities, timestamp",
+          "met": true
+        },
+        {
+          "criterion": "When Codex not installed, spawnSucceeded is false and error contains ENOENT — script exits 0",
+          "met": true
+        },
+        {
+          "criterion": "docs/codex-cli-gaps.md contains table with Feature | Claude Code | Codex CLI | Gap Impact covering at minimum 6 features",
+          "met": true
+        },
+        {
+          "criterion": "Gap doc notes codex.md collision risk for parallel spawns and worktree isolation mitigation",
+          "met": true
+        }
+      ]
+    }
+  ],
+  "created": "2026-03-07T14:00:00Z",
+  "updated": "2026-03-07T16:00:00Z"
+}

@@ -1,0 +1,154 @@
+{
+  "id": "agent-streaming-ui",
+  "title": "Agent streaming UI: session panel, header ticker, sprite status",
+  "status": "completed",
+  "priority": "P0",
+  "agent": [
+    "riley"
+  ],
+  "reviewers": [
+    "quinn",
+    "marcus"
+  ],
+  "description": "Three connected frontend changes all driven by the existing sessionActivities WebSocket data. (1) Enhance AgentPanel to show a streaming log of tool calls. (2) Add rolling status ticker to GameHeader. (3) Fix sprite status text in renderer.ts.",
+  "source_directive": "agent-streaming-ui",
+  "scope": {
+    "in": "AgentPanel streaming log, GameHeader ticker, renderer.ts sprite status text, supporting data flow changes",
+    "out": "Server/backend changes, new WebSocket message types, LogPanel refactoring"
+  },
+  "browser_test": true,
+  "dod": [
+    {
+      "criterion": "AgentPanel shows a streaming CLI-style log of recent tool calls per session with auto-scroll",
+      "met": true
+    },
+    {
+      "criterion": "GameHeader displays a rolling ticker cycling through active agents showing their current action",
+      "met": true
+    },
+    {
+      "criterion": "Sprite status text uses agent brand colors at readable alpha with dark shadow for contrast",
+      "met": true
+    }
+  ],
+  "tasks": [
+    {
+      "id": "agent-panel-streaming-log",
+      "title": "AgentPanel streaming tool-call log with ring buffer",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "moderate",
+      "phases": [
+        "build",
+        "code-review",
+        "review"
+      ],
+      "agent": [
+        "riley"
+      ],
+      "user_scenario": "When viewing an agent's panel, the user sees a scrolling CLI-style log of recent tool calls with file paths, not just the latest single line.",
+      "scope": "Add a ring buffer (cap ~50 entries) to AgentPanel.tsx that accumulates sessionActivities snapshots over time. Replace the single ActivityLine display with a scrollable list styled like CLI output (monospace, dark background, auto-scroll to bottom). Each entry shows the tool name and primary file path.",
+      "dod": [
+        {
+          "criterion": "AgentPanel shows up to 50 recent tool-call entries per agent session, not just the latest one",
+          "met": true
+        },
+        {
+          "criterion": "New entries append at the bottom and the container auto-scrolls to show the latest entry",
+          "met": true
+        },
+        {
+          "criterion": "Each entry displays the tool name and file path in monospace font",
+          "met": true
+        },
+        {
+          "criterion": "Ring buffer drops oldest entries when exceeding 50, with no memory leak",
+          "met": true
+        },
+        {
+          "criterion": "Panel remains performant with 50 entries visible — no visible scroll jank",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "header-status-ticker",
+      "title": "GameHeader rolling agent status ticker",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "moderate",
+      "phases": [
+        "build",
+        "code-review",
+        "review"
+      ],
+      "agent": [
+        "riley"
+      ],
+      "user_scenario": "The header center area cycles through active agents showing their name and current action.",
+      "scope": "Add a rolling ticker component to GameHeader.tsx center area. Thread agentSessionInfos data from GamePage. The ticker cycles through active agents on a 3-4 second interval, showing agent name in brand color and a short status summary. Fall back to date/time when no agents active.",
+      "dod": [
+        {
+          "criterion": "GameHeader receives agentSessionInfos from GamePage and renders a ticker in the center area",
+          "met": true
+        },
+        {
+          "criterion": "Ticker cycles through active agents every 3-4 seconds showing agent name and current tool/action",
+          "met": true
+        },
+        {
+          "criterion": "Agent name is rendered in their brand color",
+          "met": true
+        },
+        {
+          "criterion": "When no agents have active sessions, the ticker is hidden and only date/time displays",
+          "met": true
+        },
+        {
+          "criterion": "Text is truncated to fit within available center space without layout overflow",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "sprite-status-brand-color",
+      "title": "Sprite status text: brand-colored, better content",
+      "status": "completed",
+      "priority": "P1",
+      "complexity": "simple",
+      "phases": [
+        "build",
+        "review"
+      ],
+      "agent": [
+        "riley"
+      ],
+      "user_scenario": "Agent sprites on the canvas show their current action in the agent's brand color instead of dim barely-visible white text.",
+      "scope": "In renderer.ts around lines 752-768, replace hardcoded '#FFFFFF' at 0.35 alpha with the agent's brand color from identity.colorMap at higher opacity. Show the agent's current tool/action. Add dark shadow for readability.",
+      "dod": [
+        {
+          "criterion": "Sprite status text uses the agent's brand color from identity.colorMap instead of hardcoded white",
+          "met": true
+        },
+        {
+          "criterion": "Text alpha is 0.8 or higher (clearly readable, not the previous 0.35)",
+          "met": true
+        },
+        {
+          "criterion": "Status text shows the agent's current tool/action from streaming data when available",
+          "met": true
+        },
+        {
+          "criterion": "Text has a dark shadow or outline for readability against light tile backgrounds",
+          "met": true
+        },
+        {
+          "criterion": "bitmapFont.ts is not modified — only the color/alpha values passed to existing render calls change",
+          "met": true
+        }
+      ]
+    }
+  ],
+  "created": "2026-03-07T12:00:00Z",
+  "updated": "2026-03-07T13:00:00Z"
+}

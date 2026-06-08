@@ -1,0 +1,172 @@
+{
+  "id": "pipeline-auto-continue",
+  "title": "Pipeline Auto-Continue Fix",
+  "status": "completed",
+  "created": "2026-03-09",
+  "completed": "2026-03-09",
+  "weight": "lightweight",
+  "produced_features": [
+    "pipeline-step-loop",
+    "stalled-directive-detection"
+  ],
+  "report": null,
+  "backlog_sources": [],
+  "started_at": "2026-03-09T10:00:00Z",
+  "updated_at": "2026-03-09T10:20:00Z",
+  "current_step": "completion",
+  "pipeline": {
+    "triage": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "weight": "lightweight",
+        "summary": "Clear fix — add step-loop to SKILL.md and stalled-directive detection to watcher."
+      }
+    },
+    "read": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Ad-hoc CEO directive — requirements specified inline."
+      }
+    },
+    "context": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Read SKILL.md, 09-execute-projects.md, directive-watcher.ts, orchestration lessons."
+      }
+    },
+    "challenge": {
+      "status": "skipped"
+    },
+    "brainstorm": {
+      "status": "skipped"
+    },
+    "plan": {
+      "status": "completed",
+      "agent": [
+        "morgan"
+      ],
+      "output": {
+        "summary": "Single project: pipeline-auto-continue. Devon builds, Sarah reviews."
+      },
+      "artifacts": [
+        ".context/directives/pipeline-auto-continue/plan.json"
+      ]
+    },
+    "audit": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ],
+      "output": {
+        "summary": "SKILL.md has no step-loop. Watcher has no stalledAt. 09-execute-projects.md only updates directive.json per-task."
+      }
+    },
+    "approve": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "decision": "auto-approved",
+        "summary": "Lightweight — auto-approved."
+      }
+    },
+    "project-brainstorm": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ],
+      "output": {
+        "summary": "3 simple tasks decomposed with DOD."
+      },
+      "artifacts": [
+        ".context/directives/pipeline-auto-continue/projects/pipeline-auto-continue/project.json"
+      ]
+    },
+    "setup": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Using current branch.",
+        "mode": "branch"
+      }
+    },
+    "execute": {
+      "status": "completed",
+      "agent": [
+        "devon"
+      ],
+      "output": {
+        "summary": "All 3 tasks completed in parallel: step-loop-instruction, stalled-directive-detection, project-json-persistence-instruction. tsc --noEmit passes."
+      }
+    },
+    "review-gate": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ],
+      "output": {
+        "summary": "All 3 builders verified tsc passes. Changes are minimal and focused."
+      }
+    },
+    "wrapup": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Pipeline auto-continue fix shipped. 3 changes: step-loop in SKILL.md, stalledAt detection in watcher, project.json persistence instruction."
+      }
+    },
+    "completion": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "CEO approved completion."
+      }
+    }
+  },
+  "projects": [
+    {
+      "id": "pipeline-auto-continue",
+      "status": "completed"
+    }
+  ],
+  "planning": {
+    "coo_plan": {
+      "goal": "Fix pipeline auto-continue so directives don't die at step boundaries"
+    },
+    "ceo_approval": {
+      "status": "auto-approved",
+      "modifications": []
+    },
+    "worktree_path": null
+  },
+  "wrapup": {
+    "okrs_persisted": false,
+    "follow_ups_processed": true,
+    "digest_path": null,
+    "lessons_updated": false
+  },
+  "gates": {
+    "clarification": {
+      "passed_at": "2026-03-09T13:38:51Z",
+      "validated_artifacts": [
+        "directive.json:pipeline.brainstorm.status"
+      ]
+    }
+  }
+}

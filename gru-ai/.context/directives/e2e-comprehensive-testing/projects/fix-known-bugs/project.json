@@ -1,0 +1,65 @@
+{
+  "id": "fix-known-bugs",
+  "title": "Fix Known Bugs Before Testing",
+  "status": "completed",
+  "description": "Fix 4 known bugs discovered during initial E2E testing: PORT env var ignored, config template missing fields, agent count display off-by-one, validate-init missing content checks.",
+  "scope": {
+    "in": ["server/config.ts", "cli/templates/gruai.config.json.template", "cli/commands/scaffold.ts", "cli/commands/init.ts", "cli/commands/validate-init.ts"],
+    "out": ["No registry changes", "No dashboard changes"]
+  },
+  "dod": [
+    { "criterion": "All 4 bugs fixed and npm run type-check passes", "met": true }
+  ],
+  "agent": ["jordan"],
+  "reviewers": ["sarah"],
+  "tasks": [
+    {
+      "id": "fix-port-env-var",
+      "title": "Fix server ignoring PORT env var",
+      "status": "completed",
+      "agent": ["jordan"],
+      "scope": "server/config.ts loadConfig() reads port only from config.json. Add process.env.PORT check with precedence: env > config > default 4444.",
+      "dod": [
+        { "criterion": "loadConfig() reads process.env.PORT and uses it when set, falling back to config.json then 4444", "met": true },
+        { "criterion": "parseInt with NaN guard for non-numeric PORT values", "met": true },
+        { "criterion": "npm run type-check passes", "met": true }
+      ]
+    },
+    {
+      "id": "fix-config-template-fields",
+      "title": "Add preset and platform to gruai.config.json template",
+      "status": "completed",
+      "agent": ["jordan"],
+      "scope": "Add preset and platform fields to gruai.config.json.template and update scaffoldGruaiConfig() to substitute them.",
+      "dod": [
+        { "criterion": "gruai.config.json.template includes preset and platform with template placeholders", "met": true },
+        { "criterion": "scaffoldGruaiConfig() substitutes config.preset and config.platform", "met": true },
+        { "criterion": "npm run type-check passes", "met": true }
+      ]
+    },
+    {
+      "id": "fix-agent-count-display",
+      "title": "Fix scaffold console output showing agent count without CEO",
+      "status": "completed",
+      "agent": ["jordan"],
+      "scope": "scaffold.ts and init.ts log agent count without CEO. Update to show N+1 or 'N agents + CEO' for consistency with registry.",
+      "dod": [
+        { "criterion": "Console output shows total agent count including CEO or explicitly states 'N agents + CEO'", "met": true },
+        { "criterion": "CEO entry NOT removed from registry", "met": true },
+        { "criterion": "npm run type-check passes", "met": true }
+      ]
+    },
+    {
+      "id": "update-validate-init-config-check",
+      "title": "Add config content validation to validate-init.ts",
+      "status": "completed",
+      "agent": ["jordan"],
+      "scope": "validate-init.ts only checks config file exists. Add assertions for preset, platform, and name fields.",
+      "dod": [
+        { "criterion": "validate-init.ts asserts preset field matches input preset name", "met": true },
+        { "criterion": "validate-init.ts asserts platform field matches input platform", "met": true },
+        { "criterion": "npm run type-check passes", "met": true }
+      ]
+    }
+  ]
+}

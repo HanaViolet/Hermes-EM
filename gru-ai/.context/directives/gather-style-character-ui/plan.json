@@ -1,0 +1,34 @@
+{
+  "goal": "Gather-Style Character UI",
+  "challenges": {
+    "risks": [
+      "1. Canvas roundedRect rendering. The current identity plates use fillRect (sharp corners). Switching to rounded-pill backgrounds requires ctx.roundRect() or manual arc paths. roundRect() is available in all modern browsers but the builder needs to confirm the target browser baseline. Minor risk — easy fallback to arc-based helper.",
+      "2. Status dot + name co-location grouping. The directive mentions Gather's grouped name display ('Daud, Aaron, Philip'). Implementing collision-aware name grouping is non-trivial — it requires clustering characters by screen proximity, merging their labels, and handling dynamic group membership as characters move. This is the highest-complexity item.",
+      "3. Regression in overlay stacking. The renderer has 6+ overlay passes (identity plates, status icons, bubbles, interaction icons, CEO crown). Changing the plate geometry (height, padding, rounded corners) can cascade into misaligned status icons, task info cards, and bubble positioning. All vertical offsets are manually tuned constants."
+    ],
+    "over_engineering_flags": [
+      "The 'grouped name display for co-located characters' feature is a significant complexity spike for marginal visual gain. Our agents rarely cluster tightly enough for this to matter, and it requires proximity detection + dynamic label merging + split-on-move logic. Consider: simple overlap-fade (which already exists) may be sufficient.",
+      "Role/icon badges 'if applicable' is vague. We should scope this to a simple colored status dot (working=green, idle=gray, error=red) rather than building a badge system."
+    ],
+    "recommendation": "Simplify slightly: implement the core Gather-style visual upgrade (rounded-pill name tags, web font, colored status dots replacing sprite icons) as a single project. Include the grouped-name feature but keep it simple (comma-join names when plates overlap >70%, no fancy clustering algorithm). Skip building a 'badge system' — status dots are the badge. This keeps it to one project touching one primary file (renderer.ts) plus constants."
+  },
+  "projects": [
+    {
+      "id": "gather-ui-overlay",
+      "title": "Gather-Style Name Labels, Status Dots, and Co-location Grouping",
+      "priority": "P0",
+      "scope_summary": "Replace the current identity plate rendering with Gather.town-style rounded-pill dark backgrounds, clean sans-serif font, and colored status dots. Refactor renderIdentityPlates() to draw roundedRect pills with increased padding and corner radius. Replace renderStatusIcons() sprite-based icons with simple colored circles (green=working, gray=idle, red=error, yellow=waiting) drawn inline with the name pill. Implement lightweight name grouping: when characters' screen-space plates overlap >70%, merge into a single pill showing comma-separated names. Update constants for new pill geometry. Preserve CEO crown, speech bubbles, interaction icons, and task info card — only the name plate + status icon layers change.",
+      "complexity": "moderate",
+      "agent": ["riley"],
+      "reviewers": ["quinn", "sarah"],
+      "auditor": "sarah",
+      "depends_on": [],
+      "touches_files_hint": [
+        "src/components/game/engine/renderer.ts",
+        "src/components/game/constants.ts",
+        "src/components/game/types.ts",
+        "src/components/game/CanvasOffice.tsx"
+      ]
+    }
+  ]
+}

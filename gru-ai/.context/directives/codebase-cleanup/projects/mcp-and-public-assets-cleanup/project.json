@@ -1,0 +1,38 @@
+{
+  "id": "mcp-and-public-assets-cleanup",
+  "title": "Clean up MCP dead function and verify public assets",
+  "status": "completed",
+  "priority": "P1",
+  "agent": ["casey"],
+  "reviewers": ["jordan"],
+  "description": "Remove dead MCP function and verify public Tiled files are properly handled",
+  "source_directive": "codebase-cleanup",
+  "scope": {
+    "in": "Dead statePath() function removal, public asset verification",
+    "out": "MCP directive.ts bug fix (separate directive), no refactoring"
+  },
+  "browser_test": false,
+  "dod": [
+    { "criterion": "statePath() removed from mcp-server/tools/paths.ts", "met": true },
+    { "criterion": "tsc --noEmit passes clean", "met": true }
+  ],
+  "tasks": [
+    {
+      "id": "delete-dead-mcp-function",
+      "title": "Delete statePath() dead function from MCP paths.ts",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["casey"],
+      "scope": "Delete the statePath() function from mcp-server/tools/paths.ts (defined but never called anywhere in mcp-server/). Verify no consumers exist.",
+      "dod": [
+        { "criterion": "statePath() function removed from mcp-server/tools/paths.ts", "met": true },
+        { "criterion": "No references to statePath in the codebase (grep verified)", "met": true },
+        { "criterion": "tsc --noEmit passes clean", "met": true }
+      ]
+    }
+  ],
+  "created": "2026-03-08T00:10:00Z",
+  "updated": "2026-03-08T00:45:00Z"
+}

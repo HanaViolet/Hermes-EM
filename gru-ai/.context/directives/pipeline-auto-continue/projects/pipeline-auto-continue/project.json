@@ -1,0 +1,70 @@
+{
+  "id": "pipeline-auto-continue",
+  "title": "Step-loop, stalled detection, and project.json persistence",
+  "directive": "pipeline-auto-continue",
+  "status": "completed",
+  "priority": "P0",
+  "complexity": "moderate",
+  "agent": ["devon"],
+  "reviewers": ["sarah"],
+  "auditor": "sarah",
+  "description": "Fix pipeline auto-continue: add step-loop to SKILL.md, stalled-directive detection to watcher, project.json persistence to execute step.",
+  "dod": [
+    { "criterion": "SKILL.md has a Step Execution Loop section with STOP gates defined", "met": true },
+    { "criterion": "directive-watcher.ts detects stalled directives and sets stalledAt", "met": true },
+    { "criterion": "09-execute-projects.md has per-task project.json update instruction", "met": true },
+    { "criterion": "npm run type-check passes", "met": true }
+  ],
+  "tasks": [
+    {
+      "id": "step-loop-instruction",
+      "title": "Add step execution loop to SKILL.md",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": ["devon"],
+      "phases": ["build", "review"],
+      "scope": "In SKILL.md, after the Pipeline Progress Protocol section, insert a Step Execution Loop section.",
+      "dod": [
+        { "criterion": "A Step Execution Loop section exists in SKILL.md between Pipeline Progress Protocol and Pipeline Steps", "met": true },
+        { "criterion": "Section names the two STOP gates: approve (heavyweight only) and completion (all weights)", "met": true },
+        { "criterion": "Section instructs LLM to immediately read and execute next step doc after each step", "met": true },
+        { "criterion": "No other sections of SKILL.md modified", "met": true }
+      ]
+    },
+    {
+      "id": "stalled-directive-detection",
+      "title": "Add stalledAt field and stall detection to directive-watcher",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": ["devon"],
+      "phases": ["build", "review"],
+      "scope": "Add stalledAt to DirectiveState and stall detection to directive-watcher.ts.",
+      "dod": [
+        { "criterion": "DirectiveState in server/types.ts has stalledAt?: string | null", "met": true },
+        { "criterion": "buildStateFromDirective sets stalledAt when all stall conditions met", "met": true },
+        { "criterion": "stalledAt is null when any condition not met", "met": true },
+        { "criterion": "console.warn fires once per stalled directive", "met": true },
+        { "criterion": "CEO-action steps (approve, completion) excluded from detection", "met": true },
+        { "criterion": "npm run type-check passes", "met": true }
+      ]
+    },
+    {
+      "id": "project-json-persistence-instruction",
+      "title": "Add project.json update instruction to 09-execute-projects.md",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": ["devon"],
+      "phases": ["build", "review"],
+      "scope": "Add Update project.json instruction to After Each Task section.",
+      "dod": [
+        { "criterion": "New Update project.json instruction exists after directive.json update in After Each Task section", "met": true },
+        { "criterion": "Instruction specifies task status, DOD met fields, and updated timestamp", "met": true },
+        { "criterion": "Does not conflict with existing Finalize project.json section", "met": true },
+        { "criterion": "No other sections of 09-execute-projects.md modified", "met": true }
+      ]
+    }
+  ]
+}

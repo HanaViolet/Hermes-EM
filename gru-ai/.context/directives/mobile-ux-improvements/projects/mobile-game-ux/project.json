@@ -1,0 +1,80 @@
+{
+  "id": "mobile-game-ux",
+  "title": "Mobile Game UX — Touch Gestures, Layout Integration, and Polish",
+  "status": "in_progress",
+  "priority": "P0",
+  "agent": ["riley"],
+  "reviewers": ["sarah"],
+  "description": "Fix all mobile UX issues in the game view: pinch-to-zoom, touch pan, inline HUD panel, header responsiveness, viewport fixes, dead code cleanup.",
+  "source_directive": "mobile-ux-improvements",
+  "scope": {
+    "in": "Touch gestures (pinch-to-zoom, pan, tap), layout integration (inline panel replacing bottom sheet), mobile polish (header, AgentTicker, viewport-fit, iOS fullscreen, dead code cleanup, zoom constants consolidation)",
+    "out": "Desktop layout changes, new features, backend changes"
+  },
+  "dod": [
+    { "criterion": "Pinch-to-zoom works on mobile devices", "met": true },
+    { "criterion": "Single-finger drag pans the map on mobile", "met": true },
+    { "criterion": "HUD panel is inline below game (not floating overlay), independently scrollable", "met": true },
+    { "criterion": "Header buttons show icons only on mobile without overflow", "met": true },
+    { "criterion": "No regressions on desktop (click, wheel zoom, side panel)", "met": false }
+  ],
+  "browser_test": true,
+  "tasks": [
+    {
+      "id": "fix-zoom-bounds-and-touch-gestures",
+      "title": "Fix Zoom Bounds and Add Pinch-to-Zoom + Single-Finger Pan",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": ["riley"],
+      "phases": ["build", "code-review", "review"],
+      "user_scenario": "On a mobile phone (375px wide), the user can pinch to zoom in and out of the office map, and single-finger drag pans the view, while tap-to-click on agents and furniture still works.",
+      "scope": "Fix the broken zoom bounds in CanvasOffice.tsx: minZoom must be fitZoom (not MIN_ZOOM_ABSOLUTE=1, which exceeds maxZoom on mobile), maxZoom should be max(fitZoom*4, MAX_ZOOM_ABSOLUTE). Keep CSS touch-none on the canvas. Replace the passive tap-only touch handler with a full JS gesture handler that distinguishes: (a) two-finger pinch-to-zoom adjusting the zoom state, (b) single-finger drag that programmatically scrolls the parent overflow container, and (c) single-finger tap that fires processClick. The existing wheel zoom handler bounds must use the same corrected formula.",
+      "dod": [
+        { "criterion": "On a 375px viewport, the map renders at fit-width zoom (~0.26) and the user can pinch to zoom in up to 4x the fit-width level", "met": true },
+        { "criterion": "Single-finger drag scrolls the map smoothly without triggering tap-to-click or native browser scroll interference", "met": true },
+        { "criterion": "Pinch-to-zoom with two fingers adjusts zoom level smoothly, centered between the two touch points", "met": true },
+        { "criterion": "Tap on an agent or furniture item still opens the correct panel (no regression from desktop click behavior)", "met": true },
+        { "criterion": "Wheel zoom on desktop still works correctly with the updated bounds formula", "met": true }
+      ]
+    },
+    {
+      "id": "inline-side-panel-layout",
+      "title": "Replace Floating Bottom Sheet with Inline Panel Below Canvas",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": ["riley"],
+      "phases": ["build", "code-review", "review"],
+      "user_scenario": "On mobile, tapping an agent or header button opens a panel that slides up below the game canvas (not as a floating overlay), and the panel is the same height as the game area, scrollable independently.",
+      "scope": "In GamePage.tsx, restructure the mobile layout: remove the fixed-position bottom-sheet SidePanel. Instead, render the SidePanel as an inline element below the canvas scroll container in a vertical flex layout. When the panel is open, game area and panel each get 50% of viewport height. Panel must be independently scrollable. In SidePanel.tsx, add variant='inline' without fixed positioning, backdrop. Add CSS transition for open/close. Remove bottom-sheet variant and slideUp keyframe.",
+      "dod": [
+        { "criterion": "On mobile (375px), opening a panel shows it below the game canvas without overlaying the game -- both are visible simultaneously", "met": true },
+        { "criterion": "The panel slides in with a CSS transition (not instant appear/disappear), taking no more than 200ms", "met": true },
+        { "criterion": "The panel content is independently scrollable when it overflows", "met": true },
+        { "criterion": "Closing the panel returns full height to the game area with the reverse transition", "met": true },
+        { "criterion": "The backdrop overlay and fixed z-50 sheet are fully removed from the mobile variant", "met": true }
+      ]
+    },
+    {
+      "id": "header-mobile-collapse-and-polish",
+      "title": "Collapse Header to Icons on Mobile, Shrink Ticker, Viewport Polish",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": ["riley"],
+      "phases": ["build", "code-review", "review"],
+      "user_scenario": "On a 375px phone screen, the header buttons show only icons (no text labels), the agent ticker fits within the viewport, fullscreen button is hidden on iOS Safari, and the page uses the full screen area including notch/home-bar zones.",
+      "scope": "In GameHeader.tsx, make HudButton labels responsive: hide text at mobile widths. In index.html, update viewport meta to include viewport-fit=cover. In AgentTicker.tsx, reduce maxWidth for mobile. Hide fullscreen button on iOS Safari. Remove dead code: ControlsHint in GamePage.tsx, unused ZOOM_* in constants.ts, buildAgentCharMap in types.ts.",
+      "dod": [
+        { "criterion": "On a 375px viewport, all header buttons are visible without horizontal overflow -- buttons show icons only, no text labels", "met": true },
+        { "criterion": "The viewport meta tag includes viewport-fit=cover and layout uses env(safe-area-inset-*) for notch/home-bar areas", "met": true },
+        { "criterion": "AgentTicker does not overflow the viewport width on a 375px screen", "met": true },
+        { "criterion": "On iOS Safari (or any browser where document.fullscreenEnabled is false), the fullscreen button is not rendered", "met": true },
+        { "criterion": "Dead code removed: ControlsHint function, unused ZOOM_* constants, and buildAgentCharMap function", "met": true }
+      ]
+    }
+  ],
+  "created": "2026-03-09T12:03:00Z",
+  "updated": "2026-03-09T12:30:00Z"
+}

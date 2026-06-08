@@ -1,0 +1,36 @@
+{
+  "goal": "LogPanel enrichment — surface agent activity, task progress, subagent lifecycle, team events, enriched sessions, connection status, and upgraded filters",
+  "challenges": {
+    "risks": [
+      "Activity event flooding: sessionActivities is a snapshot that updates frequently. Without proper dedup/throttling, the LogPanel could render hundreds of near-duplicate entries per minute, tanking performance and burying real signals.",
+      "useRef diffing complexity: converting snapshot-based sessionActivities into time-series FeedEvents requires careful diff logic. Off-by-one or stale-ref bugs are subtle and hard to test without live data.",
+      "Filter UX clarity: jumping from 2-mode to 3-mode needs clear naming so the CEO instantly knows which mode shows what."
+    ],
+    "over_engineering_flags": [
+      "Live ticker section adds a second rendering path for the same data. Include only if trivially simple.",
+      "Directive metadata enrichment is 3 lines — don't let it balloon into a full directive detail card."
+    ],
+    "recommendation": "Proceed as-is"
+  },
+  "projects": [
+    {
+      "id": "log-panel-enrichment",
+      "title": "LogPanel — Full Data Enrichment + 3-Mode Filter",
+      "priority": "P0",
+      "scope_summary": "Enrich LogPanel.tsx with all available data sources: (1) agent activity events from sessionActivities via useRef snapshot diffing with dedup/throttle, (2) multi-directive events from activeDirectives[] + directiveHistory[], (3) subagent spawn/complete/error events from session.subagentIds and activeSubagentNames, (4) task progress events from tasksBySession showing 'Task 3/5 completed by Riley', (5) team lifecycle events from teams[] showing formation/dissolution, (6) connection status events from connected state, (7) enriched session events showing model, gitBranch, latestPrompt, and feature context, (8) upgrade FilterToggle from 2-mode to 3-mode (Important / Activity / All). Extend FeedEvent.source union type. Add weight/category badges on directive events.",
+      "complexity": "moderate",
+      "agent": [
+        "riley"
+      ],
+      "reviewers": [
+        "marcus"
+      ],
+      "auditor": "riley",
+      "depends_on": [],
+      "touches_files_hint": [
+        "src/components/game/panels/LogPanel.tsx",
+        "src/stores/types.ts"
+      ]
+    }
+  ]
+}

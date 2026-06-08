@@ -1,0 +1,34 @@
+{
+  "goal": "Fix pipeline auto-continue so directives don't die at step boundaries",
+  "challenges": {
+    "risks": [
+      "Step-loop instruction may not survive context limits — LLM can still be forced to stop. Stalled detection is the real safety net.",
+      "Stalled detection heuristic may false-positive on directives waiting for CEO approval. Need to exclude approve/completion steps.",
+      "Project.json persistence is already partially instructed in 09-execute-projects.md — reinforcement in the right place is enough."
+    ],
+    "over_engineering_flags": [
+      "Do NOT build auto-resume that spawns CLI sessions. Detection-only is the 80% value.",
+      "Don't restructure the entire execute doc for project.json persistence."
+    ],
+    "recommendation": "Proceed as-is"
+  },
+  "projects": [
+    {
+      "id": "pipeline-auto-continue",
+      "title": "Step-loop, stalled detection, and project.json persistence",
+      "priority": "P0",
+      "complexity": "moderate",
+      "agent": ["devon"],
+      "reviewers": ["sarah"],
+      "auditor": "sarah",
+      "scope_summary": "Three changes: (1) Add step-loop block to SKILL.md instructing LLM to continue to next step after each completion. (2) Add stalled-directive detection to directive-watcher.ts — flag directives where all tasks are done but pipeline hasn't advanced, excluding CEO action steps. (3) Add instruction in 09-execute-projects.md to verify project.json task statuses after each task.",
+      "depends_on": [],
+      "touches_files_hint": [
+        ".claude/skills/directive/SKILL.md",
+        ".claude/skills/directive/docs/pipeline/09-execute-projects.md",
+        "server/watchers/directive-watcher.ts",
+        "server/types.ts"
+      ]
+    }
+  ]
+}

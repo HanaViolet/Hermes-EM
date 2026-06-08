@@ -1,0 +1,106 @@
+{
+  "id": "smoke-test-multi-weight",
+  "title": "Multi-weight smoke test with worktree isolation and gate simulation",
+  "status": "completed",
+  "priority": "P0",
+  "agent": ["devon"],
+  "reviewers": ["sarah"],
+  "description": "Extend the /smoke-test skill with multi-weight support (lightweight + medium), worktree isolation, Option B gate simulation, and concrete test cases per weight class.",
+  "source_directive": "pipeline-e2e-test",
+  "scope": {
+    "in": [
+      "Weight argument in run-smoke-test.sh ($1 = lightweight|medium, default medium)",
+      "Worktree isolation replacing branch checkout (git worktree add)",
+      "Concrete test cases: lightweight = create marker file, medium = create utility module with function + config",
+      "Option B test_mode in 04b-clarification.md — full gate logic + default response",
+      "Option B test_mode in 07-plan-approval.md — full gate logic + auto-approve",
+      "SKILL.md updated to pass weight argument"
+    ],
+    "out": [
+      "Heavyweight test automation (deferred)",
+      "Custom test framework or assertion library",
+      "Changes to the completion gate (already has test_mode from iteration 1)"
+    ]
+  },
+  "dod": [
+    { "criterion": "Running /smoke-test lightweight creates an isolated worktree, runs a lightweight directive that creates a marker file, and reports pass/fail per step", "met": true },
+    { "criterion": "Running /smoke-test medium creates an isolated worktree, runs a medium directive that creates a utility module, and reports pass/fail per step", "met": true },
+    { "criterion": "Clarification gate (04b) runs full synthesis logic in test_mode then auto-responds", "met": true },
+    { "criterion": "Approve gate (07) runs full plan presentation in test_mode then auto-approves", "met": true },
+    { "criterion": "Worktree and test directive artifacts are cleaned up after test completes (pass or fail)", "met": true }
+  ],
+  "browser_test": false,
+  "tasks": [
+    {
+      "id": "worktree-isolation",
+      "title": "Replace branch checkout with worktree isolation in run-smoke-test.sh",
+      "status": "completed",
+      "agent": ["devon"],
+      "complexity": "moderate",
+      "depends_on": [],
+      "phases": ["build", "code-review", "review"],
+      "user_scenario": "The smoke test creates an isolated worktree so it never conflicts with the user's current branch or other running sessions.",
+      "description": "Replace the `git checkout -b` approach (lines 269-274) with `git worktree add`. Update the cleanup trap (lines 77-117) to use `git worktree remove` and delete the worktree directory. Remove the ORIGINAL_BRANCH tracking since the user's checkout is never changed. Update the agent spawn (lines 280-298) to pass the worktree path as the working directory.",
+      "dod": [
+        { "criterion": "Script uses `git worktree add <path> -b <branch>` instead of `git checkout -b`; no `git checkout` calls remain except in error handling", "met": true },
+        { "criterion": "Cleanup trap removes worktree with `git worktree remove` and deletes the branch; user's current branch is never changed", "met": true },
+        { "criterion": "Agent spawn command includes the worktree path as the working directory so the /directive session operates in the isolated copy", "met": true },
+        { "criterion": "Running the script while on any branch does not change HEAD or leave dangling worktrees on success or failure (trap handles both)", "met": true }
+      ]
+    },
+    {
+      "id": "weight-argument-and-skip-sets",
+      "title": "Accept weight argument and implement per-weight skip sets and test directives",
+      "status": "completed",
+      "agent": ["devon"],
+      "complexity": "moderate",
+      "depends_on": ["worktree-isolation"],
+      "phases": ["build", "code-review", "review"],
+      "user_scenario": "The CEO runs `/smoke-test medium` or `/smoke-test lightweight` and sees the correct skip set applied and the correct weight in the test directive.",
+      "description": "Accept $1 as the weight argument (default: medium, valid: lightweight|medium). Replace the hardcoded `is_medium_skip` function with a weight-aware skip set. Update the test directive.json template to use the passed weight. Update SKILL.md to document both weight classes and pass $ARGUMENTS to the script as $1.",
+      "dod": [
+        { "criterion": "Script accepts $1 as weight (lightweight|medium), defaults to medium, rejects invalid values with a clear error message", "met": true },
+        { "criterion": "Skip set for lightweight: brainstorm is skipped; skip set for medium: brainstorm is skipped; both auto-approve clarification and approve gates", "met": true },
+        { "criterion": "Test directive.json `weight` field matches the passed argument (not hardcoded to medium)", "met": true },
+        { "criterion": "SKILL.md documents both weight classes and passes the weight argument from $ARGUMENTS to the script", "met": true },
+        { "criterion": "Results table header shows the actual weight class used (e.g., 'Weight: lightweight')", "met": true }
+      ]
+    },
+    {
+      "id": "gate-simulation-option-b",
+      "title": "Add Option B test_mode gate simulation to clarification and plan-approval pipeline docs",
+      "status": "completed",
+      "agent": ["devon"],
+      "complexity": "moderate",
+      "depends_on": ["weight-argument-and-skip-sets"],
+      "phases": ["build", "code-review", "review"],
+      "user_scenario": "When the pipeline runs in test_mode, the clarification and plan-approval steps execute their full logic but auto-respond instead of waiting for CEO input, so the smoke test validates real pipeline behavior.",
+      "description": "In 04b-clarification.md: add test_mode check at top of Step 2 that runs full synthesis then auto-approves. In 07-plan-approval.md: add test_mode check that runs full plan presentation then auto-approves. Completion gate already has test_mode — no changes needed.",
+      "dod": [
+        { "criterion": "04b-clarification.md has a test_mode check that runs full intent synthesis (Step 1) then auto-approves at Step 2 with log line '[TEST_MODE] Auto-approved clarification'", "met": true },
+        { "criterion": "07-plan-approval.md has a test_mode check that runs full complexity floor check and plan construction then auto-approves with log line '[TEST_MODE] Auto-approved plan'", "met": true },
+        { "criterion": "test_mode gate simulation is additive (inserted as a conditional before CEO interaction), not a replacement of existing lightweight/medium auto-approve logic", "met": true },
+        { "criterion": "11-completion-gate.md is NOT modified (already has test_mode handling)", "met": true }
+      ]
+    },
+    {
+      "id": "lightweight-test-directive",
+      "title": "Create lightweight-specific test directive content and validate end-to-end",
+      "status": "completed",
+      "agent": ["devon"],
+      "complexity": "simple",
+      "depends_on": ["gate-simulation-option-b"],
+      "phases": ["build", "code-review", "review"],
+      "user_scenario": "When the CEO runs `/smoke-test lightweight`, the test directive is appropriately scoped for a lightweight pipeline run and the results show skipped steps clearly.",
+      "description": "Update directive.md and directive.json templates to be weight-appropriate. Ensure results table distinguishes 'skipped' from 'auto-approved' with clear evidence strings. Verify lightweight pipeline completes without false timeouts.",
+      "dod": [
+        { "criterion": "Lightweight test directive.json template has weight='lightweight' and appropriate initial state", "met": true },
+        { "criterion": "Results table distinguishes 'skipped' steps from 'auto-approved' steps with clear evidence strings showing the weight-based reason", "met": true },
+        { "criterion": "Script handles lightweight pipeline completing faster than medium without false timeout or missed step transitions", "met": true },
+        { "criterion": "Running `bash run-smoke-test.sh lightweight` produces a valid results table with correct skip/auto-approve annotations", "met": true }
+      ]
+    }
+  ],
+  "created": "2026-03-10T15:15:00Z",
+  "updated": "2026-03-10T16:00:00Z"
+}

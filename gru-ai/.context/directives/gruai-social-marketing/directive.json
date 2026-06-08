@@ -1,0 +1,137 @@
+{
+  "id": "gruai-social-marketing",
+  "title": "gruai Social Marketing — Multi-Platform Launch (Reddit, RedNote, X)",
+  "status": "in_progress",
+  "created": "2026-03-11",
+  "completed": null,
+  "weight": "strategic",
+  "produced_features": [],
+  "report": null,
+  "backlog_sources": ["gruai-marketing-launch"],
+
+  "dod": {
+    "success_looks_like": [
+      "Comprehensive marketing plan covering Reddit, RedNote (小红书), X, and evaluated additional platforms",
+      "Platform-specific research with audience analysis, algorithm mechanics, and competitor mapping",
+      "Ready-to-execute content calendar with cross-platform synergy",
+      "Builds on existing strategy docs from gruai-marketing-launch",
+      "Chinese README (README.zh-CN.md) for 小红书 users clicking through to GitHub"
+    ],
+    "failure_looks_like": [
+      "Generic marketing advice not tailored to each platform's mechanics",
+      "Ignoring prior work from gruai-marketing-launch directive",
+      "Missing Chinese content strategy for 小红书",
+      "No concrete posting schedule or content drafts"
+    ],
+    "quality_bar": "Each platform strategy is specific enough to execute immediately — not just 'post good content' but actual drafts, timing, hashtags, and audience targeting",
+    "examples": []
+  },
+
+  "revision": 0,
+  "intent_version": { "version": 1, "reason": null, "updated_at": null },
+  "iterations": [],
+
+  "started_at": "2026-03-11T00:00:00Z",
+  "updated_at": "2026-03-11T01:25:00Z",
+  "current_step": "execute",
+
+  "pipeline": {
+    "triage": {
+      "status": "completed",
+      "agent": ["ceo"],
+      "output": {
+        "weight": "strategic",
+        "rationale": "Multi-platform marketing (Reddit, RedNote, X, etc.) with research needed for new platforms."
+      }
+    },
+    "checkpoint": {
+      "status": "completed",
+      "agent": ["ceo"],
+      "output": { "summary": "No existing checkpoint found — new directive." }
+    },
+    "read": {
+      "status": "completed",
+      "agent": ["ceo"],
+      "output": { "summary": "Created directive.md and directive.json. DOD extracted from CEO brief." }
+    },
+    "context": {
+      "status": "completed",
+      "agent": ["ceo"],
+      "output": {
+        "summary": "Read vision.md, prior gruai-marketing-launch strategies (Reddit launch guide, 小红书 strategy + 6 post drafts). X/Twitter NOT covered yet."
+      }
+    },
+    "audit": {
+      "status": "completed",
+      "agent": ["sarah"],
+      "output": {
+        "summary": "Marketing readiness audit: npm gru-ai v0.3.0 published, GitHub public, README polished, demo GIF created (1.6MB). Prior Reddit + 小红书 strategies complete. X/Twitter missing. Landing page deferred.",
+        "weight_recommendation": null
+      },
+      "artifacts": [".context/directives/gruai-social-marketing/audit.md"]
+    },
+    "brainstorm": {
+      "status": "completed",
+      "agent": ["priya", "marcus", "sarah"],
+      "output": {
+        "summary": "Strong convergence: fix foundations (done), Reddit + RedNote simultaneous, X research only, secondary platforms go/no-go. Phase 2 deliberation skipped."
+      },
+      "artifacts": [".context/directives/gruai-social-marketing/brainstorm.md"]
+    },
+    "clarification": {
+      "status": "completed",
+      "agent": ["ceo"],
+      "output": {
+        "summary": "CEO confirmed: GIF done, landing page deferred, repo renamed, Reddit + RedNote simultaneous, X research only.",
+        "verified_intent": "Execute Reddit + RedNote marketing simultaneously using existing strategy docs. Research X/Twitter strategy (no execution yet). Evaluate HN/ProductHunt with go/no-go only. Landing page deferred."
+      }
+    },
+    "plan": {
+      "status": "completed",
+      "agent": ["morgan"],
+      "output": {
+        "summary": "4 independent projects: Reddit execution [P0], RedNote execution + Chinese README [P0], X research [P1], Secondary platforms go/no-go [P1]. Taylor builds all, Priya reviews all.",
+        "projects": ["reddit-launch-execution", "rednote-launch-execution", "x-twitter-research", "secondary-platforms-evaluation"]
+      },
+      "artifacts": [".context/directives/gruai-social-marketing/plan.json"]
+    },
+    "approve": {
+      "status": "completed",
+      "agent": ["ceo"],
+      "output": {
+        "summary": "CEO approved with one addition: Chinese README (README.zh-CN.md) added to RedNote project scope. CEO also corrected risk framing — this is open source community sharing, not a hard launch. No 'burned first impressions' concern.",
+        "decision": "approved_with_changes"
+      }
+    },
+    "project-brainstorm": {
+      "status": "completed",
+      "agent": ["sarah", "taylor"],
+      "output": {
+        "summary": "CTO decomposed 4 projects into 11 total tasks: Reddit (2 tasks), RedNote (4 tasks incl Chinese README), X research (3 tasks), Secondary platforms (1 task). All validated."
+      }
+    },
+    "setup": {
+      "status": "completed",
+      "agent": ["ceo"],
+      "output": { "summary": "Branch directive/gruai-social-marketing created. No worktree needed." }
+    },
+    "execute": { "status": "active", "agent": ["taylor"] },
+    "review-gate": { "status": "pending" },
+    "wrapup": { "status": "pending" },
+    "completion": { "status": "pending" }
+  },
+
+  "projects": ["reddit-launch-execution", "rednote-launch-execution", "x-twitter-research", "secondary-platforms-evaluation"],
+
+  "planning": {
+    "coo_plan": {},
+    "ceo_approval": { "status": "approved", "modifications": ["Added Chinese README (README.zh-CN.md) to rednote-launch-execution scope", "Removed 'burned first impressions' risk framing — open source sharing, not hard launch"] },
+    "worktree_path": null
+  },
+
+  "wrapup": {
+    "follow_ups_processed": false,
+    "digest_path": null,
+    "lessons_updated": false
+  }
+}

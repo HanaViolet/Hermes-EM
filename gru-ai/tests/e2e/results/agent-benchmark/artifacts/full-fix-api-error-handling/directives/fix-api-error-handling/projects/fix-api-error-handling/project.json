@@ -1,0 +1,18 @@
+{
+  "id": "fix-api-error-handling",
+  "title": "Fix Missing API Error Handler",
+  "status": "pending",
+  "agent": ["fullstack"],
+  "reviewers": ["qa"],
+  "tasks": [
+    {
+      "id": "task-1",
+      "title": "Add error handling middleware for /api/todos endpoint",
+      "status": "pending",
+      "agent": ["fullstack"],
+      "dod": [
+        { "criterion": "The /api/todos endpoint returns a raw 500 error with stack trace when the database connection fails. Add proper error handling middleware that returns a JSON error response with appropriate status codes.", "met": false }
+      ]
+    }
+  ]
+}

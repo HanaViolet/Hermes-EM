@@ -1,0 +1,38 @@
+{
+  "goal": "Game — Office Simulation as Primary CEO Interface",
+  "goal_folder": "game",
+  "challenges": {
+    "risks": [
+      "Graceful fallback rendering may look bad enough to scare off first-time users who don't realize they need the tileset",
+      "walls.png origin is still unknown — could be a license issue if it's from a paid pack",
+      "Git history rewrite (out of scope) must happen before repo goes public or the paid assets are still accessible in history"
+    ],
+    "over_engineering_flags": [
+      "Don't build an elaborate asset download/install system — a simple README + setup script is sufficient for v1"
+    ],
+    "recommendation": "Proceed as-is"
+  },
+  "projects": [
+    {
+      "id": "asset-license-compliance",
+      "title": "Asset License Compliance — gitignore, fallbacks, setup, credits",
+      "priority": "P0",
+      "complexity": "moderate",
+      "agent": ["devon"],
+      "reviewers": ["sarah"],
+      "auditor": "sarah",
+      "scope_summary": "Remove non-redistributable assets from git tracking, add .gitignore rules, remove the non-commercial LimeZu free pack entirely, create a setup script that helps developers acquire and place the paid tileset, ensure the game renders graceful fallbacks when tileset PNGs are missing (colored rectangles / procedural furniture instead of crashes), investigate walls.png origin, and add proper attribution credits for LimeZu and JIK-A-4/MetroCity.",
+      "depends_on": [],
+      "touches_files_hint": [
+        ".gitignore",
+        "public/assets/office/README.md",
+        "src/components/game/asset-loader.ts",
+        "src/components/game/tileset-loader.ts",
+        "src/components/game/tilesetCache.ts",
+        "src/components/game/layout/furnitureCatalog.ts",
+        "src/components/game/engine/renderer.ts",
+        "scripts/setup-assets.sh"
+      ]
+    }
+  ]
+}

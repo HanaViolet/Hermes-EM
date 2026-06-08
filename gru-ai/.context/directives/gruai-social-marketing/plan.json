@@ -1,0 +1,65 @@
+{
+  "goal": "Market gruai across social platforms with platform-specific strategies",
+  "challenges": {
+    "risks": [
+      "Reddit/RedNote posts launch simultaneously but we have no feedback loop — if the messaging falls flat on both, we burn our first impression on two platforms at once. Mitigation: stagger by 24-48 hours so Reddit (English, faster feedback) informs any last-minute RedNote adjustments.",
+      "X/Twitter research may produce a strategy doc that sits unused for weeks. Research without a concrete next-step deadline tends to rot. Mitigation: research deliverable must include a go/no-go recommendation with a specific trigger.",
+      "Content quality risk — taylor has not written marketing copy for this project before. Existing strategy docs set a high bar (Priya authored). Mitigation: Priya reviews early drafts, not just final output."
+    ],
+    "over_engineering_flags": [
+      "HN/ProductHunt/LinkedIn/Discord evaluation could expand into full strategy docs for each. CEO asked for go/no-go only — keep to single document with 1-page assessment per platform.",
+      "X/Twitter research could spiral into 20-page strategy. Cap it: platform mechanics summary, content format recommendations, effort estimate, and go/no-go."
+    ],
+    "recommendation": "Proceed as-is. The 4-project structure matches the natural work streams."
+  },
+  "projects": [
+    {
+      "id": "reddit-launch-execution",
+      "title": "Reddit Launch Execution Plan",
+      "priority": "P0",
+      "scope_summary": "Finalize the existing Reddit launch guide into execution-ready assets. Review and polish the 3 draft posts (r/ClaudeCode, r/ChatGPTCoding, r/SideProject), ensure the GIF (1.6MB) and demo assets are embedded correctly, finalize timing/sequencing plan, prepare comment response templates, and produce a ready-to-post package the CEO can execute in one sitting. Build on `.context/directives/gruai-marketing-launch/projects/reddit-strategy/reddit-launch-guide.md`.",
+      "complexity": "simple",
+      "agent": ["taylor"],
+      "reviewers": ["priya"],
+      "auditor": "priya",
+      "depends_on": [],
+      "touches_files_hint": [".context/directives/gruai-social-marketing/projects/reddit-launch-execution/"]
+    },
+    {
+      "id": "rednote-launch-execution",
+      "title": "RedNote/小红书 Launch Execution Plan",
+      "priority": "P0",
+      "scope_summary": "Finalize the existing 小红书 strategy into execution-ready assets. Review and polish the 6 ready-to-post Chinese drafts, verify hashtag relevance, confirm the 4-week content calendar is actionable, ensure visual assets (GIF, screenshots) are formatted for RedNote's platform requirements (aspect ratios, file sizes), and produce a ready-to-post package. Also create a Chinese README (README.zh-CN.md) so 小红书 users clicking through to GitHub see Chinese content. All content in Chinese. Build on `.context/directives/gruai-marketing-launch/projects/xiaohongshu-strategy/`.",
+      "complexity": "simple",
+      "agent": ["taylor"],
+      "reviewers": ["priya"],
+      "auditor": "priya",
+      "depends_on": [],
+      "touches_files_hint": [".context/directives/gruai-social-marketing/projects/rednote-launch-execution/"]
+    },
+    {
+      "id": "x-twitter-research",
+      "title": "X/Twitter Platform Research and Strategy",
+      "priority": "P1",
+      "scope_summary": "Full platform research for X/Twitter: algorithm mechanics (link penalties, reply weighting, thread performance), audience demographics for AI/developer community, competitor presence analysis (how other open-source AI tools use X), content format recommendations (threads vs. single tweets vs. video), effort estimate for sustained presence, and a go/no-go recommendation with trigger conditions for when to start execution. Research only — no draft posts or content calendar. Leverage brainstorm findings (link penalty 50-90%, replies 75x > likes).",
+      "complexity": "moderate",
+      "agent": ["taylor"],
+      "reviewers": ["priya"],
+      "auditor": "priya",
+      "depends_on": [],
+      "touches_files_hint": [".context/directives/gruai-social-marketing/projects/x-twitter-research/"]
+    },
+    {
+      "id": "secondary-platforms-evaluation",
+      "title": "HackerNews, ProductHunt, LinkedIn, Discord Go/No-Go Evaluation",
+      "priority": "P1",
+      "scope_summary": "Produce a single evaluation document covering HackerNews, ProductHunt, LinkedIn, and Discord. For each platform: 1-page assessment covering audience fit, effort required, expected ROI, timing recommendation, and a clear go/no-go verdict. Leverage brainstorm research findings (Show HN timing, ProductHunt first-hour dynamics, LinkedIn algorithm, Discord community patterns). No full strategies — just enough analysis for the CEO to decide which platforms to pursue next. Include specific trigger conditions.",
+      "complexity": "simple",
+      "agent": ["taylor"],
+      "reviewers": ["priya"],
+      "auditor": "priya",
+      "depends_on": [],
+      "touches_files_hint": [".context/directives/gruai-social-marketing/projects/secondary-platforms-evaluation/"]
+    }
+  ]
+}

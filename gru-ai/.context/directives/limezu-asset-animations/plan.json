@@ -1,0 +1,37 @@
+{
+  "goal": "Limezu Asset Animations",
+  "challenges": {
+    "risks": [
+      "1. Sprite identification is manual and error-prone — we need to figure out which of ~190 numbered singles are animation frames of the same object vs. distinct objects. Wrong groupings mean broken animations or missing furniture.",
+      "2. Performance regression from animated furniture — if every animated object creates its own render cycle or canvas operation each frame, a scene with 15+ animated items could tank FPS. Must batch properly and only re-draw changed frames.",
+      "3. Z-sorting interaction — animated furniture that changes visual bounds (e.g., a fan spinning wider than its base tile) could break the existing z-sort pipeline if sprite dimensions vary between frames."
+    ],
+    "over_engineering_flags": [
+      "Don't build a generic animation state machine for furniture — furniture animations are simple loops (no transitions, no states). A frame-cycling function using the existing identity.time pattern is sufficient.",
+      "Don't build an asset discovery system that auto-detects animation groups at runtime — a static mapping of animation groups (built once from investigating the singles) is simpler and deterministic.",
+      "Don't add a separate animation config file format — inline the frame data in the tileset-loader or a simple constant object."
+    ],
+    "recommendation": "Simplify slightly. Skip any runtime auto-detection of animation frames. Instead: (1) manually investigate the singles directory to identify animation groups, (2) hardcode a static animation map, (3) extend tileset-loader to load frame arrays for animated objects, (4) use existing identity.time pattern to cycle frames in the renderer. This is one cohesive project — investigation, system, and application are tightly coupled and touch the same files."
+  },
+  "projects": [
+    {
+      "id": "furniture-animations",
+      "title": "Furniture Animation System — Investigation, Implementation, and Scene Integration",
+      "priority": "P0",
+      "scope_summary": "Investigate Limezu Modern Office singles to identify which numbered sprites form animation sequences for the same object (screens, fans, fish tanks, etc.). Build a furniture animation system that groups these frames, loads them as frame arrays in the tileset-loader, and cycles through them using the existing identity.time clock. Apply animations to all relevant furniture in the office scene. Must maintain z-sort compatibility, cache animated frames like character sprites, and avoid separate timers.",
+      "complexity": "moderate",
+      "agent": ["devon"],
+      "reviewers": ["sarah"],
+      "auditor": "sarah",
+      "depends_on": [],
+      "touches_files_hint": [
+        "src/components/game/tileset-loader.ts",
+        "src/components/game/engine/renderer.ts",
+        "src/components/game/constants.ts",
+        "src/components/game/asset-loader.ts",
+        "src/components/game/CanvasOffice.tsx",
+        "public/assets/office/singles/"
+      ]
+    }
+  ]
+}

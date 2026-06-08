@@ -1,0 +1,27 @@
+{
+  "projects": [{
+    "id": "agent-status-visual-behaviors",
+    "baseline": "AgentStatus is 5-value union in TWO places (pixel-types.ts + types.ts). Linger timer already exists. 12 files reference AgentStatus.",
+    "active_files": [
+      "src/components/game/pixel-types.ts",
+      "src/components/game/types.ts",
+      "src/components/game/GamePage.tsx",
+      "src/components/game/engine/officeState.ts",
+      "src/components/game/engine/roomZones.ts",
+      "src/components/game/sprites/statusIcons.ts",
+      "src/components/game/engine/renderer.ts",
+      "src/components/game/panels/panelUtils.ts",
+      "src/components/game/panels/AgentPanel.tsx",
+      "src/components/game/panels/TeamPanel.tsx",
+      "src/components/game/constants.ts",
+      "src/components/game/AgentTicker.tsx"
+    ],
+    "dead_code": [],
+    "findings": "Duplicate AgentStatus type in pixel-types.ts and types.ts. Linger timer infrastructure already built. No new CharacterState needed — IDLE pose works for paused. statusIcons.ts needs 2 new sprite frames. All 12 files will get TypeScript errors on expansion — safe to find all sites.",
+    "recommended_approach": "Consolidate duplicate type. Add paused|done to union. Update toAgentStatus mapping. Wire applyAgentStatus (paused=inactive at desk, done=linger then break room). Update chooseDestination, statusIcons, renderer, panelUtils, priority map. Let TS errors guide remaining fixes.",
+    "follow_ups": [
+      {"action": "Consolidate duplicate AgentStatus type", "risk": "low", "reason": "Two identical types will drift"},
+      {"action": "Verify panelUtils statusDotColor/statusPriority handle raw server statuses", "risk": "low", "reason": "May need paused/done cases"}
+    ]
+  }]
+}

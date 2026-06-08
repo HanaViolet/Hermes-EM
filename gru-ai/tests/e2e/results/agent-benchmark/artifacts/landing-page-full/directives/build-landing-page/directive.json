@@ -1,0 +1,15 @@
+{
+  "id": "build-landing-page",
+  "title": "Build gruai Landing Page",
+  "weight": "lightweight",
+  "status": "pending",
+  "pipeline": {
+    "current_step": "triage",
+    "started_at": "2026-03-08T03:20:50Z"
+  },
+  "scope": {
+    "description": "Build a single-page landing page with pixel art/retro game aesthetic. See spec for full requirements.",
+    "in": [],
+    "out": []
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "id": "action-panel-fixes",
+  "title": "Action Panel Quality Fixes",
+  "status": "completed",
+  "phase": "build",
+  "agent": ["riley"],
+  "reviewers": ["sarah"],
+  "scope": {
+    "files": [
+      "src/components/game/panels/ActionPanel.tsx",
+      "server/watchers/directive-watcher.ts",
+      ".context/directives/pipeline-v2/projects/gate-script/project.json",
+      ".context/directives/pipeline-v2/projects/watcher-and-dashboard/project.json",
+      ".context/directives/pipeline-v2/directive.json"
+    ],
+    "description": "Fix ActionPanel UX issues found by CEO: duplicate cards, wrong timestamps, no detail/clickability, no useful info for decision-making. Also fix underlying data and watcher issues causing wrong stats."
+  },
+  "tasks": [
+    {
+      "id": "dedup-directive-cards",
+      "title": "Deduplicate directive cards across tiers",
+      "status": "done",
+      "agent": ["riley"],
+      "dod": [
+        { "criterion": "When directive is awaiting_completion, only ONE card appears (not both URGENT + NEEDS ATTENTION)", "met": true }
+      ]
+    },
+    {
+      "id": "fix-timestamps",
+      "title": "Fix 'just now' timestamp on directive cards",
+      "status": "done",
+      "agent": ["riley"],
+      "dod": [
+        { "criterion": "Directive cards use startedAt instead of lastUpdated for time display", "met": true },
+        { "criterion": "Time shows real elapsed duration (e.g. '2h ago') not always 'just now'", "met": true }
+      ]
+    },
+    {
+      "id": "expandable-directive-cards",
+      "title": "Make directive cards clickable with expandable detail view",
+      "status": "done",
+      "agent": ["riley"],
+      "dod": [
+        { "criterion": "Directive cards show pointer cursor and expand/collapse on click", "met": true },
+        { "criterion": "Collapsed state shows mini-stats: X/Y projects, X/Y tasks", "met": true },
+        { "criterion": "Expanded state shows: pipeline progress, per-project breakdown with status icons, task totals, current state", "met": true }
+      ]
+    },
+    {
+      "id": "kind-chip-clarity",
+      "title": "Improve status chip labels for directive cards",
+      "status": "done",
+      "agent": ["riley"],
+      "dod": [
+        { "criterion": "Awaiting completion card shows 'Awaiting Approval' chip instead of vague 'Complete'", "met": true },
+        { "criterion": "Pipeline action cards retain 'Pipeline' chip", "met": true }
+      ]
+    },
+    {
+      "id": "auto-expand-single",
+      "title": "Auto-expand when only one directive card",
+      "status": "done",
+      "agent": ["riley"],
+      "dod": [
+        { "criterion": "When there is only 1 directive card total, it renders expanded by default (no click needed)", "met": true }
+      ]
+    },
+    {
+      "id": "weight-label-prominent",
+      "title": "Show weight as a visible chip on directive cards",
+      "status": "done",
+      "agent": ["riley"],
+      "dod": [
+        { "criterion": "Weight (lightweight/medium/heavyweight/strategic) shown as a colored chip next to the kind chip, always visible in header", "met": true }
+      ]
+    },
+    {
+      "id": "fix-pipeline-v2-data",
+      "title": "Fix pipeline-v2 directive data — task statuses and step format",
+      "status": "done",
+      "agent": ["riley"],
+      "dod": [
+        { "criterion": "gate-script project: all 5 tasks marked done (work was done)", "met": true },
+        { "criterion": "watcher-and-dashboard project: all tasks marked done (work was done)", "met": true },
+        { "criterion": "pipeline-v2 directive.json: current_step uses named ID 'completion' not 'step-8'", "met": true },
+        { "criterion": "pipeline-v2 directive.json: completion.status is 'active' not 'awaiting'", "met": true }
+      ]
+    },
+    {
+      "id": "fix-watcher-task-counting",
+      "title": "Fix watcher task count — match both 'completed' and 'done' statuses",
+      "status": "done",
+      "agent": ["riley"],
+      "dod": [
+        { "criterion": "directive-watcher.ts counts tasks with status 'done' OR 'completed' as completed", "met": true }
+      ]
+    },
+    {
+      "id": "fix-watcher-step-inference",
+      "title": "Fix watcher step count — infer completed for steps before current_step",
+      "status": "done",
+      "agent": ["riley"],
+      "dod": [
+        { "criterion": "Steps before current_step that have no explicit data are inferred as 'completed' not 'pending'", "met": true }
+      ]
+    },
+    {
+      "id": "urgent-always-open",
+      "title": "Urgent tier section is always open, not collapsible",
+      "status": "done",
+      "agent": ["riley"],
+      "dod": [
+        { "criterion": "Urgent section has no collapse toggle — always shows its items", "met": true }
+      ]
+    },
+    {
+      "id": "approve-button",
+      "title": "Add approve button on awaiting_completion directive cards",
+      "status": "done",
+      "agent": ["riley"],
+      "dod": [
+        { "criterion": "Green 'Approve Completion' button visible on directive-completion cards", "met": true },
+        { "criterion": "Button calls POST /api/actions/directive-complete with action: 'approve'", "met": true },
+        { "criterion": "Button shows loading state while request is in flight", "met": true }
+      ]
+    }
+  ]
+}

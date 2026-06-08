@@ -1,0 +1,42 @@
+{
+  "id": "secondary-platforms-evaluation",
+  "title": "HackerNews, ProductHunt, LinkedIn, Discord Go/No-Go Evaluation",
+  "status": "in_progress",
+  "priority": "P1",
+  "agent": ["taylor"],
+  "reviewers": ["priya"],
+  "description": "Single evaluation document with 1-page go/no-go assessment per platform for HN, ProductHunt, LinkedIn, and Discord.",
+  "source_directive": "gruai-social-marketing",
+  "scope": {
+    "in": "For each platform: audience fit, effort required, expected ROI, timing recommendation, go/no-go verdict with trigger conditions.",
+    "out": "No full strategies for any platform. No execution plans."
+  },
+  "dod": [
+    { "criterion": "Single document covers all 4 platforms (HN, ProductHunt, LinkedIn, Discord) with ~1 page each", "met": false },
+    { "criterion": "Each platform assessment includes audience fit, effort estimate, ROI expectation, and clear go/no-go verdict", "met": false },
+    { "criterion": "Trigger conditions specify when to pursue each platform", "met": false }
+  ],
+  "browser_test": false,
+  "tasks": [
+    {
+      "id": "build-evaluation-doc",
+      "title": "Write 4-platform go/no-go evaluation document",
+      "status": "pending",
+      "priority": "P1",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["taylor"],
+      "user_scenario": "CEO reads a concise document and knows which secondary platforms to pursue, when, and under what conditions.",
+      "scope": "Produce platform-evaluation.md covering HN, ProductHunt, LinkedIn, Discord. For each: audience fit, effort estimate (hours/week), ROI (low/medium/high), timing recommendation, trigger conditions, GO/NO-GO/CONDITIONAL verdict. End with summary comparison table. Under 2000 words.",
+      "dod": [
+        { "criterion": "Document covers all 4 platforms (HackerNews, ProductHunt, LinkedIn, Discord)", "met": false },
+        { "criterion": "Each platform section includes: audience fit analysis, effort estimate, ROI assessment, timing recommendation, and bold GO/NO-GO/CONDITIONAL verdict", "met": false },
+        { "criterion": "Each platform section includes at least one specific trigger condition for revisiting the verdict", "met": false },
+        { "criterion": "Document ends with summary comparison table showing platform, verdict, effort, ROI, and recommended timing", "met": false },
+        { "criterion": "Total document length is under 2000 words", "met": false }
+      ]
+    }
+  ],
+  "created": "2026-03-11T01:05:00Z",
+  "updated": "2026-03-11T01:15:00Z"
+}

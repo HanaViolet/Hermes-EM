@@ -1,0 +1,45 @@
+# Source code (compiled versions in dist/ and dist-server/)
+src/
+server/
+scripts/
+
+# Game assets (large binary files)
+public/
+
+# Context tree (user data, not framework)
+.context/
+
+# Dev configs
+.eslintrc*
+tsconfig.json
+vite.config.ts
+tailwind.config.*
+postcss.config.*
+*.tsbuildinfo
+
+# Git and CI
+.git/
+.github/
+.gitignore
+
+# Test fixtures
+.claude/hooks/tests/
+
+# IDE
+.vscode/
+.idea/
+
+# Dependencies (reinstalled by user)
+node_modules/
+
+# Backup artifacts
+.gruai-backup/
+
+# Agent memory (session-specific)
+.claude/agent-memory/
+
+# MCP server (internal tool)
+mcp-server/
+
+# Docs (development-only)
+docs/

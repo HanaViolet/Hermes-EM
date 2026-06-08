@@ -1,0 +1,15 @@
+{
+  "id": "fix-api-error-handling",
+  "title": "Fix Missing API Error Handler",
+  "weight": "lightweight",
+  "status": "pending",
+  "pipeline": {
+    "current_step": "triage",
+    "started_at": "2026-03-08T03:20:47Z"
+  },
+  "scope": {
+    "description": "The /api/todos endpoint returns a raw 500 error with stack trace when the database connection fails. Add proper error handling middleware that returns a JSON error response with appropriate status codes.",
+    "in": [],
+    "out": []
+  }
+}

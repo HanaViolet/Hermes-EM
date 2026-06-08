@@ -1,0 +1,38 @@
+{
+  "goal": "Rewrite OpsPanel as StatusPanel — system overview HUD",
+  "challenges": {
+    "risks": [
+      "Renaming 'ops' to 'status' touches multiple files — easy to miss a reference and break tab routing or badge display",
+      "Velocity section requires directiveHistory data that may not be reliably populated yet",
+      "Full rewrite of a 506-line panel in one shot risks layout/styling regressions"
+    ],
+    "over_engineering_flags": [
+      "Brainstorm scope is well-contained — 4 sections using existing data, no new APIs or server changes needed."
+    ],
+    "recommendation": "Proceed as-is"
+  },
+  "projects": [
+    {
+      "id": "status-panel-rewrite",
+      "title": "Rewrite OpsPanel as StatusPanel with system overview",
+      "priority": "P0",
+      "scope_summary": "Full rewrite of OpsPanel.tsx into StatusPanel with 4 sections: System Vitals KPI strip, Active Directives with pipeline progress, Velocity metrics, and Session Health distribution. Rename all 'ops' references to 'status' across SidePanel.tsx, useBadgeCounts.ts, panels/index.ts, and any other files. Delete all dead categories/features/backlogs code.",
+      "complexity": "moderate",
+      "agent": [
+        "riley"
+      ],
+      "reviewers": [
+        "sarah"
+      ],
+      "auditor": "sarah",
+      "depends_on": [],
+      "touches_files_hint": [
+        "src/components/game/panels/OpsPanel.tsx",
+        "src/components/game/SidePanel.tsx",
+        "src/components/game/panels/index.ts",
+        "src/components/game/hooks/useBadgeCounts.ts",
+        "src/components/game/GamePage.tsx"
+      ]
+    }
+  ]
+}

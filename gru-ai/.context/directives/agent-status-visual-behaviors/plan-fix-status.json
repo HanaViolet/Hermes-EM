@@ -1,0 +1,46 @@
+{
+  "goal": "Fix broken agent status detection so the game correctly maps all 7 server statuses to visual behaviors instead of collapsing everything to working or offline",
+  "challenges": {
+    "risks": [
+      "Expanding AgentStatus type will cause TypeScript errors in all 14 files that reference it — need to update every switch/record/comparison",
+      "The statusIcons.ts and renderer.ts may not have visual assets for new statuses (done, paused, error) — builder must verify icon coverage",
+      "Character FSM in officeState.ts and characters.ts may have behavior branches gated on the old 2-value type that break with new values"
+    ],
+    "over_engineering_flags": [
+      "Tempting to redesign the entire status pipeline end-to-end — this should stay scoped to the frontend mapping layer only",
+      "No need to touch server-side status detection — the server already produces all 7 statuses correctly"
+    ],
+    "recommendation": "Proceed as-is — this is a focused type expansion + mapping fix with clear boundaries"
+  },
+  "projects": [
+    {
+      "id": "fix-status-detection",
+      "title": "Fix AgentStatus type and mapping to support all server statuses",
+      "priority": "P0",
+      "scope_summary": "Expand AgentStatus from 'working' | 'idle' to include 'done', 'paused', 'error', and 'offline'. Fix toAgentStatus() to map all 7 server statuses correctly instead of collapsing to 2. Add 'offline' to the priority record and fix the fallback comparison so agents with non-working sessions correctly show as idle/done/paused/error. Update all consumers across the 14 game files that reference AgentStatus.",
+      "complexity": "moderate",
+      "agent": [
+        "riley"
+      ],
+      "reviewers": [
+        "sarah"
+      ],
+      "auditor": "sarah",
+      "depends_on": [],
+      "touches_files_hint": [
+        "src/components/game/pixel-types.ts",
+        "src/components/game/types.ts",
+        "src/components/game/GamePage.tsx",
+        "src/components/game/CanvasOffice.tsx",
+        "src/components/game/engine/characters.ts",
+        "src/components/game/engine/officeState.ts",
+        "src/components/game/engine/renderer.ts",
+        "src/components/game/panels/panelUtils.ts",
+        "src/components/game/panels/AgentPanel.tsx",
+        "src/components/game/panels/TeamPanel.tsx",
+        "src/components/game/AgentTicker.tsx",
+        "src/components/game/SidePanel.tsx"
+      ]
+    }
+  ]
+}

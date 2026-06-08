@@ -1,0 +1,153 @@
+{
+  "id": "furniture-interaction-system",
+  "title": "Furniture Interaction Points and Activity State Machine",
+  "status": "completed",
+  "priority": "P0",
+  "agent": ["riley"],
+  "reviewers": ["sarah"],
+  "description": "Extend the character FSM with ACTIVITY state. Define interaction points for 8 furniture types. Unify wander code paths. Add CEO office restriction. Implement paired activities. Add activity bubble icons.",
+  "source_directive": "rich-idle-behaviors",
+  "scope": {
+    "in": "Character state machine extension, interaction point registry, furniture-weighted idle routing, CEO office zone restriction, paired activity logic, activity bubble icons",
+    "out": "New sprite frame authoring, sound effects, furniture placement changes"
+  },
+  "browser_test": true,
+  "dod": [
+    { "criterion": "Agents visibly interact with 5+ different furniture types when idle", "met": true },
+    { "criterion": "At least one paired activity works (two agents at same furniture)", "met": true },
+    { "criterion": "Agents respect CEO office zone restriction (non-CEO agents avoid it)", "met": true },
+    { "criterion": "Activity bubble icons appear above agents during furniture activities", "met": true },
+    { "criterion": "npm run type-check passes with zero errors", "met": true }
+  ],
+  "tasks": [
+    {
+      "id": "interaction-point-types",
+      "title": "Define InteractionPoint type and FurnitureActivityType enum",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": ["riley"],
+      "phases": ["build", "review"],
+      "user_scenario": "Developer type definitions for interaction points and activity types so subsequent tasks can build on a stable contract.",
+      "scope": "Add InteractionPoint interface and FurnitureActivityType enum to pixel-types.ts. Add ACTIVITY to CharacterState. Add activityTarget, activityStartTime, activityType to Character interface. Initialize in createCharacter.",
+      "dod": [
+        { "criterion": "CharacterState has ACTIVITY value alongside IDLE, WALK, TYPE", "met": true },
+        { "criterion": "InteractionPoint interface exported from pixel-types.ts with all fields (id, furnitureType, tileX, tileY, facing, capacity, zoneId, activityDurationMin, activityDurationMax)", "met": true },
+        { "criterion": "FurnitureActivityType enum exported with 8 activity types", "met": true },
+        { "criterion": "Character interface has activityTarget, activityStartTime, activityType fields", "met": true },
+        { "criterion": "createCharacter initializes the 3 new fields (null, 0, null)", "met": true },
+        { "criterion": "npm run type-check passes with zero errors", "met": true }
+      ]
+    },
+    {
+      "id": "interaction-point-registry",
+      "title": "Create static INTERACTION_POINTS registry in constants.ts",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": ["riley"],
+      "phases": ["build", "review"],
+      "user_scenario": "Hand-mapped registry of interaction points for each piece of interactive furniture so the wander system knows where agents can use furniture.",
+      "scope": "Add INTERACTION_POINTS array to constants.ts. Hand-map coordinates for 8 furniture types from the 32x32 grid. Add getInteractionPointsForZone and getAvailableInteractionPoint helpers.",
+      "dod": [
+        { "criterion": "INTERACTION_POINTS array in constants.ts with at least 8 entries covering all furniture types", "met": true },
+        { "criterion": "Each entry has valid tile coordinates that are walkable (not blocked) in the current office layout", "met": true },
+        { "criterion": "getInteractionPointsForZone function filters points by zone and is exported", "met": true },
+        { "criterion": "getAvailableInteractionPoint accepts a Set of occupied point IDs and returns available point or null", "met": true },
+        { "criterion": "npm run type-check passes with zero errors", "met": true }
+      ]
+    },
+    {
+      "id": "activity-state-machine",
+      "title": "Implement ACTIVITY state in character FSM",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": ["riley"],
+      "phases": ["build", "review"],
+      "user_scenario": "Idle agents walk to furniture, perform an activity animation for a duration, then resume wandering.",
+      "scope": "Add ACTIVITY case to updateCharacter switch. Hold position, play appropriate existing animation frames, count down duration, exit to IDLE. Add getCharacterSprite handling for ACTIVITY.",
+      "dod": [
+        { "criterion": "updateCharacter handles CharacterState.ACTIVITY — holds position, advances animation, exits after duration", "met": true },
+        { "criterion": "getCharacterSprite returns typing frames for WATCHING_TV/ARCADE, reading frames for READING, idle frame for LOUNGING/EXERCISING/PLAYING_POOL/PLAYING_PINGPONG", "met": true },
+        { "criterion": "ACTIVITY state resets personality animation on entry", "met": true },
+        { "criterion": "Character transitions from ACTIVITY to IDLE with fresh wanderTimer when duration expires", "met": true },
+        { "criterion": "npm run type-check passes with zero errors", "met": true }
+      ]
+    },
+    {
+      "id": "unified-wander-destination",
+      "title": "Unify wander destination picking through officeState",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": ["riley"],
+      "phases": ["build", "review"],
+      "user_scenario": "Idle agents naturally gravitate toward furniture 60% of the time and wander randomly 40%, instead of always picking random tiles.",
+      "scope": "Add occupiedPoints Set to officeState. Add pickWanderDestination method (60% furniture, 40% random). Remove duplicate random tile picking from characters.ts IDLE branch. officeState drives destination selection.",
+      "dod": [
+        { "criterion": "officeState.ts has occupiedPoints Set tracking interaction points occupied by ACTIVITY-state characters", "met": true },
+        { "criterion": "pickWanderDestination method exists on OfficeState with 60/40 furniture/random weighting", "met": true },
+        { "criterion": "characters.ts IDLE wander case no longer directly picks from walkableTiles array", "met": true },
+        { "criterion": "Agents arriving at interaction points transition to ACTIVITY state with correct activityType, facing, and duration", "met": true },
+        { "criterion": "npm run type-check passes with zero errors", "met": true }
+      ]
+    },
+    {
+      "id": "ceo-office-restriction",
+      "title": "Add CEO office zone restriction for non-CEO agents",
+      "status": "completed",
+      "priority": "P1",
+      "complexity": "simple",
+      "agent": ["riley"],
+      "phases": ["build", "review"],
+      "user_scenario": "Only the CEO character and agents seated in the CEO office wander into that zone — other agents avoid it.",
+      "scope": "Add restricted flag to RoomZone. Set ceo-office restricted: true. Filter in pickWanderDestination and chooseDestination unless agent's seat is in that zone.",
+      "dod": [
+        { "criterion": "RoomZone interface has optional restricted boolean field", "met": true },
+        { "criterion": "ceo-office zone has restricted: true in ROOM_ZONES", "met": true },
+        { "criterion": "pickWanderDestination skips interaction points in restricted zones for agents whose seat is not in that zone", "met": true },
+        { "criterion": "chooseDestination idle routing excludes restricted zones unless agent seat is in that zone", "met": true },
+        { "criterion": "npm run type-check passes with zero errors", "met": true }
+      ]
+    },
+    {
+      "id": "paired-activity-logic",
+      "title": "Implement paired activity for capacity-2 furniture",
+      "status": "completed",
+      "priority": "P1",
+      "complexity": "simple",
+      "agent": ["riley"],
+      "phases": ["build", "review"],
+      "user_scenario": "Two agents use the pool table or ping pong table simultaneously — one arrives and starts, then a second agent joins at the adjacent use-tile.",
+      "scope": "Support capacity-2 with secondary use-tile on InteractionPoint. Track partial/full occupancy. Second agent paths to secondary tile. When either finishes, both exit ACTIVITY.",
+      "dod": [
+        { "criterion": "InteractionPoint supports capacity-2 with secondaryTile fields for partner position", "met": true },
+        { "criterion": "occupiedPoints tracking distinguishes between 1/2 and 2/2 occupancy for capacity-2 points", "met": true },
+        { "criterion": "A second agent can join an occupied capacity-2 point and paths to secondary use-tile", "met": true },
+        { "criterion": "When either agent's activity duration expires, both agents transition to IDLE", "met": true },
+        { "criterion": "npm run type-check passes with zero errors", "met": true }
+      ]
+    },
+    {
+      "id": "activity-bubble-icons",
+      "title": "Add 6 activity bubble icons to statusIcons.ts",
+      "status": "completed",
+      "priority": "P1",
+      "complexity": "simple",
+      "agent": ["riley"],
+      "phases": ["build", "review"],
+      "user_scenario": "Small 8x8 icon bubble above agents doing activities — a TV icon when watching, book when reading, snack at vending machine, etc.",
+      "scope": "Add 6 new 8x8 pixel sprites to statusIcons.ts: TV, book, snack, controller, dumbbell, paddle. Export as ACTIVITY_ICON_SPRITES. In renderer.ts, show activity icon for ACTIVITY-state characters.",
+      "dod": [
+        { "criterion": "6 new 8x8 SpriteData arrays in statusIcons.ts: tv, book, snack, controller, dumbbell, paddle", "met": true },
+        { "criterion": "ACTIVITY_ICON_SPRITES record exported mapping FurnitureActivityType to sprite frames", "met": true },
+        { "criterion": "renderStatusIcons shows activity icon above ACTIVITY-state characters instead of status icon", "met": true },
+        { "criterion": "Icons are visually distinct at zoom >= 2 with clear silhouettes", "met": true },
+        { "criterion": "npm run type-check passes with zero errors", "met": true }
+      ]
+    }
+  ],
+  "created": "2026-03-08T00:01:00Z",
+  "updated": "2026-03-08T00:02:00Z"
+}

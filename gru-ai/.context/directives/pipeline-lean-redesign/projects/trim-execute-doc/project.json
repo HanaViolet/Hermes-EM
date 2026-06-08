@@ -1,0 +1,58 @@
+{
+  "id": "trim-execute-doc",
+  "title": "Trim 09-execute-projects.md to under 4000 words",
+  "status": "completed",
+  "priority": "P0",
+  "agent": ["taylor"],
+  "reviewers": ["morgan"],
+  "description": "Trim the single largest pipeline doc in-place. Same structure, tighter prose. Wave algorithm compressed inline. All critical enforcement content preserved.",
+  "source_directive": "pipeline-lean-redesign",
+  "scope": {
+    "in": "Edit 09-execute-projects.md to reduce word count from ~6222 to under 4000. Remove redundant restatements, consolidate duplicates, replace verbose prose with bullets. Compress wave algorithm inline (do not extract to new file). Promote buried instructions.",
+    "out": "Creating new files. Splitting into multiple files. Removing unique enforcement content. Changing the section structure."
+  },
+  "browser_test": false,
+  "dod": [
+    { "criterion": "09-execute-projects.md word count is under 4000", "met": true },
+    { "criterion": "All unique enforcement instructions preserved (project.json update, review verification, code-review blocking)", "met": true },
+    { "criterion": "Wave algorithm still present inline (compressed, not removed)", "met": true },
+    { "criterion": "Smoke test: validate-project-json.sh runs successfully against an existing completed directive", "met": true }
+  ],
+  "tasks": [
+    {
+      "id": "trim-redundant-content",
+      "title": "Remove redundant restatements and consolidate duplicates",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["taylor"],
+      "user_scenario": "Agents reading 09-execute-projects.md encounter each instruction once, not repeated across sections.",
+      "scope": "Identify and remove content in 09-execute-projects.md that restates rules already covered in reference docs (phase-definitions.md, casting-rules.md, scope-and-dod.md). Consolidate duplicate instruction blocks within the doc. Replace verbose prose with concise bullet points. Do NOT remove unique enforcement content.",
+      "dod": [
+        { "criterion": "No instruction appears twice in the doc", "met": true },
+        { "criterion": "References to detailed rules point to reference docs instead of restating them", "met": true },
+        { "criterion": "Word count reduced by at least 1500 words from this task alone", "met": true }
+      ]
+    },
+    {
+      "id": "compress-wave-algorithm",
+      "title": "Compress wave algorithm and finalize under 4000 words",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["taylor"],
+      "depends_on": ["trim-redundant-content"],
+      "user_scenario": "Agents get the wave computation logic in a compact form without losing the algorithm.",
+      "scope": "Compress the wave algorithm pseudocode section (~900 words) to under 400 words. Keep the algorithm logic, remove verbose comments and examples. Ensure total doc is under 4000 words. Run validate-project-json.sh against .context/directives/agent-identity-extraction-layer as smoke test.",
+      "dod": [
+        { "criterion": "Wave algorithm section is under 400 words", "met": true },
+        { "criterion": "Total doc word count under 4000", "met": true },
+        { "criterion": "validate-project-json.sh passes against an existing completed directive", "met": true }
+      ]
+    }
+  ],
+  "created": "2026-03-09T23:45:00Z",
+  "updated": "2026-03-10T00:15:00Z"
+}

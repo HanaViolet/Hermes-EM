@@ -1,0 +1,174 @@
+{
+  "id": "pipeline-quality-and-trim",
+  "title": "Pipeline Quality Gates & Context Trim",
+  "status": "completed",
+  "created": "2026-03-09",
+  "completed": "2026-03-09",
+  "weight": "strategic",
+  "revision": 1,
+  "produced_features": [],
+  "report": "pipeline-quality-and-trim-2026-03-09",
+  "backlog_sources": [],
+  "started_at": "2026-03-09T09:30:00Z",
+  "updated_at": "2026-03-09T10:55:00Z",
+  "current_step": "completion",
+  "iterations": [],
+  "pipeline": {
+    "triage": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "weight": "strategic",
+        "summary": "Strategic — process-level change affecting how every future directive runs."
+      }
+    },
+    "read": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Read directive.md — 5 requirements (R1-R5)."
+      }
+    },
+    "context": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Read pipeline docs, lessons, agent registry. Identified 4 target files."
+      }
+    },
+    "challenge": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "CEO challenged scope — dropped R4 (trim) and R5 (self-verification). Narrowed to 5 surgical edits."
+      }
+    },
+    "brainstorm": {
+      "status": "completed",
+      "agent": [
+        "sarah",
+        "morgan",
+        "marcus"
+      ],
+      "output": {
+        "summary": "3 C-suite proposals with deliberation. CEO narrowed to 5 edits across 4 files."
+      },
+      "artifacts": [
+        ".context/directives/pipeline-quality-and-trim/brainstorm.md"
+      ]
+    },
+    "plan": {
+      "status": "completed",
+      "agent": [
+        "morgan"
+      ],
+      "output": {
+        "summary": "Single project: pipeline-quality-gates. Taylor builds, Sarah + Morgan review."
+      },
+      "artifacts": [
+        ".context/directives/pipeline-quality-and-trim/plan.json"
+      ]
+    },
+    "audit": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Lightweight audit — 4 known markdown files, simple edits."
+      }
+    },
+    "approve": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "decision": "approved",
+        "summary": "CEO pre-approved exact 5-item scope during brainstorm."
+      }
+    },
+    "project-brainstorm": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ],
+      "output": {
+        "summary": "5 tasks with user-centric DOD decomposed from project scope."
+      }
+    },
+    "setup": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "mode": "direct",
+        "summary": "No worktree — editing framework docs on main."
+      }
+    },
+    "execute": {
+      "status": "completed",
+      "agent": [
+        "taylor"
+      ],
+      "output": {
+        "summary": "All 5 tasks completed: COO clarification, UI DOD guidance, review reweight, default-state verification, scope-and-dod UI rules."
+      }
+    },
+    "review-gate": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ],
+      "output": {
+        "summary": "CTO reviewed all 5 edits. All 20 DOD criteria met. 3 minor issues found and fixed (step numbering, conditional JSON field, file pattern consistency). Review outcome: pass."
+      }
+    },
+    "wrapup": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Digest written. Directive awaiting CEO completion approval."
+      },
+      "artifacts": [
+        ".context/reports/pipeline-quality-and-trim-2026-03-09.md"
+      ]
+    },
+    "completion": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "CEO approved completion. All 5 pipeline quality gates shipped."
+      }
+    }
+  },
+  "projects": [
+    {
+      "id": "pipeline-quality-gates",
+      "status": "completed"
+    }
+  ],
+  "planning": {
+    "coo_plan": {
+      "goal": "5 surgical prompt edits"
+    },
+    "ceo_approval": {
+      "status": "approved",
+      "modifications": []
+    },
+    "worktree_path": null
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "id": "{{DIRECTIVE_ID}}",
+  "title": "{{DIRECTIVE_TITLE}}",
+  "weight": "medium",
+  "current_step": "triage",
+  "status": "pending",
+  "created_at": "{{CREATED_AT}}"
+}

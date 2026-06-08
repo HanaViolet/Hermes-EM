@@ -1,0 +1,151 @@
+{
+  "id": "pipeline-lean-redesign",
+  "title": "Pipeline Lean Redesign — Context Engineering Overhaul",
+  "status": "completed",
+  "created": "2026-03-09",
+  "weight": "strategic",
+  "revision": 2,
+  "produced_features": [],
+  "backlog_sources": [],
+  "started_at": "2026-03-09T15:00:00Z",
+  "updated_at": "2026-03-09T09:04:47.472Z",
+  "current_step": "completion",
+  "report": "pipeline-lean-redesign-2026-03-09",
+  "iterations": [],
+  "pipeline": {
+    "triage": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "weight": "strategic",
+        "summary": "Strategic — process-level change to pipeline context engineering."
+      }
+    },
+    "read": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Read directive.md."
+      }
+    },
+    "context": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Read vision.md, agent registry."
+      }
+    },
+    "challenge": {
+      "status": "skipped"
+    },
+    "brainstorm": {
+      "status": "completed",
+      "agent": [
+        "sarah",
+        "morgan",
+        "marcus"
+      ],
+      "output": {
+        "summary": "External research + internal gap analysis. 7 conflicts, 5 missing gates. Context rot confirmed.",
+        "findings": "Harness engineering > context engineering. 3-7 examples > 20 rules."
+      },
+      "artifacts": [
+        ".context/directives/pipeline-lean-redesign/brainstorm.md"
+      ]
+    },
+    "plan": {
+      "status": "completed",
+      "agent": [
+        "morgan"
+      ],
+      "output": {
+        "summary": "Revision 2: 3 projects (surgical, incremental). P1: resolve 7 conflicts. P2: trim 09-execute to <4000 words. P3: add 3 enforcement gates as scripts. CTO+CPO approved with notes.",
+        "projects": [
+          "resolve-pipeline-conflicts",
+          "trim-execute-doc",
+          "add-enforcement-gates"
+        ]
+      }
+    },
+    "approve": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "decision": "approved",
+        "summary": "CEO approved revision 2 incremental plan. CTO+CPO review notes incorporated (4000 word ceiling, specify conflict resolution directions, add smoke-test DOD)."
+      }
+    },
+    "project-brainstorm": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "3 projects decomposed: 4+2+2 tasks with DOD. Conflict resolution directions specified per CTO guidance."
+      }
+    },
+    "execute": {
+      "status": "active",
+      "agent": [
+        "taylor"
+      ],
+      "output": {
+        "summary": "All 3 projects complete. 8 tasks, all DOD met.",
+        "progress": "3 of 3 projects complete"
+      }
+    },
+    "review-gate": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ],
+      "output": {
+        "summary": "CTO review passed. All DOD verified. 2 low-severity cross-doc fixes applied. No blocking issues."
+      }
+    },
+    "completion": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Awaiting CEO approval."
+      }
+    }
+  },
+  "projects": [
+    {
+      "id": "resolve-pipeline-conflicts",
+      "status": "completed"
+    },
+    {
+      "id": "trim-execute-doc",
+      "status": "completed"
+    },
+    {
+      "id": "add-enforcement-gates",
+      "status": "completed"
+    }
+  ],
+  "planning": {
+    "coo_plan": "plan.json",
+    "ceo_approval": {
+      "status": "approved",
+      "modifications": [
+        "incremental not aggressive",
+        "4000 word ceiling",
+        "specify conflict resolution directions",
+        "smoke-test DOD"
+      ]
+    }
+  },
+  "completed": "2026-03-09"
+}

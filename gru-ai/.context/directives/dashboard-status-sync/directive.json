@@ -1,0 +1,156 @@
+{
+  "id": "dashboard-status-sync",
+  "title": "Fix Dashboard Status Sync — Active Directives Not Showing",
+  "status": "completed",
+  "created": "2026-03-08",
+  "weight": "medium",
+  "produced_features": [],
+  "report": null,
+  "backlog_sources": [],
+  "started_at": "2026-03-08T12:00:00Z",
+  "updated_at": "2026-03-08T09:51:56.662Z",
+  "current_step": "completion",
+  "pipeline": {
+    "triage": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "weight": "medium",
+        "summary": "Bug fix in directive-watcher status filtering. Touches server watcher + MCP tool consistency. No revenue/auth impact."
+      }
+    },
+    "read": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Read directive-watcher.ts, server/index.ts, MCP status.ts, types.ts. Root cause: mapStatus() maps 'active' to 'pending' (default case), readCurrentState() hardcodes 'in_progress'/'awaiting_completion' filter."
+      }
+    },
+    "context": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Read vision.md, lessons/state-management.md, directive-json schema. Schema defines valid statuses as pending/triaged/in_progress/awaiting_completion/completed/failed/reopened — 'active' is NOT valid but used in practice."
+      }
+    },
+    "challenge": {
+      "status": "skipped",
+      "output": {
+        "summary": "Skipped for medium weight"
+      }
+    },
+    "brainstorm": {
+      "status": "skipped",
+      "output": {
+        "summary": "Skipped for medium weight"
+      }
+    },
+    "plan": {
+      "status": "completed",
+      "agent": [
+        "morgan"
+      ],
+      "output": {
+        "summary": "1 project, 4 tasks: fix mapStatus() + readCurrentState filter, fix state-watcher mapDirectiveStatus, normalize directive data files, add predev cleanup script.",
+        "projects": "fix-status-and-dev-env"
+      }
+    },
+    "audit": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ],
+      "output": {
+        "summary": "Confirmed root cause + found additional issue in state-watcher.ts mapDirectiveStatus(). Also found 'superseded' status not handled. Risk: near zero — read-only mapping bug, adding switch cases cannot break existing cases."
+      }
+    },
+    "approve": {
+      "status": "skipped",
+      "output": {
+        "summary": "Auto-approved for medium weight"
+      }
+    },
+    "project-brainstorm": {
+      "status": "completed",
+      "agent": [
+        "sarah",
+        "morgan"
+      ],
+      "output": {
+        "summary": "Tasks decomposed with DOD. All tasks in one project — single engineer, same files."
+      }
+    },
+    "setup": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Working on current branch (game). No worktree needed."
+      }
+    },
+    "execute": {
+      "status": "completed",
+      "agent": [
+        "devon"
+      ],
+      "output": {
+        "summary": "All 4 tasks completed. TypeScript compiles, Vite build passes. Fixed mapStatus + readCurrentState in directive-watcher, mapDirectiveStatus in state-watcher, normalized 2 directive data files, added predev cleanup script."
+      }
+    },
+    "review-gate": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "All changes verified: mapStatus handles active/reopened/superseded, readCurrentState uses inclusion set, dead reopened removed from post-map filters, state-watcher fixed, data files normalized, predev script added. tsc + vite build pass."
+      }
+    },
+    "wrapup": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "No OKRs to update. Lessons: status mapping functions must handle all schema statuses + common aliases at the boundary."
+      }
+    },
+    "completion": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Awaiting CEO approval"
+      }
+    }
+  },
+  "projects": [
+    {
+      "id": "fix-status-and-dev-env",
+      "status": "completed"
+    }
+  ],
+  "planning": {
+    "coo_plan": {},
+    "ceo_approval": {
+      "status": "auto-approved",
+      "modifications": []
+    },
+    "worktree_path": null
+  },
+  "wrapup": {
+    "okrs_persisted": false,
+    "follow_ups_processed": false,
+    "digest_path": null,
+    "lessons_updated": false
+  },
+  "completed": "2026-03-08"
+}

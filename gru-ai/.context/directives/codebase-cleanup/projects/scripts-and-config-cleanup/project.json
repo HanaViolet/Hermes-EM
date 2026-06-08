@@ -1,0 +1,57 @@
+{
+  "id": "scripts-and-config-cleanup",
+  "title": "Delete dead scripts, fix config, update gitignore",
+  "status": "completed",
+  "priority": "P0",
+  "agent": ["casey"],
+  "reviewers": ["sarah"],
+  "description": "Delete dead scripts, remove unused deps, fix gitignore and zod transitive dependency",
+  "source_directive": "codebase-cleanup",
+  "scope": {
+    "in": "Dead scripts deletion, package.json dep cleanup, .gitignore update, zod dependency fix",
+    "out": "No refactoring, no restructuring"
+  },
+  "browser_test": false,
+  "dod": [
+    { "criterion": "All 5 dead script files deleted", "met": true },
+    { "criterion": "cmdk removed, zod added to package.json", "met": true },
+    { "criterion": "dist-cli/ and dist-server/ in .gitignore", "met": true },
+    { "criterion": "tsc --noEmit passes clean", "met": true }
+  ],
+  "tasks": [
+    {
+      "id": "delete-dead-scripts",
+      "title": "Delete confirmed dead script files",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["casey"],
+      "scope": "Delete scripts/intelligence-trends.ts, scripts/intelligence-trends.js, scripts/intelligence-trends.d.ts, scripts/codex-proof.ts, scripts/find-gids.ts. These have zero imports anywhere in the codebase.",
+      "dod": [
+        { "criterion": "All 5 dead script files deleted from scripts/", "met": true },
+        { "criterion": "No remaining imports reference any of the deleted files (verified via grep)", "met": true },
+        { "criterion": "tsc --noEmit passes clean", "met": true }
+      ]
+    },
+    {
+      "id": "fix-config-and-deps",
+      "title": "Remove cmdk dep, add zod, update gitignore and tsconfig",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["casey"],
+      "scope": "Remove cmdk from package.json dependencies. Add zod as explicit dependency (currently transitive from @modelcontextprotocol/sdk). Add dist-cli/ and dist-server/ to .gitignore. Remove intelligence-trends.ts from server/tsconfig.json include array. Run npm install to update lockfile.",
+      "dod": [
+        { "criterion": "cmdk removed from package.json and package-lock.json", "met": true },
+        { "criterion": "zod listed as explicit dependency in package.json", "met": true },
+        { "criterion": "dist-cli/ and dist-server/ in .gitignore", "met": true },
+        { "criterion": "server/tsconfig.json no longer references deleted scripts", "met": true },
+        { "criterion": "npm install succeeds and tsc --noEmit passes", "met": true }
+      ]
+    }
+  ],
+  "created": "2026-03-08T00:10:00Z",
+  "updated": "2026-03-08T00:45:00Z"
+}

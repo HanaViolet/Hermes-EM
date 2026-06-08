@@ -1,0 +1,40 @@
+{
+  "id": "server-dead-code-cleanup",
+  "title": "Delete dead server code (excluding Codex adapter)",
+  "status": "completed",
+  "priority": "P0",
+  "agent": ["jordan"],
+  "reviewers": ["sarah"],
+  "description": "Remove confirmed dead server code: cleanup.ts, dead exports, unused functions. Keep Codex platform adapter per CEO.",
+  "source_directive": "codebase-cleanup",
+  "scope": {
+    "in": "Dead server file deletion, dead export removal, dead function removal",
+    "out": "Codex platform adapter (keep per CEO), no refactoring"
+  },
+  "browser_test": false,
+  "dod": [
+    { "criterion": "server/actions/cleanup.ts deleted", "met": true },
+    { "criterion": "getEventsBySession removed from db.ts", "met": true },
+    { "criterion": "tsc --noEmit passes clean", "met": true }
+  ],
+  "tasks": [
+    {
+      "id": "delete-dead-server-files",
+      "title": "Delete server/actions/cleanup.ts and dead functions",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["jordan"],
+      "scope": "Delete server/actions/cleanup.ts (zero imports, exports deleteTeam which nothing calls). Remove getEventsBySession export from server/db.ts (exported but never called). Verify no remaining imports reference deleted code.",
+      "dod": [
+        { "criterion": "server/actions/cleanup.ts deleted", "met": true },
+        { "criterion": "getEventsBySession removed from server/db.ts", "met": true },
+        { "criterion": "No broken imports anywhere (verified via grep)", "met": true },
+        { "criterion": "tsc --noEmit passes clean", "met": true }
+      ]
+    }
+  ],
+  "created": "2026-03-08T00:10:00Z",
+  "updated": "2026-03-08T00:45:00Z"
+}

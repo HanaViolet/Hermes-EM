@@ -1,0 +1,105 @@
+{
+  "id": "game-dynamic-team",
+  "title": "Game UI supports dynamic team sizes from agent-registry",
+  "status": "completed",
+  "priority": "P1",
+  "agent": [
+    "riley"
+  ],
+  "reviewers": [
+    "quinn",
+    "marcus"
+  ],
+  "description": "Add missing rose color, defensive seat assignment, verify game renders with 2-15 agents",
+  "source_directive": "game-productionize-and-publish",
+  "scope": {
+    "in": "Add rose to COLOR_NAME_TO_HEX, defensive seatId fallback, verify variable agent counts",
+    "out": "Do not modify tilemap or desk layout. Seat ASSIGNMENT adapts, not desk positions."
+  },
+  "dod": [
+    {
+      "criterion": "Quinn renders with rose color, not gray",
+      "met": true
+    },
+    {
+      "criterion": "Game renders without errors with 2-15 agents",
+      "met": true
+    },
+    {
+      "criterion": "Agents without seatId handled gracefully",
+      "met": true
+    }
+  ],
+  "browser_test": true,
+  "tasks": [
+    {
+      "id": "add-rose-color",
+      "title": "Add rose color to COLOR_NAME_TO_HEX mapping",
+      "status": "completed",
+      "agent": [
+        "riley"
+      ],
+      "dod": [
+        {
+          "criterion": "COLOR_NAME_TO_HEX contains 'rose' entry with pink/rose hex value",
+          "met": true
+        },
+        {
+          "criterion": "Quinn renders with rose color instead of gray fallback",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "defensive-seat-assignment",
+      "title": "Defensive seat assignment for agents without seatId",
+      "status": "completed",
+      "agent": [
+        "riley"
+      ],
+      "dod": [
+        {
+          "criterion": "Agent without seatId does not crash the game",
+          "met": true
+        },
+        {
+          "criterion": "Unseated agents assigned to available seats or gracefully excluded",
+          "met": true
+        },
+        {
+          "criterion": "No two agents occupy the same seat",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "verify-dynamic-range",
+      "title": "Verify game renders correctly with 2-15 agents",
+      "status": "completed",
+      "agent": [
+        "riley"
+      ],
+      "dod": [
+        {
+          "criterion": "Game renders without JS errors with 2 agents",
+          "met": true
+        },
+        {
+          "criterion": "Game renders without JS errors with 15 agents",
+          "met": true
+        },
+        {
+          "criterion": "TeamPanel displays correct agent count matching registry",
+          "met": true
+        },
+        {
+          "criterion": "Agents beyond seat capacity handled gracefully",
+          "met": true
+        }
+      ]
+    }
+  ],
+  "created": "2026-03-07T00:20:00Z",
+  "updated": "2026-03-07T02:00:00Z",
+  "completed": "2026-03-07T02:00:00Z"
+}

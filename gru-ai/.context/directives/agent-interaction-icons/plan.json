@@ -1,0 +1,34 @@
+{
+  "goal": "Replace generic chat bubble with 5 context-specific animated 8x8 pixel interaction icons",
+  "challenges": {
+    "risks": [
+      "Pixel art quality risk: LLM-generated 8x8 sprites for 5 icon types (15-17 total frames) may not meet the CEO's 'best in market' visual bar on first pass — will need visual feedback loop via Chrome MCP",
+      "interactionMap type widening (Map<number, number> → Map<number, {partnerId, type}>) touches renderer hot path — must not regress frame rate or break the existing facing-direction logic in CanvasOffice.tsx",
+      "Meeting interactions (multiple agents in planning) currently create N*N pairs — type tagging must handle the case where one agent is in multiple interaction pairs with different types"
+    ],
+    "over_engineering_flags": [
+      "Scope is tight — 5 files, clear spec from brainstorm. No over-engineering detected."
+    ],
+    "recommendation": "Proceed as-is. Single project, clear spec, well-bounded file set."
+  },
+  "projects": [
+    {
+      "id": "interaction-type-icons",
+      "title": "Context-specific animated interaction icons",
+      "priority": "P0",
+      "scope_summary": "Widen interactionMap from Map<number, number> to Map<number, {partnerId: number, type: InteractionType}> in types.ts and all consumers. Create interactionIcons.ts with 5 icon sprite sets (clipboard/lightbulb/hammer/magnifying-glass/shield) using expand()+palette pattern. Update GamePage.tsx to tag interaction pairs with InteractionType derived from currentStepId. Propagate type through CanvasOffice.tsx into the interaction map. Replace renderChatBubbles with renderInteractionIcons that selects sprite set by type and uses per-type colored dot fallback at zoom < 2.",
+      "complexity": "moderate",
+      "agent": ["riley"],
+      "reviewers": ["quinn", "sarah"],
+      "auditor": "sarah",
+      "depends_on": [],
+      "touches_files_hint": [
+        "src/components/game/types.ts",
+        "src/components/game/sprites/interactionIcons.ts",
+        "src/components/game/GamePage.tsx",
+        "src/components/game/CanvasOffice.tsx",
+        "src/components/game/engine/renderer.ts"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,263 @@
+{
+  "id": "log-panel-enrichment",
+  "title": "LogPanel — Full Data Enrichment + 3-Mode Filter",
+  "status": "completed",
+  "priority": "P0",
+  "agent": [
+    "riley"
+  ],
+  "reviewers": [
+    "marcus"
+  ],
+  "description": "Enrich LogPanel.tsx with all available data sources: agent activity events, multi-directive events, subagent lifecycle, task progress, team events, connection status, enriched session metadata, and 3-mode filter.",
+  "source_directive": "game-hud-tabs-improvement",
+  "scope": {
+    "in": [
+      "Agent activity events from sessionActivities via useRef snapshot diffing with dedup/throttle",
+      "Multi-directive events from activeDirectives[] + directiveHistory[]",
+      "Subagent spawn/complete/error events from session.subagentIds and activeSubagentNames",
+      "Task progress events from tasksBySession",
+      "Team lifecycle events from teams[]",
+      "Connection status events from connected state",
+      "Enriched session events with model, gitBranch, latestPrompt, feature context",
+      "Upgrade FilterToggle from 2-mode to 3-mode (Important / Activity / All)",
+      "Weight/category badges on directive events"
+    ],
+    "out": [
+      "No server-side changes",
+      "No new WebSocket message types",
+      "No workState backlog/feature items as standalone events"
+    ]
+  },
+  "browser_test": true,
+  "dod": [
+    {
+      "criterion": "LogPanel surfaces agent activity events from sessionActivities with dedup/throttle",
+      "met": true
+    },
+    {
+      "criterion": "LogPanel shows events from all active directives and directive history",
+      "met": true
+    },
+    {
+      "criterion": "Subagent lifecycle events (spawn/complete/error) appear in the feed",
+      "met": true
+    },
+    {
+      "criterion": "Task progress events appear in the feed",
+      "met": true
+    },
+    {
+      "criterion": "Team lifecycle events appear in the feed",
+      "met": true
+    },
+    {
+      "criterion": "Connection lost/restored events appear in the feed",
+      "met": true
+    },
+    {
+      "criterion": "Session events show model, gitBranch, latestPrompt context",
+      "met": true
+    },
+    {
+      "criterion": "3-mode filter (Important/Activity/All) works correctly",
+      "met": true
+    },
+    {
+      "criterion": "TypeScript compiles without errors",
+      "met": true
+    }
+  ],
+  "tasks": [
+    {
+      "id": "extend-feed-types-and-filter",
+      "title": "Extend FeedEvent source union + upgrade FilterToggle to 3-mode",
+      "priority": "P0",
+      "status": "completed",
+      "agent": [
+        "riley"
+      ],
+      "phases": [
+        "build",
+        "review"
+      ],
+      "user_scenario": "CEO sees a 3-way filter toggle (Important / Activity / All) and the log feed supports categorizing events from all new source types.",
+      "scope": "Extend FeedEvent.source from 4 values to 9: add 'activity' | 'subagent' | 'task' | 'team' | 'connection'. Change FilterMode from 2-mode to 3-mode. Update FilterToggle to render 3 buttons. Update filter logic.",
+      "dod": [
+        {
+          "criterion": "FeedEvent.source type union includes all 9 sources",
+          "met": true
+        },
+        {
+          "criterion": "FilterToggle renders 3 buttons: Important, Activity, All",
+          "met": true
+        },
+        {
+          "criterion": "Filter logic correctly separates the 3 modes",
+          "met": true
+        },
+        {
+          "criterion": "No TypeScript errors",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "activity-events-ref-diffing",
+      "title": "Agent activity events via useRef snapshot diffing",
+      "priority": "P0",
+      "status": "completed",
+      "agent": [
+        "riley"
+      ],
+      "phases": [
+        "build",
+        "review"
+      ],
+      "user_scenario": "CEO sees real-time agent activity in the log — tool calls, thinking states — as they happen, without duplicates or flooding.",
+      "scope": "Add useRef for previous snapshot. Diff current vs previous on each render. Accumulate into FeedEvent[] buffer with dedup and throttle (max 1 event per session per 3s). Build buildActivityEvents function. Wire into allEvents useMemo.",
+      "dod": [
+        {
+          "criterion": "buildActivityEvents produces FeedEvent[] from sessionActivities diff",
+          "met": true
+        },
+        {
+          "criterion": "Dedup: same sessionId+tool+detail does not create duplicates",
+          "met": true
+        },
+        {
+          "criterion": "Throttle: max one event per session per 3 seconds",
+          "met": true
+        },
+        {
+          "criterion": "Events sorted correctly by timestamp with other event types",
+          "met": true
+        },
+        {
+          "criterion": "No TypeScript errors",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "multi-directive-and-connection-events",
+      "title": "Multi-directive events + connection status events",
+      "priority": "P0",
+      "status": "completed",
+      "agent": [
+        "riley"
+      ],
+      "phases": [
+        "build",
+        "review"
+      ],
+      "user_scenario": "CEO sees all active directives and their history in the log, plus connection lost/restored events.",
+      "scope": "Refactor buildDirectiveEvents to accept activeDirectives[] and directiveHistory[]. Dedup by directiveName+status. Add weight/category badges. Add connection tracking via useRef. Wire both into allEvents.",
+      "dod": [
+        {
+          "criterion": "Directive events from activeDirectives[] and directiveHistory[]",
+          "met": true
+        },
+        {
+          "criterion": "Directive events include weight and category badges",
+          "met": true
+        },
+        {
+          "criterion": "Connection lost/restored events with source 'connection'",
+          "met": true
+        },
+        {
+          "criterion": "No duplicate directive events across sources",
+          "met": true
+        },
+        {
+          "criterion": "No TypeScript errors",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "subagent-and-team-events",
+      "title": "Subagent lifecycle + team lifecycle events",
+      "priority": "P1",
+      "status": "completed",
+      "agent": [
+        "riley"
+      ],
+      "phases": [
+        "build",
+        "review"
+      ],
+      "user_scenario": "CEO sees when subagents spawn, complete, or error out, and when teams form or dissolve.",
+      "scope": "Add diffSubagentEvents with useRef tracking. Add buildTeamEvents for team creation/stale events. Wire into allEvents.",
+      "dod": [
+        {
+          "criterion": "Subagent spawn/complete/error events with correct priorities",
+          "met": true
+        },
+        {
+          "criterion": "Subagent events include parent and child agent names",
+          "met": true
+        },
+        {
+          "criterion": "Team creation and member join events appear",
+          "met": true
+        },
+        {
+          "criterion": "Stale teams generate warning events",
+          "met": true
+        },
+        {
+          "criterion": "No TypeScript errors",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "task-progress-and-enriched-sessions",
+      "title": "Task progress events + enriched session event details",
+      "priority": "P1",
+      "status": "completed",
+      "agent": [
+        "riley"
+      ],
+      "phases": [
+        "build",
+        "review"
+      ],
+      "user_scenario": "CEO sees task completion progress and session events with model, git branch, and feature context.",
+      "scope": "Add task status diffing via useRef. Enrich buildSessionEvents with model, gitBranch, feature, truncated latestPrompt. Wire into allEvents.",
+      "dod": [
+        {
+          "criterion": "Task status transitions generate events with source 'task'",
+          "met": true
+        },
+        {
+          "criterion": "Task events include subject and owner",
+          "met": true
+        },
+        {
+          "criterion": "Session events include model and gitBranch in detail",
+          "met": true
+        },
+        {
+          "criterion": "Working sessions show truncated latestPrompt",
+          "met": true
+        },
+        {
+          "criterion": "No TypeScript errors",
+          "met": true
+        }
+      ]
+    }
+  ],
+  "review": {
+    "reviewer": "marcus",
+    "outcome": "pass",
+    "bugs_found": 4,
+    "bugs_fixed": 4,
+    "notes": "Seeding race condition fixed (useEffect deps changed from [] to [sessions]/[tasksBySession]). Stale team timestamp fixed. Unused import removed."
+  },
+  "created": "2026-03-07T10:00:00.000Z",
+  "updated": "2026-03-07T12:32:00.000Z"
+}

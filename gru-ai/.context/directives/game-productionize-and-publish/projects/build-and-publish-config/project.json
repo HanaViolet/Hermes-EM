@@ -1,0 +1,98 @@
+{
+  "id": "build-and-publish-config",
+  "title": "Fix build pipeline, start script, .npmignore, and npm publish",
+  "status": "completed",
+  "priority": "P0",
+  "agent": [
+    "jordan"
+  ],
+  "reviewers": [
+    "sarah"
+  ],
+  "auditor": "sarah",
+  "description": "Fix build scripts, update start to serve client + API, create .npmignore, npm publish.",
+  "source_directive": "game-productionize-and-publish",
+  "depends_on": [
+    "cli-to-skills"
+  ],
+  "scope": {
+    "in": "Fix build scripts (remove build:cli), update start script to serve built client as static files + API, create .npmignore, update files array, npm publish --dry-run then npm publish.",
+    "out": "CLI code changes (handled by cli-to-skills)"
+  },
+  "browser_test": false,
+  "tasks": [
+    {
+      "id": "fix-build-scripts",
+      "title": "Fix build scripts and start command",
+      "status": "completed",
+      "agent": [
+        "jordan"
+      ],
+      "phases": [
+        "build"
+      ],
+      "dod": [
+        {
+          "criterion": "package.json build script works without build:cli",
+          "met": true
+        },
+        {
+          "criterion": "server/index.ts serves dist/ as static files (express.static or equivalent) when dist/ exists",
+          "met": true
+        },
+        {
+          "criterion": "npm run build && npm start successfully serves the game UI + API",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "create-npmignore",
+      "title": "Create .npmignore and fix files array",
+      "status": "completed",
+      "agent": [
+        "jordan"
+      ],
+      "phases": [
+        "build"
+      ],
+      "dod": [
+        {
+          "criterion": ".npmignore exists excluding: src/, server/, .context/, scripts/, public/assets/, *.png, test fixtures, dev configs",
+          "met": true
+        },
+        {
+          "criterion": "package.json files array includes only: dist/, dist-server/, cli/templates/, .claude/skills/, LICENSE, README.md",
+          "met": true
+        },
+        {
+          "criterion": "npm pack --dry-run shows only intended files",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "npm-publish",
+      "title": "Publish to npm registry",
+      "status": "completed",
+      "agent": [
+        "jordan"
+      ],
+      "phases": [
+        "build"
+      ],
+      "dod": [
+        {
+          "criterion": "npm publish --dry-run succeeds with correct package contents",
+          "met": true
+        },
+        {
+          "criterion": "npm publish succeeds (v0.1.0 on npm registry)",
+          "met": true
+        }
+      ]
+    }
+  ],
+  "created": "2026-03-07T04:20:00Z",
+  "updated": "2026-03-07T04:55:00Z"
+}

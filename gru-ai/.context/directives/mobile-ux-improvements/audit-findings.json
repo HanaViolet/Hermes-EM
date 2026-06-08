@@ -1,0 +1,62 @@
+{
+  "projects": [
+    {
+      "id": "mobile-ux-improvements",
+      "baseline": "Map is 30x20 tiles at TILE_SIZE=48px (1440x960 native pixels). On mobile (375px viewport), fitZoom calculates to ~0.26, producing a canvas of ~375x250px. Zoom is Ctrl+wheel only. Canvas has CSS 'touch-none' blocking ALL touch gestures. Touch handling is tap-to-click only -- no pinch-to-zoom, no drag-to-pan. Mobile bottom sheet is a fixed overlay at max-h-[55vh]. Zoom math is broken on mobile: maxZoom(0.78) < minZoom(1.0) makes clamping impossible.",
+      "active_files": [
+        "src/components/game/CanvasOffice.tsx",
+        "src/components/game/GamePage.tsx",
+        "src/components/game/SidePanel.tsx",
+        "src/components/game/GameHeader.tsx",
+        "src/components/game/constants.ts",
+        "src/styles/globals.css",
+        "index.html"
+      ],
+      "dead_code": [
+        "src/components/game/GamePage.tsx (ControlsHint component defined at lines 129-143 but never rendered)",
+        "src/components/game/constants.ts (ZOOM_MIN, ZOOM_MAX, ZOOM_DEFAULT_DPR_FACTOR, etc. at lines 114-121 -- never imported anywhere)",
+        "src/components/game/types.ts (buildAgentCharMap function -- no callers)"
+      ],
+      "findings": "CRITICAL ISSUES:\n1. ZOOM IS BROKEN ON MOBILE. Wheel zoom requires Ctrl/Meta key. No pinch-to-zoom support. Touch handler only handles single-finger tap-to-click.\n2. ZOOM MATH IS BROKEN ON MOBILE. Clamping logic computes minZoom=max(1, fitZoom*0.5) and maxZoom=min(8, fitZoom*3). On 375px mobile, fitZoom=0.26, so minZoom=1.0 but maxZoom=0.78. maxZoom < minZoom makes zoom impossible.\n3. TOUCH-NONE BLOCKS SCROLLING. Canvas has 'touch-none' CSS preventing ALL browser touch gestures.\n4. BOTTOM SHEET IS FLOATING OVERLAY. Mobile SidePanel is fixed z-50 with max-h-[55vh] and backdrop -- floats OVER the game.\n5. AGENT TICKER OVERLAPS ON MOBILE. Positioned absolute with maxWidth 320px against 375px canvas.\n6. HEADER BUTTONS CRAMPED. 5 HudButtons in a row overflow on 375px screens.\n7. FULLSCREEN API MISSING ON IOS. requestFullscreen not supported on iOS Safari.\n8. NO VIEWPORT-FIT=COVER. Meta tag lacks viewport-fit=cover for notched devices.\n9. DUPLICATE ZOOM CONSTANTS. constants.ts exports unused ZOOM_* values; CanvasOffice uses local constants with inconsistent values (max 10 vs 8).",
+      "recommended_approach": "Split into 3 workstreams within a single project:\n\nWORKSTREAM 1 -- Touch Gestures (CanvasOffice.tsx, constants.ts): Replace touch handler with unified gesture recognizer for tap, single-finger drag (pan), two-finger pinch (zoom). Keep touch-none on canvas, implement pinch-to-zoom tracking 2 touches with distance delta. For panning, programmatically scroll parent overflow container. Fix zoom bounds: on mobile, minZoom=fitZoom (fill width), maxZoom=fitZoom*4 or MAX_ZOOM_ABSOLUTE. Consolidate zoom constants to constants.ts.\n\nWORKSTREAM 2 -- Layout Integration (GamePage.tsx, SidePanel.tsx, globals.css): Replace floating bottom sheet with integrated layout. Canvas and panel share vertical space (panel below canvas). Remove fixed positioning, z-50, backdrop. When no panel open, canvas takes full height. Animate split view on panel open.\n\nWORKSTREAM 3 -- Polish (GameHeader.tsx, index.html, AgentTicker.tsx): Collapse header buttons to icons-only on mobile. Add viewport-fit=cover. Shrink AgentTicker on mobile. Hide fullscreen on iOS. Delete dead code.",
+      "follow_ups": [
+        {
+          "action": "Delete dead ControlsHint component from GamePage.tsx",
+          "risk": "low",
+          "rationale": "Never rendered. Pure dead code.",
+          "files": ["src/components/game/GamePage.tsx"]
+        },
+        {
+          "action": "Consolidate zoom constants -- remove unused ZOOM_* from constants.ts",
+          "risk": "low",
+          "rationale": "Dead exports, never imported.",
+          "files": ["src/components/game/constants.ts"]
+        },
+        {
+          "action": "Delete dead buildAgentCharMap function from types.ts",
+          "risk": "low",
+          "rationale": "No callers.",
+          "files": ["src/components/game/types.ts"]
+        },
+        {
+          "action": "Add viewport-fit=cover to index.html viewport meta tag",
+          "risk": "medium",
+          "rationale": "Enables safe-area-inset env vars. Low side-effect risk.",
+          "files": ["index.html"]
+        },
+        {
+          "action": "Investigate iOS fullscreen API compatibility -- hide button or use alternative",
+          "risk": "medium",
+          "rationale": "Button does nothing on iOS. UX dead-end.",
+          "files": ["src/components/game/GameHeader.tsx"]
+        },
+        {
+          "action": "Evaluate whether tab strip should be persistent bottom nav on mobile",
+          "risk": "high",
+          "rationale": "Significant UX architecture decision. Needs CEO/design input.",
+          "files": ["src/components/game/GamePage.tsx", "src/components/game/GameHeader.tsx", "src/components/game/SidePanel.tsx"]
+        }
+      ]
+    }
+  ]
+}

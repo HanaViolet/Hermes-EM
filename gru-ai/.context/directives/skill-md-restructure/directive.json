@@ -1,0 +1,34 @@
+{
+  "id": "skill-md-restructure",
+  "title": "Restructure directive SKILL.md into routing map + modular docs",
+  "status": "completed",
+  "source": "ceo",
+  "weight": "strategic",
+  "created": "2026-03-03T06:30:00Z",
+  "updated": "2026-03-03T11:30:00Z",
+  "completed": "2026-03-03T11:30:00Z",
+  "triage": {
+    "action": "execute_project",
+    "project_id": "improve-agent-productivity",
+    "task_ids": [
+      "0.1-extract-pipeline-docs",
+      "0.2-extract-reference-docs",
+      "0.3-build-routing-map",
+      "0.4-content-integrity-verification"
+    ],
+    "rationale": "P0 enabler — every harness engineering project depends on SKILL.md being modular",
+    "requires_ceo_approval": false
+  },
+  "plan": null,
+  "phases": null,
+  "cast": null,
+  "dod": [
+    "SKILL.md is <150 lines with only routing logic",
+    "Every step exists in exactly one docs/pipeline/*.md file",
+    "All schemas/templates/rules in docs/reference/*.md",
+    "Zero content loss",
+    "Alex spawn prompt updated to reference routing map"
+  ],
+  "report_summary": "Split 1,450-line SKILL.md into 27 modular docs (11 pipeline, 16 reference) + 134-line routing map. Verified 76/76 headings, 10/10 content blocks, zero content loss. Alex spawn: 68KB → 500 bytes.",
+  "telemetry": null
+}

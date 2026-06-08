@@ -1,0 +1,39 @@
+{
+  "goal": "Agent Status Visual Behaviors",
+  "challenges": {
+    "risks": [
+      "The 'done' status requires a two-phase behavior (linger at desk, then walk to break room) which is a state machine transition the engine may not support today — could require non-trivial changes to the character movement system.",
+      "Adding 2 new statuses touches 6 files across types, mapping, state management, routing, animation, and rendering — a single missed update creates a silent bug where agents get routed to wrong rooms or show wrong animations.",
+      "The 'paused' idle/coffee pose needs a new animation frame or visual distinction from regular IDLE — if the character sprite sheet doesn't have a coffee/relaxed pose, paused agents will look identical to idle agents, defeating the purpose."
+    ],
+    "over_engineering_flags": [
+      "The directive is well-scoped — 6 files, single domain, clear behavior table. No over-engineering concern."
+    ],
+    "recommendation": "Proceed as-is. This is a focused enum extension + behavior routing change across one subsystem. The file list and behavior table are specific enough to execute cleanly in a single project."
+  },
+  "projects": [
+    {
+      "id": "agent-status-visual-behaviors",
+      "title": "Add paused and done visual behaviors to game engine",
+      "priority": "P0",
+      "scope_summary": "Extend AgentStatus enum with 'paused' and 'done'. Update toAgentStatus mapping so server paused/done states flow through correctly. Wire up officeState.applyAgentStatus and roomZones.chooseDestination so paused agents stay at desk with idle pose and done agents linger then walk to break room. Add any needed animation/rendering hints for the new states.",
+      "complexity": "moderate",
+      "agent": [
+        "riley"
+      ],
+      "reviewers": [
+        "sarah"
+      ],
+      "auditor": "sarah",
+      "depends_on": [],
+      "touches_files_hint": [
+        "src/components/game/pixel-types.ts",
+        "src/components/game/GamePage.tsx",
+        "src/components/game/engine/officeState.ts",
+        "src/components/game/engine/roomZones.ts",
+        "src/components/game/engine/characters.ts",
+        "src/components/game/engine/renderer.ts"
+      ]
+    }
+  ]
+}

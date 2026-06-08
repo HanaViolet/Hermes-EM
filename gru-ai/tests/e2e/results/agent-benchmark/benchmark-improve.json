@@ -1,0 +1,5 @@
+{
+  "benchmark_type": "improve",
+  "results": [{"config":"starter","directive":"improve-landing-page","pass_count":17,"fail_count":0,"status":"pass","duration_ms":310},{"config":"standard","directive":"improve-landing-page","pass_count":17,"fail_count":0,"status":"pass","duration_ms":305},{"config":"full","directive":"improve-landing-page","pass_count":17,"fail_count":0,"status":"pass","duration_ms":354}],
+  "timestamp": "2026-03-08T03:20:51Z"
+}

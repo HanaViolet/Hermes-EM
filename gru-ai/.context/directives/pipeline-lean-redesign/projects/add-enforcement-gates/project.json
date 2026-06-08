@@ -1,0 +1,58 @@
+{
+  "id": "add-enforcement-gates",
+  "title": "Add 3 critical missing enforcement gates as validation scripts",
+  "status": "completed",
+  "priority": "P1",
+  "agent": ["devon"],
+  "reviewers": ["sarah"],
+  "description": "Implement 3 highest-impact enforcement gates as mechanical validation. Harness engineering > context engineering.",
+  "source_directive": "pipeline-lean-redesign",
+  "scope": {
+    "in": "Extend validate-project-json.sh with 2 new checks (project.json update verification, browser test verification). Add code-review failure blocking logic in 09-execute-projects.md.",
+    "out": "Creating new scripts. Adding the 2 deferred medium-priority gates. Changing existing validation behavior."
+  },
+  "browser_test": false,
+  "dod": [
+    { "criterion": "validate-project-json.sh checks that completed tasks have DOD met fields set", "met": true },
+    { "criterion": "validate-project-json.sh checks browser_test flag and warns if no design-review.md exists", "met": true },
+    { "criterion": "09-execute-projects.md has explicit code-review failure blocking with max 1 fix cycle", "met": true },
+    { "criterion": "Each validation script exits non-zero when condition is violated", "met": true }
+  ],
+  "tasks": [
+    {
+      "id": "extend-project-validation",
+      "title": "Add project.json update and browser test checks to validate-project-json.sh",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "code-review", "review"],
+      "agent": ["devon"],
+      "user_scenario": "Pipeline stops with clear error if tasks are marked complete but DOD not verified, or if browser_test is true but no design review was logged.",
+      "scope": "Extend validate-project-json.sh with: (1) For completed tasks, check that dod[].met is set (not all false). (2) If project has browser_test: true, check that a design-review.md exists in the project directory. Both checks should produce clear error messages. Script must exit non-zero on failure.",
+      "dod": [
+        { "criterion": "Script detects completed tasks with all DOD met=false and reports error", "met": true },
+        { "criterion": "Script detects browser_test=true without design-review.md and reports warning", "met": true },
+        { "criterion": "Script exits non-zero on validation failure", "met": true },
+        { "criterion": "Existing validation checks still pass for valid project.json files", "met": true }
+      ]
+    },
+    {
+      "id": "add-codereview-blocking",
+      "title": "Add code-review failure blocking logic in 09-execute-projects.md",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["devon"],
+      "user_scenario": "When a code review returns 'fail', the pipeline stops and re-runs the builder before proceeding — bugs don't slip through to final review.",
+      "scope": "Add explicit code-review failure handling in 09-execute-projects.md after the code-review phase section. If code_review_outcome = 'fail' or 'critical': (1) stop — do not proceed to review, (2) re-spawn builder with findings (bugs_found, data_flow_issues), (3) re-run code-review on updated diff, (4) max 1 fix cycle — if still failing, log and proceed to review. If 'pass': proceed normally.",
+      "dod": [
+        { "criterion": "09-execute-projects.md has code-review failure handling section with clear blocking logic", "met": true },
+        { "criterion": "Max 1 fix cycle is specified to prevent infinite loops", "met": true },
+        { "criterion": "Both 'fail' and 'critical' outcomes trigger the blocking logic", "met": true }
+      ]
+    }
+  ],
+  "created": "2026-03-09T23:45:00Z",
+  "updated": "2026-03-10T00:15:00Z"
+}

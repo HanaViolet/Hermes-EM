@@ -1,0 +1,206 @@
+{
+  "id": "codebase-cleanup",
+  "title": "Codebase Cleanup",
+  "status": "completed",
+  "created": "2026-03-08",
+  "completed": "2026-03-08",
+  "weight": "heavyweight",
+  "produced_features": [],
+  "report": null,
+  "backlog_sources": [],
+  "started_at": "2026-03-08T00:00:00Z",
+  "updated_at": "2026-03-08T00:50:00Z",
+  "current_step": "completion",
+  "pipeline": {
+    "triage": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "weight": "heavyweight",
+        "summary": "Heavyweight: crosses all system boundaries, 4+ parallel work areas."
+      }
+    },
+    "checkpoint": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "No existing checkpoint. Fresh start."
+      }
+    },
+    "read": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Read directive.md. Full codebase cleanup after 100+ iterations."
+      }
+    },
+    "context": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Read vision.md, all lessons, agent registry. Cataloged 100+ source files."
+      }
+    },
+    "challenge": {
+      "status": "skipped",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Challenge inlined into COO planning prompt."
+      }
+    },
+    "brainstorm": {
+      "status": "completed",
+      "agent": [
+        "sarah",
+        "morgan",
+        "sam"
+      ],
+      "output": {
+        "summary": "3 agents converged on domain-based decomposition. Key finds: 5 dead scripts, cmdk dep, zod bug, type drift, barrel indexes."
+      },
+      "artifacts": [
+        ".context/directives/codebase-cleanup/brainstorm.md"
+      ]
+    },
+    "plan": {
+      "status": "completed",
+      "agent": [
+        "morgan"
+      ],
+      "output": {
+        "summary": "5 projects across 4 waves. 3 P0, 2 P1."
+      },
+      "artifacts": [
+        ".context/directives/codebase-cleanup/plan.json"
+      ]
+    },
+    "audit": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ],
+      "output": {
+        "summary": "97 tool calls. Key corrections: stores/types.ts LIVE, tasksByTeam LIVE, Codex kept per CEO, MCP bug found."
+      }
+    },
+    "approve": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "decision": "approved",
+        "modifications": [
+          "Keep Codex adapter",
+          "Commit first"
+        ]
+      }
+    },
+    "project-brainstorm": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ],
+      "output": {
+        "summary": "All 5 projects decomposed into tasks with DOD. 7 total tasks across 5 projects."
+      }
+    },
+    "setup": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Committed 452 files as baseline. Working on game branch directly (clean tree)."
+      }
+    },
+    "execute": {
+      "status": "completed",
+      "agent": [
+        "casey",
+        "jordan",
+        "riley",
+        "devon"
+      ],
+      "output": {
+        "summary": "All 5 projects completed. 7/7 tasks done. 1,293 lines deleted, 68 added. tsc + vite build pass clean."
+      }
+    },
+    "review-gate": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "All tasks verified: tsc --noEmit passes, vite build succeeds, grep confirms zero dangling references. All DOD criteria met across all 5 projects."
+      }
+    },
+    "wrapup": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Cleanup complete. Follow-ups flagged: MCP directive.ts bug, tasksByTeam dead consumer path, MCP backlog.ts stale path."
+      }
+    },
+    "completion": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "CEO approved completion. Committed as 7d0191c."
+      }
+    }
+  },
+  "projects": [
+    {
+      "id": "scripts-and-config-cleanup",
+      "status": "completed"
+    },
+    {
+      "id": "server-dead-code-cleanup",
+      "status": "completed"
+    },
+    {
+      "id": "frontend-dead-code-cleanup",
+      "status": "completed"
+    },
+    {
+      "id": "type-drift-reconciliation",
+      "status": "completed"
+    },
+    {
+      "id": "mcp-and-public-assets-cleanup",
+      "status": "completed"
+    }
+  ],
+  "planning": {
+    "coo_plan": {},
+    "ceo_approval": {
+      "status": "approved",
+      "modifications": [
+        "Keep Codex adapter",
+        "Commit first"
+      ]
+    },
+    "worktree_path": null
+  },
+  "wrapup": {
+    "okrs_persisted": false,
+    "follow_ups_processed": false,
+    "digest_path": null,
+    "lessons_updated": false
+  }
+}

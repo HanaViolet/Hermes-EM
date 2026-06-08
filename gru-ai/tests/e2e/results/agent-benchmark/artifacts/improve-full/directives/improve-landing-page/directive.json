@@ -1,0 +1,15 @@
+{
+  "id": "improve-landing-page",
+  "title": "Improve and Polish Landing Page",
+  "weight": "lightweight",
+  "status": "pending",
+  "pipeline": {
+    "current_step": "triage",
+    "started_at": "2026-03-08T03:20:51Z"
+  },
+  "scope": {
+    "description": "Take the existing landing page (index.html) and improve it with responsive breakpoints, accessibility, micro-animations, and typography polish. MUST preserve all 6 original sections: Hero, Features Grid, How It Works, Agent Showcase, Pricing, Footer CTA.",
+    "in": [],
+    "out": []
+  }
+}

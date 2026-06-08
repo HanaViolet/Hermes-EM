@@ -1,0 +1,33 @@
+{
+  "goal": "Pipeline Quality Gates & Context Trim — 5 surgical prompt edits to prevent silent requirement drops, enforce user-centric DOD for UI work, and reweight reviews toward acceptance testing",
+  "challenges": {
+    "risks": [
+      "1. Prompt edits are fragile — a poorly worded addition to planner-prompt.md could cause the COO agent to enter a clarification loop on every directive instead of just ambiguous ones, slowing throughput",
+      "2. 'User-centric DOD for UI work' is a conditional rule that builders must internalize — if the brainstorm prompt addition is too subtle, the CTO will keep writing code-centric DOD out of habit",
+      "3. Review reweighting in 09-execute-projects.md is the longest file (715 lines) — inserting acceptance-review language in the wrong spot could conflict with existing review prompts (user-perspective review, DOD verification, code-review) rather than complement them"
+    ],
+    "over_engineering_flags": [
+      "The directive already scoped this to 5 edits across 4 files — no over-engineering risk. The CEO explicitly dropped R4 (context trim) and R5 (builder self-verification). This is already the minimal version."
+    ],
+    "recommendation": "Proceed as-is. The CEO brainstorm already simplified this to the lightest possible approach — 5 prompt edits, no new schemas/scripts/steps. Single project, single builder (taylor), dual reviewers."
+  },
+  "projects": [
+    {
+      "id": "pipeline-quality-gates",
+      "title": "Pipeline Quality Gates — 5 Surgical Prompt Edits",
+      "priority": "P0",
+      "scope_summary": "Make 5 targeted edits to 4 pipeline docs to prevent the failure modes exposed by game-ui-tmx-update. Edit 1: Add clarification/gap-surfacing behavior to planner-prompt.md so the COO asks questions when requirements are ambiguous instead of silently compressing. Edit 2: Add user-centric DOD guidance to 07b-project-brainstorm.md so UI task DOD describes what users see at default state. Edit 3: Reweight the review prompt in 09-execute-projects.md toward acceptance testing over code review. Edit 4: Add default-state verification requirement to 09-execute-projects.md review instructions. Edit 5: Add user-centric DOD rules to scope-and-dod.md for UI/visual work.",
+      "complexity": "simple",
+      "agent": ["taylor"],
+      "reviewers": ["sarah", "morgan"],
+      "auditor": "morgan",
+      "depends_on": [],
+      "touches_files_hint": [
+        ".claude/skills/directive/docs/reference/templates/planner-prompt.md",
+        ".claude/skills/directive/docs/pipeline/07b-project-brainstorm.md",
+        ".claude/skills/directive/docs/pipeline/09-execute-projects.md",
+        ".claude/skills/directive/docs/reference/rules/scope-and-dod.md"
+      ]
+    }
+  ]
+}

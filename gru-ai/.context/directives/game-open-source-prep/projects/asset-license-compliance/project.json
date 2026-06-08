@@ -1,0 +1,183 @@
+{
+  "id": "asset-license-compliance",
+  "title": "Asset License Compliance — gitignore, fallbacks, setup, credits",
+  "description": "Ensure non-redistributable paid assets are excluded from the repo, add a setup script for developer onboarding, improve fallback console messages, and add proper credits/attribution.",
+  "status": "completed",
+  "completed": "2026-03-07T11:00:00Z",
+  "priority": "P0",
+  "complexity": "moderate",
+  "scope": {
+    "in": [
+      ".gitignore",
+      "scripts/setup-assets.sh",
+      "src/components/game/tileset-loader.ts",
+      "src/components/game/asset-loader.ts",
+      "src/components/game/tilesetCache.ts",
+      "public/assets/README.md",
+      "src/components/game/GamePage.tsx"
+    ],
+    "out": [
+      "Fallback rendering logic changes",
+      "Asset replacement or recreation"
+    ]
+  },
+  "dod": [
+    {
+      "criterion": "Non-redistributable assets are gitignored and untracked",
+      "met": true
+    },
+    {
+      "criterion": "setup-assets.sh exists and guides developers to acquire paid assets",
+      "met": true
+    },
+    {
+      "criterion": "Console warnings reference setup-assets.sh",
+      "met": true
+    },
+    {
+      "criterion": "README and game UI include proper attribution/credits",
+      "met": true
+    }
+  ],
+  "agent": [
+    "devon"
+  ],
+  "reviewers": [
+    "sarah"
+  ],
+  "auditor": "sarah",
+  "tasks": [
+    {
+      "id": "gitignore-and-untrack",
+      "title": "Add .gitignore rules and untrack non-redistributable assets",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": [
+        "build",
+        "review"
+      ],
+      "agent": [
+        "devon"
+      ],
+      "scope": "Add gitignore rules for public/assets/Modern_Office_Revamped_v1.2/, public/assets/office/furniture.png, and public/assets/office/room-builder.png. Run git rm --cached on all three to untrack them. Run git rm -r 'public/assets/Modern tiles_Free/' to delete the non-commercial free pack entirely. Verify with git status.",
+      "dod": [
+        {
+          "criterion": ".gitignore contains rules that exclude public/assets/Modern_Office_Revamped_v1.2/, public/assets/office/furniture.png, and public/assets/office/room-builder.png",
+          "met": true
+        },
+        {
+          "criterion": "git ls-files shows none of the non-redistributable assets are tracked",
+          "met": true
+        },
+        {
+          "criterion": "public/assets/Modern tiles_Free/ directory is deleted from the repo (git rm -r)",
+          "met": true
+        },
+        {
+          "criterion": "walls.png and characters/char_*.png remain tracked",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "setup-script",
+      "title": "Create setup-assets.sh script for developer onboarding",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": [
+        "build",
+        "review"
+      ],
+      "agent": [
+        "devon"
+      ],
+      "scope": "Create scripts/setup-assets.sh that checks if LimeZu tileset files exist, if missing prints purchase URL and exact copy commands, validates placed files, idempotent and safe to re-run.",
+      "dod": [
+        {
+          "criterion": "scripts/setup-assets.sh exists, is executable, and runs without errors on macOS/Linux",
+          "met": true
+        },
+        {
+          "criterion": "When assets missing, prints purchase URL (https://limezu.itch.io/modernoffice) and file placement instructions",
+          "met": true
+        },
+        {
+          "criterion": "When assets present, prints 'assets already installed' and exits cleanly",
+          "met": true
+        },
+        {
+          "criterion": "Checks all three paths: Modern_Office_Revamped_v1.2/, office/furniture.png, office/room-builder.png",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "improve-fallback-messages",
+      "title": "Improve console warnings to reference setup script",
+      "status": "completed",
+      "priority": "P1",
+      "complexity": "simple",
+      "phases": [
+        "build",
+        "review"
+      ],
+      "agent": [
+        "devon"
+      ],
+      "scope": "Update catch-block console.warn messages in asset-loader.ts, tileset-loader.ts, and tilesetCache.ts to mention setup-assets.sh. Do NOT change fallback logic.",
+      "dod": [
+        {
+          "criterion": "asset-loader.ts loadFloorAssets catch block mentions setup-assets.sh",
+          "met": true
+        },
+        {
+          "criterion": "tileset-loader.ts loadLimeZuSprites catch block mentions setup-assets.sh",
+          "met": true
+        },
+        {
+          "criterion": "tilesetCache.ts loadTilesetCache catch block mentions setup-assets.sh",
+          "met": true
+        },
+        {
+          "criterion": "No changes to actual fallback/rendering logic",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "readme-and-credits",
+      "title": "Update asset README and add credits/attribution to the game UI",
+      "status": "completed",
+      "priority": "P1",
+      "complexity": "simple",
+      "phases": [
+        "build",
+        "review"
+      ],
+      "agent": [
+        "devon"
+      ],
+      "scope": "Rewrite public/assets/office/README.md with accurate fallback description and setup-assets.sh reference. Create public/assets/README.md with asset structure and license table. Add credits section to game UI (LimeZu, JIK-A-4/MetroCity, walls.png MIT).",
+      "dod": [
+        {
+          "criterion": "public/assets/office/README.md accurately describes fallback behavior and references setup-assets.sh",
+          "met": true
+        },
+        {
+          "criterion": "public/assets/README.md exists with asset structure overview and license summary table",
+          "met": true
+        },
+        {
+          "criterion": "Game UI includes visible attribution for LimeZu and JIK-A-4 MetroCity",
+          "met": true
+        },
+        {
+          "criterion": "Credits render correctly even without premium assets (fallback mode)",
+          "met": true
+        }
+      ]
+    }
+  ]
+}

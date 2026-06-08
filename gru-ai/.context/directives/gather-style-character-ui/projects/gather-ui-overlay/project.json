@@ -1,0 +1,97 @@
+{
+  "id": "gather-ui-overlay",
+  "title": "Gather-Style Name Labels, Status Dots, and Co-location Grouping",
+  "directive": "gather-style-character-ui",
+  "priority": "P0",
+  "status": "completed",
+  "complexity": "moderate",
+  "agent": ["riley"],
+  "reviewers": ["quinn", "sarah"],
+  "auditor": "sarah",
+  "description": "Replace the current identity plate rendering with Gather.town-style rounded-pill dark backgrounds, clean sans-serif font, and colored status dots inline with name pills. Implement lightweight name grouping for overlapping plates.",
+  "scope": {
+    "in": "renderIdentityPlates() pill rendering, renderStatusIcons() status display, constants for pill geometry, name overlap grouping logic",
+    "out": "Character sprites, CEO crown, speech bubbles, interaction icons, activity icons, AgentStatus type expansion"
+  },
+  "dod": [
+    { "criterion": "Name plates render as Gather.town-style rounded pills with dark background and white text", "met": true },
+    { "criterion": "Colored status dots (green=working, gray=idle) render inline to the right of agent names", "met": true },
+    { "criterion": "Overlapping name pills merge into grouped comma-separated labels", "met": true },
+    { "criterion": "Activity icons and interaction icons continue to render correctly", "met": true }
+  ],
+  "sequencing_rationale": "Task 1 establishes constants and cleans dead code so subsequent tasks have the right values and a clean import surface. Task 2 changes the pill shape (visual foundation). Task 3 adds the inline status dot into the pill created by task 2 and strips the old sprite-based status rendering. Task 4 builds on the plate data structures from tasks 2-3 to implement grouping logic.",
+  "tasks": [
+    {
+      "id": "pill-constants-and-cleanup",
+      "title": "Update pill geometry constants and remove dead code",
+      "priority": "P0",
+      "status": "completed",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["riley"],
+      "user_scenario": "Foundation constants for new pill style, removes unused code.",
+      "scope": "In constants.ts: increase IDENTITY_PLATE_PAD_X from 4 to 8, IDENTITY_PLATE_PAD_Y from 2 to 5, IDENTITY_PLATE_HEIGHT from 12 to 22, add IDENTITY_PLATE_CORNER_RADIUS=11, STATUS_DOT_RADIUS=4, STATUS_DOT_GAP=5. In renderer.ts: delete unused STATUS_DOT_COLORS block and unused INTERACTION_DOT_COLORS import.",
+      "dod": [
+        { "criterion": "IDENTITY_PLATE_PAD_X=8, IDENTITY_PLATE_PAD_Y=5, IDENTITY_PLATE_HEIGHT=22, IDENTITY_PLATE_CORNER_RADIUS=11 exported from constants.ts", "met": true },
+        { "criterion": "STATUS_DOT_RADIUS=4 and STATUS_DOT_GAP=5 exported from constants.ts", "met": true },
+        { "criterion": "STATUS_DOT_COLORS record deleted from renderer.ts (was dead code)", "met": true },
+        { "criterion": "INTERACTION_DOT_COLORS removed from import statement in renderer.ts (INTERACTION_SPRITES preserved)", "met": true },
+        { "criterion": "npm run type-check passes with zero errors", "met": true }
+      ]
+    },
+    {
+      "id": "rounded-pill-plates",
+      "title": "Replace sharp-rect identity plates with rounded-pill rendering",
+      "priority": "P0",
+      "status": "completed",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["riley"],
+      "user_scenario": "Agent name labels change from sharp-cornered dark rectangles to smooth rounded-pill shapes with more padding, matching Gather.town style.",
+      "scope": "Refactor renderIdentityPlates() to use ctx.roundRect() with IDENTITY_PLATE_CORNER_RADIUS instead of ctx.fillRect(). Update pill width for status dot space. Increase BG_ALPHA to 0.75. Adjust task info card vertical positioning. Change text color to white (#FFFFFF) instead of per-agent brandColor.",
+      "dod": [
+        { "criterion": "Name plates render as rounded pills (roundRect with corner radius 11) instead of sharp rectangles", "met": true },
+        { "criterion": "Pill background uses alpha 0.75 for improved contrast against varied tile backgrounds", "met": true },
+        { "criterion": "Name text renders in white (#FFFFFF) and is vertically centered within the pill", "met": true },
+        { "criterion": "Pill width includes reserved space for the status dot to the right of the name text", "met": true },
+        { "criterion": "Task info card still renders correctly below the pill with proper gap", "met": true }
+      ]
+    },
+    {
+      "id": "inline-status-dots",
+      "title": "Replace sprite status icons with inline colored dots in the name pill",
+      "priority": "P0",
+      "status": "completed",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["riley"],
+      "user_scenario": "Each agent's name pill shows a small colored circle to the right of their name — green for working, gray for idle — replacing the floating sprite icons.",
+      "scope": "Draw filled circle using STATUS_DOT_RADIUS at right side of pill. Green (#22c55e) for working, gray (#9ca3af) for idle. Remove LimeZu and sprite-based status icon rendering paths from renderStatusIcons(). Preserve ACTIVITY_ICON_SPRITES and interactionMap.has() guard.",
+      "dod": [
+        { "criterion": "Green dot (#22c55e) renders inline to the right of the name text for working agents", "met": true },
+        { "criterion": "Gray dot (#9ca3af) renders inline to the right of the name text for idle agents", "met": true },
+        { "criterion": "ACTIVITY_ICON_SPRITES still render above characters in furniture activity states", "met": true },
+        { "criterion": "interactionMap.has() guard preserved — agents with active interactions skip status icon rendering", "met": true },
+        { "criterion": "No dot renders for agents with no status", "met": true }
+      ]
+    },
+    {
+      "id": "colocation-grouping",
+      "title": "Merge overlapping name pills into grouped comma-separated labels",
+      "priority": "P0",
+      "status": "completed",
+      "complexity": "simple",
+      "phases": ["build", "code-review", "review"],
+      "agent": ["riley"],
+      "user_scenario": "When agents stand close together, a single merged pill shows comma-separated names instead of overlapping individual pills.",
+      "scope": "Replace overlap-reduce-alpha approach with merge-based grouping. Run grouping pass after computing plate rects. 70% overlap threshold. Merged pill shows comma-separated names centered at average position. Green dot if any member working. Groups of 4+ show first 2 + '+N more'. Task info cards suppressed for merged groups.",
+      "dod": [
+        { "criterion": "When two agents' plate rects overlap >70%, a single merged pill renders showing both names comma-separated", "met": true },
+        { "criterion": "Merged pill is horizontally centered at the midpoint of grouped agents' positions", "met": true },
+        { "criterion": "Status dot in merged pill shows green if any grouped agent is working, gray if all idle", "met": true },
+        { "criterion": "Groups of 4+ agents show first 2 names + '+N more' format", "met": true },
+        { "criterion": "Non-overlapping agents still render individual pills with their own status dots", "met": true }
+      ]
+    }
+  ]
+}

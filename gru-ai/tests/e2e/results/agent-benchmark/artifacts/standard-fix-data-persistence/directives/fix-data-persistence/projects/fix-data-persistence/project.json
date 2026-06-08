@@ -1,0 +1,18 @@
+{
+  "id": "fix-data-persistence",
+  "title": "Fix Data Persistence Bug",
+  "status": "pending",
+  "agent": ["fullstack"],
+  "reviewers": ["qa"],
+  "tasks": [
+    {
+      "id": "task-1",
+      "title": "Persist todo completion state to localStorage on toggle",
+      "status": "pending",
+      "agent": ["fullstack"],
+      "dod": [
+        { "criterion": "Completed todos revert to incomplete state after page refresh because the toggle handler updates the UI but does not persist the change to localStorage. Fix the toggle handler to save state.", "met": false }
+      ]
+    }
+  ]
+}

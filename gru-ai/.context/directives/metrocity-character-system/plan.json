@@ -1,0 +1,35 @@
+{
+  "goal": "MetroCity Character System",
+  "challenges": {
+    "risks": [
+      "Frame mapping ambiguity: MetroCity has 24 columns per direction but we need exactly 7 frames (3 walk + 2 type + 2 read). The builder will need to visually inspect the spritesheet and make judgment calls on which frames map to which animations.",
+      "MetroCity frame size is 32x32 vs current 16x32. This is a 2x width increase. Character positioning (anchor at bottom-center, sitting offsets) may need tuning.",
+      "Compositing complexity at load time: layering body + hair + outfit via canvas for 13 agents x 7 frames x 3 directions = 273 composite operations. Needs a pre-composition strategy."
+    ],
+    "over_engineering_flags": [
+      "Auto-assignment for new users with exactly 13 fixed agents is over-engineering — a static mapping table is sufficient.",
+      "Runtime compositing is more complex than build-time pre-compositing via a Node script."
+    ],
+    "recommendation": "Simplify. Use a build-time Node script to pre-composite 13 agent spritesheets into static PNGs matching the current format. Runtime stays unchanged."
+  },
+  "projects": [
+    {
+      "id": "metrocity-character-compositing",
+      "title": "MetroCity Composable Character System",
+      "priority": "P0",
+      "scope_summary": "Build a Node/canvas script that composites MetroCity base body + hair + outfit layers into per-agent spritesheets. Map MetroCity's 24-column layout to the existing 7-frame x 3-direction format. Pre-compose 13 unique agent combinations with distinct skin/hair/outfit. Output char_0..12.png matching current format so asset-loader and renderer work unchanged. Copy MetroCity source assets to public/assets/metrocity/ for the build script.",
+      "complexity": "moderate",
+      "agent": ["devon"],
+      "reviewers": ["sarah"],
+      "auditor": "sarah",
+      "depends_on": [],
+      "touches_files_hint": [
+        "scripts/compose-characters.ts",
+        "public/assets/characters/char_0.png",
+        "public/assets/characters/char_1.png",
+        "src/components/game/sprites/spriteData.ts",
+        "src/components/game/asset-loader.ts"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,154 @@
+{
+  "id": "agent-status-visual-behaviors",
+  "title": "Agent Status Visual Behaviors",
+  "status": "completed",
+  "created": "2026-03-07",
+  "completed": "2026-03-08",
+  "weight": "medium",
+  "produced_features": [],
+  "report": null,
+  "backlog_sources": [],
+  "started_at": "2026-03-07T17:05:00Z",
+  "updated_at": "2026-03-08T00:00:00Z",
+  "current_step": "completion",
+  "pipeline": {
+    "triage": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "weight": "medium",
+        "summary": "Medium weight -- single game domain, clear spec."
+      }
+    },
+    "read": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Read directive.md -- add paused/done as distinct visual states."
+      }
+    },
+    "context": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Read vision.md, lessons. Reopened to add fix-status-detection project — later cancelled by CEO."
+      }
+    },
+    "challenge": {
+      "status": "skipped",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Skipped for medium weight"
+      }
+    },
+    "plan": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Superseded — CEO implemented working/idle simplification directly."
+      }
+    },
+    "audit": {
+      "status": "skipped",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Skipped — fix-status-detection cancelled, original project already completed."
+      }
+    },
+    "approve": {
+      "status": "skipped",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Auto-approved for medium weight"
+      }
+    },
+    "project-brainstorm": {
+      "status": "skipped",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Skipped — no remaining pending projects."
+      }
+    },
+    "setup": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Working on game branch directly."
+      }
+    },
+    "execute": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Original project completed. fix-status-detection cancelled — CEO confirmed status should remain working/idle only."
+      }
+    },
+    "review-gate": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Original project verified. Second project removed per CEO direction."
+      }
+    },
+    "wrapup": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Directive complete. AgentStatus stays as working/idle — no expansion needed."
+      }
+    },
+    "completion": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "CEO closed directive. fix-status-detection removed — status expansion was wrong direction."
+      }
+    }
+  },
+  "projects": [
+    {
+      "id": "agent-status-visual-behaviors",
+      "status": "completed"
+    }
+  ],
+  "planning": {
+    "coo_plan": {},
+    "ceo_approval": {
+      "status": "auto-approved",
+      "modifications": []
+    },
+    "worktree_path": null
+  },
+  "wrapup": {
+    "okrs_persisted": false,
+    "follow_ups_processed": false,
+    "digest_path": null,
+    "lessons_updated": true
+  }
+}

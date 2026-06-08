@@ -1,0 +1,189 @@
+{
+  "id": "pipeline-e2e-test",
+  "title": "Pipeline E2E Test Skill",
+  "status": "completed",
+  "created": "2026-03-10",
+  "completed": "2026-03-10",
+  "weight": "medium",
+  "produced_features": ["/smoke-test skill"],
+  "report": "pipeline-e2e-test-2026-03-10",
+  "backlog_sources": [],
+
+  "dod": {
+    "success_looks_like": [
+      "I run /smoke-test and see a step-by-step report: triage PASS, checkpoint PASS, read PASS, ..., completion PASS",
+      "If a step fails (missing output field, wrong schema, step didn't advance), I see exactly what broke",
+      "After pipeline doc changes, I run this and know in ~5 minutes whether the pipeline still works",
+      "Test runs in isolation (branch or worktree) and cleans up after itself",
+      "Medium-weight test auto-approves at all gates except completion"
+    ],
+    "failure_looks_like": [
+      "The test is another cognitive walkthrough that just reads docs instead of actually running a directive",
+      "The test requires me to babysit each step manually",
+      "Test artifacts leak into the real repo",
+      "The test hangs at STOP gates with no way to auto-approve"
+    ],
+    "quality_bar": "Running /smoke-test produces a clear pass/fail report per pipeline step within 5 minutes, with no manual intervention needed for medium-weight directives",
+    "examples": [
+      "Like running `npm test` — one command, clear output, pass or fail",
+      "Like CI smoke tests — exercise the critical path, not every edge case"
+    ]
+  },
+
+  "revision": 1,
+  "intent_version": {
+    "version": 2,
+    "reason": "Add multi-weight support (lightweight + medium), worktree isolation, Option B gate simulation (full gate logic + default response)",
+    "updated_at": "2026-03-10T15:10:00Z"
+  },
+  "iterations": [
+    {
+      "opened_at": "2026-03-10T15:10:00Z",
+      "reason": "CEO: multi-weight was original requirement but incorrectly scoped out. Need worktree isolation instead of branch checkout, Option B for gate simulation (full gate logic + default response), concrete test cases per weight class, weight argument in run-smoke-test.sh",
+      "type": "extend",
+      "items": [
+        "Option B test_mode in 04b-clarification.md and 07-plan-approval.md — full gate execution + default response",
+        "Worktree isolation in run-smoke-test.sh — replace branch checkout with git worktree add",
+        "Weight argument support — run-smoke-test.sh accepts lightweight/medium, SKILL.md passes $ARGUMENTS",
+        "Concrete test cases per weight — lightweight: create marker file; medium: create utility module with function + config"
+      ]
+    }
+  ],
+
+  "started_at": "2026-03-10T14:00:00Z",
+  "updated_at": "2026-03-10T16:15:00Z",
+  "current_step": "completion",
+
+  "pipeline": {
+    "triage": {
+      "status": "completed",
+      "agent": ["ceo"],
+      "output": {
+        "summary": "Classified as medium — building a new skill with clear requirements, single domain, low risk.",
+        "weight": "medium",
+        "rationale": "New testing skill with prescribed approach. 2-3 tasks, framework-only changes."
+      }
+    },
+    "checkpoint": {
+      "status": "completed",
+      "agent": ["ceo"],
+      "output": { "summary": "Fresh directive, no prior progress to resume." }
+    },
+    "read": {
+      "status": "completed",
+      "agent": ["ceo"],
+      "output": { "summary": "Read directive.md. DOD extracted: 5 success criteria, 4 failure criteria, quality bar defined." }
+    },
+    "context": {
+      "status": "completed",
+      "agent": ["ceo"],
+      "output": { "summary": "Read vision.md, lessons/orchestration.md, lessons/agent-behavior.md, lessons/skill-design.md. No preferences.md found." }
+    },
+    "audit": {
+      "status": "completed",
+      "agent": ["sarah"],
+      "output": {
+        "summary": "Audited 5 scope areas. Skills are convention-based (.claude/skills/{name}/SKILL.md). validate-gate.sh can verify step artifacts. Recommended hybrid approach: spawn real /directive session with test_mode auto-approve. Branch isolation sufficient. 2 scenarios to migrate from lessons/scenarios.md.",
+        "findings": 5
+      },
+      "artifacts": [".context/directives/pipeline-e2e-test/audit.md"]
+    },
+    "brainstorm": {
+      "status": "skipped",
+      "agent": ["ceo"],
+      "output": { "summary": "Skipped for medium weight." }
+    },
+    "clarification": {
+      "status": "completed",
+      "agent": ["ceo"],
+      "output": {
+        "summary": "Auto-approved for medium weight. Intent clear from CEO brief: real pipeline execution test, not cognitive walkthrough.",
+        "verified_intent": {
+          "goal": "Build a /smoke-test skill that runs a real directive through the pipeline and reports pass/fail per step",
+          "constraints": ["Must run a real directive, not simulate/read docs", "Medium weight auto-approves at all gates", "Clean up test artifacts on pass or fail"],
+          "quality_bar": "One command, clear pass/fail output within 5 minutes",
+          "acceptance_scenarios": ["CEO runs /smoke-test -> sees step-by-step pass/fail report", "Pipeline doc change breaks a step -> smoke-test catches it with evidence"],
+          "out_of_scope": ["Heavyweight test with pre-canned CEO responses", "Trigger testing", "Custom test framework"]
+        }
+      }
+    },
+    "plan": {
+      "status": "completed",
+      "agent": ["morgan"],
+      "output": {
+        "summary": "EXTEND iteration: 1 delta project: smoke-test-multi-weight (P0, moderate). Devon builds, Sarah reviews. Worktree isolation + weight argument + Option B gate simulation + concrete test cases per weight.",
+        "projects": ["smoke-test-multi-weight"]
+      },
+      "artifacts": [".context/directives/pipeline-e2e-test/plan.json", ".context/directives/pipeline-e2e-test/plan-extend.json"]
+    },
+    "approve": {
+      "status": "completed",
+      "agent": ["ceo"],
+      "output": {
+        "summary": "Auto-approved for medium weight. Delta plan matches extend scope: 1 project, 4 tasks.",
+        "decision": "auto-approved"
+      }
+    },
+    "project-brainstorm": {
+      "status": "completed",
+      "agent": ["sarah", "devon"],
+      "output": {
+        "summary": "CTO decomposed smoke-test-multi-weight into 4 sequential tasks: worktree-isolation (replace branch with worktree), weight-argument-and-skip-sets (accept $1, skip sets per weight), gate-simulation-option-b (test_mode in 04b + 07), lightweight-test-directive (lightweight-specific content + validation). All moderate except task 4 (simple).",
+        "tasks": ["worktree-isolation", "weight-argument-and-skip-sets", "gate-simulation-option-b", "lightweight-test-directive"]
+      }
+    },
+    "setup": {
+      "status": "completed",
+      "agent": ["ceo"],
+      "output": {
+        "summary": "Reusing directive/enrich-agent-behaviors branch. No worktree needed for the directive itself (the smoke test creates its own worktree at runtime)."
+      }
+    },
+    "execute": {
+      "status": "completed",
+      "agent": ["devon", "sarah"],
+      "output": {
+        "summary": "4/4 tasks completed (worktree-isolation, weight-argument-and-skip-sets, gate-simulation-option-b, lightweight-test-directive). All built by Devon, code-reviewed + reviewed by Sarah. All DOD met."
+      }
+    },
+    "review-gate": {
+      "status": "completed",
+      "agent": ["ceo"],
+      "output": {
+        "summary": "validate-reviews.sh passed for iteration 2 (smoke-test-multi-weight). All 4 tasks have build + review artifacts. No self-review violations. DOD verified by reviewer (Sarah) for all tasks."
+      }
+    },
+    "wrapup": {
+      "status": "completed",
+      "agent": ["ceo"],
+      "output": {
+        "summary": "Iteration 2 wrapup: digest updated with both iterations (7/7 tasks, 30 DOD criteria all met). Review-gate passed. No new follow-ups. Status set to awaiting_completion."
+      }
+    },
+    "completion": {
+      "status": "completed",
+      "agent": ["ceo"],
+      "output": {
+        "summary": "CEO approved completion. 2 projects, 7 tasks, 30 DOD criteria all met across 2 iterations (initial build + extend).",
+        "decision": "approve"
+      }
+    }
+  },
+
+  "projects": [
+    { "id": "smoke-test-skill", "status": "completed" },
+    { "id": "smoke-test-multi-weight", "status": "completed" }
+  ],
+
+  "planning": {
+    "coo_plan": {},
+    "ceo_approval": { "status": "auto-approved", "modifications": [] },
+    "worktree_path": null
+  },
+
+  "wrapup": {
+    "follow_ups_processed": true,
+    "digest_path": ".context/reports/pipeline-e2e-test-2026-03-10.md",
+    "lessons_updated": false
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "goal": "Comprehensive E2E Testing of gru-ai v0.2.0",
+  "challenges": {
+    "risks": [
+      "Agent benchmark dimension is unbounded — 'build a new web app' + 'improve existing code' + multiple agent configs + multiple platforms creates a combinatorial explosion.",
+      "Showing 'actual products' (web apps agents built) requires serving/screenshotting output from multiple test runs.",
+      "Multi-platform init depends on those tools being installable and functional in our test env."
+    ],
+    "over_engineering_flags": [
+      "CEO wants comprehensive agent benchmarks with multiple dimensions x configs x platforms. Keep it as parameterized bash scripts, not a custom benchmarking engine.",
+      "Results reporting: markdown summary table with timing, pass/fail, and links to output dirs is sufficient for v1."
+    ],
+    "recommendation": "Simplify — bash scripts with markdown output. No test frameworks, no CI integration, no automated browser testing."
+  },
+  "projects": [
+    {
+      "id": "fix-known-bugs",
+      "title": "Fix Known Bugs Before Testing",
+      "priority": "P0",
+      "scope_summary": "Fix 3 known bugs: (1) server/config.ts ignoring PORT env var, (2) gruai.config.json missing preset/platform fields, (3) agent-registry.json CEO entry causing N+1 agent count.",
+      "complexity": "simple",
+      "agent": ["jordan"],
+      "reviewers": ["sarah"],
+      "auditor": "sarah",
+      "depends_on": [],
+      "touches_files_hint": ["server/config.ts", "cli/commands/scaffold.ts", "cli/templates/gruai.config.json.template"]
+    },
+    {
+      "id": "e2e-orchestrator-and-deterministic-dims",
+      "title": "E2E Orchestrator + Deterministic Test Dimensions (1-2, 4, 6-7)",
+      "priority": "P0",
+      "scope_summary": "Build run-e2e.sh orchestrator with --dim flag. Implement deterministic test dimensions: fresh install/init (3 presets), server startup/dashboard (HTTP, WS, assets), directive JSON schema validation, multi-platform init (4 variants), benchmark timing harness.",
+      "complexity": "moderate",
+      "agent": ["sam"],
+      "reviewers": ["sarah"],
+      "auditor": "sarah",
+      "depends_on": ["fix-known-bugs"],
+      "touches_files_hint": ["tests/e2e/run-e2e.sh", "tests/e2e/dim-*.sh", "tests/e2e/lib/utils.sh"]
+    },
+    {
+      "id": "agent-benchmark-suite",
+      "title": "Agent Benchmark Suite — Bug Fix, Build, Improve",
+      "priority": "P0",
+      "scope_summary": "Comprehensive agent benchmark: (1) bug-fix using existing fixture, (2) build-new-app from spec, (3) improve-existing with refactoring directive. Each runs across agent configs (starter/standard/full) and platforms. Output: actual artifacts in results dirs for CEO inspection, markdown summary with timing/pass rates/quality.",
+      "complexity": "complex",
+      "agent": ["sam"],
+      "reviewers": ["sarah", "marcus"],
+      "auditor": "sarah",
+      "depends_on": ["e2e-orchestrator-and-deterministic-dims"],
+      "touches_files_hint": ["tests/e2e/dim-agent-benchmark.sh", "tests/e2e/fixtures/", "tests/e2e/results/"]
+    },
+    {
+      "id": "chrome-mcp-checklist",
+      "title": "Chrome MCP UI Verification Checklist for CEO",
+      "priority": "P1",
+      "scope_summary": "Structured manual verification checklist for CEO to walk through in Chrome MCP. Covers dashboard, agent cards, directive status, WebSocket updates, responsive layout. Documentation only — CEO executes.",
+      "complexity": "simple",
+      "agent": ["sam"],
+      "reviewers": ["marcus"],
+      "auditor": "marcus",
+      "depends_on": [],
+      "touches_files_hint": ["tests/e2e/manual-chrome-mcp-checklist.md"]
+    }
+  ]
+}

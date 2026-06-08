@@ -1,0 +1,91 @@
+{
+  "id": "remove-category-concept",
+  "title": "Remove Category Concept",
+  "status": "completed",
+  "weight": "medium",
+  "created_at": "2026-03-07T00:00:00Z",
+  "updated_at": "2026-03-07T12:42:25.334Z",
+  "current_step": "completion",
+  "pipeline": {
+    "triage": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Classified as medium.",
+        "weight": "medium"
+      }
+    },
+    "read": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Directive read and JSON created."
+      }
+    },
+    "context": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Context loaded. ~25 files reference category."
+      }
+    },
+    "plan": {
+      "status": "completed",
+      "agent": [
+        "morgan"
+      ],
+      "output": {
+        "summary": "Single project: remove-category-field. Devon builds, Sarah reviews."
+      },
+      "artifacts": [
+        ".context/directives/remove-category-concept/plan.json"
+      ]
+    },
+    "audit": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ],
+      "output": {
+        "summary": "82 directive.json + 19 project.json + 12 plan.json. 24 source files. Key risk: game visual gate needs path-based replacement."
+      }
+    },
+    "approve": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Auto-approved (medium weight)."
+      }
+    },
+    "project-brainstorm": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ],
+      "output": {
+        "summary": "4 tasks: JSON artifacts, server+MCP, frontend+hooks, docs+CLAUDE.md."
+      }
+    },
+    "execute": {
+      "status": "completed",
+      "agent": [
+        "devon"
+      ],
+      "output": {
+        "summary": "All 4 tasks completed. 114 JSON files stripped, 30+ source/doc files updated. Type-check passes. Zero remaining category references in framework code."
+      }
+    },
+    "completion": {
+      "status": "completed"
+    }
+  },
+  "completed": "2026-03-07"
+}

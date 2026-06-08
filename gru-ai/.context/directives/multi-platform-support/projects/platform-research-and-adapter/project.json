@@ -1,0 +1,189 @@
+{
+  "id": "platform-research-and-adapter",
+  "title": "Multi-Platform Research Report + PlatformAdapter Interface Extraction",
+  "status": "completed",
+  "priority": "P0",
+  "agent": [
+    "devon"
+  ],
+  "reviewers": [
+    "sarah"
+  ],
+  "description": "Research session data formats for 6 platforms, design PlatformAdapter interface, and extract Claude Code code behind the interface.",
+  "source_directive": "multi-platform-support",
+  "scope": {
+    "in": "Research report on platform data formats, PlatformAdapter interface design, refactor session-state.ts/session-scanner.ts/session-watcher.ts/claude-watcher.ts/config.ts behind the interface",
+    "out": "Foreman spawn adapter, pipeline adapter, actual non-Claude-Code adapter implementations, marketing/SEO work"
+  },
+  "dod": [
+    {
+      "criterion": "Research report covers 6 platforms with file format, discovery path, and metadata comparison matrix",
+      "met": true
+    },
+    {
+      "criterion": "PlatformAdapter interface defined in server/platform/types.ts with all 12 methods typed",
+      "met": true
+    },
+    {
+      "criterion": "ClaudeCodeAdapter implements PlatformAdapter wrapping existing code with singleton state moved to instance",
+      "met": true
+    },
+    {
+      "criterion": "All existing tests pass — zero behavior change from the refactor",
+      "met": true
+    }
+  ],
+  "browser_test": false,
+  "tasks": [
+    {
+      "id": "platform-research-report",
+      "title": "Research report: session data formats for 6 CLI platforms",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "moderate",
+      "phases": [
+        "build",
+        "review"
+      ],
+      "agent": [
+        "devon"
+      ],
+      "user_scenario": "The team has a structured reference document comparing how Claude Code, Codex CLI, Aider, Cursor, Windsurf, and Copilot store session data.",
+      "scope": "Research and document session data formats for 6 platforms.",
+      "dod": [
+        {
+          "criterion": "Report covers all 6 platforms with file format, discovery path, and metadata fields",
+          "met": true
+        },
+        {
+          "criterion": "Comparison matrix table shows feature parity across platforms",
+          "met": true
+        },
+        {
+          "criterion": "Claude Code section references actual code paths as baseline",
+          "met": true
+        },
+        {
+          "criterion": "Adapter implications section identifies universal vs platform-specific methods",
+          "met": true
+        },
+        {
+          "criterion": "Report is saved at the correct path and is valid markdown",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "platform-adapter-interface",
+      "title": "Define PlatformAdapter interface in server/platform/types.ts",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "moderate",
+      "phases": [
+        "build",
+        "review"
+      ],
+      "agent": [
+        "devon"
+      ],
+      "user_scenario": "The codebase has a well-typed PlatformAdapter interface.",
+      "scope": "Create server/platform/types.ts with PlatformAdapter interface.",
+      "dod": [
+        {
+          "criterion": "server/platform/types.ts exists with PlatformAdapter interface with all 12 methods",
+          "met": true
+        },
+        {
+          "criterion": "Method signatures use platform-generic types",
+          "met": true
+        },
+        {
+          "criterion": "server/platform/index.ts exists and re-exports",
+          "met": true
+        },
+        {
+          "criterion": "npm run type-check passes with zero errors",
+          "met": true
+        },
+        {
+          "criterion": "JSDoc comments on PlatformAdapter",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "claude-code-adapter-impl",
+      "title": "Implement ClaudeCodeAdapter wrapping existing code behind PlatformAdapter",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "complex",
+      "phases": [
+        "build",
+        "review"
+      ],
+      "agent": [
+        "devon"
+      ],
+      "user_scenario": "All Claude-Code-specific session logic is accessible through ClaudeCodeAdapter.",
+      "scope": "Create server/platform/claude-code.ts implementing ClaudeCodeAdapter.",
+      "dod": [
+        {
+          "criterion": "server/platform/claude-code.ts implementing all PlatformAdapter methods",
+          "met": true
+        },
+        {
+          "criterion": "fileStates Map and parentAgentMapCache are instance properties",
+          "met": true
+        },
+        {
+          "criterion": "aggregator.ts uses ClaudeCodeAdapter",
+          "met": true
+        },
+        {
+          "criterion": "All existing tests pass — zero behavior change",
+          "met": true
+        },
+        {
+          "criterion": "No new dependencies added to package.json",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "adapter-tests-and-cleanup",
+      "title": "Add adapter integration tests and clean up dead imports",
+      "status": "completed",
+      "priority": "P1",
+      "complexity": "moderate",
+      "phases": [
+        "build",
+        "review"
+      ],
+      "agent": [
+        "devon"
+      ],
+      "user_scenario": "The PlatformAdapter refactor is tested and codebase has no dead imports.",
+      "scope": "Write integration tests for ClaudeCodeAdapter. Clean up orphaned imports.",
+      "dod": [
+        {
+          "criterion": "Test file with at least 8 test cases",
+          "met": true
+        },
+        {
+          "criterion": "Tests construct ClaudeCodeAdapter and verify outputs",
+          "met": true
+        },
+        {
+          "criterion": "No orphaned imports",
+          "met": true
+        },
+        {
+          "criterion": "npm run type-check passes and all tests pass",
+          "met": true
+        }
+      ]
+    }
+  ],
+  "created": "2026-03-07T12:00:00Z",
+  "updated": "2026-03-07T12:00:00Z"
+}

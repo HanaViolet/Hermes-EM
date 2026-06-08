@@ -1,0 +1,204 @@
+{
+  "id": "limezu-office-redesign",
+  "title": "Populate office TMX with Limezu Modern Interiors furniture",
+  "description": "Integrate Limezu Modern Interiors 16x16 asset pack into the office map, adding rich furniture and decorations to transform the sparse office into a vibrant modern tech startup.",
+  "priority": "P0",
+  "status": "pending",
+  "agent": [
+    "devon"
+  ],
+  "reviewers": [
+    "quinn",
+    "sarah"
+  ],
+  "auditor": "sarah",
+  "scope": {
+    "in": [
+      "Copy Limezu 16x16 Theme_Sorter PNGs into public/assets/office/",
+      "Update tilesetCache.ts to load new tileset images with correct firstgid values",
+      "Populate FURNITURE, TABLES, DECO, TOP layers in office-layout.ts with new furniture GIDs",
+      "Update office.tmx tileset references and layer CSV data",
+      "Update WALL_GIDS for collision detection on new solid furniture",
+      "Add plants, rugs, paintings, bookshelves, sofas, kitchen items, conference room decor"
+    ],
+    "out": [
+      "Floors layer modifications",
+      "Seats objectgroup modifications",
+      "New room layouts or wall changes",
+      "Animated objects from Limezu pack",
+      "Singles/tileset-loader.ts changes"
+    ]
+  },
+  "dod": [
+    {
+      "criterion": "At least 4 Limezu Theme_Sorter tilesets integrated into tilesetCache.ts",
+      "met": false
+    },
+    {
+      "criterion": "Right half of office (cols 17-30) populated with conference room, break room, and utility furniture",
+      "met": false
+    },
+    {
+      "criterion": "Bottom half (rows 24-31) has lounge/utility area with furniture",
+      "met": false
+    },
+    {
+      "criterion": "WALL_GIDS updated for new solid furniture, agent pathfinding works",
+      "met": false
+    },
+    {
+      "criterion": "All 6 gidLayers render correctly with no missing tiles",
+      "met": false
+    }
+  ],
+  "tasks": [
+    {
+      "id": "tileset-infrastructure",
+      "title": "Add Limezu Theme_Sorter tilesets to tilesetCache and office-layout",
+      "status": "pending",
+      "priority": "P0",
+      "complexity": "moderate",
+      "agent": [
+        "devon"
+      ],
+      "phases": [
+        "build",
+        "review"
+      ],
+      "user_scenario": "The game loads additional Limezu tileset images at startup, making hundreds of new furniture and decoration tiles available for rendering.",
+      "scope": "Copy the relevant Limezu 16x16 Theme_Sorter PNGs (1_Generic, 2_LivingRoom, 5_Classroom_and_library, 12_Kitchen, 13_Conference_Hall) into public/assets/office/. Update tilesetCache.ts to load these new tileset images with correct firstgid offsets starting at 1073. Each tileset must be registered with extractTiles() using the correct firstgid computed from the previous tileset's tile count. Document the GID ranges in a comment block in office-layout.ts.",
+      "dod": [
+        {
+          "criterion": "At least 4 Limezu Theme_Sorter PNGs are copied to public/assets/office/ with descriptive filenames",
+          "met": false
+        },
+        {
+          "criterion": "tilesetCache.ts loadTilesetCache() loads all new PNGs with correct sequential firstgid values (first new tileset starts at 1073)",
+          "met": false
+        },
+        {
+          "criterion": "A GID reference comment block is added to office-layout.ts documenting each tileset name, firstgid, tile count, and GID range",
+          "met": false
+        },
+        {
+          "criterion": "The game loads without errors in the browser console -- hasTilesetCache() returns true after load",
+          "met": false
+        }
+      ]
+    },
+    {
+      "id": "populate-right-half-rooms",
+      "title": "Populate conference room, break room, and server room with furniture",
+      "status": "pending",
+      "priority": "P0",
+      "complexity": "complex",
+      "agent": [
+        "devon"
+      ],
+      "phases": [
+        "build",
+        "review"
+      ],
+      "user_scenario": "The right half of the office transforms from mostly empty space into furnished conference room, break room / kitchen, and utility areas.",
+      "scope": "Visually inspect each loaded Theme_Sorter PNG to identify tile positions for kitchen appliances, sofas, coffee tables, bookshelves, rugs, plants. Compute GIDs using firstgid + (row * columns + col). Populate FURNITURE, DECO, and TOP layers in office-layout.ts for right half. Conference room: wall art, plants, whiteboard. Break room: kitchen counter, fridge, coffee machine, sofa, rug. Preserve existing non-zero GIDs.",
+      "dod": [
+        {
+          "criterion": "Conference room area (cols 17-30, rows 2-10) has at least 5 new furniture/decoration tile groups placed",
+          "met": false
+        },
+        {
+          "criterion": "Break room area (cols 17-30, rows 13-20) has at least 8 new tile groups including kitchen furniture, seating, and decorations",
+          "met": false
+        },
+        {
+          "criterion": "All placed GIDs correspond to actual visible tiles in source tileset PNGs",
+          "met": false
+        },
+        {
+          "criterion": "Existing non-zero GID values in the right half are preserved",
+          "met": false
+        },
+        {
+          "criterion": "FLOORS layer and SEAT_POSITIONS array are completely unchanged",
+          "met": false
+        }
+      ]
+    },
+    {
+      "id": "populate-bottom-half-and-lobby",
+      "title": "Populate bottom workspace area and lobby with furniture and decorations",
+      "status": "pending",
+      "priority": "P0",
+      "complexity": "complex",
+      "agent": [
+        "devon"
+      ],
+      "phases": [
+        "build",
+        "review"
+      ],
+      "user_scenario": "The bottom half and lobby fill out with lounge furniture, wall decorations, plants, making the office feel complete.",
+      "scope": "Populate FURNITURE, DECO, and TOP layers for bottom half (rows 24-31) and corridor/lobby (rows 10-12). Add lounge furniture: sofas, coffee tables, rugs. Add wall items: clocks, paintings, bulletin boards. Scatter plants, filing cabinets, decorative items in workspace area (cols 17-30, rows 20-31).",
+      "dod": [
+        {
+          "criterion": "Bottom area (rows 24-31) has at least 10 new furniture/decoration tile groups creating a lounge or utility zone",
+          "met": false
+        },
+        {
+          "criterion": "Corridor/transition area (rows 10-12) has at least 3 decorative elements",
+          "met": false
+        },
+        {
+          "criterion": "Right-side workspace (cols 17-30, rows 20-31) has at least 6 scattered decoration items",
+          "met": false
+        },
+        {
+          "criterion": "No furniture tiles placed on walkable pathfinding nodes used by agent routing",
+          "met": false
+        },
+        {
+          "criterion": "All new GIDs reference valid tile positions in loaded tilesets",
+          "met": false
+        }
+      ]
+    },
+    {
+      "id": "sync-collision-and-verify",
+      "title": "Update collision detection, verify rendering, and clean up",
+      "status": "pending",
+      "priority": "P0",
+      "complexity": "moderate",
+      "agent": [
+        "devon"
+      ],
+      "phases": [
+        "build",
+        "review"
+      ],
+      "user_scenario": "Agents correctly navigate around all new furniture and the full office renders with all layers displaying correctly.",
+      "scope": "Update WALL_GIDS set in office-layout.ts for new solid furniture GIDs. Verify getBlockedTilesFromGids() processes new layers. Test hasTilesetCache() and all layer rendering. Verify no regressions in existing desk areas and agent pathfinding.",
+      "dod": [
+        {
+          "criterion": "WALL_GIDS set includes GIDs for all newly placed solid furniture items",
+          "met": false
+        },
+        {
+          "criterion": "getBlockedTilesFromGids() correctly blocks tiles occupied by new solid furniture",
+          "met": false
+        },
+        {
+          "criterion": "All 6 gidLayers render correctly in browser -- no missing tiles or layer ordering issues",
+          "met": false
+        },
+        {
+          "criterion": "Agent pathfinding works without errors -- agents navigate around new furniture",
+          "met": false
+        },
+        {
+          "criterion": "No changes to FLOORS layer or SEAT_POSITIONS array compared to pre-task state",
+          "met": false
+        }
+      ]
+    }
+  ]
+}

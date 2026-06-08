@@ -1,0 +1,59 @@
+{
+  "id": "panel-layout-v2",
+  "title": "Panel Layout V2 — Mobile Max-Height + Desktop Drawer Overlay",
+  "status": "completed",
+  "priority": "P0",
+  "agent": ["riley"],
+  "reviewers": ["sarah"],
+  "description": "Two CEO-requested changes: (1) Mobile panel must have a max-height so the game canvas always remains visible on screen. (2) Desktop panel must change from a fixed right column to a drawer overlay on top of the game canvas — same height as game area, resizable width, scrollable content.",
+  "source_directive": "mobile-ux-improvements",
+  "scope": {
+    "in": "Mobile panel max-height constraint, desktop drawer overlay with resize handle, panel height matching game area, scrollable panel content",
+    "out": "Touch gesture changes, header changes, other mobile polish (already completed in mobile-game-ux project)"
+  },
+  "dod": [
+    { "criterion": "Mobile panel has a max-height so the game canvas is always visible on screen", "met": true },
+    { "criterion": "Desktop panel renders as a drawer overlay on top of the game canvas (not a side column that reduces canvas width)", "met": true },
+    { "criterion": "Desktop drawer is resizable (user can drag to change width)", "met": true },
+    { "criterion": "Desktop drawer has the same height as the game area and its content is scrollable", "met": true }
+  ],
+  "browser_test": true,
+  "tasks": [
+    {
+      "id": "mobile-panel-max-height",
+      "title": "Add Max-Height to Mobile Panel So Game Canvas Always Stays Visible",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": ["riley"],
+      "phases": ["build", "code-review", "review"],
+      "user_scenario": "On a mobile phone, when the user opens a panel (tap agent or header button), the panel takes up at most 50% of the viewport height. The game canvas always occupies at least 50% of the screen and remains visible above the panel.",
+      "scope": "In GamePage.tsx, constrain the mobile panel wrapper to maxHeight '50vh' or use flex-basis with a cap. Ensure the game canvas container has minHeight so it never gets pushed off screen. The current flex-basis 50%/50% split should work but needs a guarantee that the panel can't grow beyond 50%.",
+      "dod": [
+        { "criterion": "When mobile panel is open, the game canvas always occupies at least 50% of the available height (never pushed off screen)", "met": true },
+        { "criterion": "Panel content that overflows the max-height is scrollable within the panel", "met": true }
+      ]
+    },
+    {
+      "id": "desktop-drawer-overlay",
+      "title": "Convert Desktop Side Panel to Resizable Drawer Overlay on Game Canvas",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "moderate",
+      "agent": ["riley"],
+      "phases": ["build", "code-review", "review"],
+      "user_scenario": "On desktop, clicking an agent or header button opens a panel that slides in from the right as a drawer overlay on top of the game canvas. The drawer has the same height as the game area, its content is scrollable, and the user can drag the left edge to resize the drawer width. The game canvas underneath is NOT resized — the drawer floats on top of it.",
+      "scope": "In GamePage.tsx, change desktop panel from flex sibling (w-80 xl:w-96 shrink-0) to an absolutely/fixed positioned overlay within the game area. Add a draggable left-edge resize handle. Store drawer width in state with min/max bounds (e.g. 280px-600px). In SidePanel.tsx, update the 'side' variant to support overlay positioning — remove the fixed width classes and accept width from parent. Add slide-in/slide-out CSS transition. Ensure the drawer height matches the game area exactly (below header, above footer).",
+      "dod": [
+        { "criterion": "Desktop panel renders as an overlay on top of the game canvas — the canvas does NOT shrink when the panel opens", "met": true },
+        { "criterion": "The drawer slides in from the right edge with a CSS transition (not instant)", "met": true },
+        { "criterion": "The drawer has a draggable left-edge resize handle that lets the user change width between 280px and 600px", "met": true },
+        { "criterion": "The drawer height matches the game area exactly (fills from below header to above footer)", "met": true },
+        { "criterion": "Panel content is scrollable when it overflows the drawer height", "met": true },
+        { "criterion": "Clicking outside the drawer (on the game canvas) does NOT close the drawer — only the close button closes it", "met": true }
+      ]
+    }
+  ],
+  "created": "2026-03-09T12:45:00Z",
+  "updated": "2026-03-09T12:55:00Z"
+}

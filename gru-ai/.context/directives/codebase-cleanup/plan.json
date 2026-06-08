@@ -1,0 +1,115 @@
+{
+  "goal": "Complete codebase cleanup — delete dead code, unused files, stale references, and outdated patterns across the entire repo",
+  "challenges": {
+    "risks": [
+      "Deleting the Codex platform adapter prematurely — it is exported from platform/index.ts barrel and codex-cli-spawn.ts has tests. Foreman only uses ClaudeCodeSpawnAdapter, but removing the Codex adapter changes the public platform API. Need to verify no external consumers before deleting.",
+      "Parallel deletion across domains risks merge conflicts — if frontend cleanup and server cleanup both touch shared type files (server/types.ts, src/stores/types.ts), one branch will conflict with the other.",
+      "Incomplete deletion leaving broken imports — removing a file without tracing all its import sites will break tsc --noEmit. Each project must run type-check as its final verification."
+    ],
+    "over_engineering_flags": [
+      "Tempting to also refactor or restructure while cleaning — the directive correctly says deletion only. No restructuring.",
+      "Could over-scope by auditing every file line-by-line when the brainstorm already identified most targets. Use the known targets as the primary list, then do a tsc/build sweep to catch anything else."
+    ],
+    "recommendation": "Proceed as-is. The domain decomposition from the brainstorm is sound. The key simplification: use tsc --noEmit and vite build as the source of truth for what is actually dead, rather than manual line-by-line audit. Delete known targets first, then let the compiler tell you what else broke or is orphaned."
+  },
+  "projects": [
+    {
+      "id": "scripts-and-config-cleanup",
+      "title": "Delete dead scripts, fix config, update gitignore",
+      "priority": "P0",
+      "scope_summary": "Delete intelligence-trends.ts/.js/.d.ts, codex-proof.ts, find-gids.ts from scripts/. Remove cmdk from package.json dependencies (zero imports in src/). Add dist-cli/ and dist-server/ to .gitignore. Fix zod transitive dep in work-item-types.ts (either add zod to package.json or remove the import). Remove unused tsconfig paths/includes referencing deleted files. Verify with tsc --noEmit.",
+      "complexity": "simple",
+      "agent": ["casey"],
+      "reviewers": ["sarah"],
+      "auditor": "sarah",
+      "depends_on": [],
+      "touches_files_hint": [
+        "scripts/intelligence-trends.ts",
+        "scripts/intelligence-trends.js",
+        "scripts/intelligence-trends.d.ts",
+        "scripts/codex-proof.ts",
+        "scripts/find-gids.ts",
+        "package.json",
+        ".gitignore",
+        "server/state/work-item-types.ts",
+        "server/tsconfig.json"
+      ]
+    },
+    {
+      "id": "server-platform-cleanup",
+      "title": "Delete Codex platform adapter and dead server code",
+      "priority": "P0",
+      "scope_summary": "Delete server/platform/codex-cli-spawn.ts and its test file. Remove CodexCLISpawnAdapter export from server/platform/index.ts. Verify foreman.ts and server/index.ts still compile (they use ClaudeCodeSpawnAdapter only). Delete scripts/spawn-agent.ts if orphaned. Check for and remove any dead exports in server/types.ts, dead functions in server state/aggregator, and stale watchers. Verify with tsc --noEmit.",
+      "complexity": "moderate",
+      "agent": ["jordan"],
+      "reviewers": ["sarah"],
+      "auditor": "sarah",
+      "depends_on": [],
+      "touches_files_hint": [
+        "server/platform/codex-cli-spawn.ts",
+        "server/platform/__tests__/codex-cli-spawn.test.ts",
+        "server/platform/index.ts",
+        "server/platform/spawn-adapter.ts",
+        "server/types.ts",
+        "server/state/aggregator.ts",
+        "scripts/spawn-agent.ts"
+      ]
+    },
+    {
+      "id": "frontend-dead-code-cleanup",
+      "title": "Delete dead frontend components, hooks, and UI primitives",
+      "priority": "P0",
+      "scope_summary": "The git status shows ~40 deleted frontend files already staged (dashboard/, org/, projects/, sessions/, teams/, shared/, ui/ components, hooks/useNotifications.ts). Verify these deletions are complete — no remaining imports referencing deleted files. Check src/components/game/panels/ for orphaned panels (OpsPanel.tsx already deleted per git status). Remove any dead re-exports from barrel index files. Clean up src/router.tsx routes pointing to deleted pages. Remove unused UI primitives from src/components/ui/. Verify with vite build + tsc --noEmit.",
+      "complexity": "moderate",
+      "agent": ["riley"],
+      "reviewers": ["sarah", "devon"],
+      "auditor": "sarah",
+      "depends_on": [],
+      "touches_files_hint": [
+        "src/App.tsx",
+        "src/router.tsx",
+        "src/stores/dashboard-store.ts",
+        "src/stores/types.ts",
+        "src/lib/utils.ts",
+        "src/components/game/panels/index.ts",
+        "src/hooks/useWebSocket.ts",
+        "src/styles/globals.css"
+      ]
+    },
+    {
+      "id": "type-drift-reconciliation",
+      "title": "Reconcile type drift between server/types.ts and src/stores/types.ts",
+      "priority": "P1",
+      "scope_summary": "Audit server/types.ts and src/stores/types.ts for types that reference deleted features (goals, categories, dashboard pages, old pipeline steps). Remove dead type definitions and interfaces that no longer have consumers. Check server/state/work-item-types.ts for stale types. This is deletion of dead types only — no restructuring. Verify both server and client compile after changes.",
+      "complexity": "moderate",
+      "agent": ["devon"],
+      "reviewers": ["sarah"],
+      "auditor": "sarah",
+      "depends_on": ["frontend-dead-code-cleanup", "server-platform-cleanup"],
+      "touches_files_hint": [
+        "server/types.ts",
+        "src/stores/types.ts",
+        "server/state/work-item-types.ts",
+        "src/stores/dashboard-store.ts"
+      ]
+    },
+    {
+      "id": "mcp-and-public-assets-cleanup",
+      "title": "Clean up MCP server dead code and public/ stale assets",
+      "priority": "P1",
+      "scope_summary": "Audit mcp-server/tools/ for references to deleted concepts (goals, categories, old dashboard types). Remove dead tool handlers or dead branches within tools. In public/, remove tracked Tiled .tsx files and .tiled-project/.tiled-session. Delete scripts/personality-compiler.ts if orphaned. Verify with tsc --noEmit and vite build.",
+      "complexity": "simple",
+      "agent": ["casey"],
+      "reviewers": ["jordan"],
+      "auditor": "sarah",
+      "depends_on": ["scripts-and-config-cleanup"],
+      "touches_files_hint": [
+        "mcp-server/tools/backlog.ts",
+        "mcp-server/tools/status.ts",
+        "mcp-server/tools/directive.ts",
+        "mcp-server/index.ts",
+        "scripts/personality-compiler.ts"
+      ]
+    }
+  ]
+}

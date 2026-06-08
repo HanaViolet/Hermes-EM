@@ -1,0 +1,158 @@
+{
+  "id": "game-first-toggle",
+  "title": "Game-Only UI — Remove All Non-Game Pages and Chrome",
+  "directive_id": "dashboard-to-game-migration",
+  "priority": "P0",
+  "complexity": "moderate",
+  "status": "completed",
+  "description": "Strip the app down to game-only. Remove sidebar, header, dashboard pages, sessions page, directives page, org page, prototype page, search palette, notifications, and scheduler. Simplify router and AppLayout.",
+  "agent": [
+    "riley"
+  ],
+  "reviewers": [
+    "sarah"
+  ],
+  "auditor": "sarah",
+  "scope": {
+    "in": "Delete all non-game page components, remove sidebar/header/AppLayout chrome, simplify router to game-only, remove SearchCommandPalette, remove useNotifications, remove SchedulerCard, clean up dead imports",
+    "out": "Game components, game panels, shared components used by game (ActivityLine, PipelineStepper, QuickActions, SendInput), UI primitives, stores, MCP server"
+  },
+  "dod": [
+    {
+      "criterion": "App renders GamePage full-screen with no sidebar, header, or wrapper chrome",
+      "met": true
+    },
+    {
+      "criterion": "All non-game page components deleted (dashboard/*, sessions/*, projects/*, org/*, prototype/*)",
+      "met": true
+    },
+    {
+      "criterion": "SearchCommandPalette, useNotifications hook, and SchedulerCard removed",
+      "met": true
+    },
+    {
+      "criterion": "Router has only game route(s), no dead routes",
+      "met": true
+    },
+    {
+      "criterion": "TypeScript compiles clean (npm run type-check passes)",
+      "met": true
+    }
+  ],
+  "tasks": [
+    {
+      "id": "strip-router-and-layout",
+      "title": "Strip router to game-only and remove AppLayout chrome",
+      "priority": "P0",
+      "complexity": "simple",
+      "status": "done",
+      "agent": [
+        "riley"
+      ],
+      "phases": [
+        "build",
+        "review"
+      ],
+      "user_scenario": "The app loads directly into the full-screen game view with no sidebar, header, or navigation chrome.",
+      "scope": "Remove all routes except game from router.tsx. Simplify AppLayout.tsx to just render Outlet (or remove it entirely and render GamePage directly). Remove Sidebar.tsx and Header.tsx imports and components. Remove SearchCommandPalette from AppLayout. Remove useNotifications hook usage. The game should fill the entire viewport.",
+      "dod": [
+        {
+          "criterion": "router.tsx has only the game route(s) — no /overview, /org, /directives, /sessions, /prototype, /teams routes",
+          "met": true
+        },
+        {
+          "criterion": "AppLayout renders without Sidebar, Header, or SearchCommandPalette",
+          "met": true
+        },
+        {
+          "criterion": "GamePage fills the full viewport with no surrounding chrome",
+          "met": true
+        },
+        {
+          "criterion": "App loads without errors at /",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "delete-page-components",
+      "title": "Delete all non-game page components and unused shared components",
+      "priority": "P0",
+      "complexity": "simple",
+      "status": "done",
+      "agent": [
+        "riley"
+      ],
+      "phases": [
+        "build",
+        "review"
+      ],
+      "user_scenario": "The codebase has no dead page components — only game code remains.",
+      "scope": "Delete entire directories: src/components/dashboard/, src/components/sessions/, src/components/projects/, src/components/org/, src/components/prototype/. Delete src/components/layout/Sidebar.tsx and src/components/layout/Header.tsx. Delete src/components/shared/SearchCommandPalette.tsx. Delete src/hooks/useNotifications.ts. Delete src/components/teams/ if not used by game. Remove any remaining dead imports across the codebase.",
+      "dod": [
+        {
+          "criterion": "src/components/dashboard/ directory deleted",
+          "met": true
+        },
+        {
+          "criterion": "src/components/sessions/ directory deleted",
+          "met": true
+        },
+        {
+          "criterion": "src/components/projects/ directory deleted",
+          "met": true
+        },
+        {
+          "criterion": "src/components/org/ directory deleted",
+          "met": true
+        },
+        {
+          "criterion": "src/components/prototype/ directory deleted",
+          "met": true
+        },
+        {
+          "criterion": "Sidebar.tsx, Header.tsx, SearchCommandPalette.tsx, useNotifications.ts deleted",
+          "met": true
+        },
+        {
+          "criterion": "No dead imports — TypeScript compiles clean",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "verify-and-clean",
+      "title": "Verify game works and clean up any remaining dead code",
+      "priority": "P0",
+      "complexity": "simple",
+      "status": "done",
+      "agent": [
+        "riley"
+      ],
+      "phases": [
+        "build",
+        "review"
+      ],
+      "user_scenario": "The game loads, all HUD panels work, all interactive elements function correctly.",
+      "scope": "Run type-check to find any remaining broken imports. Fix any issues. Verify the game's HUD panels (Team, Tasks, Ops, Log) still render correctly. Verify furniture click interactions work. Check that stores and hooks used only by deleted pages can be cleaned up from dashboard-store.ts if safe. Remove SchedulerCard references from any remaining code.",
+      "dod": [
+        {
+          "criterion": "npm run type-check passes with zero errors",
+          "met": true
+        },
+        {
+          "criterion": "Game loads at / and renders the canvas office",
+          "met": true
+        },
+        {
+          "criterion": "All 4 HUD panels (Team, Tasks, Ops, Log) open and render content",
+          "met": true
+        },
+        {
+          "criterion": "No references to deleted components remain in the codebase",
+          "met": true
+        }
+      ]
+    }
+  ]
+}

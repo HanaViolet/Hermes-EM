@@ -1,0 +1,92 @@
+{
+  "id": "remove-category-field",
+  "title": "Remove category field from framework",
+  "status": "completed",
+  "priority": "P0",
+  "agent": ["devon"],
+  "reviewers": ["sarah"],
+  "description": "Strip the category field from all directive.json files, server types/watchers/aggregator, MCP tools, frontend store types, pipeline docs/schemas/templates, hooks, CLI templates, and CLAUDE.md.",
+  "source_directive": "remove-category-concept",
+  "scope": {
+    "in": "All directive.json, project.json, plan.json files; server types/watchers/aggregator/endpoints; MCP status and backlog tools; frontend store types and game panel displays; pipeline docs; validate-project-json.sh; CLI templates; CLAUDE.md",
+    "out": "furnitureCatalog.ts and game furniture categories (unrelated concept)"
+  },
+  "dod": [
+    { "criterion": "No directive/project category enum references remain in framework code", "met": true },
+    { "criterion": "All directive.json files have category field removed", "met": true },
+    { "criterion": "Server compiles without category references (npm run type-check passes)", "met": true },
+    { "criterion": "MCP tools work without category filtering", "met": true },
+    { "criterion": "Pipeline docs don't mention category enum", "met": true }
+  ],
+  "browser_test": false,
+  "tasks": [
+    {
+      "id": "strip-category-from-json-artifacts",
+      "title": "Remove category field from all directive.json, project.json, and plan.json files",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": ["devon"],
+      "phases": ["build", "review"],
+      "scope": "Delete the category key-value pair from all 82 directive.json files, 19 project.json files, and 12 plan.json files using a batch operation.",
+      "dod": [
+        { "criterion": "Zero directive.json files under .context/directives/ contain a category key", "met": true },
+        { "criterion": "Zero project.json files under .context/directives/ contain a category key", "met": true },
+        { "criterion": "Zero plan.json files under .context/directives/ contain a category key", "met": true },
+        { "criterion": "All modified JSON files remain valid JSON", "met": true },
+        { "criterion": "No other fields in the JSON files are altered", "met": true }
+      ]
+    },
+    {
+      "id": "strip-category-from-server-and-mcp",
+      "title": "Remove category from server types, watchers, aggregator, HTTP endpoints, and MCP tools",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": ["devon"],
+      "phases": ["build", "review"],
+      "scope": "Remove category from server/types.ts, server/state/work-item-types.ts, server/state/aggregator.ts, server/index.ts, server/watchers/, mcp-server/, and scripts/foreman.ts.",
+      "dod": [
+        { "criterion": "grep category server/ returns zero hits (excluding node_modules)", "met": true },
+        { "criterion": "grep category mcp-server/ returns zero hits", "met": true },
+        { "criterion": "npm run type-check passes with no errors", "met": true },
+        { "criterion": "Server can start without runtime errors", "met": true }
+      ]
+    },
+    {
+      "id": "strip-category-from-frontend-and-hooks",
+      "title": "Remove category from frontend store types, game panels, validation hook, and CLI templates",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": ["devon"],
+      "phases": ["build", "review"],
+      "scope": "Remove category from src/stores/types.ts, game panels (ActionPanel, StatusPanel, LogPanel), validate-project-json.sh REQUIRED_FIELDS, CLI templates, and replace category === 'game' gate in 09-execute-projects.md with path-based check.",
+      "dod": [
+        { "criterion": "src/stores/types.ts contains no category references", "met": true },
+        { "criterion": "ActionPanel, StatusPanel, LogPanel contain no category references", "met": true },
+        { "criterion": "validate-project-json.sh REQUIRED_FIELDS does not include category", "met": true },
+        { "criterion": "09-execute-projects.md visual feedback gate uses path-based check", "met": true },
+        { "criterion": "npm run type-check passes", "met": true }
+      ]
+    },
+    {
+      "id": "strip-category-from-docs-and-claude-md",
+      "title": "Remove category from pipeline docs, schemas, templates, and CLAUDE.md",
+      "status": "completed",
+      "priority": "P1",
+      "complexity": "simple",
+      "agent": ["devon"],
+      "phases": ["build", "review"],
+      "scope": "Remove category references from 9 pipeline doc files, CLAUDE.md Categories table, directive-json.md schema, template files, and any remaining references.",
+      "dod": [
+        { "criterion": "CLAUDE.md contains no Categories table and no category field references", "met": true },
+        { "criterion": "directive-json.md schema does not include category", "met": true },
+        { "criterion": "grep across .claude/skills/directive/docs/ for 'category' returns zero framework-category hits", "met": true },
+        { "criterion": "Repo-wide grep returns zero false positives outside game furniture files", "met": true }
+      ]
+    }
+  ],
+  "created": "2026-03-07T12:00:00Z",
+  "updated": "2026-03-07T23:31:00Z"
+}

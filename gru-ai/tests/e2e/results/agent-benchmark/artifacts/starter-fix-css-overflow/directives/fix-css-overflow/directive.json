@@ -1,0 +1,15 @@
+{
+  "id": "fix-css-overflow",
+  "title": "Fix CSS Layout Overflow Bug",
+  "weight": "lightweight",
+  "status": "pending",
+  "pipeline": {
+    "current_step": "triage",
+    "started_at": "2026-03-08T03:20:44Z"
+  },
+  "scope": {
+    "description": "Todo items with long text overflow their container on mobile viewports (below 480px). The text should truncate with ellipsis or wrap properly within the card bounds.",
+    "in": [],
+    "out": []
+  }
+}

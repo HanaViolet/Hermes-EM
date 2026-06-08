@@ -1,0 +1,665 @@
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useDashboardStore } from '@/stores/dashboard-store';
+import { type SelectedItem, type InteractionType } from './types';
+import type { AgentStatus, SessionInfo } from './pixel-types';
+import GameHeader, { type HudPanel } from './GameHeader';
+import CanvasOffice, { type ClickedItem } from './CanvasOffice';
+import SidePanel from './SidePanel';
+import AgentTicker from './AgentTicker';
+import type { TileType } from './types';
+import type { Session } from '@/stores/types';
+import { getZoneAt } from './engine/roomZones';
+import { useOfficeAgents } from './useOfficeAgents';
+import { useAgentRegistryStore } from '@/stores/agent-registry-store';
+
+/** Capitalize first letter — agent names in project.json are lowercase ("riley") */
+function capitalize(s: string): string {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+/** Convert a meaningful session slug to a display name.
+ *  Skips random 3-word slugs (like "quirky-braving-key") by requiring 4+ words. */
+function formatSlug(slug?: string | null): string | undefined {
+  if (!slug) return undefined;
+  const words = slug.split('-');
+  if (words.length < 4) return undefined; // random slugs are typically 3 words
+  const text = words.join(' ');
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+/** Extract a meaningful task name from a session's initialPrompt.
+ *  Strips preambles like "You are Riley Kim, Frontend Developer." and
+ *  "MODE: Independent Code Review..." to get the actual task description. */
+function extractTaskName(prompt?: string | null): string | undefined {
+  if (!prompt) return undefined;
+  let text = prompt;
+
+  // Structured headers — extract directly if present
+  const modeMatch = text.match(/^MODE:\s*([^\n]+)/);
+  if (modeMatch) return modeMatch[1].trim().slice(0, 60);
+  const taskHeader = text.match(/^(?:TASK_NAME|TASK|OBJECTIVE):\s*([^\n]+)/im);
+  if (taskHeader) return taskHeader[1].trim().slice(0, 60);
+
+  // Strip role identification lines
+  text = text.replace(/^You are [A-Z][^\n.]*\.\s*/g, '');
+  text = text.replace(/^You are the [A-Za-z/\- ]+\.\s*/g, '');
+  text = text.replace(/^You are operating in [A-Z_ ]+\.\s*/g, '');
+
+  // Strip instruction preambles that aren't the task description
+  text = text.replace(/^Your job\s*(?:is to)?[:\s]*/i, '');
+  text = text.replace(/^Your (?:task|goal|objective|mission)\s*(?:is to)?[:\s]*/i, '');
+  text = text.replace(/^(?:QUESTION|CONTEXT|BACKGROUND|INSTRUCTIONS?)\s*:\s*/i, '');
+  text = text.replace(/^You are (decomposing|reviewing|executing|performing)\s+/, '$1 ');
+  text = text.replace(/^You are (reviewing|auditing|executing|building|implementing)[^.\n]*\.\s*/i, '');
+  text = text.replace(/^You are being spawned[^.\n]*\.\s*/i, '');
+  text = text.replace(/^You (proposed|completed|finished|started)\s+/, '$1 ');
+  text = text.replace(/^(Execute|Complete|Implement|Perform|Run)\s+(all\s+)?\d*\s*(tasks?|items?|steps?)\s+(below|listed|described|following)[^.\n]*\.\s*/i, '');
+  text = text.replace(/^The CEO\s+[^.\n]*\.\s*/i, '');
+  text = text.replace(/^You have \d+\s*(sequential\s+)?tasks?[^.\n]*\.\s*/i, '');
+
+  // Strip generic instruction noise
+  text = text.replace(/^(?:Don't|Do not|Never|Always|Think|Remember)[^.\n]*\.\s*/i, '');
+  text = text.replace(/^(?:Instead|First|Before)[^.\n]*[.:]\s*/i, '');
+  text = text.replace(/^Socratic refinement\.\s*/i, '');
+
+  text = text.trim();
+  if (text.length === 0) return undefined;
+
+  // Take first sentence only
+  const firstSentence = text.match(/^[^.!?\n]+/)?.[0]?.trim();
+  if (!firstSentence || firstSentence.length < 5) return undefined;
+  const result = firstSentence[0].toUpperCase() + firstSentence.slice(1);
+  return result.length > 60 ? result.slice(0, 57) + '...' : result;
+}
+
+// ---------------------------------------------------------------------------
+// Furniture-to-HUD-tab mapping
+// When a furniture click resolves to one of these TileTypes, open the
+// corresponding HUD tab instead of the furniture-specific panel.
+// ---------------------------------------------------------------------------
+
+const FURNITURE_TAB_MAP: Partial<Record<TileType, HudPanel>> = {
+  'ceo-desk':    'tasks',      // CEO desk -> Tasks tab
+  'whiteboard':  'tasks',      // Whiteboard -> Tasks tab (directives merged in)
+  'conference':  'status',     // Conference room -> Status tab (company overview)
+};
+
+// ---------------------------------------------------------------------------
+// Mobile breakpoint
+// ---------------------------------------------------------------------------
+
+const MOBILE_BREAKPOINT = 768;
+
+function useIsMobile(): boolean {
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== 'undefined' && window.innerWidth < MOBILE_BREAKPOINT,
+  );
+
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
+    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener('change', onChange);
+    setIsMobile(mq.matches);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+
+  return isMobile;
+}
+
+// ---------------------------------------------------------------------------
+// Map session status -> simplified AgentStatus
+// ---------------------------------------------------------------------------
+
+function toAgentStatus(sessionStatus: string): AgentStatus {
+  switch (sessionStatus) {
+    case 'working':
+    case 'waiting-approval':
+    case 'waiting-input':
+      return 'working';
+    default:
+      return 'idle';
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Pixel-art overlay styles
+// ---------------------------------------------------------------------------
+
+const PIXEL_BORDER_STYLE = {
+  boxShadow: 'inset -2px -2px 0 0 #8B6914, inset 2px 2px 0 0 #F5ECD7',
+} as const;
+
+// ---------------------------------------------------------------------------
+// GamePage
+// ---------------------------------------------------------------------------
+
+export default function GamePage() {
+  // Fetch runtime agent registry on mount (populates useOfficeAgents)
+  const fetchRegistry = useAgentRegistryStore((s) => s.fetchRegistry);
+  useEffect(() => { fetchRegistry(); }, [fetchRegistry]);
+
+  const OFFICE_AGENTS = useOfficeAgents();
+  const KNOWN_AGENTS = useMemo(() => new Set(OFFICE_AGENTS.map((a) => a.agentName)), [OFFICE_AGENTS]);
+
+  const sessions = useDashboardStore((s) => s.sessions);
+  const sessionActivities = useDashboardStore((s) => s.sessionActivities);
+  const [selected, setSelected] = useState<SelectedItem | null>(null);
+  const isMobile = useIsMobile();
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [drawerWidth, setDrawerWidth] = useState(400);
+
+  // Derive agent interactions from directive pipeline state
+  // Uses semantic relationships (builder↔reviewer, planners in meeting) instead of session parent/child
+  const activeDirectives = useDashboardStore((s) => s.activeDirectives);
+
+  // Derive agent statuses purely from real session data.
+  // Pipeline state drives interaction icons, NOT working/idle/offline status.
+  const agentStatuses = useMemo<Record<string, AgentStatus>>(() => {
+    const map: Record<string, AgentStatus> = {};
+    for (const name of KNOWN_AGENTS) {
+      map[name] = 'offline';
+    }
+    const priority: Record<AgentStatus, number> = { offline: 0, idle: 1, working: 2 };
+    for (const s of sessions) {
+      if (s.agentName && KNOWN_AGENTS.has(s.agentName)) {
+        const status = toAgentStatus(s.status);
+        if (priority[status] > priority[map[s.agentName]]) {
+          map[s.agentName] = status;
+        }
+      }
+    }
+    return map;
+  }, [sessions]);
+
+  // Build agent → task title map from directive pipeline (authoritative source)
+  const directiveTaskNames = useMemo<Record<string, string>>(() => {
+    const map: Record<string, string> = {};
+    for (const directive of activeDirectives) {
+      const step = directive.currentStepId ?? '';
+      // For planning/brainstorm steps, show the directive title for involved agents
+      if (['plan', 'brainstorm', 'clarification', 'project-brainstorm'].includes(step)) {
+        const label = directive.title ?? directive.directiveName.replace(/-/g, ' ');
+        const currentPipelineStep = directive.pipelineSteps?.find(s => s.id === step);
+        const stepLabel = currentPipelineStep?.label ?? capitalize(step);
+        for (const name of currentPipelineStep?.agents ?? []) {
+          const n = capitalize(name);
+          if (KNOWN_AGENTS.has(n)) map[n] = `${stepLabel}: ${label}`;
+        }
+      }
+      // For execute step, show the in-progress task title per agent
+      if (step === 'execute') {
+        for (const proj of directive.projects) {
+          if (proj.status !== 'in_progress') continue;
+          for (const t of proj.tasks ?? []) {
+            if (t.status === 'in_progress' && t.agent) {
+              const n = capitalize(t.agent);
+              if (KNOWN_AGENTS.has(n)) map[n] = t.title;
+            }
+          }
+        }
+      }
+      if (step === 'review-gate' || step === 'audit') {
+        const label = directive.title ?? directive.directiveName.replace(/-/g, ' ');
+        for (const proj of directive.projects) {
+          for (const r of (proj.reviewers ?? []).map(capitalize)) {
+            if (KNOWN_AGENTS.has(r)) map[r] = `Reviewing: ${label}`;
+          }
+        }
+      }
+    }
+    return map;
+  }, [activeDirectives]);
+
+  // Derive per-agent session context info (prefer working session's activity)
+  const agentSessionInfos = useMemo<Record<string, SessionInfo>>(() => {
+    const map: Record<string, SessionInfo> = {};
+    const mapPriority: Record<string, number> = {};
+    const latestActivity: Record<string, number> = {};
+    const statusPri: Record<string, number> = { working: 3, 'waiting-approval': 2, 'waiting-input': 2 };
+    for (const s of sessions) {
+      if (s.agentName && KNOWN_AGENTS.has(s.agentName)) {
+        // Track most recent activity across all sessions for this agent
+        if (s.lastActivity) {
+          const ts = new Date(s.lastActivity).getTime();
+          if (ts > (latestActivity[s.agentName] ?? 0)) {
+            latestActivity[s.agentName] = ts;
+          }
+        }
+        const pri = statusPri[s.status] ?? 0;
+        if (pri >= (mapPriority[s.agentName] ?? -1)) {
+          mapPriority[s.agentName] = pri;
+          const activity = sessionActivities[s.id];
+          map[s.agentName] = {
+            taskName: directiveTaskNames[s.agentName] ?? s.feature ?? formatSlug(s.slug) ?? extractTaskName(s.initialPrompt) ?? undefined,
+            toolName: activity?.tool ?? undefined,
+            detail: activity?.detail ?? undefined,
+          };
+        }
+      }
+    }
+    // Attach lastActivityMs + directive task names for agents without sessions
+    for (const name of KNOWN_AGENTS) {
+      if (!map[name]) map[name] = {};
+      map[name].lastActivityMs = latestActivity[name] ?? undefined;
+      // Override with directive task name if available (authoritative)
+      if (directiveTaskNames[name]) map[name].taskName = directiveTaskNames[name];
+    }
+    return map;
+  }, [sessions, sessionActivities, directiveTaskNames]);
+
+  // Derive per-agent busy flag
+  const agentBusyMap = useMemo<Record<string, boolean>>(() => {
+    const counts: Record<string, number> = {};
+    for (const s of sessions) {
+      if (s.agentName && KNOWN_AGENTS.has(s.agentName)) {
+        const status = toAgentStatus(s.status);
+        if (status === 'working') {
+          counts[s.agentName] = (counts[s.agentName] ?? 0) + 1;
+        }
+      }
+    }
+    const map: Record<string, boolean> = {};
+    for (const name of KNOWN_AGENTS) {
+      map[name] = (counts[name] ?? 0) > 1;
+    }
+    return map;
+  }, [sessions]);
+
+  const { agentInteractions, subagentsByParent } = useMemo(() => {
+    const pairs: Array<[string, string, InteractionType]> = [];
+    const seen = new Set<string>();
+    const byParent = new Map<string, string[]>();
+
+    for (const directive of activeDirectives) {
+      const step = directive.currentStepId ?? '';
+
+      // Map pipeline step to interaction type
+      let interactionType: InteractionType;
+      if (step === 'plan') {
+        interactionType = 'planning';
+      } else if (step === 'brainstorm' || step === 'clarification' || step === 'project-brainstorm') {
+        interactionType = 'brainstorming';
+      } else if (step === 'execute') {
+        interactionType = 'building';
+      } else if (step === 'review-gate') {
+        interactionType = 'reviewing';
+      } else if (step === 'audit') {
+        interactionType = 'auditing';
+      } else {
+        interactionType = 'planning'; // fallback
+      }
+
+      // During plan/brainstorm/clarification: gather step agents into meeting room
+      if (['plan', 'brainstorm', 'clarification', 'project-brainstorm'].includes(step)) {
+        const currentPipelineStep = directive.pipelineSteps?.find(s => s.id === step);
+        const meetingAgents = new Set<string>();
+        for (const name of currentPipelineStep?.agents ?? []) {
+          const n = capitalize(name);
+          if (KNOWN_AGENTS.has(n)) meetingAgents.add(n);
+        }
+        // Build meeting group — put all agents as children under the first one
+        // The engine checks subIds.length >= MEETING_SUBAGENT_THRESHOLD (2),
+        // so we include the host in the children array too (the engine dedupes via Set)
+        const agents = Array.from(meetingAgents);
+        if (agents.length >= 2) {
+          const host = agents[0];
+          byParent.set(host, agents);
+          // Also create interaction pairs for chat bubbles
+          for (let i = 0; i < agents.length; i++) {
+            for (let j = i + 1; j < agents.length; j++) {
+              const key = [agents[i], agents[j]].sort().join(':');
+              if (!seen.has(key)) {
+                seen.add(key);
+                pairs.push([agents[i], agents[j], interactionType]);
+              }
+            }
+          }
+        }
+      }
+
+      // During execute: builders who are working get interaction pairs with each other
+      if (step === 'execute') {
+        const builders = new Set<string>();
+        for (const proj of directive.projects) {
+          if (proj.status !== 'in_progress') continue;
+          for (const t of proj.tasks ?? []) {
+            if (t.status === 'in_progress' && t.agent) {
+              const name = capitalize(t.agent);
+              if (KNOWN_AGENTS.has(name)) builders.add(name);
+            }
+          }
+        }
+        // If multiple builders working on same directive, they interact
+        const builderList = Array.from(builders);
+        for (let i = 0; i < builderList.length; i++) {
+          for (let j = i + 1; j < builderList.length; j++) {
+            const key = [builderList[i], builderList[j]].sort().join(':');
+            if (!seen.has(key)) {
+              seen.add(key);
+              pairs.push([builderList[i], builderList[j], interactionType]);
+            }
+          }
+        }
+      }
+
+      // During review-gate or audit: reviewers + builders interact
+      if (step === 'review-gate' || step === 'audit') {
+        for (const proj of directive.projects) {
+          const reviewers = (proj.reviewers ?? []).map(capitalize).filter(n => KNOWN_AGENTS.has(n));
+          const builders = new Set<string>();
+          for (const t of proj.tasks ?? []) {
+            if (t.agent) {
+              const name = capitalize(t.agent);
+              if (KNOWN_AGENTS.has(name)) builders.add(name);
+            }
+          }
+          // Each reviewer interacts with each builder
+          for (const reviewer of reviewers) {
+            for (const builder of builders) {
+              if (reviewer === builder) continue;
+              const key = [reviewer, builder].sort().join(':');
+              if (!seen.has(key)) {
+                seen.add(key);
+                pairs.push([reviewer, builder, interactionType]);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // ── Session-based meeting detection ──────────────────────────
+    // When agents are spawned as raw subagents (not through a directive),
+    // detect concurrent working sessions sharing a parent and group them.
+    const sessionsByParent = new Map<string, string[]>();
+    for (const s of sessions) {
+      if (!s.parentSessionId || !s.agentName || !KNOWN_AGENTS.has(s.agentName)) continue;
+      const status = toAgentStatus(s.status);
+      if (status !== 'working') continue;
+      const existing = sessionsByParent.get(s.parentSessionId) ?? [];
+      if (!existing.includes(s.agentName)) existing.push(s.agentName);
+      sessionsByParent.set(s.parentSessionId, existing);
+    }
+    for (const [, agentNames] of sessionsByParent) {
+      if (agentNames.length < 2) continue;
+      // Skip if these agents are already grouped by a directive
+      const alreadyGrouped = agentNames.every(n =>
+        Array.from(byParent.values()).some(group => group.includes(n))
+      );
+      if (alreadyGrouped) continue;
+      // Use the first agent as the host
+      const host = agentNames[0];
+      byParent.set(host, agentNames);
+      // Also create interaction pairs
+      for (let i = 0; i < agentNames.length; i++) {
+        for (let j = i + 1; j < agentNames.length; j++) {
+          const key = [agentNames[i], agentNames[j]].sort().join(':');
+          if (!seen.has(key)) {
+            seen.add(key);
+            pairs.push([agentNames[i], agentNames[j], 'brainstorming']);
+          }
+        }
+      }
+    }
+
+    return { agentInteractions: pairs, subagentsByParent: byParent };
+  }, [activeDirectives, sessions]);
+
+  // Derive review interactions from directive state
+  // Maps reviewer → builder for "walk to builder's desk" behavior
+  const reviewInteractions = useMemo<Map<string, string>>(() => {
+    const map = new Map<string, string>();
+    for (const directive of activeDirectives) {
+      const step = directive.currentStepId ?? '';
+      if (step !== 'review-gate' && step !== 'audit') continue;
+      for (const proj of directive.projects) {
+        const reviewers = (proj.reviewers ?? []).map(capitalize).filter(n => KNOWN_AGENTS.has(n));
+        // Find the primary builder for each project
+        const builders = new Set<string>();
+        for (const t of proj.tasks ?? []) {
+          if (t.agent) {
+            const name = capitalize(t.agent);
+            if (KNOWN_AGENTS.has(name)) builders.add(name);
+          }
+        }
+        const primaryBuilder = Array.from(builders)[0];
+        if (primaryBuilder) {
+          for (const reviewer of reviewers) {
+            if (reviewer !== primaryBuilder) {
+              map.set(reviewer, primaryBuilder);
+            }
+          }
+        }
+      }
+    }
+    return map;
+  }, [activeDirectives]);
+
+  // Close timer ref — delays clearing `selected` so the panel content stays
+  // visible during the 200ms collapse transition on mobile.
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Clean up close timer on unmount
+  useEffect(() => {
+    return () => {
+      if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+    };
+  }, []);
+
+  const handleClose = useCallback(() => {
+    setSheetOpen(false);
+    if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
+    closeTimerRef.current = setTimeout(() => {
+      setSelected(null);
+      closeTimerRef.current = null;
+    }, 200); // matches the 200ms CSS transition duration
+  }, []);
+
+  // Handle agent click from canvas
+  const handleAgentClick = useCallback((agentName: string) => {
+    // Cancel any pending close transition when opening a new panel
+    if (closeTimerRef.current) { clearTimeout(closeTimerRef.current); closeTimerRef.current = null; }
+
+    if (!agentName) {
+      handleClose();
+      return;
+    }
+
+    if (selected?.agentName === agentName) {
+      handleClose();
+      return;
+    }
+
+    const agent = OFFICE_AGENTS.find((a) => a.agentName === agentName);
+    if (agent) {
+      setSelected({
+        type: 'desk',
+        agentName: agent.agentName,
+        position: agent.position,
+      });
+      setSheetOpen(true);
+    }
+  }, [selected, handleClose, OFFICE_AGENTS]);
+
+  // Wire HUD buttons to SidePanel with toggle behavior
+  const handlePanelRequest = useCallback((panel: HudPanel) => {
+    // Cancel any pending close transition
+    if (closeTimerRef.current) { clearTimeout(closeTimerRef.current); closeTimerRef.current = null; }
+
+    const typeMap: Record<HudPanel, TileType> = {
+      team: 'hud-team',
+      tasks: 'hud-tasks',
+      status: 'hud-status',
+      log: 'hud-log',
+    };
+    // Toggle: if same panel already open, close it
+    if (selected?.type === typeMap[panel]) {
+      handleClose();
+      return;
+    }
+    setSelected({ type: typeMap[panel], position: { row: 0, col: 0 } });
+    setSheetOpen(true);
+  }, [selected, handleClose]);
+
+  // Handle furniture/desk click from canvas
+  const handleItemClick = useCallback((item: ClickedItem | null) => {
+    // Cancel any pending close transition
+    if (closeTimerRef.current) { clearTimeout(closeTimerRef.current); closeTimerRef.current = null; }
+
+    if (!item) {
+      handleClose();
+      return;
+    }
+
+    const typeMap: Record<ClickedItem['type'], TileType> = {
+      desk: 'desk',
+      furniture: 'desk',
+      conference: 'conference',
+      wall: 'wall',
+      whiteboard: 'whiteboard',
+      bookshelf: 'bookshelf',
+    };
+
+    let tileType = typeMap[item.type];
+
+    // Route generic 'furniture' clicks by room zone for richer panels
+    if (item.type === 'furniture') {
+      const zone = getZoneAt(item.col, item.row);
+      if (zone === 'ceo-office') tileType = 'ceo-desk';
+      else if (zone === 'meeting') tileType = 'conference';
+    }
+
+    // If this furniture type maps to a HUD tab, open that tab instead
+    const hudPanel = FURNITURE_TAB_MAP[tileType];
+    if (hudPanel) {
+      handlePanelRequest(hudPanel);
+      return;
+    }
+
+    setSelected({
+      type: tileType,
+      agentName: item.agentName,
+      position: { row: item.row, col: item.col },
+    });
+    setSheetOpen(true);
+  }, [handlePanelRequest, handleClose]);
+
+  // Derive which HudPanel is active (for header button highlight)
+  const activePanel = useMemo<HudPanel | null>(() => {
+    if (!selected) return null;
+    switch (selected.type) {
+      case 'hud-team': return 'team';
+      case 'hud-tasks': return 'tasks';
+      case 'hud-action': return 'tasks'; // backward compat
+      case 'hud-directive': return 'tasks'; // merged
+      case 'hud-status': return 'status';
+      case 'hud-log': return 'log';
+      default: return null;
+    }
+  }, [selected]);
+
+  const gameContainerRef = useRef<HTMLDivElement>(null);
+
+  return (
+    <div
+      ref={gameContainerRef}
+      className="flex flex-col"
+      style={{
+        height: '100dvh',
+        paddingTop: 'env(safe-area-inset-top, 0px)',
+        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+      }}
+    >
+      <GameHeader
+        onPanelRequest={handlePanelRequest}
+        gameContainerRef={gameContainerRef}
+        activePanel={activePanel}
+        workingCount={Object.values(agentStatuses).filter((s) => s === 'working').length}
+        staffCount={OFFICE_AGENTS.filter((a) => !a.isPlayer).length}
+        liveTaskCount={Object.values(agentStatuses).filter((s) => s === 'working').length}
+      />
+
+      {isMobile ? (
+        /* Mobile layout: flex-col with canvas + panel below, using height transition */
+        <div className="flex flex-col flex-1 min-h-0" style={{ position: 'relative' }}>
+          {/* Canvas scroll container — always fills remaining space */}
+          <div
+            className="overflow-auto bg-stone-200 dark:bg-stone-950 relative"
+            style={{ flex: 1, minHeight: 0 }}
+          >
+            <CanvasOffice
+              agents={OFFICE_AGENTS}
+              onAgentClick={handleAgentClick}
+              onItemClick={handleItemClick}
+              agentStatuses={agentStatuses}
+              agentSessionInfos={agentSessionInfos}
+              agentBusyMap={agentBusyMap}
+              agentInteractions={agentInteractions}
+              subagentsByParent={subagentsByParent}
+              reviewInteractions={reviewInteractions}
+              selectedAgentName={selected?.agentName ?? null}
+            />
+            {/* No AgentTicker on mobile — too cluttered at small viewport */}
+          </div>
+
+          {/* SidePanel on mobile — panel below canvas, height transitions smoothly */}
+          <div
+            style={{
+              height: sheetOpen && selected ? '50%' : '0px',
+              maxHeight: '50%',
+              overflow: 'hidden',
+              transition: 'height 200ms ease-in-out',
+              flexShrink: 0,
+            }}
+          >
+            {selected && (
+              <SidePanel
+                selected={selected}
+                agentStatuses={agentStatuses}
+                onClose={handleClose}
+                variant="inline"
+              />
+            )}
+          </div>
+        </div>
+      ) : (
+        /* Desktop layout: canvas in flow, panel overlays as drawer */
+        <div className="flex-1 min-h-0 relative">
+          {/* Canvas scroll container — in normal flow, fills parent height */}
+          <div className="h-full overflow-auto bg-stone-200 dark:bg-stone-950">
+            <CanvasOffice
+              agents={OFFICE_AGENTS}
+              onAgentClick={handleAgentClick}
+              onItemClick={handleItemClick}
+              agentStatuses={agentStatuses}
+              agentSessionInfos={agentSessionInfos}
+              agentBusyMap={agentBusyMap}
+              agentInteractions={agentInteractions}
+              subagentsByParent={subagentsByParent}
+              reviewInteractions={reviewInteractions}
+              selectedAgentName={selected?.agentName ?? null}
+            />
+            <AgentTicker agentStatuses={agentStatuses} agentSessionInfos={agentSessionInfos} />
+          </div>
+
+          {/* SidePanel on desktop — overlay drawer, always mounted for transition */}
+          <SidePanel
+            selected={selected}
+            agentStatuses={agentStatuses}
+            onClose={handleClose}
+            variant="side"
+            isOpen={sheetOpen && !!selected}
+            drawerWidth={drawerWidth}
+            onDrawerWidthChange={setDrawerWidth}
+          />
+        </div>
+      )}
+
+      <div style={{ textAlign: 'center', padding: '4px 0', fontSize: '11px', color: '#666', opacity: 0.7 }}>
+        Tileset by <a href="https://limezu.itch.io/modernoffice" target="_blank" rel="noopener" style={{ color: '#888' }}>LimeZu</a>
+        {' | '}
+        Characters by <a href="https://jik-a-4.itch.io/metrocity-free-topdown-character-pack" target="_blank" rel="noopener" style={{ color: '#888' }}>JIK-A-4</a> (CC0)
+      </div>
+    </div>
+  );
+}

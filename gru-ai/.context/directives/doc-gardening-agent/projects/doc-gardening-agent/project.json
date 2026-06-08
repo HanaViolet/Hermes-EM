@@ -1,0 +1,136 @@
+{
+  "id": "doc-gardening-agent",
+  "title": "Event-triggered stale documentation detection",
+  "goal_id": "workflow-orchestration",
+  "status": "completed",
+  "priority": "p1",
+  "agent": [
+    "self"
+  ],
+  "reviewers": [
+    "sarah"
+  ],
+  "sequence": 6,
+  "depends_on_project": "workflow-orchestration/improve-agent-productivity",
+  "description": "Docs rot silently. Build an event-triggered staleness detector: when a directive completes, scan docs that reference modified files/systems and flag potentially stale content. This is NOT a new agent or skill \u2014 it's a post-directive hook (Step 6 addition) that outputs 'Potentially Stale Docs' in the digest. Lightweight: grep + timestamp check, not a knowledge graph.",
+  "source_directive": "harness-engineering-adoption",
+  "scope": {
+    "in": [
+      "Post-directive hook: scan .context/ docs that reference files modified in this directive",
+      "Staleness heuristic: doc references files changed in directive but doc hasn't been updated",
+      "Output: 'Potentially Stale Docs' section in digest with file paths and what changed",
+      "Lightweight: grep + git log timestamps, no embeddings or semantic analysis"
+    ],
+    "out": [
+      "Standalone skill or agent",
+      "Automatic doc updates (only detection, not fixing)",
+      "Knowledge graph or embedding-based analysis",
+      "Dashboard integration",
+      "Scheduled runs (only triggered by directive completion)"
+    ]
+  },
+  "dod": [
+    {
+      "criterion": "After a directive modifies code, the digest lists docs that reference those files but weren't updated",
+      "met": true
+    },
+    {
+      "criterion": "Zero false positives on docs that WERE updated in the same directive",
+      "met": true
+    },
+    {
+      "criterion": "Detection runs in <5 seconds (grep + timestamp, not expensive analysis)",
+      "met": true
+    }
+  ],
+  "browser_test": false,
+  "tags": [
+    "harness-engineering",
+    "doc-maintenance",
+    "lightweight"
+  ],
+  "tasks": [
+    {
+      "id": "t1",
+      "title": "Design staleness detection heuristic \u2014 what counts as 'references', what counts as 'stale'",
+      "status": "completed",
+      "phases": [
+        "design"
+      ],
+      "cast": {
+        "designer": "sarah",
+        "reviewers": [
+          "sarah"
+        ]
+      },
+      "scope": "Define what 'references a file' means (import path, file path mention, heading reference) and what 'stale' means (modified files not reflected in doc update timestamp)",
+      "depends_on": [],
+      "dod": [],
+      "agent": []
+    },
+    {
+      "id": "t2",
+      "title": "Build detection script \u2014 grep .context/ for file references, compare with git log",
+      "status": "completed",
+      "phases": [
+        "build"
+      ],
+      "cast": {
+        "builder": "engineer",
+        "reviewers": [
+          "sarah"
+        ]
+      },
+      "scope": "Bash/node script that takes a list of modified files, greps .context/ for references, and outputs stale docs",
+      "depends_on": [
+        "t1"
+      ],
+      "dod": [],
+      "agent": []
+    },
+    {
+      "id": "t3",
+      "title": "Integrate into pipeline Step 6 \u2014 add 'Potentially Stale Docs' to digest template",
+      "status": "completed",
+      "phases": [
+        "build"
+      ],
+      "cast": {
+        "builder": "engineer",
+        "reviewers": [
+          "sarah"
+        ]
+      },
+      "scope": "Add detection script invocation to wrapup pipeline doc and add output section to digest template",
+      "depends_on": [
+        "t2"
+      ],
+      "dod": [],
+      "agent": []
+    },
+    {
+      "id": "t4",
+      "title": "Test with directive that touches system files \u2014 verify detection and no false positives",
+      "status": "completed",
+      "phases": [
+        "build",
+        "review"
+      ],
+      "cast": {
+        "builder": "engineer",
+        "reviewers": [
+          "sarah"
+        ]
+      },
+      "scope": "Run detection against real directive outputs, verify catch rate and false positive rate",
+      "depends_on": [
+        "t3"
+      ],
+      "dod": [],
+      "agent": []
+    }
+  ],
+  "created": "2026-03-03T06:30:00Z",
+  "updated": "2026-03-03T07:56:00Z",
+  "completed": "2026-03-03"
+}

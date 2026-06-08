@@ -1,0 +1,87 @@
+{
+  "goal": "Pipeline iteration model: walkthrough testing, first-pass quality, iteration fallback, orchestrator split",
+  "challenges": {
+    "risks": [
+      "Cross-file consistency: directive-json.md schema is consumed by execute-projects, completion-gate, brainstorm, scope-and-dod. Field changes must propagate to all consumers. Mitigation: Project 2 establishes the schema, Project 3 builds on it.",
+      "Scope creep in DOD rewrite: rewriting scope-and-dod.md from technical to user-centric could expand into rewriting every example. Mitigation: add alongside existing rules, not wholesale replacement.",
+      "Ghost field cleanup may surface more undefined references. Mitigation: grep all pipeline docs for iterations/revision/reopen during schema task.",
+      "Orchestrator split (Project 4) has platform constraints — subagents can't spawn sub-subagents, background agents get Bash auto-rejected. Needs brainstorm to find viable architecture."
+    ],
+    "over_engineering_flags": [
+      "Intent versioning (version + history) should be minimal: version integer + reason string, not a full changelog."
+    ],
+    "recommendation": "Proceed with 4 projects. P0-a ships the testing tool first, P0-b ships pipeline quality changes (tested by P0-a), P1 adds iteration fallback, P2 is architectural."
+  },
+  "projects": [
+    {
+      "id": "walkthrough-polish",
+      "title": "Polish /walkthrough skill for pipeline testing",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": ["taylor"],
+      "reviewers": ["sarah"],
+      "auditor": "sarah",
+      "scope_summary": "Polish the /walkthrough skill to serve as the testing tool for pipeline changes. Add pipeline-specific standing scenarios to scenarios.md: (1) 'directive-intent-extraction' — CEO gives directive, system extracts intent after audit+brainstorm, CEO verifies piece by piece. (2) 'builder-context-completeness' — builder receives task, prompt contains CEO brief + intent + acceptance scenarios verbatim. (3) 'review-fix-cycle' — code-review fails, fix cycle triggers, builder fixes, re-review happens. (4) 'completion-checklist' — CEO reviews at completion gate, sees acceptance scenario checklist with pass/fail. (5) 'pipeline-smoke-test' — full directive traced through updated pipeline end-to-end. Enhance CTO trace step to verify doc consistency (cross-references match, schema fields align with what prompt templates expect, validation scripts check new fields). This project ships first so it can validate Project 2's output.",
+      "depends_on": [],
+      "touches_files_hint": [
+        ".claude/skills/walkthrough/SKILL.md",
+        ".context/lessons/scenarios.md"
+      ]
+    },
+    {
+      "id": "first-pass-quality",
+      "title": "Layer 1: Intent propagation, user-centric DOD, review fix cycles, and pipeline reorder",
+      "priority": "P0",
+      "complexity": "moderate",
+      "agent": ["taylor"],
+      "reviewers": ["sarah"],
+      "auditor": "sarah",
+      "scope_summary": "Update pipeline docs to implement first-pass quality improvements. (1) Reorder and simplify pipeline steps: merge challenge INTO brainstorm (one step, not two), move audit BEFORE brainstorm, add clarification step AFTER brainstorm. New order: triage → checkpoint → read → context → audit → brainstorm (includes challenge) → clarification → plan → approve → project-brainstorm → setup → execute → review-gate → wrapup → completion. Reduces step count. Update SKILL.md routing table, step numbering, and remove separate challenge doc/references. (2) Add directive-level dod (success_looks_like, failure_looks_like, quality_bar, examples) to directive-json schema. (3) Add clarification step — system extracts intent from CEO brief + audit + brainstorm, CEO verifies piece by piece. (4) Rewrite scope-and-dod.md: DOD becomes user-centric acceptance scenarios with examples (full workflow examples, not one-liners). (5) Update project-brainstorm to produce acceptance scenarios derived from directive DOD, include CEO brief + intent as inputs. (6) Update execute-projects: builder prompt includes CEO brief + intent verbatim, code-review increases to 3 fix cycles with convergence detection, standard review 'fail' triggers fix cycles (max 2), review-fix loop states trackable for game UI. (7) Update phase-definitions with review-fix loop phase. (8) Create lessons/failure-patterns.md template. (9) Remove 'single project is the default' bias from planner prompt. (10) Audit step outputs weight_recommendation — pipeline upgrades weight before brainstorm if audit reveals higher complexity.",
+      "depends_on": ["walkthrough-polish"],
+      "touches_files_hint": [
+        ".claude/skills/directive/docs/pipeline/00-delegation-and-triage.md",
+        ".claude/skills/directive/docs/pipeline/07b-project-brainstorm.md",
+        ".claude/skills/directive/docs/pipeline/09-execute-projects.md",
+        ".claude/skills/directive/docs/reference/schemas/directive-json.md",
+        ".claude/skills/directive/docs/reference/rules/scope-and-dod.md",
+        ".claude/skills/directive/docs/reference/rules/phase-definitions.md",
+        ".claude/skills/directive/docs/reference/rules/failure-handling.md",
+        ".claude/skills/directive/docs/reference/templates/planner-prompt.md",
+        ".claude/skills/directive/SKILL.md",
+        ".context/lessons/failure-patterns.md"
+      ]
+    },
+    {
+      "id": "iteration-fallback",
+      "title": "Layer 2: Completion gate amend/extend, acceptance checklist, schema cleanup",
+      "priority": "P1",
+      "complexity": "simple",
+      "agent": ["taylor"],
+      "reviewers": ["sarah"],
+      "auditor": "sarah",
+      "scope_summary": "Update completion gate (11-completion-gate.md) with amend/extend/redirect options, acceptance scenario checklist display with pass/fail evidence, and intent versioning for scope changes. Properly define iterations[] and revision in directive-json.md schema (replacing ghost references). Update failure-handling.md with new iteration failure cases. Grep all pipeline docs for orphaned references to undefined fields and clean up.",
+      "depends_on": ["first-pass-quality"],
+      "touches_files_hint": [
+        ".claude/skills/directive/docs/pipeline/11-completion-gate.md",
+        ".claude/skills/directive/docs/reference/schemas/directive-json.md",
+        ".claude/skills/directive/docs/reference/rules/failure-handling.md"
+      ]
+    },
+    {
+      "id": "orchestrator-split",
+      "title": "Layer 3: Separate orchestrator session from CEO session",
+      "priority": "P2",
+      "complexity": "complex",
+      "agent": ["devon"],
+      "reviewers": ["sarah", "morgan"],
+      "auditor": "sarah",
+      "scope_summary": "Architect and implement the split of pipeline orchestration from the CEO session. Currently the CEO session runs all 14 steps (12 orchestration + 2 CEO decisions), consuming 50-100K tokens of context before any building starts. Goal: CEO session only touches approve + completion gates. A dedicated orchestrator session handles triage through execute autonomously. Key constraint: subagents can't spawn sub-subagents, and background agents get Bash auto-rejected. Needs brainstorm during project-brainstorm step to find viable architecture (CLI-spawned orchestrator? Separate entry point? Two-phase execution?). Changes span SKILL.md (entry point), pipeline docs (who runs what), and potentially scripts/spawn infrastructure.",
+      "depends_on": ["first-pass-quality"],
+      "touches_files_hint": [
+        ".claude/skills/directive/SKILL.md",
+        ".claude/skills/directive/docs/pipeline/00-delegation-and-triage.md",
+        ".claude/skills/directive/docs/pipeline/09-execute-projects.md"
+      ]
+    }
+  ]
+}

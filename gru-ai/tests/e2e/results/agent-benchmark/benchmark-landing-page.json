@@ -1,0 +1,5 @@
+{
+  "benchmark_type": "landing-page",
+  "results": [{"config":"starter","directive":"build-landing-page","pass_count":15,"fail_count":0,"status":"pass","duration_ms":332},{"config":"standard","directive":"build-landing-page","pass_count":15,"fail_count":0,"status":"pass","duration_ms":306},{"config":"full","directive":"build-landing-page","pass_count":15,"fail_count":0,"status":"pass","duration_ms":319}],
+  "timestamp": "2026-03-08T03:20:50Z"
+}

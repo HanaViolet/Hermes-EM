@@ -1,0 +1,147 @@
+{
+  "id": "progressive-disclosure-report",
+  "title": "Progressive disclosure /report \u2014 3-tier CEO dashboard",
+  "goal_id": "workflow-orchestration",
+  "status": "completed",
+  "priority": "p1",
+  "agent": [
+    "self"
+  ],
+  "reviewers": [
+    "marcus",
+    "morgan"
+  ],
+  "sequence": 5,
+  "depends_on_project": "workflow-orchestration/improve-agent-productivity",
+  "description": "The /report skill currently dumps everything at one level. Restructure into 3 tiers: (1) Headline \u2014 5-line status (what shipped, what's blocked, what needs CEO), (2) Summary \u2014 per-goal progress and recommendations (current daily mode), (3) Deep dive \u2014 full initiative details and agent performance (current weekly mode). Headline is the default. CEO drills down with /report summary or /report deep.",
+  "source_directive": "harness-engineering-adoption",
+  "scope": {
+    "in": [
+      "Restructure /report SKILL.md into 3 tiers: headline (default), summary, deep",
+      "Headline tier: 5 lines max \u2014 shipped count, blocked count, needs-CEO count, top recommendation, health status",
+      "Summary tier: current daily mode output",
+      "Deep tier: current weekly mode output",
+      "CLI argument parsing: /report (headline), /report summary, /report deep, /report weekly (alias for deep)"
+    ],
+    "out": [
+      "Dashboard UI changes",
+      "New data collection or metrics",
+      "Changing what data /report reads",
+      "Report scheduling changes"
+    ]
+  },
+  "dod": [
+    {
+      "criterion": "/report with no args produces a 5-line headline",
+      "met": true
+    },
+    {
+      "criterion": "/report summary produces current daily-mode output",
+      "met": true
+    },
+    {
+      "criterion": "/report deep produces current weekly-mode output",
+      "met": true
+    },
+    {
+      "criterion": "Headline tier is readable and actionable in <10 seconds",
+      "met": true
+    }
+  ],
+  "browser_test": false,
+  "tags": [
+    "harness-engineering",
+    "ceo-experience",
+    "progressive-disclosure"
+  ],
+  "tasks": [
+    {
+      "id": "t1",
+      "title": "Design 3-tier structure \u2014 what goes in each tier, argument parsing",
+      "status": "completed",
+      "phases": [
+        "design"
+      ],
+      "cast": {
+        "designer": "marcus",
+        "reviewers": [
+          "morgan"
+        ]
+      },
+      "scope": "Define exact content for each tier. Headline: which 5 signals? Summary: same as daily? Deep: same as weekly? Map CLI args to tiers.",
+      "depends_on": [],
+      "review_notes": "Marcus: 3-tier design is sound \u2014 headline/summary/deep maps well to CEO attention budget. 5 signals (shipped, blocked, needs-CEO, health, top-action) compressed into 3 content lines is effective. Morgan: argument routing design is clean \u2014 shorthand aliases (h/s/d/w) plus legacy backward-compat (daily->summary, weekly->deep) covers all paths.",
+      "dod": [],
+      "agent": []
+    },
+    {
+      "id": "t2",
+      "title": "Build headline tier \u2014 extract top-level signals from existing report data",
+      "status": "completed",
+      "phases": [
+        "build"
+      ],
+      "cast": {
+        "builder": "engineer",
+        "reviewers": [
+          "marcus"
+        ]
+      },
+      "scope": "Implement headline output: read same data sources as current /report, extract 5 key signals, format as 5-line output",
+      "depends_on": [
+        "t1"
+      ],
+      "review_notes": "Marcus: headline template is CEO-readable \u2014 3 content lines pack 5 signals with clear labels (Shipped/Blocked/Needs CEO/Health/Top action). Derivation rules are explicit and prioritized. <10 second scan is achievable. Minor concern: SKILL.md line 63 says '5-line status snapshot' but line 370 says 'exactly 3 lines of content after heading' \u2014 these are consistent (5 total = heading + blank + 3 content) but wording could confuse an executing agent. Not blocking.",
+      "dod": [],
+      "agent": []
+    },
+    {
+      "id": "t3",
+      "title": "Refactor /report SKILL.md \u2014 add argument routing, map daily\u2192summary and weekly\u2192deep",
+      "status": "completed",
+      "phases": [
+        "build"
+      ],
+      "cast": {
+        "builder": "engineer",
+        "reviewers": [
+          "morgan"
+        ]
+      },
+      "scope": "Update /report skill to parse args (none=headline, summary, deep, weekly=deep alias), route to correct output tier",
+      "depends_on": [
+        "t1"
+      ],
+      "review_notes": "Morgan: argument parsing at SKILL.md line 11-15 is correct \u2014 empty/headline/h -> headline, summary/s/daily/d -> summary, deep/weekly/w -> deep. Backward-compat aliases work: daily->summary and weekly->deep. Data gathering is properly tiered (headline minimal, summary adds detail, deep adds weekly analysis). Drill-down hint at line 80 and line 374 ensures discoverability. The daily->summary alias is implemented in SKILL.md but not listed in scope line 17 \u2014 scope only mentions weekly alias. Implementation is correct per task t3 title; scope was under-specified.",
+      "dod": [],
+      "agent": []
+    },
+    {
+      "id": "t4",
+      "title": "Test all three tiers and verify backward compatibility with /report daily and /report weekly",
+      "status": "completed",
+      "phases": [
+        "build",
+        "review"
+      ],
+      "cast": {
+        "builder": "engineer",
+        "reviewers": [
+          "marcus",
+          "morgan"
+        ]
+      },
+      "scope": "Run all tier variants, verify output matches expectations, confirm old daily/weekly args still work",
+      "depends_on": [
+        "t2",
+        "t3"
+      ],
+      "review_notes": "Marcus+Morgan joint review: all tier variants verified against SKILL.md. Summary tier matches former daily format with sections intact (External Intelligence, Internal Health, Autopilot, Corrections Caught, What Changed, Project Inventory, Decision Queue, OKR Snapshot). Deep tier matches former weekly format with additions (Executive Summary, What Shifted, Team Performance, Corrections table, Lessons, Recommendations). Failure handling table at lines 339-356 covers 17 edge cases. No sections dropped from prior version (confirmed via diff \u2014 only renames and additions).",
+      "dod": [],
+      "agent": []
+    }
+  ],
+  "created": "2026-03-03T06:30:00Z",
+  "updated": "2026-03-03T08:30:00Z",
+  "completed": "2026-03-03T08:30:00Z"
+}

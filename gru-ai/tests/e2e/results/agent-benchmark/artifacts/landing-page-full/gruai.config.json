@@ -1,0 +1,70 @@
+{
+  "name": "test-project",
+  "preset": "full",
+  "platform": "claude-code",
+  "version": "1.0.0",
+  "agents": [
+      {
+          "id": "amara",
+          "name": "Amara Volkov",
+          "role": "CTO"
+      },
+      {
+          "id": "priya",
+          "name": "Priya Fischer",
+          "role": "COO"
+      },
+      {
+          "id": "nadia",
+          "name": "Nadia Davis",
+          "role": "CPO"
+      },
+      {
+          "id": "nico",
+          "name": "Nico Andersen",
+          "role": "CMO"
+      },
+      {
+          "id": "elias",
+          "name": "Elias Davis",
+          "role": "FE"
+      },
+      {
+          "id": "ravi",
+          "name": "Ravi Chen",
+          "role": "BE"
+      },
+      {
+          "id": "blake",
+          "name": "Blake Laurent",
+          "role": "FS"
+      },
+      {
+          "id": "zion",
+          "name": "Zion Cohen",
+          "role": "DE"
+      },
+      {
+          "id": "jade",
+          "name": "Jade Yamamoto",
+          "role": "QA"
+      },
+      {
+          "id": "devon",
+          "name": "Devon Rivera",
+          "role": "UX"
+      },
+      {
+          "id": "lina",
+          "name": "Lina Cruz",
+          "role": "CB"
+      }
+  ],
+  "skills": ["directive", "scout", "healthcheck", "report"],
+  "contextDir": ".context",
+  "settings": {
+    "dailyBudget": 50,
+    "autoScout": false,
+    "reportFrequency": "daily"
+  }
+}

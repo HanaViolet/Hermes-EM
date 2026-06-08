@@ -1,0 +1,36 @@
+{
+  "goal": "Fix 4 bugs from TMX v2 migration (hit detection, furniture clipping, invisible labels, TMX data sync) and deliver 2 new features (canvas font labels, LimeZu UI status icons) for the game rendering engine.",
+  "challenges": {
+    "risks": [
+      "1. renderer.ts is a 900+ line file touched by 4 of 6 items — concurrent edits would conflict. Mitigation: single project with strict task ordering.",
+      "2. LimeZu UI sprite sheet integration requires understanding the sprite sheet layout (grid offsets, frame counts) which the builder may misidentify from the PNG. Mitigation: provide sprite sheet layout info in task description and require visual verification.",
+      "3. TMX re-sync (bug 4) could shift tile coordinates that affect the other bug fixes (hit detection, label positioning). Mitigation: TMX sync runs FIRST so all subsequent fixes use correct coordinates."
+    ],
+    "over_engineering_flags": ["Scope is appropriate — 4 bugs are specific constant/logic fixes, 2 features are well-defined replacements. No architecture changes needed."],
+    "recommendation": "Proceed as-is. Single project, ordered tasks, one builder."
+  },
+  "projects": [
+    {
+      "id": "game-rendering-fixes-v3",
+      "title": "Fix rendering bugs and replace fonts/icons with LimeZu assets",
+      "priority": "P0",
+      "complexity": "moderate",
+      "agent": ["riley"],
+      "reviewers": ["sarah"],
+      "auditor": "sarah",
+      "scope_summary": "6 ordered tasks in one project: (1) re-sync TMX tile data via parse-tmx.ts, (2) fix CHARACTER_HIT dimensions to account for SPRITE_SCALE, (3) fix CHARACTER_SITTING_OFFSET collision alignment, (4) fix NAME_LABEL positioning constants, (5) replace bitmap font with canvas ctx.font/ctx.fillText, (6) replace hand-drawn status/interaction icons with LimeZu UI_48x48.png sprite sheet.",
+      "depends_on": [],
+      "touches_files_hint": [
+        "src/components/game/constants.ts",
+        "src/components/game/engine/renderer.ts",
+        "src/components/game/engine/officeState.ts",
+        "src/components/game/office-layout.ts",
+        "src/components/game/sprites/statusIcons.ts",
+        "src/components/game/sprites/interactionIcons.ts",
+        "src/components/game/sprites/bitmapFont.ts",
+        "public/assets/office/UI_48x48.png",
+        "scripts/parse-tmx.ts"
+      ]
+    }
+  ]
+}

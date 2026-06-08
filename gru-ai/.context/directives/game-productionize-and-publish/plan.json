@@ -1,0 +1,79 @@
+{
+  "goal": "Transform agent-conductor into gruai — an open-source npm package with clone-and-run and install-in-existing-repo usage modes",
+  "goal_folder": "game",
+  "challenges": {
+    "risks": [
+      "Pipeline docs (30+ files) hardcode agent names like 'Morgan plans', 'Sarah reviews'. Mechanical find-replace risks breaking prompt quality — each reference needs contextual conversion to role-based language ('the COO plans', 'the CTO reviews'). High file count, high error surface.",
+      "init.ts currently copies agent files from the repo's own .claude/agents/ directory. After publishing to npm, those source files must ship inside the package (dist-cli/). Path resolution between tsx dev mode and compiled dist mode is already fragile (CLI_ROOT logic). Getting this wrong means gruai init silently scaffolds nothing.",
+      "Game UI reads agent-registry.json and currently assumes the default 12-agent team. Custom teams from gruai init will have different agent counts, names, and roles. If the game doesn't gracefully handle variable team sizes, the first-run experience breaks — empty desks, missing sprites, layout overflow."
+    ],
+    "over_engineering_flags": [
+      "Don't build a full 'personality generator' system with templates and composition. A simple name-swap on existing personality files delivers 95% of the value.",
+      "Don't build gruai update as a full upgrade migration system. For v0.1, a simple 're-run init with --force to overwrite scaffolded files' is sufficient.",
+      "Don't over-invest in the welcome directive. A single markdown file that the pipeline picks up is enough — no need for a special auto-queue mechanism."
+    ],
+    "recommendation": "Simplify"
+  },
+  "projects": [
+    {
+      "id": "repo-brand-publish",
+      "title": "Repo rename, branding, build config, and npm publish setup",
+      "priority": "P0",
+      "complexity": "moderate",
+      "agent": ["devon"],
+      "reviewers": ["sarah"],
+      "auditor": "sarah",
+      "scope_summary": "Rename package to gruai in package.json, update bin field to 'gruai', add MIT LICENSE, configure vite build for 3 outputs (dist/, dist-server/, dist-cli/), ensure dist is committed to git, set up npm publish config with files whitelist, update npm scripts so 'npm run start' serves dist + runs server. Also rename all internal branding strings from 'agent-conductor' to 'gruai'.",
+      "depends_on": [],
+      "touches_files_hint": ["package.json", "vite.config.ts", "LICENSE", "tsconfig.json", "server/index.ts", "cli/index.ts", ".npmignore"]
+    },
+    {
+      "id": "role-based-pipeline",
+      "title": "Convert pipeline from name-based to role-based casting",
+      "priority": "P0",
+      "complexity": "complex",
+      "agent": ["taylor"],
+      "reviewers": ["morgan", "sarah"],
+      "auditor": "morgan",
+      "scope_summary": "Refactor all 30+ pipeline docs, casting-rules.md, morgan-prompt.md, auditor-prompt.md, and SKILL.md files to use role-based references ('the CTO', 'the COO') instead of hardcoded names ('Sarah', 'Morgan'). Update casting-rules.md to resolve roles from agent-registry.json at runtime. Ensure pipeline docs reference roles/titles so any team composition works. Also update the agent personality .md files to be role-template-based — keeping role-specific content but making the name/personality a variable filled from the registry.",
+      "depends_on": [],
+      "touches_files_hint": [".claude/skills/directive/docs/pipeline/*.md", ".claude/skills/directive/docs/reference/rules/casting-rules.md", ".claude/skills/directive/docs/reference/templates/*.md", ".claude/agents/*.md"]
+    },
+    {
+      "id": "init-and-scaffolding",
+      "title": "Complete gruai init CLI with team generation and scaffolding",
+      "priority": "P0",
+      "complexity": "moderate",
+      "agent": ["jordan"],
+      "reviewers": ["sarah"],
+      "auditor": "sarah",
+      "scope_summary": "Extend cli/commands/init.ts to: (1) ask minimal questions (project name, team preference), (2) generate agent-registry.json with role-based defaults and random or user-provided names, (3) generate personality files from role templates with injected names, (4) scaffold .claude/agents/, agent-registry.json, .claude/skills/directive/, .context/ tree, CLAUDE.md, gruai.config.json, (5) copy skills into user repo, (6) create a 'gruai update' command that re-scaffolds framework files. Path resolution must work from both tsx dev and compiled dist-cli/.",
+      "depends_on": ["role-based-pipeline"],
+      "touches_files_hint": ["cli/commands/init.ts", "cli/commands/update.ts", "cli/index.ts"]
+    },
+    {
+      "id": "game-dynamic-team",
+      "title": "Game UI supports dynamic team sizes from agent-registry",
+      "priority": "P1",
+      "complexity": "moderate",
+      "agent": ["riley"],
+      "reviewers": ["quinn", "marcus"],
+      "auditor": "marcus",
+      "scope_summary": "Update game UI to read agent-registry.json dynamically instead of assuming a fixed 12-agent roster. Handle variable team sizes gracefully: desk layout adapts to agent count, sprites render for any number of agents (2-15), TeamPanel shows the actual team. Ensure the first-run experience shows a populated office with the default team — no blank/empty state.",
+      "depends_on": [],
+      "touches_files_hint": ["src/components/game/constants.ts", "src/components/game/types.ts", "src/components/game/engine/characters.ts", "src/components/game/engine/officeState.ts", "src/components/game/panels/TeamPanel.tsx", "src/components/game/CanvasOffice.tsx"]
+    },
+    {
+      "id": "first-run-and-readme",
+      "title": "Welcome directive, README with GIF, and first-run experience",
+      "priority": "P1",
+      "complexity": "moderate",
+      "agent": ["taylor"],
+      "reviewers": ["priya", "marcus"],
+      "auditor": "priya",
+      "scope_summary": "Create a welcome directive template scaffolded during gruai init. Write README.md with GIF placeholder, 'Your AI dev team, visualized' tagline, 3-command quickstart, feature overview, MIT license badge. Covers both clone-and-run and install-in-existing-repo modes.",
+      "depends_on": ["init-and-scaffolding", "repo-brand-publish"],
+      "touches_files_hint": ["README.md", "cli/templates/welcome-directive.md"]
+    }
+  ]
+}

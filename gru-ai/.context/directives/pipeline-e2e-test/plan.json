@@ -1,0 +1,34 @@
+{
+  "goal": "Build a /smoke-test skill that runs a real directive through the pipeline, auto-approving at all gates, and reports pass/fail per step",
+  "challenges": {
+    "risks": [
+      "Real pipeline execution is non-deterministic — LLM agents may stall, produce unexpected output, or hit context limits. The smoke test needs robust timeout handling per step and clear failure reporting.",
+      "Test isolation via branch risks polluting the real directive index. The dashboard directive-watcher reads .context/directives/ via chokidar — test directives will appear in the live dashboard during execution.",
+      "The completion gate test_mode auto-approve creates a path where a real directive could accidentally skip CEO review if directive.json is hand-edited."
+    ],
+    "over_engineering_flags": [
+      "Do NOT build a custom test framework or assertion library. A single bash script that spawns one directive session, polls directive.json, and validates artifacts is sufficient.",
+      "Only move the 2 pipeline-mechanical scenarios. Do NOT rewrite or expand them."
+    ],
+    "recommendation": "Proceed as-is"
+  },
+  "projects": [
+    {
+      "id": "smoke-test-skill",
+      "title": "Build /smoke-test skill with real pipeline execution",
+      "priority": "P0",
+      "scope_summary": "Create .claude/skills/smoke-test/SKILL.md that orchestrates end-to-end pipeline smoke testing. Build a runner script (bash) that creates a test directive, spawns a real /directive session, polls directive.json for progression, validates artifacts via validate-gate.sh, auto-approves at completion via test_mode flag, reports pass/fail per step, and cleans up. Patch 11-completion-gate.md for test_mode. Migrate 2 pipeline-mechanical scenarios from lessons/scenarios.md.",
+      "complexity": "moderate",
+      "agent": ["devon"],
+      "reviewers": ["sarah"],
+      "auditor": "sarah",
+      "depends_on": [],
+      "touches_files_hint": [
+        ".claude/skills/smoke-test/SKILL.md",
+        ".claude/skills/smoke-test/run-smoke-test.sh",
+        ".claude/skills/directive/docs/pipeline/11-completion-gate.md",
+        ".context/lessons/scenarios.md"
+      ]
+    }
+  ]
+}

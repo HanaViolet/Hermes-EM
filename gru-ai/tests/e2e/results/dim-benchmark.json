@@ -1,0 +1,9 @@
+{
+  "dimension": "benchmark",
+  "status": "pass",
+  "pass_count": 5,
+  "fail_count": 0,
+  "duration_ms": 1811,
+  "benchmarks": [{"operation":"init-starter","duration_ms":63,"status":"ok"},{"operation":"init-standard","duration_ms":63,"status":"ok"},{"operation":"init-full","duration_ms":92,"status":"ok"},{"operation":"server-cold-start","duration_ms":1045,"status":"ok"},{"operation":"type-check","duration_ms":275,"status":"ok"}],
+  "timestamp": "2026-03-08T03:20:53Z"
+}

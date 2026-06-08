@@ -1,0 +1,229 @@
+{
+  "id": "spawn-adapter-and-wrapper",
+  "title": "SpawnAdapter interface + Claude Code impl + spawn-agent.ts wrapper + personality compiler",
+  "status": "completed",
+  "priority": "P0",
+  "agent": [
+    "devon"
+  ],
+  "reviewers": [
+    "sarah"
+  ],
+  "description": "Define SpawnAdapter interface, build ClaudeCodeSpawnAdapter, create spawn-agent.ts wrapper, build personality compiler, update pipeline docs and foreman.",
+  "source_directive": "multi-platform-wave2-spawn",
+  "scope": {
+    "in": "SpawnAdapter interface, ClaudeCodeSpawnAdapter, spawn-agent.ts, personality compiler, foreman.ts refactor, pipeline doc updates",
+    "out": "Non-Claude-Code adapters, auto-detect at init, marketing"
+  },
+  "dod": [
+    {
+      "criterion": "SpawnAdapter interface defined and ClaudeCodeSpawnAdapter implemented with tracked and detached modes",
+      "met": true
+    },
+    {
+      "criterion": "scripts/spawn-agent.ts is the universal spawn entry point — all callsites refactored",
+      "met": true
+    },
+    {
+      "criterion": "scripts/personality-compiler.ts compiles agent personalities for claude-code and codex platforms",
+      "met": true
+    },
+    {
+      "criterion": "foreman.ts and pipeline docs (09, 00) use spawn-agent.ts instead of direct claude CLI calls",
+      "met": true
+    },
+    {
+      "criterion": "npm run type-check passes with no new errors",
+      "met": true
+    }
+  ],
+  "browser_test": false,
+  "tasks": [
+    {
+      "id": "spawn-adapter-interface",
+      "title": "Define SpawnAdapter interface and types",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": [
+        "devon"
+      ],
+      "phases": [
+        "build",
+        "review"
+      ],
+      "scope": "Create server/platform/spawn-adapter.ts with SpawnAdapter interface, SpawnConfig type, SpawnHandle type, and SpawnMode enum.",
+      "dod": [
+        {
+          "criterion": "server/platform/spawn-adapter.ts exports SpawnAdapter interface, SpawnConfig, SpawnHandle, and SpawnMode types",
+          "met": true
+        },
+        {
+          "criterion": "SpawnConfig.agentId is optional (foreman spawns without --agent)",
+          "met": true
+        },
+        {
+          "criterion": "SpawnAdapter is a separate interface from PlatformAdapter (not extending it)",
+          "met": true
+        },
+        {
+          "criterion": "server/platform/index.ts re-exports all new types from spawn-adapter.ts",
+          "met": true
+        },
+        {
+          "criterion": "npm run type-check passes with no new errors",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "claude-code-spawn-adapter",
+      "title": "Implement ClaudeCodeSpawnAdapter",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": [
+        "devon"
+      ],
+      "phases": [
+        "build",
+        "code-review",
+        "review"
+      ],
+      "scope": "Create server/platform/claude-code-spawn.ts implementing SpawnAdapter.",
+      "dod": [
+        {
+          "criterion": "ClaudeCodeSpawnAdapter implements SpawnAdapter interface from spawn-adapter.ts",
+          "met": true
+        },
+        {
+          "criterion": "Detached mode: child process is detached, stdio redirected to outputPath, child.unref() called",
+          "met": true
+        },
+        {
+          "criterion": "Tracked mode: spawn() returns SpawnHandle with promise that resolves to exit code",
+          "met": true
+        },
+        {
+          "criterion": "When agentId is undefined, --agent flag is omitted from args array",
+          "met": true
+        },
+        {
+          "criterion": "npm run type-check passes with no new errors",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "personality-compiler",
+      "title": "Build personality compiler script",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": [
+        "devon"
+      ],
+      "phases": [
+        "build",
+        "review"
+      ],
+      "scope": "Create scripts/personality-compiler.ts with compilePersonality function.",
+      "dod": [
+        {
+          "criterion": "compilePersonality('devon-fullstack', 'claude-code') returns empty string (no-op)",
+          "met": true
+        },
+        {
+          "criterion": "compilePersonality('devon-fullstack', 'codex') reads .claude/agents/devon-fullstack.md and outputs transformed content",
+          "met": true
+        },
+        {
+          "criterion": "Claude Code-specific frontmatter fields (permissionMode, hooks, skills) are stripped in non-claude-code output",
+          "met": true
+        },
+        {
+          "criterion": "Script is executable via tsx scripts/personality-compiler.ts --agent devon-fullstack --platform claude-code",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "spawn-agent-wrapper",
+      "title": "Create scripts/spawn-agent.ts universal spawn entry point",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": [
+        "devon"
+      ],
+      "phases": [
+        "build",
+        "code-review",
+        "review"
+      ],
+      "scope": "Create scripts/spawn-agent.ts as universal CLI entry point.",
+      "dod": [
+        {
+          "criterion": "tsx scripts/spawn-agent.ts --agent devon-fullstack --prompt 'test' --mode tracked runs without error",
+          "met": true
+        },
+        {
+          "criterion": "tsx scripts/spawn-agent.ts --prompt '/directive test' --mode detached (no --agent) spawns detached process and prints PID",
+          "met": true
+        },
+        {
+          "criterion": "Script reads platform from gruai.config.json, defaults to claude-code if not found",
+          "met": true
+        },
+        {
+          "criterion": "Exit code matches child process exit code in tracked mode",
+          "met": true
+        },
+        {
+          "criterion": "npm run type-check passes with no new errors",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "refactor-callsites",
+      "title": "Refactor foreman.ts and pipeline docs to use spawn-agent.ts",
+      "status": "completed",
+      "priority": "P1",
+      "complexity": "simple",
+      "agent": [
+        "devon"
+      ],
+      "phases": [
+        "build",
+        "code-review",
+        "review"
+      ],
+      "scope": "Refactor foreman.ts, 09-execute-projects.md, and 00-delegation-and-triage.md.",
+      "dod": [
+        {
+          "criterion": "foreman.ts no longer directly imports spawn from child_process for agent launching — uses ClaudeCodeSpawnAdapter instead",
+          "met": true
+        },
+        {
+          "criterion": "09-execute-projects.md bash template uses tsx scripts/spawn-agent.ts instead of direct claude -p --agent invocation",
+          "met": true
+        },
+        {
+          "criterion": "00-delegation-and-triage.md pre-flight cleanup kills orphaned spawn-agent.ts processes alongside existing claude patterns",
+          "met": true
+        },
+        {
+          "criterion": "foreman.ts launchDirective still produces log files, tracks PIDs, and detaches child processes (behavior preserved)",
+          "met": true
+        },
+        {
+          "criterion": "npm run type-check passes with no new errors",
+          "met": true
+        }
+      ]
+    }
+  ],
+  "created": "2026-03-07T14:00:00Z",
+  "updated": "2026-03-07T16:00:00Z"
+}

@@ -1,0 +1,20 @@
+{
+  "id": "chief-of-staff-pattern",
+  "title": "Chief of Staff (Alex) delegation pattern for CEO context shielding",
+  "goal_id": "workflow-orchestration",
+  "status": "completed",
+  "priority": "p0",
+  "agent": [
+    "self"
+  ],
+  "reviewers": [
+    "sarah"
+  ],
+  "description": "SUPERSEDED by remove-alex-proxy. The background subagent pattern was fundamentally broken: subagents can't use Agent tool (platform limitation), CLI spawning via Bash gets permission-rejected for background agents. Replaced by inline execution (lightweight) and top-level CLI sessions (medium/heavy).",
+  "source_directive": null,
+  "tags": [],
+  "tasks": [],
+  "created": "2026-03-02T00:00:00Z",
+  "updated": "2026-03-02T00:00:00Z",
+  "completed": "2026-03-02T00:00:00Z"
+}

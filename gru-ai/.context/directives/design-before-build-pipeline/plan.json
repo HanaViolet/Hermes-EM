@@ -1,0 +1,36 @@
+{
+  "goal": "Design-first step for UI tasks",
+  "challenges": {
+    "risks": [
+      "Builder-designer disagreement escalation could stall execution — CEO becomes bottleneck",
+      "Design phase adds latency to every UI task — need a threshold for when to trigger vs skip",
+      "Design artifact format ambiguity — builder may ignore design like brainstorm output"
+    ],
+    "over_engineering_flags": [
+      "Scope is tight — reuse existing Quinn design format, no new infrastructure"
+    ],
+    "recommendation": "Proceed as-is"
+  },
+  "projects": [
+    {
+      "id": "design-first-ui-pipeline",
+      "title": "Add design-first flow for UI tasks in execution pipeline",
+      "priority": "P0",
+      "scope_summary": "Modify 09-execute-projects.md to add a 'visual-design' phase that spawns Quinn before the build phase for UI tasks. Define the detection heuristic (browser_test: true, category game/dashboard, or agent includes frontend/full-stack touching UI files). Define the design artifact handoff (Quinn produces visual-design.md). Add builder acceptance gate: builder reviews design and either accepts or objects (escalate to CEO). Update builder prompt to reference the visual-design artifact. Update phase-definitions.md and casting-rules.md.",
+      "complexity": "moderate",
+      "agent": [
+        "morgan"
+      ],
+      "reviewers": [
+        "sarah"
+      ],
+      "auditor": "sarah",
+      "depends_on": [],
+      "touches_files_hint": [
+        ".claude/skills/directive/docs/pipeline/09-execute-projects.md",
+        ".claude/skills/directive/docs/reference/rules/phase-definitions.md",
+        ".claude/skills/directive/docs/reference/rules/casting-rules.md"
+      ]
+    }
+  ]
+}

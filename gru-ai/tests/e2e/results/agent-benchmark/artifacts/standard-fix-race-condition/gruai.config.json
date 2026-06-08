@@ -1,0 +1,50 @@
+{
+  "name": "test-project",
+  "preset": "standard",
+  "platform": "claude-code",
+  "version": "1.0.0",
+  "agents": [
+      {
+          "id": "carmen",
+          "name": "Carmen Castillo",
+          "role": "CTO"
+      },
+      {
+          "id": "alex",
+          "name": "Alex Volkov",
+          "role": "COO"
+      },
+      {
+          "id": "yuki",
+          "name": "Yuki Blake",
+          "role": "CPO"
+      },
+      {
+          "id": "skyler",
+          "name": "Skyler Malik",
+          "role": "FE"
+      },
+      {
+          "id": "sol",
+          "name": "Sol Gupta",
+          "role": "BE"
+      },
+      {
+          "id": "rowan",
+          "name": "Rowan Tanaka",
+          "role": "FS"
+      },
+      {
+          "id": "lina",
+          "name": "Lina Kumar",
+          "role": "QA"
+      }
+  ],
+  "skills": ["directive", "scout", "healthcheck", "report"],
+  "contextDir": ".context",
+  "settings": {
+    "dailyBudget": 50,
+    "autoScout": false,
+    "reportFrequency": "daily"
+  }
+}

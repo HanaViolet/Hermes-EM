@@ -1,0 +1,65 @@
+{
+  "id": "multi-directive-support",
+  "title": "Tasks Panel — Merged Directive + Action with Interactive Navigation",
+  "status": "cancelled",
+  "phase": "build",
+  "agent": ["riley"],
+  "reviewers": ["sarah"],
+  "scope": {
+    "files": [
+      "src/components/game/panels/ActionPanel.tsx",
+      "src/components/game/panels/DirectivePanel.tsx",
+      "src/components/game/SidePanel.tsx",
+      "server/watchers/directive-watcher.ts",
+      "server/types.ts",
+      "src/stores/types.ts",
+      "src/stores/dashboard-store.ts",
+      "server/state/aggregator.ts"
+    ],
+    "description": "Merge Action + Directive panels into a single 'Tasks' tab. Show all active directives with embedded pipeline steppers. Add interactive navigation: click project for detail, click active step for session."
+  },
+  "tasks": [
+    {
+      "id": "watcher-multi-directive",
+      "title": "Watcher: return all active directives",
+      "status": "cancelled",
+      "agent": ["riley"],
+      "dod": [
+        { "criterion": "Watcher returns DirectiveState[] for all in_progress/awaiting_completion/reopened directives", "met": false },
+        { "criterion": "activeDirectives field added to server types, client types, aggregator, and store", "met": false }
+      ]
+    },
+    {
+      "id": "rename-and-merge",
+      "title": "Rename Action tab to Tasks, merge with Directive panel",
+      "status": "cancelled",
+      "agent": ["riley"],
+      "dod": [
+        { "criterion": "Tab strip shows 'Tasks' instead of 'Action', Directive tab removed", "met": false },
+        { "criterion": "Tasks panel shows all directives grouped: needs-action (expanded), in-progress (collapsed), recent", "met": false },
+        { "criterion": "Each directive card embeds PipelineStepper + project cards when expanded", "met": false },
+        { "criterion": "Session items (errors, approvals, waiting-input) still appear in correct tiers", "met": false }
+      ]
+    },
+    {
+      "id": "click-project-detail",
+      "title": "Click project to show detail view",
+      "status": "cancelled",
+      "agent": ["riley"],
+      "dod": [
+        { "criterion": "Clicking a project card opens a detail view showing tasks with DOD and status", "met": false },
+        { "criterion": "Detail view shows project context.md content if available", "met": false }
+      ]
+    },
+    {
+      "id": "click-step-session",
+      "title": "Click active pipeline step to navigate to session",
+      "status": "cancelled",
+      "agent": ["riley"],
+      "dod": [
+        { "criterion": "Active pipeline steps that have associated sessions are clickable", "met": false },
+        { "criterion": "Clicking navigates to / focuses the relevant terminal session", "met": false }
+      ]
+    }
+  ]
+}

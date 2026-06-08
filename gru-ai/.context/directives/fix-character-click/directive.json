@@ -1,0 +1,165 @@
+{
+  "id": "fix-character-click",
+  "title": "Fix Character Click Regression",
+  "status": "completed",
+  "created": "2026-03-09",
+  "completed": "2026-03-09",
+  "weight": "lightweight",
+  "produced_features": [],
+  "report": null,
+  "backlog_sources": [],
+  "started_at": "2026-03-09T12:00:00Z",
+  "updated_at": "2026-03-09T07:14:36.474Z",
+  "current_step": "completion",
+  "pipeline": {
+    "triage": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "weight": "lightweight",
+        "rationale": "Bug fix in click handler, 2 files, no architectural risk."
+      }
+    },
+    "checkpoint": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "No prior progress found."
+      }
+    },
+    "read": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Read directive.md — stale React closure bug in click handlers."
+      }
+    },
+    "context": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Partial context load for lightweight directive."
+      }
+    },
+    "challenge": {
+      "status": "skipped",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Skipped for lightweight weight."
+      }
+    },
+    "brainstorm": {
+      "status": "skipped",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Skipped for lightweight weight."
+      }
+    },
+    "audit": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Root cause: 4 stale useCallback closures. resolveAgentName/resolveRealAgentName have [] deps but capture AGENT_ID_TO_NAME/AGENT_ID_TO_REAL_NAME which change when agents load. processClick misses CEO_ID in deps. handleAgentClick misses OFFICE_AGENTS in deps."
+      }
+    },
+    "plan": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "1 project, 1 task: fix useCallback dependency arrays in CanvasOffice.tsx and GamePage.tsx."
+      }
+    },
+    "approve": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "decision": "auto-approved"
+      }
+    },
+    "project-brainstorm": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Auto — tasks derived from plan."
+      }
+    },
+    "setup": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Working on current branch directive/game-ui-tmx-update."
+      }
+    },
+    "execute": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Fixed 4 stale useCallback dependency arrays.",
+        "progress": "1 of 1 tasks complete"
+      }
+    },
+    "review-gate": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Type check passes. Fix is minimal and targeted."
+      }
+    },
+    "wrapup": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Stale closure fix complete. 2 files changed."
+      }
+    },
+    "completion": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ]
+    }
+  },
+  "projects": [],
+  "planning": {
+    "coo_plan": {},
+    "ceo_approval": {
+      "status": "auto-approved",
+      "modifications": []
+    },
+    "worktree_path": null
+  },
+  "wrapup": {
+    "okrs_persisted": false,
+    "follow_ups_processed": false,
+    "digest_path": null,
+    "lessons_updated": false
+  }
+}

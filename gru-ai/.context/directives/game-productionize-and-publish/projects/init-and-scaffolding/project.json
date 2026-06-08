@@ -1,0 +1,190 @@
+{
+  "id": "init-and-scaffolding",
+  "title": "Complete gruai init CLI with team generation and scaffolding",
+  "status": "completed",
+  "priority": "P0",
+  "agent": [
+    "jordan"
+  ],
+  "reviewers": [
+    "sarah"
+  ],
+  "description": "Extend cli/commands/init.ts with agent-registry generation, personality templates, skill docs copying, CLAUDE.md, gruai.config.json, update command, path resolution fix",
+  "source_directive": "game-productionize-and-publish",
+  "scope": {
+    "in": "Extend init.ts, add update command, fix path resolution, generate agent-registry.json with random names, scaffold all missing items, copy skill docs/ subdirectories",
+    "out": "Do not modify pipeline doc content. Update v1 is overwrite-with-backup only."
+  },
+  "dod": [
+    {
+      "criterion": "gruai init scaffolds complete project: .claude/agents/, agent-registry.json, skills with docs/, .context/ tree, CLAUDE.md, gruai.config.json",
+      "met": true
+    },
+    {
+      "criterion": "Path resolution works from both tsx dev and compiled dist-cli/",
+      "met": true
+    },
+    {
+      "criterion": "gruai update command backs up and overwrites framework files",
+      "met": true
+    },
+    {
+      "criterion": "Init asks only project name, scaffolds all roles by default",
+      "met": true
+    }
+  ],
+  "browser_test": false,
+  "tasks": [
+    {
+      "id": "fix-path-resolution",
+      "title": "Fix path resolution for npm-installed mode",
+      "status": "completed",
+      "agent": [
+        "jordan"
+      ],
+      "dod": [
+        {
+          "criterion": "findPackageRoot() walks up from __dirname to find package.json",
+          "met": true
+        },
+        {
+          "criterion": "REPO_ROOT, TEMPLATES_DIR, registryPath all derive from findPackageRoot()",
+          "met": true
+        },
+        {
+          "criterion": "init still works via tsx from repo root",
+          "met": true
+        },
+        {
+          "criterion": "Clear error if package root not found",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "generate-registry-and-personalities",
+      "title": "Generate agent-registry.json and personality files from role templates",
+      "status": "completed",
+      "agent": [
+        "jordan"
+      ],
+      "dod": [
+        {
+          "criterion": "init generates .claude/agent-registry.json with role-based entries",
+          "met": true
+        },
+        {
+          "criterion": "Each agent gets randomly generated first+last name from curated pools",
+          "met": true
+        },
+        {
+          "criterion": "Personality .md files generated from role templates with injected names",
+          "met": true
+        },
+        {
+          "criterion": "At least 7 role templates exist: CTO, COO, CPO, CMO, backend, frontend, fullstack",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "scaffold-claudemd-and-gruai-config",
+      "title": "Generate CLAUDE.md and gruai.config.json during init",
+      "status": "completed",
+      "agent": [
+        "jordan"
+      ],
+      "dod": [
+        {
+          "criterion": "init generates CLAUDE.md from template with project name and agent roster",
+          "met": true
+        },
+        {
+          "criterion": "init generates gruai.config.json with name, version, agents, skills",
+          "met": true
+        },
+        {
+          "criterion": "CLAUDE.md includes context tree structure and key conventions",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "copy-skill-docs-subdirs",
+      "title": "Copy skill docs/ subdirectories during scaffolding",
+      "status": "completed",
+      "agent": [
+        "jordan"
+      ],
+      "dod": [
+        {
+          "criterion": "scaffoldSkills() recursively copies docs/ subdirectory",
+          "met": true
+        },
+        {
+          "criterion": "directive skill scaffolded with full docs/ tree",
+          "met": true
+        },
+        {
+          "criterion": "At least 4 new templates: goal.json, backlog.json, directive.json, directive.md",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "gruai-update-command",
+      "title": "Add gruai update command with backup-and-overwrite strategy",
+      "status": "completed",
+      "agent": [
+        "jordan"
+      ],
+      "dod": [
+        {
+          "criterion": "gruai update command exists and wired in cli/index.ts",
+          "met": true
+        },
+        {
+          "criterion": "Backs up existing framework files to .gruai-backup/{timestamp}/",
+          "met": true
+        },
+        {
+          "criterion": "Updates skill files and re-renders CLAUDE.md from template",
+          "met": true
+        },
+        {
+          "criterion": "Does NOT overwrite .context/ tree or agent-registry.json names",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "simplify-init-prompts",
+      "title": "Reduce init to minimal questions and clean up output",
+      "status": "completed",
+      "agent": [
+        "jordan"
+      ],
+      "dod": [
+        {
+          "criterion": "Interactive init asks only project name (when not provided via --name)",
+          "met": true
+        },
+        {
+          "criterion": "All agent roles scaffolded by default without prompting",
+          "met": true
+        },
+        {
+          "criterion": "No writes to ~/.conductor/ directory",
+          "met": true
+        },
+        {
+          "criterion": "Next steps output references gruai commands",
+          "met": true
+        }
+      ]
+    }
+  ],
+  "created": "2026-03-07T00:20:00Z",
+  "updated": "2026-03-07T02:30:00Z",
+  "completed": "2026-03-07T02:30:00Z"
+}

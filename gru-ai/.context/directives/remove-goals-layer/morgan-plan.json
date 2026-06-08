@@ -1,0 +1,53 @@
+{
+  "goal": "Remove Goals Layer — Categories Replace Goals",
+  "challenges": {
+    "risks": [
+      "Pipeline docs are LLM-interpreted instructions — a stale goals/ reference in any of the 17 docs will cause pipeline agents to read from the wrong path or produce malformed project.json. Must update ALL atomically.",
+      "GoalWatcher removal could break the dashboard WebSocket contract — if the frontend expects GoalInventory data and the server stops sending it, the dashboard will error or show stale state.",
+      "Backlog consolidation has no clear consumer — the 4 backlog.json files under goals/ may not be actively read by any code. Risk of over-engineering a backlog migration that nobody uses."
+    ],
+    "over_engineering_flags": [
+      "Splitting into two projects adds coordination cost for tightly coupled changes",
+      "Building a full CategoryAggregator may be over-engineering — directive-watcher can aggregate by category"
+    ],
+    "recommendation": "Proceed as-is — single project, auditor verifies backlog consumption before building consolidation"
+  },
+  "projects": [
+    {
+      "id": "remove-goals-replace-with-categories",
+      "title": "Remove goals layer: category replaces goal_ids across pipeline docs, schemas, server, dashboard, and hooks",
+      "priority": "P0",
+      "scope_summary": "Replace goal_ids/goalIds/goal_folder with category (single string enum) in directive.json schema, morgan-plan schema, and all 17 pipeline/template docs. Remove GoalWatcher and GoalArea/GoalInventory types, fold category aggregation into directive-watcher or aggregator. Update validate-project-json.sh and validate-reviews.sh. Update dashboard store, types, and components to remove goal-based data. Consolidate backlogs if actively consumed (skip if dead code). Update CLAUDE.md and vision.md. Leave goals/ directory in place as read-only archive.",
+      "complexity": "complex",
+      "agent": [
+        "devon"
+      ],
+      "reviewers": [
+        "sarah"
+      ],
+      "auditor": "sarah",
+      "depends_on": [],
+      "touches_files_hint": [
+        ".claude/skills/directive/docs/pipeline/*.md",
+        ".claude/skills/directive/docs/reference/schemas/directive-json.md",
+        ".claude/skills/directive/docs/reference/schemas/morgan-plan.md",
+        ".claude/skills/directive/docs/reference/templates/morgan-prompt.md",
+        ".claude/skills/directive/docs/reference/templates/investigator-prompt.md",
+        "server/watchers/goal-watcher.ts",
+        "server/watchers/directive-watcher.ts",
+        "server/watchers/state-watcher.ts",
+        "server/state/aggregator.ts",
+        "server/types.ts",
+        "server/index.ts",
+        "src/stores/dashboard-store.ts",
+        "src/stores/types.ts",
+        "src/hooks/useWebSocket.ts",
+        "scripts/index-state.ts",
+        ".claude/hooks/validate-project-json.sh",
+        ".claude/hooks/validate-reviews.sh",
+        "CLAUDE.md",
+        ".context/vision.md"
+      ]
+    }
+  ]
+}

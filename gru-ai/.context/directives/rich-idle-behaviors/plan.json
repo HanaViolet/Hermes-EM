@@ -1,0 +1,38 @@
+{
+  "goal": "Rich Idle Agent Behaviors — Furniture-Aware Activities",
+  "challenges": {
+    "risks": [
+      "Animation complexity: CharacterState only has IDLE/WALK/TYPE. Adding 5+ activity animations with custom pixel art for each direction is a massive sprite authoring effort. Previous personality idle sprites were removed because they looked bad next to PNG characters.",
+      "Paired agent synchronization: Two agents playing ping pong or pool requires coordination state (initiator, joiner, shared animation timeline, collision avoidance at the same tile). Non-trivial state machine extension.",
+      "Furniture interaction points don't exist: The office layout uses GID tile layers with blocked tiles. No concept of interaction tile adjacent to furniture. Need to derive or manually define interaction positions."
+    ],
+    "over_engineering_flags": [
+      "5+ furniture types with unique animations each is ambitious. Lighter approach: reuse existing walk-to + face-direction + existing frame animations with activity bubble/icon overlay. 80% of visual effect without authoring dozens of new sprite frames.",
+      "Paired animations (ping pong, pool) are highest-complexity, lowest-impact. Two agents at same furniture facing each other with simple bounce animation is sufficient."
+    ],
+    "recommendation": "Simplify. Reuse existing sprite frames per activity type with activity indicator icons/bubbles instead of authoring new sprite sheets. For paired activities, walk-to-same-spot + face-each-other + reuse type/idle frames."
+  },
+  "projects": [
+    {
+      "id": "furniture-interaction-system",
+      "title": "Furniture Interaction Points and Activity State Machine",
+      "priority": "P0",
+      "scope_summary": "Extend the character FSM with a new ACTIVITY state. Define interaction point metadata for furniture types (TV, bookshelf, sofa, vending machine, arcade, gym equipment, pool/ping pong tables) — each with a walkable use-tile and facing direction. Modify idle wander logic to pick furniture-based destinations weighted by room zone. Add CEO office restriction to room zone routing so idle agents never path into ceo-office zone. Implement paired activity logic where a second idle agent can join an agent already at a 2-player furniture item (pool, ping pong). Reuse existing sprite frames (read for bookshelf, type for arcade/TV, idle-face for sofa/gym) with small activity bubble icons to differentiate activities visually.",
+      "complexity": "complex",
+      "agent": ["riley"],
+      "reviewers": ["sarah"],
+      "auditor": "sarah",
+      "depends_on": [],
+      "touches_files_hint": [
+        "src/components/game/pixel-types.ts",
+        "src/components/game/engine/characters.ts",
+        "src/components/game/engine/officeState.ts",
+        "src/components/game/engine/roomZones.ts",
+        "src/components/game/engine/renderer.ts",
+        "src/components/game/sprites/statusIcons.ts",
+        "src/components/game/sprites/interactionIcons.ts",
+        "src/components/game/constants.ts"
+      ]
+    }
+  ]
+}

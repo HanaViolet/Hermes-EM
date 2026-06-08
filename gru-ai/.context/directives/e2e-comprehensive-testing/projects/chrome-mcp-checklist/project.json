@@ -1,0 +1,32 @@
+{
+  "id": "chrome-mcp-checklist",
+  "title": "Chrome MCP UI Verification Checklist for CEO",
+  "status": "completed",
+  "description": "Write a comprehensive manual Chrome MCP verification checklist covering all dashboard panels, game canvas, WebSocket updates, responsive layout, and edge cases.",
+  "scope": {
+    "in": ["tests/e2e/chrome-mcp-checklist.md"],
+    "out": ["No code changes — documentation only"]
+  },
+  "dod": [
+    { "criterion": "Checklist covers all panels with specific expected behaviors and pass/fail checkboxes", "met": true }
+  ],
+  "agent": ["sam"],
+  "reviewers": ["marcus"],
+  "tasks": [
+    {
+      "id": "write-full-checklist",
+      "title": "Write complete Chrome MCP verification checklist",
+      "status": "completed",
+      "agent": ["sam"],
+      "scope": "Create tests/e2e/chrome-mcp-checklist.md covering: prerequisites/server startup, GameHeader buttons, SidePanel tabs, TeamPanel, ActionPanel/DirectivePanel, StatusPanel, LogPanel, CanvasOffice interactions, WebSocket live updates, responsive layout, edge cases. Each section has specific checks with expected behavior.",
+      "dod": [
+        { "criterion": "Checklist covers all 8 panel components + GamePage + CanvasOffice", "met": true },
+        { "criterion": "Each check item has: what to look at, expected behavior, pass/fail checkbox", "met": true },
+        { "criterion": "Interactive elements covered: click targets, keyboard nav, panel switching", "met": true },
+        { "criterion": "WebSocket live update verification included", "met": true },
+        { "criterion": "Responsive checks for desktop and mobile viewports", "met": true },
+        { "criterion": "Server prerequisites documented at top", "met": true }
+      ]
+    }
+  ]
+}

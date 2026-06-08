@@ -1,0 +1,120 @@
+{
+  "id": "multi-platform-wave2-spawn",
+  "title": "Multi-Platform Wave 2 — Spawn & Execution Abstraction",
+  "status": "completed",
+  "weight": "heavyweight",
+  "created_at": "2026-03-07T00:00:00Z",
+  "updated_at": "2026-03-07T10:48:36.163Z",
+  "current_step": "completion",
+  "pipeline": {
+    "triage": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Classified as heavyweight — crosses pipeline, foreman, CLI, and agent definition boundaries.",
+        "weight": "heavyweight",
+        "decision": "Full heavyweight pipeline with brainstorm (proposals only, no deliberation)"
+      }
+    },
+    "checkpoint": {
+      "status": "skipped"
+    },
+    "read": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ]
+    },
+    "context": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ]
+    },
+    "challenge": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ]
+    },
+    "brainstorm": {
+      "status": "completed",
+      "agent": [
+        "sarah",
+        "marcus"
+      ],
+      "output": {
+        "summary": "SpawnAdapter separate from PlatformAdapter, universal personality compiler, spawn-agent.ts wrapper, prove with Claude Code + Codex CLI."
+      }
+    },
+    "plan": {
+      "status": "completed",
+      "agent": [
+        "morgan"
+      ],
+      "output": {
+        "summary": "Two projects: P0 spawn-adapter-and-wrapper (Devon), P1 codex-cli-proof (Jordan). Sequential.",
+        "projects": [
+          "spawn-adapter-and-wrapper",
+          "codex-cli-proof"
+        ]
+      }
+    },
+    "audit": {
+      "status": "completed",
+      "agent": [
+        "sam",
+        "sarah"
+      ],
+      "output": {
+        "summary": "7 spawn sites found, 4 in scope, 3 deferred. SpawnAdapter as separate interface confirmed."
+      }
+    },
+    "approve": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ]
+    },
+    "project-brainstorm": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ]
+    },
+    "setup": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ]
+    },
+    "execute": {
+      "status": "completed",
+      "agent": [
+        "devon",
+        "jordan"
+      ],
+      "output": {
+        "summary": "All 8 tasks completed across 2 projects. P0: SpawnAdapter interface, ClaudeCodeSpawnAdapter, personality compiler, spawn-agent.ts wrapper, callsite refactors (foreman.ts, 09-execute-projects.md, 00-delegation-and-triage.md). P1: CodexCLISpawnAdapter, test suite, proof script, gap documentation."
+      }
+    },
+    "review-gate": {
+      "status": "completed",
+      "output": {
+        "summary": "Type-check passed. All files created and verified by builder agents during execution."
+      }
+    },
+    "wrapup": {
+      "status": "completed",
+      "output": {
+        "summary": "Both projects marked completed. All DOD criteria met."
+      }
+    },
+    "completion": {
+      "status": "completed"
+    }
+  },
+  "completed": "2026-03-07"
+}

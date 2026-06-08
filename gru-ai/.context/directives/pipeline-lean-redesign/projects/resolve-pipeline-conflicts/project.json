@@ -1,0 +1,86 @@
+{
+  "id": "resolve-pipeline-conflicts",
+  "title": "Resolve 7 documented pipeline doc conflicts in-place",
+  "status": "completed",
+  "priority": "P0",
+  "agent": ["taylor"],
+  "reviewers": ["sarah"],
+  "description": "Fix all 7 conflicts from brainstorm.md by editing existing pipeline docs. Each conflict has a specified resolution direction below.",
+  "source_directive": "pipeline-lean-redesign",
+  "scope": {
+    "in": "Edit 6 existing pipeline docs to resolve the 7 conflicts. Each fix is a small in-place edit following the resolution direction specified in each task.",
+    "out": "Creating new files. Restructuring docs. Trimming content (that is project 2). Adding enforcement scripts (that is project 3)."
+  },
+  "browser_test": false,
+  "dod": [
+    { "criterion": "All 7 conflicts have before/after diffs showing the contradiction removed", "met": true },
+    { "criterion": "No new files created — all edits in existing docs", "met": true },
+    { "criterion": "Pipeline step order in SKILL.md is consistent with all doc references", "met": true }
+  ],
+  "tasks": [
+    {
+      "id": "fix-lightweight-routing",
+      "title": "Fix conflict #1: lightweight routing contradiction (HIGH)",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["taylor"],
+      "user_scenario": "Agents running lightweight directives no longer get contradictory instructions about whether COO planning runs.",
+      "scope": "RESOLUTION: COO plans for ALL weights including lightweight. Fix 07b-project-brainstorm.md line 86-87 which says 'Lightweight directives skip this step entirely -- they have no COO plan'. Change to: 'Lightweight directives auto-derive tasks from the COO plan without spawning a separate CTO + builder decomposition.' Also verify 00-delegation-and-triage.md is consistent (it already says COO plans for all weights).",
+      "dod": [
+        { "criterion": "07b-project-brainstorm.md no longer says lightweight has 'no COO plan'", "met": true },
+        { "criterion": "07b-project-brainstorm.md says lightweight auto-derives tasks from COO plan", "met": true },
+        { "criterion": "00-delegation-and-triage.md and 07b are consistent on lightweight routing", "met": true }
+      ]
+    },
+    {
+      "id": "fix-brainstorm-timing-and-status",
+      "title": "Fix conflicts #2 and #3: brainstorm timing + status lifecycle",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["taylor"],
+      "user_scenario": "Agents know exactly when brainstorm runs relative to planning, and what status values are valid for directives.",
+      "scope": "CONFLICT #2 RESOLUTION: Add explicit note in 07b-project-brainstorm.md that brainstorm (step 6) runs BEFORE COO plan (step 8). Reference SKILL.md pipeline table. CONFLICT #3 RESOLUTION: Add a 5-line status lifecycle in directive-json.md schema: planned → active → awaiting_completion → completed | reopened | cancelled. Just a comment block, not a new section.",
+      "dod": [
+        { "criterion": "07b-project-brainstorm.md has explicit note about brainstorm running before COO plan", "met": true },
+        { "criterion": "directive-json.md has status lifecycle comment (5 lines max)", "met": true }
+      ]
+    },
+    {
+      "id": "fix-dod-and-codereview-and-audit",
+      "title": "Fix conflicts #4, #5, #6: DOD verification, code-review blocking, audit timing",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["taylor"],
+      "user_scenario": "Reviewers verify DOD (not builders), code-review failures block progress, and COO plans with audit data.",
+      "scope": "CONFLICT #4 RESOLUTION: Add instruction in 09-execute-projects.md review section: 'Update project.json DOD from the REVIEWER output, not builder self-assessment.' CONFLICT #5 RESOLUTION: Add in phase-definitions.md code-review section: 'If code_review_outcome = fail: stop, re-spawn builder with findings, re-run code-review. Max 1 fix cycle. If still failing, log and proceed to review.' CONFLICT #6 RESOLUTION: Add note in 05-planning.md: 'The COO receives audit findings as input. If audit reveals complexity exceeding triage estimate, COO should flag in challenges.risks.'",
+      "dod": [
+        { "criterion": "09-execute-projects.md review section says DOD comes from reviewer output not builder", "met": true },
+        { "criterion": "phase-definitions.md has code-review failure blocking logic (max 1 fix cycle)", "met": true },
+        { "criterion": "05-planning.md mentions COO receives audit findings as input", "met": true }
+      ]
+    },
+    {
+      "id": "fix-buried-projectjson-update",
+      "title": "Fix conflict #7: project.json update instruction buried (HIGH)",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["taylor"],
+      "user_scenario": "Agents see the project.json update instruction prominently, not buried at line 397.",
+      "scope": "RESOLUTION: In 09-execute-projects.md, promote the project.json update instruction to a prominent callout near the top of the task execution loop. Use bold text and a clear heading like '### CRITICAL: Update project.json After Each Task'. Keep the existing instruction text, just move/duplicate it to a visible position.",
+      "dod": [
+        { "criterion": "project.json update instruction appears within the first 50 lines of the task execution section", "met": true },
+        { "criterion": "Instruction uses bold/heading formatting for visibility", "met": true }
+      ]
+    }
+  ],
+  "created": "2026-03-09T23:45:00Z",
+  "updated": "2026-03-10T00:15:00Z"
+}

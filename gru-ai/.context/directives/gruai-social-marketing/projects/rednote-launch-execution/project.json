@@ -1,0 +1,93 @@
+{
+  "id": "rednote-launch-execution",
+  "title": "RedNote/小红书 Launch Execution Plan",
+  "status": "in_progress",
+  "priority": "P0",
+  "agent": ["taylor"],
+  "reviewers": ["priya"],
+  "description": "Finalize the existing 小红书 strategy into execution-ready assets with Chinese content, plus create a Chinese README.",
+  "source_directive": "gruai-social-marketing",
+  "scope": {
+    "in": "Polish 6 Chinese drafts, verify hashtags, confirm 4-week calendar, format visuals for RedNote platform. Create README.zh-CN.md. Build on existing xiaohongshu-strategy.",
+    "out": "No new platform research. No execution (posting) — just preparation. English README content untouched."
+  },
+  "dod": [
+    { "criterion": "6 小红书 posts are polished in Chinese and ready to copy-paste with hooks, body, CTA, hashtags", "met": false },
+    { "criterion": "4-week content calendar has specific dates, times, and which post goes when", "met": false },
+    { "criterion": "Visual assets (GIF, screenshots) are confirmed compatible with RedNote format requirements", "met": false },
+    { "criterion": "README.zh-CN.md exists with Chinese translation of key README sections", "met": false }
+  ],
+  "browser_test": false,
+  "tasks": [
+    {
+      "id": "rednote-content-polish",
+      "title": "Polish 6 post drafts and verify platform compliance",
+      "status": "pending",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["taylor"],
+      "user_scenario": "CEO opens posts.md and each post is ready to copy-paste into 小红书 with confidence that character counts, hashtag counts, and content quality are publication-grade.",
+      "scope": "Review and polish all 6 post drafts. Verify title under 18 Chinese characters, body under 1000 characters, hashtags 10 or fewer. Improve Chinese naturalness. Verify GitHub repo and npm package references. Append compliance checklist.",
+      "dod": [
+        { "criterion": "All 6 post titles are 18 Chinese characters or fewer (小红书 platform limit)", "met": false },
+        { "criterion": "All 6 post bodies are under 1,000 Chinese characters (with hashtags)", "met": false },
+        { "criterion": "All 6 posts have 10 or fewer hashtags each (小红书 platform limit)", "met": false },
+        { "criterion": "Compliance checklist appended to posts.md showing per-post pass/fail for title length, body length, hashtag count", "met": false }
+      ]
+    },
+    {
+      "id": "rednote-visual-asset-spec",
+      "title": "Create visual asset specification with platform-formatted requirements",
+      "status": "pending",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["taylor"],
+      "user_scenario": "CEO knows exactly what visual assets are needed for each post, what format they must be in, and which existing assets can be reused vs what needs to be created.",
+      "scope": "Create visual-assets.md specifying per-post visual requirements: dimensions (images 1242x1660px 3:4, video 1080x1920 9:16), which existing assets can be reused (demo.gif, dashboard-full.png, demo.mp4), what needs creation. Include summary table.",
+      "dod": [
+        { "criterion": "visual-assets.md exists with per-post visual requirements listing exact dimensions, aspect ratios, and file format", "met": false },
+        { "criterion": "Each existing asset (demo.gif, dashboard-full.png, demo.mp4) has a reuse plan with required transformations", "met": false },
+        { "criterion": "Summary table lists all required assets with source (existing/create), target dimensions, and status", "met": false },
+        { "criterion": "All dimension specs match 小红书 platform requirements (images: 3:4 preferred, video: 9:16)", "met": false }
+      ]
+    },
+    {
+      "id": "rednote-chinese-readme",
+      "title": "Create Chinese README (README.zh-CN.md) for GitHub",
+      "status": "pending",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["taylor"],
+      "user_scenario": "A Chinese developer clicking through from 小红书 to GitHub sees a native Chinese README linked from the top of the English README.",
+      "scope": "Create README.zh-CN.md at repo root. Natural Chinese (not mechanical translation). Include language switcher, intro, pipeline overview, quickstart, team, tech stack. Add language switcher to English README.md. Target 150-250 lines.",
+      "dod": [
+        { "criterion": "README.zh-CN.md exists at repo root with all major sections (intro, pipeline, quickstart, team, tech stack)", "met": false },
+        { "criterion": "Chinese content reads naturally (not machine-translated) and follows strategy.md tone guidance", "met": false },
+        { "criterion": "English README.md has a language switcher line at the top linking to README.zh-CN.md", "met": false },
+        { "criterion": "README.zh-CN.md is between 150-250 lines and includes same badge links and demo video embed as English version", "met": false }
+      ]
+    },
+    {
+      "id": "rednote-launch-package",
+      "title": "Compile ready-to-post launch package with posting instructions",
+      "status": "pending",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["taylor"],
+      "user_scenario": "CEO has a single document that serves as a step-by-step posting guide for 小红书 — open it, follow instructions, posts go live.",
+      "scope": "Create launch-package.md with pre-launch checklist, per-week posting guide (12 calendar slots with ready-to-paste text), engagement playbook with Chinese response templates, posting times, cross-reference to README.zh-CN.md.",
+      "dod": [
+        { "criterion": "launch-package.md exists with pre-launch checklist, per-week posting guide, and engagement playbook", "met": false },
+        { "criterion": "Each of the 12 calendar slots has ready-to-paste post text", "met": false },
+        { "criterion": "Engagement playbook includes 5+ template responses in Chinese for common 小红书 comments", "met": false },
+        { "criterion": "Document references visual-assets.md for asset requirements and README.zh-CN.md as the GitHub landing page", "met": false }
+      ]
+    }
+  ],
+  "created": "2026-03-11T01:05:00Z",
+  "updated": "2026-03-11T01:15:00Z"
+}

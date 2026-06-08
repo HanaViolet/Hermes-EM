@@ -1,0 +1,57 @@
+# {{PROJECT_NAME}} — Claude Code Rules
+
+## What This Is
+{{PROJECT_NAME}} uses gruai, an autonomous AI company framework. See `.context/vision.md` for the full vision.
+
+## Context Tree Structure
+
+```
+.context/
+|-- vision.md                           # System vision (read first)
+|
+|-- directives/                         # ALL work lives here: Directive > Project > Task
+|   |-- {id}/
+|   |   |-- directive.json              # Pipeline state, weight
+|   |   |-- directive.md                # CEO brief
+|   |   +-- projects/
+|   |       |-- {project-id}/
+|   |       |   +-- project.json       # Tasks[], DOD, agents -- THE source of truth
+|   |       +-- ...
+|   +-- ...
+|
+|-- reports/                            # CEO dashboard reports
+|   |-- daily-{date}.md
+|   +-- weekly-{date}.md
+|
+|-- lessons/                            # Flat, topic-based knowledge
+|   +-- index.md
+|
+|-- backlog.json                        # Prioritized work items
+|-- preferences.md                      # CEO standing orders
+```
+
+## How to Read the Context Tree
+
+- **"What should we do now?"** -> Read `directives/*/directive.json` for active directives
+- **Planning a feature:** -> Read `vision.md` + relevant directive context + `lessons/`
+- **Building a feature:** -> Read project.json for tasks
+- **After completing work:** -> Update project.json tasks, update `lessons/` if new patterns
+
+## Key Conventions
+
+- Directory names = entity IDs. `directives/pipeline-v2/` means `directive.id = "pipeline-v2"`
+- project.json is THE source of truth for a project including all its tasks
+- Tasks are embedded in project.json -- no separate task files
+- Directives discovered via glob: `directives/*/directive.json`
+- Projects discovered via glob: `directives/*/projects/*/project.json`
+
+## Agent Team
+
+{{AGENT_ROSTER}}
+
+## Pipeline Enforcement
+- **ALL work goes through the `/directive` pipeline.** The pipeline is weight-adaptive: lightweight tasks skip some steps; heavyweight gets the full process.
+- NEVER spawn builder/engineer agents directly. Use `/directive` which handles reviews, scope, and completion verification.
+
+## Git Operations
+NEVER perform git operations without explicit user approval.

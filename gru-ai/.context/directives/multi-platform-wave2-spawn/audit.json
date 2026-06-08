@@ -1,0 +1,76 @@
+{
+  "audit_type": "technical",
+  "directive_id": "multi-platform-wave2-spawn",
+  "projects": [
+    {
+      "project_id": "spawn-adapter-and-wrapper",
+      "complexity": "complex",
+      "recommended_approach": {
+        "summary": "Define SpawnAdapter as standalone interface in server/platform/spawn-adapter.ts, implement ClaudeCodeSpawnAdapter in server/platform/claude-code-spawn.ts, create scripts/spawn-agent.ts as universal CLI entry point, build scripts/personality-compiler.ts, then refactor all spawn callsites.",
+        "files_to_create": [
+          {
+            "path": "server/platform/spawn-adapter.ts",
+            "description": "SpawnAdapter interface. SpawnConfig = { agentId?, prompt, cwd, model?, skipPermissions?, sessionPersistence?, outputPath?, env? }. SpawnHandle = { pid, promise? }. SpawnMode enum: 'tracked' vs 'detached'. agentId optional — foreman spawns directives without --agent."
+          },
+          {
+            "path": "server/platform/claude-code-spawn.ts",
+            "description": "ClaudeCodeSpawnAdapter. Encapsulates spawn('claude', ['-p', '--agent', agentId, ...]). Detached mode: stdio redirect to log, child.unref(). Tracked mode: promise resolves on exit. Validates agentId against agent-registry.json."
+          },
+          {
+            "path": "scripts/spawn-agent.ts",
+            "description": "CLI: spawn-agent.ts --agent <id> --prompt <text> --mode tracked|detached [--model sonnet]. Reads gruai.config.json for platform, instantiates adapter, calls spawn(). Executable via tsx."
+          },
+          {
+            "path": "scripts/personality-compiler.ts",
+            "description": "Reads agent-registry.json + .claude/agents/*.md. For Claude Code: no-op. For Codex: writes codex.md with flattened personality. Pure function: compilePersonality(agentId, platform): string."
+          }
+        ],
+        "files_to_modify": [
+          {"path": "server/platform/index.ts", "changes": "Re-export SpawnAdapter and ClaudeCodeSpawnAdapter"},
+          {"path": "scripts/foreman.ts", "changes": "Replace spawn('claude',...) at line 364 with ClaudeCodeSpawnAdapter.spawn() in detached mode. launchDirective shrinks to ~10 lines."},
+          {"path": ".claude/skills/directive/docs/pipeline/09-execute-projects.md", "changes": "Replace spawn template at line 339 with tsx scripts/spawn-agent.ts invocation. Keep CHILD_PIDS + trap pattern."},
+          {"path": ".claude/skills/directive/docs/pipeline/00-delegation-and-triage.md", "changes": "Add spawn-agent.ts cleanup pattern alongside existing claude patterns."}
+        ],
+        "key_decisions": [
+          "SpawnAdapter SEPARATE from PlatformAdapter — orthogonal concerns",
+          "Two spawn modes (tracked vs detached) in one interface via SpawnConfig.mode",
+          "spawn-agent.ts is CLI script, not library — pipeline docs need bash commands",
+          "Personality compiler called on-demand by spawn-agent.ts, not pre-computed",
+          "foreman.ts agentId is null for directive spawns — SpawnAdapter handles gracefully"
+        ]
+      },
+      "scope_assessment": {
+        "in_scope": ["server/platform/spawn-adapter.ts", "server/platform/claude-code-spawn.ts", "scripts/spawn-agent.ts", "scripts/personality-compiler.ts", "scripts/foreman.ts", "09-execute-projects.md", "00-delegation-and-triage.md", "server/platform/index.ts"],
+        "deferred": ["scripts/scheduled-runs.sh (2 simple shell spawns — adapter adds no value)", "mcp-server/tools/directive.ts (display string, not a spawn)"],
+        "verdict": "Plan scope correct. No expansion needed."
+      }
+    },
+    {
+      "project_id": "codex-cli-proof",
+      "complexity": "moderate",
+      "recommended_approach": {
+        "summary": "Implement CodexCLISpawnAdapter, proof script that validates adapter without requiring Codex installed, capability gap documentation.",
+        "files_to_create": [
+          {"path": "server/platform/codex-cli-spawn.ts", "description": "CodexCLISpawnAdapter. Maps to spawn('codex', ['-q', prompt]). Writes codex.md before spawn. No --agent equivalent."},
+          {"path": "scripts/codex-proof.ts", "description": "Proof script: compile personality, attempt spawn (catch ENOENT if no codex), output structured JSON report."},
+          {"path": "docs/codex-cli-gaps.md", "description": "Gap table: Feature | Claude Code | Codex CLI | Gap Impact"}
+        ],
+        "key_decisions": [
+          "Proof works without Codex installed — validates adapter logic, not Codex itself",
+          "codex.md written per-spawn to avoid parallel collision",
+          "Gap doc is a formal deliverable for Wave 3 planning"
+        ]
+      },
+      "scope_assessment": {
+        "in_scope": ["server/platform/codex-cli-spawn.ts", "scripts/codex-proof.ts", "docs/codex-cli-gaps.md"],
+        "verdict": "Scope appropriate for proof-of-concept."
+      }
+    }
+  ],
+  "follow_ups": [
+    {"action": "Backlog: migrate scheduled-runs.sh to spawn-agent.ts", "risk": "low"},
+    {"action": "Backlog: update mcp directive tool command string", "risk": "low"},
+    {"action": "Verify tsx available in all spawn contexts", "risk": "medium"},
+    {"action": "Update validate-gate.sh if new artifacts produced", "risk": "low"}
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "goal": "Enrich game agent behavior with tiered idle detection, expanded status/interaction icon mappings, and refined wandering behaviors",
+  "challenges": {
+    "risks": [
+      "AgentStatus is a union type used across 6+ files (pixel-types.ts, types.ts, GamePage.tsx, renderer.ts, officeState.ts, characters.ts). Widening from 'working'|'idle' to include tiered idle states requires careful pass through all consumers — a missed file = type error or silent status loss.",
+      "Idle time thresholds depend on sessionInfo.lastActivityMs which is derived from session.lastActivity in GamePage.tsx. If sessions lack lastActivity timestamps (e.g. old sessions), agents may incorrectly show as long-idle. Must handle missing/undefined gracefully.",
+      "Wandering behavior already works at the 30min boundary. Changing to tiered (stay-at-desk < 10min, occasional-wander 10-30min, full-wander > 30min) requires splitting the shouldWander() binary into a 3-state function and updating the IDLE case FSM logic in characters.ts — this is the highest-complexity change."
+    ],
+    "over_engineering_flags": [
+      "Design spec (task 1) is useful but scope is narrow — the emoji maps and threshold constants are self-documenting. Keep the design doc lightweight: a table mapping statuses/actions to emoji + colors, threshold values, and wandering rules. Not a full UX deliverable.",
+      "No need for custom pixel-art status icons — existing emoji-in-pill system works well and was deliberately chosen over pixel sprites. Enrichment = more emoji mappings + better idle state differentiation, not a rendering system change."
+    ],
+    "recommendation": "Proceed. Single project, 4 sequential tasks. The design task is lightweight (table spec), not a full UX exploration. Implementation tasks are well-bounded to 2 files each. Key risk mitigation: task 2 handles type widening first so tasks 3-4 build on stable types."
+  },
+  "projects": [
+    {
+      "id": "agent-behavior-enrichment",
+      "title": "Agent Behavior Enrichment — Status Icons, Idle Tiers, Wandering",
+      "priority": "P0",
+      "scope_summary": "Design mapping spec for all status/interaction/idle visual treatments, then implement: (1) expand AgentStatus with tiered idle states + new session status mappings + dot/emoji colors per status, (2) tiered wandering behavior (desk < 10min, occasional-wander 10-30min, full-wander > 30min), (3) interaction action emoji icons verified complete for all pipeline steps. All changes are frontend-only within the game engine.",
+      "complexity": "moderate",
+      "agent": ["riley"],
+      "reviewers": ["sarah"],
+      "auditor": "sarah",
+      "depends_on": [],
+      "touches_files_hint": [
+        "src/components/game/types.ts",
+        "src/components/game/pixel-types.ts",
+        "src/components/game/engine/officeState.ts",
+        "src/components/game/engine/characters.ts",
+        "src/components/game/engine/renderer.ts",
+        "src/components/game/GamePage.tsx",
+        "src/components/game/constants.ts"
+      ],
+      "tasks_summary": "4 tasks: (1) design mapping spec, (2) implement status enrichment + idle tiers, (3) implement tiered wandering, (4) implement interaction action icons"
+    }
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "id": "fix-status-detection",
+  "title": "Fix AgentStatus type and mapping to support all server statuses",
+  "description": "Expand AgentStatus from 'working' | 'idle' to include 'done', 'paused', 'error', and 'offline'. Fix toAgentStatus() mapping, priority map, and all consumers.",
+  "priority": "P0",
+  "status": "pending",
+  "scope": {
+    "in": "AgentStatus type expansion, toAgentStatus mapping fix, priority map fix, sprite entries, statusBadgeVariant, StatusChip, chooseDestination, all consumer switch/case blocks",
+    "out": "Server-side aggregator changes (already correct), new animation frames, visual design changes"
+  },
+  "dod": [
+    {
+      "criterion": "AgentStatus type includes all 6 values: working, idle, done, paused, error, offline",
+      "met": false
+    },
+    {
+      "criterion": "toAgentStatus() correctly maps all 7 server statuses without collapsing",
+      "met": false
+    },
+    {
+      "criterion": "npm run type-check passes with zero errors",
+      "met": false
+    }
+  ],
+  "complexity": "moderate",
+  "agent": [
+    "riley"
+  ],
+  "reviewers": [
+    "sarah"
+  ],
+  "auditor": "sarah",
+  "tasks": [
+    {
+      "id": "expand-agent-status-type",
+      "title": "Expand AgentStatus type and fix toAgentStatus mapping",
+      "priority": "P0",
+      "status": "pending",
+      "complexity": "simple",
+      "phases": [
+        "build",
+        "review"
+      ],
+      "agent": [
+        "riley"
+      ],
+      "user_scenario": "When an agent finishes work or hits an error, the game shows the correct status instead of collapsing everything to 'idle'.",
+      "scope": "Expand AgentStatus in pixel-types.ts to 'working' | 'idle' | 'done' | 'paused' | 'error' | 'offline'. Delete the duplicate type in types.ts and re-export from pixel-types.ts. Rewrite toAgentStatus() to map all 7 server statuses correctly. Fix the priority map to include all 6 statuses.",
+      "dod": [
+        {
+          "criterion": "AgentStatus in pixel-types.ts includes all 6 values: working, idle, done, paused, error, offline",
+          "met": false
+        },
+        {
+          "criterion": "No duplicate AgentStatus definition in types.ts — it re-exports from pixel-types.ts",
+          "met": false
+        },
+        {
+          "criterion": "toAgentStatus() maps all 7 server statuses correctly without collapsing",
+          "met": false
+        },
+        {
+          "criterion": "Priority map covers all 6 AgentStatus values with no missing keys",
+          "met": false
+        },
+        {
+          "criterion": "npm run type-check passes with zero errors",
+          "met": false
+        }
+      ]
+    },
+    {
+      "id": "update-sprites-and-consumers",
+      "title": "Add sprite entries and update all consumer switch/case blocks",
+      "priority": "P0",
+      "status": "pending",
+      "complexity": "simple",
+      "phases": [
+        "build",
+        "review"
+      ],
+      "agent": [
+        "riley"
+      ],
+      "user_scenario": "Agents in the game render the correct status icon sprite and UI badge color for every possible status, with no unhandled cases.",
+      "scope": "Export the existing error/offline/paused/done sprite definitions in statusIcons.ts and add them to STATUS_ICON_SPRITES. Update statusBadgeVariant() for new statuses. Update StatusChip and chooseDestination. Verify no TypeScript exhaustiveness gaps remain.",
+      "dod": [
+        {
+          "criterion": "STATUS_ICON_SPRITES has entries for all 6 AgentStatus values",
+          "met": false
+        },
+        {
+          "criterion": "statusBadgeVariant() returns distinct variants for done, paused, error, and offline",
+          "met": false
+        },
+        {
+          "criterion": "chooseDestination handles all 6 statuses without falling through to a lossy default",
+          "met": false
+        },
+        {
+          "criterion": "npm run type-check passes with zero errors",
+          "met": false
+        },
+        {
+          "criterion": "No remaining references to the old two-value AgentStatus type anywhere in the codebase",
+          "met": false
+        }
+      ]
+    }
+  ],
+  "sequencing_rationale": "Task 1 establishes the canonical type, eliminates the duplicate, and fixes the core mapping logic. Task 2 builds on the expanded type to update all downstream consumers."
+}

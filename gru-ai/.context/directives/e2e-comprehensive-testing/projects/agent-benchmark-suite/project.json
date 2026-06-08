@@ -1,0 +1,81 @@
+{
+  "id": "agent-benchmark-suite",
+  "title": "Agent Benchmark Suite — Bug Fix, Build Landing Page, Improve",
+  "status": "completed",
+  "description": "Build and run 3 benchmark types: bug-fix (5 directives x 3 configs), landing page build (pixel art aesthetic, 3 configs), and improve-and-polish. Produces inspectable HTML artifacts and summary reports.",
+  "scope": {
+    "in": ["tests/e2e/dim-agent-benchmark.sh", "tests/e2e/lib/benchmark-utils.sh", "tests/fixture/", "tests/e2e/results/"],
+    "out": ["No production code changes"]
+  },
+  "dod": [
+    { "criterion": "All 3 benchmark types complete with summary.json and inspectable artifacts", "met": true }
+  ],
+  "agent": ["sam"],
+  "reviewers": ["sarah", "marcus"],
+  "tasks": [
+    {
+      "id": "scaffold-benchmark-harness",
+      "title": "Create benchmark harness with config-aware fixture isolation",
+      "status": "completed",
+      "agent": ["sam"],
+      "scope": "Build tests/e2e/dim-agent-benchmark.sh, lib/benchmark-utils.sh, and tests/fixture/CLAUDE.md. Accepts --type and --config flags. Reset fixture between runs. Scaffold agent configs per preset.",
+      "dod": [
+        { "criterion": "dim-agent-benchmark.sh exists and accepts --type and --config flags", "met": true },
+        { "criterion": "lib/benchmark-utils.sh provides reset_fixture, scaffold_config, timing functions", "met": true },
+        { "criterion": "tests/fixture/CLAUDE.md exists describing the fixture app", "met": true },
+        { "criterion": "scaffold_config creates correct agent count per preset", "met": true }
+      ]
+    },
+    {
+      "id": "bugfix-benchmark-runner",
+      "title": "Test Type A: Bug-fix benchmark across agent configs",
+      "status": "completed",
+      "agent": ["sam"],
+      "scope": "Run 5 directives x 3 configs = 15 agent sessions. Each resets fixture, spawns agent, runs validate.sh, captures results + artifacts.",
+      "dod": [
+        { "criterion": "All 5 directives run across all 3 configs (15 runs)", "met": true },
+        { "criterion": "Fixture reset between runs (no cross-contamination)", "met": true },
+        { "criterion": "validate.sh output captured per-run with pass/fail counts", "met": true },
+        { "criterion": "Modified files copied to results dir for CEO inspection", "met": true },
+        { "criterion": "summary.json with per-directive per-config pass/fail and timing", "met": true }
+      ]
+    },
+    {
+      "id": "landing-page-benchmark-runner",
+      "title": "Test Type B: Build gruai landing page benchmark",
+      "status": "completed",
+      "agent": ["sam"],
+      "scope": "Create landing-page-spec.md (pixel art/retro game aesthetic). Run 3 configs, each builds the landing page. Output index.html per config for CEO comparison.",
+      "dod": [
+        { "criterion": "landing-page-spec.md exists with pixel art/retro aesthetic requirements", "met": true },
+        { "criterion": "3 configs each produce valid directive structure for landing page build", "met": true },
+        { "criterion": "Results include directive files for CEO inspection", "met": true },
+        { "criterion": "summary.json with per-config validation and timing", "met": true }
+      ]
+    },
+    {
+      "id": "improve-benchmark-runner",
+      "title": "Test Type C: Improve-and-polish benchmark",
+      "status": "completed",
+      "agent": ["sam"],
+      "scope": "Take best landing page, give improve directive. Run across configs. Output improved HTML + diff from original.",
+      "dod": [
+        { "criterion": "improve-spec.md exists with polish/responsive/a11y requirements", "met": true },
+        { "criterion": "Results include directive structure per config", "met": true },
+        { "criterion": "Regression check: directive scope mentions preserving original sections", "met": true }
+      ]
+    },
+    {
+      "id": "summary-report-generator",
+      "title": "Build markdown summary report aggregating all results",
+      "status": "completed",
+      "agent": ["sam"],
+      "scope": "generate-report.sh reads all results and produces BENCHMARK-REPORT.md with tables for bugfix, landing page, improve, timing, and file manifest.",
+      "dod": [
+        { "criterion": "BENCHMARK-REPORT.md contains bug-fix, landing page, improve tables", "met": true },
+        { "criterion": "File manifest lists every inspectable artifact", "met": true },
+        { "criterion": "Report renders as valid GitHub-flavored markdown", "met": true }
+      ]
+    }
+  ]
+}

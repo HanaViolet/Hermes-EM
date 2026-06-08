@@ -1,0 +1,60 @@
+{
+  "id": "improve-landing-page",
+  "title": "Improve and Polish Landing Page",
+  "status": "pending",
+  "agent": ["frontend"],
+  "reviewers": ["qa", "cpo"],
+  "tasks": [
+    {
+      "id": "responsive",
+      "title": "Add responsive breakpoints for mobile/tablet/desktop",
+      "status": "pending",
+      "agent": ["frontend"],
+      "dod": [
+        { "criterion": "Mobile breakpoint (max-width: 480px) with single column", "met": false },
+        { "criterion": "Tablet breakpoint (481-768px) with 2-column grids", "met": false },
+        { "criterion": "Desktop breakpoint (1025px+) with max-width container", "met": false },
+        { "criterion": "No horizontal overflow at any breakpoint", "met": false }
+      ]
+    },
+    {
+      "id": "accessibility",
+      "title": "Add WCAG 2.1 AA accessibility improvements",
+      "status": "pending",
+      "agent": ["frontend"],
+      "dod": [
+        { "criterion": "aria-label on all interactive elements", "met": false },
+        { "criterion": "Keyboard navigation with visible focus indicators", "met": false },
+        { "criterion": "Color contrast meets 4.5:1 ratio", "met": false },
+        { "criterion": "Skip-to-content link at top of page", "met": false },
+        { "criterion": "Correct heading hierarchy (h1 > h2 > h3)", "met": false }
+      ]
+    },
+    {
+      "id": "animations",
+      "title": "Add micro-animations and polish",
+      "status": "pending",
+      "agent": ["frontend"],
+      "dod": [
+        { "criterion": "Hover effects on interactive elements", "met": false },
+        { "criterion": "Scroll reveal animations on sections", "met": false },
+        { "criterion": "prefers-reduced-motion media query respected", "met": false },
+        { "criterion": "Consistent spacing using base unit", "met": false }
+      ]
+    },
+    {
+      "id": "regression",
+      "title": "Verify all original sections preserved",
+      "status": "pending",
+      "agent": ["qa"],
+      "dod": [
+        { "criterion": "Hero section present with pixel art and CTA", "met": false },
+        { "criterion": "Features Grid with all 6 features", "met": false },
+        { "criterion": "How It Works with 3 steps", "met": false },
+        { "criterion": "Agent Showcase with all roles", "met": false },
+        { "criterion": "Pricing with 3 tiers", "met": false },
+        { "criterion": "Footer CTA with links", "met": false }
+      ]
+    }
+  ]
+}

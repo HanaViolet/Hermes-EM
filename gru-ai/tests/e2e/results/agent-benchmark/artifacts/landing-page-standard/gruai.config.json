@@ -1,0 +1,50 @@
+{
+  "name": "test-project",
+  "preset": "standard",
+  "platform": "claude-code",
+  "version": "1.0.0",
+  "agents": [
+      {
+          "id": "riley",
+          "name": "Riley Grant",
+          "role": "CTO"
+      },
+      {
+          "id": "sol",
+          "name": "Sol Andersen",
+          "role": "COO"
+      },
+      {
+          "id": "reese",
+          "name": "Reese Andersen",
+          "role": "CPO"
+      },
+      {
+          "id": "mika",
+          "name": "Mika Cohen",
+          "role": "FE"
+      },
+      {
+          "id": "mara",
+          "name": "Mara Jensen",
+          "role": "BE"
+      },
+      {
+          "id": "noah",
+          "name": "Noah Wu",
+          "role": "FS"
+      },
+      {
+          "id": "sage",
+          "name": "Sage Andersen",
+          "role": "QA"
+      }
+  ],
+  "skills": ["directive", "scout", "healthcheck", "report"],
+  "contextDir": ".context",
+  "settings": {
+    "dailyBudget": 50,
+    "autoScout": false,
+    "reportFrequency": "daily"
+  }
+}

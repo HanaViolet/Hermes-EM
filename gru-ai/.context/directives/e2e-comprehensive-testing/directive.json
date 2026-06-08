@@ -1,0 +1,181 @@
+{
+  "id": "e2e-comprehensive-testing",
+  "title": "Comprehensive E2E Testing of gru-ai v0.2.0",
+  "weight": "strategic",
+  "status": "completed",
+  "created_at": "2026-03-08T00:00:00Z",
+  "updated_at": "2026-03-08T09:15:45.757Z",
+  "current_step": "completion",
+  "pipeline": {
+    "triage": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Strategic weight."
+      },
+      "artifacts": []
+    },
+    "read": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Read directive.md."
+      },
+      "artifacts": []
+    },
+    "context": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Read vision, lessons, registry."
+      },
+      "artifacts": []
+    },
+    "challenge": {
+      "status": "completed",
+      "agent": [
+        "sarah",
+        "marcus",
+        "sam"
+      ],
+      "output": {
+        "summary": "3 proposals + deliberation. CEO resolved all disagreements."
+      },
+      "artifacts": [
+        ".context/directives/e2e-comprehensive-testing/brainstorm.md"
+      ]
+    },
+    "plan": {
+      "status": "completed",
+      "agent": [
+        "morgan"
+      ],
+      "output": {
+        "summary": "4 projects planned. Cast validated."
+      },
+      "artifacts": [
+        ".context/directives/e2e-comprehensive-testing/plan.json"
+      ]
+    },
+    "audit": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ],
+      "output": {
+        "summary": "PORT bug one-liner, config template needs fields, fixture needs CLAUDE.md."
+      },
+      "artifacts": [
+        ".context/directives/e2e-comprehensive-testing/audit.md"
+      ]
+    },
+    "approve": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "CEO approved plan. Additional requirements: landing page benchmark should use game pixel art aesthetic. Test Type B = build gruai landing page (real deliverable). 3 agent configs each attempt it, CEO compares results."
+      },
+      "artifacts": []
+    },
+    "project-brainstorm": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "4 project.json files created with tasks, DOD, agents, reviewers. All pass validate-project-json.sh."
+      },
+      "artifacts": [
+        ".context/directives/e2e-comprehensive-testing/projects/fix-known-bugs/project.json",
+        ".context/directives/e2e-comprehensive-testing/projects/e2e-orchestrator-and-deterministic-dims/project.json",
+        ".context/directives/e2e-comprehensive-testing/projects/agent-benchmark-suite/project.json",
+        ".context/directives/e2e-comprehensive-testing/projects/chrome-mcp-checklist/project.json"
+      ]
+    },
+    "setup": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Using existing game branch. No worktree needed — uncommitted changes present."
+      },
+      "artifacts": []
+    },
+    "execute": {
+      "status": "completed",
+      "agent": [
+        "jordan",
+        "sam",
+        "ceo"
+      ],
+      "output": {
+        "summary": "All 4 projects + 3 gap-fill dimensions completed. 16 original tasks + 3 new dimensions (pipeline, cli, update). Final suite: 555 pass, 0 fail across 9 dimensions in 27.3s.",
+        "projects": {
+          "fix-known-bugs": "completed — 4/4 tasks (PORT fix, config template, agent count, validate-init)",
+          "e2e-orchestrator-and-deterministic-dims": "completed — 6/6 tasks (orchestrator, init, server, schema, multiplatform, benchmark dims)",
+          "agent-benchmark-suite": "completed — 5/5 tasks (harness, bugfix 15 runs, landing page 3 configs, improve 3 configs, report generator)",
+          "chrome-mcp-checklist": "completed — 1/1 task (185-item checklist)"
+        }
+      },
+      "artifacts": [
+        "tests/e2e/run-e2e.sh",
+        "tests/e2e/lib/utils.sh",
+        "tests/e2e/lib/benchmark-utils.sh",
+        "tests/e2e/dim-init.sh",
+        "tests/e2e/dim-server.sh",
+        "tests/e2e/dim-schema.sh",
+        "tests/e2e/dim-multiplatform.sh",
+        "tests/e2e/dim-benchmark.sh",
+        "tests/e2e/dim-agent-benchmark.sh",
+        "tests/e2e/dim-pipeline.sh",
+        "tests/e2e/dim-cli.sh",
+        "tests/e2e/dim-update.sh",
+        "tests/e2e/generate-report.sh",
+        "tests/e2e/chrome-mcp-checklist.md",
+        "tests/e2e/BENCHMARK-REPORT.md",
+        "tests/e2e/LANDING-PAGE-BENCHMARK.md",
+        "tests/e2e/specs/landing-page-spec.md",
+        "tests/e2e/specs/improve-spec.md",
+        "tests/fixture/CLAUDE.md"
+      ]
+    },
+    "review-gate": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "CEO identified missing pipeline tests. 3 new dimensions added (pipeline 86 tests, cli 17 tests, update 33 tests). Full suite re-verified: 555 pass, 0 fail. Landing pages reviewed via Chrome MCP."
+      },
+      "artifacts": [
+        "tests/e2e/LANDING-PAGE-BENCHMARK.md",
+        "/tmp/landing-pages/starter/index.html",
+        "/tmp/landing-pages/standard/index.html",
+        "/tmp/landing-pages/full/index.html"
+      ]
+    },
+    "wrapup": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "555 tests across 9 dimensions. 4 bugs fixed. 3 landing pages built. Pipeline state machine fully tested (14 steps, 3 weight classes, validation hooks, server integration). Follow-up: publish v0.2.1 with bug fixes."
+      },
+      "artifacts": []
+    },
+    "completion": {
+      "status": "completed"
+    }
+  },
+  "completed": "2026-03-08"
+}

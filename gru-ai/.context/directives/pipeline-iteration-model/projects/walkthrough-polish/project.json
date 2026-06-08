@@ -1,0 +1,80 @@
+{
+  "id": "walkthrough-polish",
+  "title": "Polish /walkthrough skill for pipeline testing",
+  "status": "completed",
+  "priority": "P0",
+  "agent": ["taylor"],
+  "reviewers": ["sarah"],
+  "description": "Polish the /walkthrough skill to serve as the testing tool for pipeline changes. Add pipeline-specific standing scenarios and enhance CTO trace step for doc consistency verification.",
+  "source_directive": "pipeline-iteration-model",
+  "scope": {
+    "in": [
+      "Add pipeline-specific standing scenarios to scenarios.md",
+      "Enhance CTO trace step to verify doc consistency (cross-references, schema alignment, validation scripts)"
+    ],
+    "out": [
+      "No changes to /directive pipeline docs — that's project 2"
+    ]
+  },
+  "dod": [
+    { "criterion": "5 new pipeline-specific standing scenarios exist in scenarios.md with full critical paths", "met": true },
+    { "criterion": "CTO trace step in SKILL.md includes doc-consistency checks (cross-references, schema-template alignment, validation coverage)", "met": true },
+    { "criterion": "Walkthrough report template surfaces doc-consistency findings in a dedicated section", "met": true }
+  ],
+  "browser_test": false,
+  "tasks": [
+    {
+      "id": "add-pipeline-scenarios",
+      "title": "Add 5 pipeline-specific standing scenarios to scenarios.md",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["taylor"],
+      "user_scenario": "When the team runs /walkthrough all or /walkthrough directive-intent-extraction, they get pipeline-focused scenarios that test intent propagation, builder context, review fix cycles, and completion gate behavior.",
+      "scope": "Add 5 new scenarios to .context/lessons/scenarios.md: directive-intent-extraction, builder-context-completeness, review-fix-cycle, completion-checklist, pipeline-smoke-test. Each with actor, trigger, goal, critical_path (4-7 steps), success_criteria.",
+      "dod": [
+        { "criterion": "scenarios.md contains all 5 new scenarios: directive-intent-extraction, builder-context-completeness, review-fix-cycle, completion-checklist, pipeline-smoke-test", "met": true },
+        { "criterion": "Each scenario has all required fields: name, actor, trigger, goal, critical_path (4-7 steps), success_criteria", "met": true },
+        { "criterion": "Critical paths reference specific pipeline artifacts: CEO brief, intent fields, builder prompt, code-review output, completion gate checklist", "met": true },
+        { "criterion": "Existing 7 scenarios are unmodified — new scenarios are appended after them", "met": true }
+      ]
+    },
+    {
+      "id": "enhance-cto-trace-step",
+      "title": "Enhance CTO trace step in SKILL.md with doc-consistency and schema verification",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["taylor"],
+      "user_scenario": "When the CTO traces implementation during a walkthrough, they also verify pipeline doc cross-references, schema-template alignment, and validation script coverage — producing concrete evidence of doc drift.",
+      "scope": "Modify Step 3 in .claude/skills/walkthrough/SKILL.md. Add doc-consistency checks to CTO trace instructions and output JSON schema with cross_ref_issues, schema_drift, validation_gaps arrays.",
+      "dod": [
+        { "criterion": "SKILL.md Step 3 CTO trace prompt includes instructions to check doc cross-references, schema-to-template alignment, and validation script coverage", "met": true },
+        { "criterion": "CTO output JSON schema includes doc_consistency block with cross_ref_issues, schema_drift, and validation_gaps arrays", "met": true },
+        { "criterion": "Instructions tell the CTO to read actual file contents (Grep/Read) to verify — not guess", "met": true },
+        { "criterion": "Existing trace functionality (actual_flow, gaps_found, working_well) is preserved unchanged", "met": true }
+      ]
+    },
+    {
+      "id": "update-gap-report-for-doc-consistency",
+      "title": "Update gap synthesis and report template to surface doc-consistency findings",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["taylor"],
+      "user_scenario": "When the walkthrough report is presented, doc-consistency issues appear in a dedicated section alongside the existing gap report.",
+      "scope": "Update Steps 4 and 5 in walkthrough SKILL.md. Add consolidation of doc_consistency findings in synthesis and a conditional Doc Consistency section in the report template.",
+      "dod": [
+        { "criterion": "Step 4 synthesis includes deduplication of doc_consistency findings across scenario traces", "met": true },
+        { "criterion": "Step 5 report template includes a Doc Consistency section showing cross_ref_issues, schema_drift, and validation_gaps with file evidence", "met": true },
+        { "criterion": "Doc Consistency section is conditional — only rendered when findings exist", "met": true },
+        { "criterion": "Existing gap synthesis and report sections (Gaps Found, Systemic Gaps, Working Well, Summary) are preserved unchanged", "met": true }
+      ]
+    }
+  ],
+  "created": "2026-03-09T15:00:00Z",
+  "updated": "2026-03-09T15:30:00Z"
+}

@@ -1,0 +1,18 @@
+{
+  "id": "fix-css-overflow",
+  "title": "Fix CSS Layout Overflow Bug",
+  "status": "pending",
+  "agent": ["fullstack"],
+  "reviewers": ["qa"],
+  "tasks": [
+    {
+      "id": "task-1",
+      "title": "Fix text overflow in todo item cards on mobile",
+      "status": "pending",
+      "agent": ["fullstack"],
+      "dod": [
+        { "criterion": "Todo items with long text overflow their container on mobile viewports (below 480px). The text should truncate with ellipsis or wrap properly within the card bounds.", "met": false }
+      ]
+    }
+  ]
+}

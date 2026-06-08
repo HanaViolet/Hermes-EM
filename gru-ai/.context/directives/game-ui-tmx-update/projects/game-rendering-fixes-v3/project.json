@@ -1,0 +1,93 @@
+{
+  "id": "game-rendering-fixes-v3",
+  "title": "Fix rendering bugs and replace fonts/icons with LimeZu assets",
+  "status": "completed",
+  "priority": "P0",
+  "complexity": "moderate",
+  "agent": ["riley"],
+  "reviewers": ["sarah"],
+  "auditor": "sarah",
+  "description": "Fix 4 rendering bugs from TMX v2 migration and deliver 2 new features: canvas font labels and LimeZu UI status icons.",
+  "scope": {
+    "in": ["TMX tile data re-sync", "Character hit detection scaling", "Name label positioning", "Bitmap font replacement", "LimeZu UI sprite integration", "Status/interaction icon replacement"],
+    "out": ["Character sprite changes", "Zone/routing changes", "New game features"]
+  },
+  "dod": [
+    { "criterion": "Characters are clickable — hit detection matches visual sprite size", "met": true },
+    { "criterion": "Character names visible above sprites using canvas font", "met": true },
+    { "criterion": "Status icons use LimeZu UI sprite sheet assets", "met": true },
+    { "criterion": "FURNITURE_TOP matches latest TMX data", "met": true },
+    { "criterion": "npx tsc --noEmit passes", "met": true }
+  ],
+  "scope_summary": "6 ordered tasks: (1) re-sync TMX tile data, (2) fix hit detection scaling, (3) fix name label positioning + replace bitmap font with canvas font, (4) copy LimeZu UI assets and replace status/interaction icons.",
+  "sequencing_rationale": "TMX sync first to establish correct tile data. Hit detection next (independent fix). Label positioning and font replacement together (same code area). LimeZu icons last (builds on stable renderer).",
+  "tasks": [
+    {
+      "id": "sync-tmx-tile-data",
+      "title": "Re-sync FURNITURE_TOP with latest TMX data",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": ["riley"],
+      "phases": ["build", "review"],
+      "user_scenario": "The office renders with the latest tile layout matching what the CEO designed in Tiled.",
+      "scope": "Copy the FURNITURE_TOP array from the generated file (src/components/game/generated/office-tmx-data.ts) into office-layout.ts. The TMX parser has already been re-run and the generated file is up to date. Only FURNITURE_TOP has real changes (rows 7-9 and 12-13 — animated bathroom tiles moved). Other layers are identical.",
+      "dod": [
+        { "criterion": "FURNITURE_TOP in office-layout.ts matches FURNITURE_TOP in generated/office-tmx-data.ts exactly", "met": true },
+        { "criterion": "npx tsc --noEmit passes", "met": true }
+      ]
+    },
+    {
+      "id": "fix-hit-detection",
+      "title": "Scale character hit detection by CHARACTER_SPRITE_SCALE",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": ["riley"],
+      "phases": ["build", "review"],
+      "user_scenario": "Clicking anywhere on a character's visible sprite selects them — not just the bottom half.",
+      "scope": "In officeState.ts getCharacterAt() (line ~1458), the hit box uses CHARACTER_HIT_HALF_WIDTH=24 and CHARACTER_HIT_HEIGHT=48 which match the unscaled sprite. But characters are rendered at CHARACTER_SPRITE_SCALE (3×), so sprites appear 48×96px. Multiply the hit dimensions by CHARACTER_SPRITE_SCALE so the clickable area matches the visual. Import CHARACTER_SPRITE_SCALE from constants.ts. Update the constants CHARACTER_HIT_HALF_WIDTH and CHARACTER_HIT_HEIGHT if needed, or apply the scale factor in the hit test logic.",
+      "dod": [
+        { "criterion": "getCharacterAt hit box covers the full visual sprite area (scaled by CHARACTER_SPRITE_SCALE)", "met": true },
+        { "criterion": "CHARACTER_SPRITE_SCALE is imported and used in officeState.ts hit detection", "met": true },
+        { "criterion": "npx tsc --noEmit passes", "met": true }
+      ]
+    },
+    {
+      "id": "fix-labels-and-replace-font",
+      "title": "Fix name label positioning and replace bitmap font with canvas font",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": ["riley"],
+      "phases": ["build", "review"],
+      "user_scenario": "Character names appear clearly above each sprite in a clean, readable font.",
+      "scope": "Two changes: (1) Fix NAME_LABEL_VERTICAL_OFFSET_PX in constants.ts — current value 84 is too high. The character sprite is 32px tall × 3 scale = 96px rendered height. Label should be ~8-12px above the sprite top, so offset should be approximately 96 + 10 = 106 from the character's anchor (bottom). Adjust until labels sit just above the character head. Also fix BUBBLE_VERTICAL_OFFSET_PX (currently 72) to match. (2) Replace renderBitmapText() calls in renderer.ts with ctx.font/ctx.fillText. Use a clean sans-serif font like '10px \"Segoe UI\", system-ui, sans-serif' scaled by zoom. Remove the bitmapFont.ts import and switch to native canvas text. Update IDENTITY_PLATE_HEIGHT to match the new font metrics.",
+      "dod": [
+        { "criterion": "Name labels are visible above character sprites at default zoom", "met": true },
+        { "criterion": "Labels use ctx.font/ctx.fillText instead of renderBitmapText", "met": true },
+        { "criterion": "bitmapFont.ts is no longer imported by renderer.ts", "met": true },
+        { "criterion": "IDENTITY_PLATE_HEIGHT and NAME_LABEL_VERTICAL_OFFSET_PX values are recalculated for canvas font", "met": true },
+        { "criterion": "npx tsc --noEmit passes", "met": true }
+      ]
+    },
+    {
+      "id": "limezu-status-icons",
+      "title": "Replace status/interaction icons with LimeZu UI sprite sheet",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": ["riley"],
+      "phases": ["build", "review"],
+      "user_scenario": "Status bubbles above characters show polished LimeZu speech-bubble icons instead of hand-drawn pixel art.",
+      "scope": "Copy UI_48x48.png from /Users/yangyang/Downloads/moderninteriors-win/4_User_Interface_Elements/UI_48x48.png to public/assets/office/UI_48x48.png. Create a new sprite loading module that slices the 48x48 sprite sheet into individual icon frames. The sprite sheet is a grid of 48×48 icons. Map status types to icons: working→gear icon (row 0, col ~6), idle→zzz/sleep icon (row 3, col ~10), planning→thinking dots, reviewing→checkmark, brainstorming→lightbulb, auditing→magnifying glass. Replace the hand-drawn SpriteData arrays in statusIcons.ts and interactionIcons.ts with image-based icons loaded from the sprite sheet. Update renderer.ts to render these as Image elements via drawImage instead of getCachedSprite from SpriteData arrays. Also copy relevant animated GIFs (UI_thinking_emote_dots_48x48.gif, UI_timer_green_to_green_48x48.gif) to public/assets/office/ for potential animated icon use.",
+      "dod": [
+        { "criterion": "UI_48x48.png exists in public/assets/office/", "met": true },
+        { "criterion": "Status icons render from the LimeZu sprite sheet instead of hand-drawn pixel art", "met": true },
+        { "criterion": "At least 4 status types mapped to LimeZu icons (working, idle, planning, reviewing)", "met": true },
+        { "criterion": "Icons appear in speech-bubble style above character name plates", "met": true },
+        { "criterion": "npx tsc --noEmit passes", "met": true }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "project_id": "game-first-toggle",
+  "active_files": [
+    "src/router.tsx",
+    "src/components/layout/Sidebar.tsx",
+    "src/components/layout/AppLayout.tsx",
+    "src/components/game/panels/OpsPanel.tsx",
+    "src/components/game/GameHeader.tsx"
+  ],
+  "existing_patterns": [
+    "Router uses lazy() + SuspenseWrapper; index route = GamePage, /office = GamePage, /overview = DashboardPage",
+    "AppLayout checks isGameRoute to conditionally hide Header and padding",
+    "Sidebar navItems array is single source for nav links with useLocation for active state",
+    "Game panels use PARCHMENT theme + PIXEL_CARD from panelUtils.ts — NOT shadcn",
+    "OpsPanel reads from useDashboardStore: workState?.features?.features and backlogs",
+    "CeoBrief fetches via API_BASE/api/state/artifact-content, uses workState?.conductor",
+    "SidePanel routes via PanelContent switch on activeTab or selected.type",
+    "GameHeader exports HudPanel type, uses HudButton component",
+    "SchedulerCard has its own 30s fetch cycle + toggle endpoint (POST /api/scheduler/toggle)"
+  ],
+  "risks": [
+    "Route preservation: toggle mechanism (state vs navigation) affects browser history",
+    "Duplicate data fetching if both views load simultaneously",
+    "Scheduler toggle mutation exposure in read-only game context",
+    "Sidebar active-state highlighting may break when consolidating items",
+    "CeoBrief is 344 lines with complex state — not a simple restyle",
+    "GameHeader already crowded on mobile with 4 HUD buttons"
+  ],
+  "recommendations": [
+    "Use React state in AppLayout for toggle, store preference in localStorage",
+    "Place toggle in AppLayout/Sidebar header area, not GameHeader",
+    "Extract useCeoBriefData.ts shared hook for both UIs",
+    "Scheduler in OpsPanel: read-only SchedulerSummary section with shared hook",
+    "Merge Office/Overview into single nav item + toggle icon",
+    "Add Brief section to existing OpsPanel.tsx rather than new panel file",
+    "Preserve CeoBrief.tsx and SchedulerCard.tsx untouched — game panels consume shared hooks",
+    "Update AppLayout isGameRoute check to account for toggle state"
+  ]
+}

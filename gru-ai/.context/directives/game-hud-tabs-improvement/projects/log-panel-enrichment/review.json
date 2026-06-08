@@ -1,0 +1,49 @@
+{
+  "reviewer": "marcus",
+  "phase": "code-review",
+  "outcome": "pass",
+  "bugs_found": [
+    {
+      "file": "src/components/game/panels/LogPanel.tsx",
+      "line": "663-677",
+      "severity": "medium",
+      "description": "Seeding race condition: useEffect([]) captures empty store on mount (WebSocket hasn't connected). When real data arrives, all existing subagents appear as 'new spawns'. Same issue for task seeding (lines 698-707).",
+      "fixed": true,
+      "fix": "Changed deps from [] to [sessions]/[tasksBySession], added early return if data is empty"
+    },
+    {
+      "file": "src/components/game/panels/LogPanel.tsx",
+      "line": "763-784",
+      "severity": "medium",
+      "description": "useMemo staleness: ref mutations (connectionBufferRef etc.) don't trigger re-renders. A standalone disconnect event won't show until something else updates the store.",
+      "fixed": false,
+      "fix_note": "Edge case — store updates arrive together in practice"
+    },
+    {
+      "file": "src/components/game/panels/LogPanel.tsx",
+      "line": "17",
+      "severity": "low",
+      "description": "Unused TeamTask import — only used indirectly via tasksBySession type inference.",
+      "fixed": true,
+      "fix": "Removed from import statement"
+    },
+    {
+      "file": "src/components/game/panels/LogPanel.tsx",
+      "line": "359-370",
+      "severity": "low",
+      "description": "Stale team events use new Date().toISOString() — causes stale warnings to always sort to top of feed on every render.",
+      "fixed": true,
+      "fix": "Changed to team.createdAt"
+    }
+  ],
+  "approach_deviation": "none",
+  "suspicious_patterns": [
+    "activityDedupeRef grows unboundedly — new unique composite keys added but never evicted. Practically harmless since activity buffer is capped at 50.",
+    "Date.now() in event IDs means React keys are unstable if same logical event produced across renders — mitigated by ref-based accumulation pattern."
+  ],
+  "data_flow_issues": [
+    "Seeding pattern was a race condition with async WebSocket data (FIXED).",
+    "Ref buffers accumulate events across renders but old events from hours ago persist — acceptable for a log panel."
+  ],
+  "verdict": "Functional code that compiles and renders correctly. Main bug (seeding race) fixed. Pass with noted edge cases."
+}

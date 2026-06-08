@@ -1,0 +1,142 @@
+{
+  "id": "repo-brand-publish",
+  "title": "Repo rename, branding, build config, and npm publish setup",
+  "status": "completed",
+  "priority": "P0",
+  "agent": [
+    "devon"
+  ],
+  "reviewers": [
+    "sarah"
+  ],
+  "description": "Rename package to gruai, configure multi-output build, npm publish setup, MIT LICENSE",
+  "source_directive": "game-productionize-and-publish",
+  "scope": {
+    "in": "Rename package.json name to gruai, update bin field to compiled JS, add build scripts for 3 outputs, add files whitelist, MIT LICENSE, update npm scripts, rename user-facing brand strings",
+    "out": "Do not rename .context/ documentation references. Do not change server logic."
+  },
+  "dod": [
+    {
+      "criterion": "package.json name is 'gruai' with correct bin, files, and build scripts",
+      "met": true
+    },
+    {
+      "criterion": "npm run build produces dist/, dist-server/, dist-cli/ without errors",
+      "met": true
+    },
+    {
+      "criterion": "MIT LICENSE exists at repo root",
+      "met": true
+    },
+    {
+      "criterion": "Zero 'agent-conductor' in source files outside .context/",
+      "met": true
+    }
+  ],
+  "browser_test": false,
+  "tasks": [
+    {
+      "id": "package-json-and-build-scripts",
+      "title": "Rename package, fix bin, add build scripts and files whitelist",
+      "status": "completed",
+      "agent": [
+        "devon"
+      ],
+      "dod": [
+        {
+          "criterion": "package.json name is 'gruai'",
+          "met": true
+        },
+        {
+          "criterion": "bin field is { \"gruai\": \"./dist-cli/index.js\" }",
+          "met": true
+        },
+        {
+          "criterion": "build:client, build:server, build:cli, build, and prepublishOnly scripts added",
+          "met": true
+        },
+        {
+          "criterion": "start script runs 'node dist-server/server/index.js'",
+          "met": true
+        },
+        {
+          "criterion": "files field whitelists: dist/, dist-server/, dist-cli/, cli/templates/, LICENSE, README.md",
+          "met": true
+        },
+        {
+          "criterion": "npm run build succeeds without errors",
+          "met": true
+        },
+        {
+          "criterion": "npm run type-check still passes",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "license-and-readme",
+      "title": "Add MIT LICENSE file and update README brand references",
+      "status": "completed",
+      "agent": [
+        "devon"
+      ],
+      "dod": [
+        {
+          "criterion": "LICENSE file exists at repo root with MIT license text",
+          "met": true
+        },
+        {
+          "criterion": "README.md references 'gruai' instead of 'agent-conductor'",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "rename-brand-strings",
+      "title": "Rename agent-conductor to gruai in source files",
+      "status": "completed",
+      "agent": [
+        "devon"
+      ],
+      "dod": [
+        {
+          "criterion": "cli/index.ts and cli/commands/init.ts brand strings updated to gruai",
+          "met": true
+        },
+        {
+          "criterion": "mcp-server, scripts, server files brand refs updated",
+          "met": true
+        },
+        {
+          "criterion": "Zero 'agent-conductor' occurrences in source files outside .context/ and node_modules/",
+          "met": true
+        },
+        {
+          "criterion": "npm run type-check passes after all renames",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "cli-path-resolution",
+      "title": "Fix CLI template path resolution for compiled output",
+      "status": "completed",
+      "agent": [
+        "devon"
+      ],
+      "dod": [
+        {
+          "criterion": "TEMPLATES_DIR resolves to REPO_ROOT/cli/templates (not CLI_ROOT/templates)",
+          "met": true
+        },
+        {
+          "criterion": "Running 'node dist-cli/index.js' prints help text without errors",
+          "met": true
+        }
+      ]
+    }
+  ],
+  "created": "2026-03-07T00:20:00Z",
+  "updated": "2026-03-07T02:00:00Z",
+  "completed": "2026-03-07T02:00:00Z"
+}

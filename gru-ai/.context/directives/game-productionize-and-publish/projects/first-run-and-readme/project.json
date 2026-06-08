@@ -1,0 +1,113 @@
+{
+  "id": "first-run-and-readme",
+  "title": "Welcome directive, README with GIF, and first-run experience",
+  "status": "completed",
+  "priority": "P1",
+  "agent": [
+    "taylor"
+  ],
+  "reviewers": [
+    "priya",
+    "marcus"
+  ],
+  "description": "README rebrand with quickstart, welcome directive template for init scaffolding",
+  "source_directive": "game-productionize-and-publish",
+  "scope": {
+    "in": "Full README.md rewrite for gruai branding, welcome directive template in cli/templates/, 3-command quickstart, GIF placeholder",
+    "out": "Do not create the actual GIF. Do not modify init.ts."
+  },
+  "dod": [
+    {
+      "criterion": "README.md fully rebranded to gruai with GIF-first layout",
+      "met": true
+    },
+    {
+      "criterion": "Welcome directive template exists in cli/templates/",
+      "met": true
+    },
+    {
+      "criterion": "docs/assets/ directory with GIF placeholder",
+      "met": true
+    }
+  ],
+  "browser_test": false,
+  "tasks": [
+    {
+      "id": "readme-rewrite",
+      "title": "Rewrite README.md for gruai branding with GIF-first layout",
+      "status": "completed",
+      "agent": [
+        "taylor"
+      ],
+      "dod": [
+        {
+          "criterion": "README.md rebranded — zero references to 'Agent Conductor'",
+          "met": true
+        },
+        {
+          "criterion": "GIF placeholder image tag appears above the fold",
+          "met": true
+        },
+        {
+          "criterion": "Quickstart section contains exactly 3 commands",
+          "met": true
+        },
+        {
+          "criterion": "Tone is conversational, not enterprise",
+          "met": true
+        },
+        {
+          "criterion": "References welcome directive as default first-run",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "welcome-directive-template",
+      "title": "Create welcome directive template for first-run experience",
+      "status": "completed",
+      "agent": [
+        "taylor"
+      ],
+      "dod": [
+        {
+          "criterion": "cli/templates/welcome-directive/ exists with directive.md and directive.json",
+          "met": true
+        },
+        {
+          "criterion": "directive.json is valid with id, title, weight, status",
+          "met": true
+        },
+        {
+          "criterion": "directive.md understandable by someone who hasn't seen the project",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "gif-placeholder-asset",
+      "title": "Create GIF placeholder asset and docs/assets directory",
+      "status": "completed",
+      "agent": [
+        "taylor"
+      ],
+      "dod": [
+        {
+          "criterion": "docs/assets/ directory exists",
+          "met": true
+        },
+        {
+          "criterion": "docs/assets/demo.gif exists as placeholder",
+          "met": true
+        },
+        {
+          "criterion": "README.md GIF image tag resolves without 404",
+          "met": true
+        }
+      ]
+    }
+  ],
+  "created": "2026-03-07T00:20:00Z",
+  "updated": "2026-03-07T03:00:00Z",
+  "completed": "2026-03-07T03:00:00Z"
+}

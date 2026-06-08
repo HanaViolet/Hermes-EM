@@ -1,0 +1,87 @@
+{
+  "id": "furniture-animations",
+  "title": "Furniture Animation System — Investigation, Implementation, and Scene Integration",
+  "directive": "limezu-asset-animations",
+  "status": "completed",
+  "priority": "P0",
+  "complexity": "moderate",
+  "agent": ["devon"],
+  "reviewers": ["sarah"],
+  "auditor": "sarah",
+  "description": "Add animation to Limezu furniture in the office scene by substituting animated GIDs at render time using the existing identity.time clock.",
+  "scope": {
+    "in": [
+      "Create animation registry mapping base GIDs to frame GID sequences",
+      "Thread identity.time through GID tile rendering pipeline",
+      "Substitute animated GIDs in renderTileGrid and renderGidOverlayLayers",
+      "Ensure all animated Limezu furniture in office-layout.ts is covered"
+    ],
+    "out": [
+      "tileset-loader.ts singles system (dead code for main office)",
+      "Character animation changes",
+      "New furniture placement or layout changes"
+    ]
+  },
+  "dod": [
+    { "criterion": "Animated furniture (monitors, fans, fish tanks) cycles through frames in the office scene", "met": true },
+    { "criterion": "Animation uses existing identity.time clock — no new timers", "met": true },
+    { "criterion": "No regressions in static furniture rendering or z-sort order", "met": true },
+    { "criterion": "npm run type-check passes", "met": true }
+  ],
+  "tasks": [
+    {
+      "id": "animation-registry",
+      "title": "Create furniture animation registry mapping GIDs to frame sequences",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "moderate",
+      "phases": ["build", "code-review", "review"],
+      "agent": ["devon"],
+      "user_scenario": "No user-visible change yet — this task establishes the data layer that subsequent tasks consume.",
+      "scope": "Investigate the Interiors.png tileset (firstgid=1073, 16-wide grid) and the office-layout.ts GID layers to identify which GIDs in the layout belong to animated furniture (screens, fans, fish tanks, etc.). Limezu animated objects use adjacent tiles in the same row. Create a new file src/components/game/furnitureAnimations.ts that exports: (1) an ANIMATED_TILES registry mapping each base GID to {frames: number[], durationSec: number}, (2) a getAnimatedGid(baseGid, timeSec) function, and (3) an animation timing constant.",
+      "dod": [
+        { "criterion": "File furnitureAnimations.ts exists and exports ANIMATED_TILES map, getAnimatedGid function, and FURNITURE_ANIM_FRAME_SEC constant", "met": true },
+        { "criterion": "At least 3 distinct animated furniture types are identified and registered with correct adjacent-GID frame sequences from Interiors.png", "met": false },
+        { "criterion": "getAnimatedGid returns the base GID unchanged for non-animated GIDs (passthrough behavior)", "met": true },
+        { "criterion": "getAnimatedGid returns the correct frame GID when called with a known animated base GID and varying time values", "met": true },
+        { "criterion": "npm run type-check passes with no errors", "met": true }
+      ]
+    },
+    {
+      "id": "renderer-animation-threading",
+      "title": "Thread time through GID rendering and substitute animated frames",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "moderate",
+      "phases": ["build", "code-review", "review"],
+      "agent": ["devon"],
+      "user_scenario": "Animated furniture in the office (monitors, fans, fish tanks) now visually cycles through animation frames — the office feels alive instead of static.",
+      "scope": "Modify renderer.ts to thread a timeSec parameter through renderTileGrid and renderGidOverlayLayers. Before calling getScaledTileCanvas(gid, zoom), call getAnimatedGid(gid, timeSec) to substitute animated GIDs. Update renderFrame to pass identity.time. Ensure tilesetCache pre-extracts animation frame GIDs by extending collectUsedGids().",
+      "dod": [
+        { "criterion": "renderTileGrid and renderGidOverlayLayers accept a timeSec parameter and call getAnimatedGid for each non-zero GID", "met": true },
+        { "criterion": "renderFrame passes identity.time to both tile-rendering functions", "met": true },
+        { "criterion": "collectUsedGids in tilesetCache.ts includes all animation frame GIDs from the registry", "met": true },
+        { "criterion": "npm run type-check passes with no errors", "met": true },
+        { "criterion": "Visual verification: animated furniture cycles frames smoothly in the browser", "met": false }
+      ]
+    },
+    {
+      "id": "scene-integration-and-polish",
+      "title": "Verify all animated furniture in office scene and add animation speed constant",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["devon"],
+      "user_scenario": "All animated furniture objects in the office animate smoothly and consistently.",
+      "scope": "Walk through every GID in the office-layout.ts layers to ensure no animated furniture was missed. Add FURNITURE_ANIM_FRAME_SEC to constants.ts. Verify animated GID caching works correctly. Ensure z-sort compatibility is maintained.",
+      "dod": [
+        { "criterion": "All animated furniture objects in the 7 GID layers are registered in the animation registry", "met": true },
+        { "criterion": "FURNITURE_ANIM_FRAME_SEC is exported from constants.ts and imported by furnitureAnimations.ts", "met": true },
+        { "criterion": "Animated tiles do not cause cache key collisions in tilesetCache.ts", "met": true },
+        { "criterion": "No regressions: static furniture renders identically, z-sort preserved, no flickering at any zoom level", "met": true }
+      ]
+    }
+  ],
+  "sequencing_rationale": "Task 1 creates the data model (animation registry + lookup function) with zero rendering changes. Task 2 threads time through the render pipeline and wires up GID substitution. Task 3 is a completeness sweep and polish pass."
+}

@@ -1,0 +1,58 @@
+{
+  "id": "fix-status-and-dev-env",
+  "title": "Fix directive status mapping + dev environment cleanup",
+  "status": "completed",
+  "agent": ["devon"],
+  "reviewers": ["sarah"],
+  "tasks": [
+    {
+      "id": "fix-map-status",
+      "title": "Fix mapStatus() in directive-watcher.ts",
+      "scope": "Add 'active' -> 'in_progress', 'reopened' -> 'in_progress', 'superseded' -> 'completed' to mapStatus(). Also add 'active' and 'reopened' to readCurrentState() raw status filter (line 234). Remove dead 'reopened' from post-mapStatus filters in readActiveDirectives() and readAndUpdate().",
+      "agent": "devon",
+      "status": "completed",
+      "dod": [
+        { "criterion": "mapStatus('active') returns 'in_progress'", "met": true },
+        { "criterion": "mapStatus('reopened') returns 'in_progress'", "met": true },
+        { "criterion": "mapStatus('superseded') returns 'completed'", "met": true },
+        { "criterion": "readCurrentState() includes raw status 'active' and 'reopened'", "met": true },
+        { "criterion": "readActiveDirectives() and readAndUpdate() only check mapped statuses (no dead 'reopened')", "met": true }
+      ]
+    },
+    {
+      "id": "fix-state-watcher-map",
+      "title": "Fix mapDirectiveStatus() in state-watcher.ts",
+      "scope": "Add 'active' -> 'in_progress', 'reopened' -> 'in_progress', 'superseded' -> 'completed' cases to mapDirectiveStatus().",
+      "agent": "devon",
+      "status": "completed",
+      "dod": [
+        { "criterion": "mapDirectiveStatus('active') returns 'in_progress'", "met": true },
+        { "criterion": "mapDirectiveStatus('reopened') returns 'in_progress'", "met": true },
+        { "criterion": "mapDirectiveStatus('superseded') returns 'completed'", "met": true }
+      ]
+    },
+    {
+      "id": "fix-directive-data",
+      "title": "Fix directive.json files using invalid status values",
+      "scope": "Change status 'active' to 'in_progress' in gruai-marketing-launch/directive.json and any other directives using non-schema statuses.",
+      "agent": "devon",
+      "status": "completed",
+      "dod": [
+        { "criterion": "gruai-marketing-launch/directive.json uses status 'in_progress'", "met": true },
+        { "criterion": "No directive.json files use status 'active' (all normalized)", "met": true }
+      ]
+    },
+    {
+      "id": "dev-env-cleanup",
+      "title": "Add predev script to prevent stale process conflicts",
+      "scope": "Add a 'predev' npm script to package.json that kills any existing processes on port 4444 and existing vite dev servers before starting. This prevents the zombie tsx-watch + port conflict issue where multiple npm run dev instances create stale, fragmented processes.",
+      "agent": "devon",
+      "status": "completed",
+      "dod": [
+        { "criterion": "package.json has a 'predev' script that kills processes on port 4444", "met": true },
+        { "criterion": "predev also kills stale vite processes for this project", "met": true },
+        { "criterion": "npm run dev runs predev automatically before starting", "met": true }
+      ]
+    }
+  ]
+}

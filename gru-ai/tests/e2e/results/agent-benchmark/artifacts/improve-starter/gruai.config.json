@@ -1,0 +1,35 @@
+{
+  "name": "test-project",
+  "preset": "starter",
+  "platform": "claude-code",
+  "version": "1.0.0",
+  "agents": [
+      {
+          "id": "theo",
+          "name": "Theo Park",
+          "role": "CTO"
+      },
+      {
+          "id": "sara",
+          "name": "Sara Wang",
+          "role": "COO"
+      },
+      {
+          "id": "valentina",
+          "name": "Valentina Lin",
+          "role": "FS"
+      },
+      {
+          "id": "jade",
+          "name": "Jade Huang",
+          "role": "QA"
+      }
+  ],
+  "skills": ["directive", "scout", "healthcheck", "report"],
+  "contextDir": ".context",
+  "settings": {
+    "dailyBudget": 50,
+    "autoScout": false,
+    "reportFrequency": "daily"
+  }
+}

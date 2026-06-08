@@ -1,0 +1,56 @@
+{
+  "id": "frontend-dead-code-cleanup",
+  "title": "Delete dead frontend barrel indexes and verify staged deletions",
+  "status": "completed",
+  "priority": "P0",
+  "agent": ["riley"],
+  "reviewers": ["sarah", "devon"],
+  "description": "Remove dead barrel index files and verify no dangling imports from previously deleted components",
+  "source_directive": "codebase-cleanup",
+  "scope": {
+    "in": "Dead barrel index deletion, dangling import verification, unused CSS cleanup",
+    "out": "No refactoring, no restructuring"
+  },
+  "browser_test": false,
+  "dod": [
+    { "criterion": "Dead barrel index files deleted", "met": true },
+    { "criterion": "Zero dangling imports from deleted components", "met": true },
+    { "criterion": "vite build and tsc --noEmit pass clean", "met": true }
+  ],
+  "tasks": [
+    {
+      "id": "delete-dead-barrel-indexes",
+      "title": "Delete unused barrel index files",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["riley"],
+      "scope": "Delete src/components/game/engine/index.ts and src/components/game/sprites/index.ts — both are barrel re-export files with ZERO external consumers (all imports go directly to submodules). Verify no imports reference './engine' or './sprites' as bare paths.",
+      "dod": [
+        { "criterion": "engine/index.ts and sprites/index.ts deleted", "met": true },
+        { "criterion": "No imports reference './engine' or './sprites' as bare barrel imports (grep verified)", "met": true },
+        { "criterion": "vite build succeeds", "met": true },
+        { "criterion": "tsc --noEmit passes clean", "met": true }
+      ]
+    },
+    {
+      "id": "verify-no-dangling-imports",
+      "title": "Verify no dangling imports from deleted components",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["riley"],
+      "scope": "Grep for imports referencing deleted directories (dashboard/, org/, projects/, sessions/, teams/, shared/SearchCommandPalette, prototype/). Remove any dangling imports found. Check globals.css for unused CSS classes that only applied to deleted components.",
+      "dod": [
+        { "criterion": "Zero imports reference deleted component directories (grep verified)", "met": true },
+        { "criterion": "No unused CSS classes for deleted components in globals.css", "met": true },
+        { "criterion": "vite build succeeds", "met": true },
+        { "criterion": "tsc --noEmit passes clean", "met": true }
+      ]
+    }
+  ],
+  "created": "2026-03-08T00:10:00Z",
+  "updated": "2026-03-08T00:15:00Z"
+}

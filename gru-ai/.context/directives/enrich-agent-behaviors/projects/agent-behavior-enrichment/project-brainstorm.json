@@ -1,0 +1,66 @@
+{
+  "project_id": "agent-behavior-enrichment",
+  "tasks": [
+    {
+      "id": "add-offline-status-and-idle-tiers",
+      "title": "Add 'offline' AgentStatus, 3-tier idle detection, and expose idle tier on Character",
+      "description": "Extend the AgentStatus union with 'offline'. Add an IdleTier enum ('recent' | 'moderate' | 'long') to pixel-types.ts and compute it from sessionInfo.lastActivityMs in characters.ts. Thread idle tier onto the Character struct so the renderer can use it. Update GamePage.tsx toAgentStatus() to emit 'offline' when no session exists. Update officeState.ts applyAgentStatus/routeAgent to handle 'offline' (treat like idle, stay at desk). Update shouldWander to use the tier enum instead of a raw boolean.",
+      "agent": ["riley"],
+      "phases": ["build", "code-review", "review"],
+      "active_files": [
+        "src/components/game/pixel-types.ts",
+        "src/components/game/types.ts",
+        "src/components/game/engine/characters.ts",
+        "src/components/game/engine/officeState.ts",
+        "src/components/game/GamePage.tsx",
+        "src/components/game/constants.ts"
+      ],
+      "dod": [
+        { "criterion": "AgentStatus type is 'working' | 'idle' | 'offline' in both pixel-types.ts and types.ts", "met": false },
+        { "criterion": "IdleTier type ('recent' | 'moderate' | 'long') exists in pixel-types.ts and Character struct has an idleTier field", "met": false },
+        { "criterion": "characters.ts computes idleTier from sessionInfo.lastActivityMs: <10min='recent', 10-30min='moderate', >=30min='long'. Thresholds are named constants in constants.ts", "met": false },
+        { "criterion": "GamePage.tsx toAgentStatus returns 'offline' for agents with no active session. agentStatuses priority map includes 'offline' ranked below 'idle'", "met": false },
+        { "criterion": "officeState.ts applyAgentStatus handles 'offline' without errors (agents go to desk, stay seated like idle). shouldWander uses idleTier === 'long' instead of raw timestamp comparison", "met": false }
+      ]
+    },
+    {
+      "id": "idle-tier-visual-differentiation",
+      "title": "Distinct visual treatment per idle tier in renderer and panels",
+      "description": "Give each idle tier its own dot color, emoji icon, and character sprite alpha in the canvas renderer. Recent idle (<10min): green-ish gray dot, no icon (at desk, looks normal). Moderate idle (10-30min): amber/yellow dot, yawning/sleepy emoji, character sprite drawn at 70% alpha (dimmed). Long idle (>30min): gray dot, coffee emoji (existing). Offline: dark gray dot, no emoji, character sprite at 50% alpha. Update PILL_DOT_COLORS, STATUS_EMOJI, getCharacterEmoji, renderScene character drawing, and panel status helpers (panelUtils.ts statusBadgeVariant, statusDotColor, StatusChip).",
+      "agent": ["riley"],
+      "phases": ["build", "code-review", "review"],
+      "active_files": [
+        "src/components/game/engine/renderer.ts",
+        "src/components/game/panels/panelUtils.ts",
+        "src/components/game/panels/TeamPanel.tsx",
+        "src/components/game/panels/AgentPanel.tsx",
+        "src/components/game/constants.ts"
+      ],
+      "dod": [
+        { "criterion": "PILL_DOT_COLORS has 4 entries: working (green), idle-recent (light gray or muted green), idle-moderate (amber/yellow), idle-long (gray), offline (dark gray/charcoal)", "met": false },
+        { "criterion": "STATUS_EMOJI differentiates by idle tier: recent=none or minimal, moderate=sleepy face (U+1F634 or U+1F971), long=coffee (existing)", "met": false },
+        { "criterion": "Character sprites render at 70% alpha when idle-moderate and 50% alpha when offline. Working, idle-recent, and idle-long (wandering) render at full alpha", "met": false },
+        { "criterion": "panelUtils.ts statusBadgeVariant, statusDotColor, and StatusChip handle 'offline' status with distinct color (dark gray bg, muted text)", "met": false },
+        { "criterion": "Type-checks pass: npm run type-check exits 0", "met": false }
+      ]
+    },
+    {
+      "id": "dead-code-cleanup",
+      "title": "Remove renderStatusIcons and renderInteractionIcons dead code",
+      "description": "Delete the no-op renderStatusIcons() and renderInteractionIcons() functions from renderer.ts. Remove their call sites in renderFrame(). Remove the comment referencing them at the import section. Verify no other files import or reference these functions.",
+      "agent": ["riley"],
+      "phases": ["build", "code-review", "review"],
+      "active_files": [
+        "src/components/game/engine/renderer.ts"
+      ],
+      "dod": [
+        { "criterion": "renderStatusIcons function definition is deleted from renderer.ts", "met": false },
+        { "criterion": "renderInteractionIcons function definition is deleted from renderer.ts", "met": false },
+        { "criterion": "Both call sites in renderFrame() are removed (lines calling renderStatusIcons and renderInteractionIcons)", "met": false },
+        { "criterion": "No remaining references to renderStatusIcons or renderInteractionIcons exist anywhere in the codebase (verified by grep)", "met": false },
+        { "criterion": "Type-checks pass: npm run type-check exits 0", "met": false }
+      ]
+    }
+  ],
+  "sequencing_rationale": "Task 1 establishes the data model (offline status, IdleTier enum, Character field, threshold constants, GamePage mapping, officeState handling). Task 2 depends on Task 1's IdleTier being available on Character to implement visual differentiation in the renderer and panels. Task 3 is independent cleanup but sequenced last so the reviewer can verify the final codebase is clean after all feature work lands. Three tasks is appropriate because the audit confirmed interaction icons and wandering are already done — only the type gap, tier detection, visuals, and cleanup remain."
+}

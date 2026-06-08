@@ -1,0 +1,148 @@
+{
+  "id": "status-panel-rewrite",
+  "title": "Rewrite OpsPanel as StatusPanel with system overview",
+  "status": "completed",
+  "priority": "P0",
+  "agent": [
+    "riley"
+  ],
+  "reviewers": [
+    "sarah"
+  ],
+  "description": "Full rewrite of OpsPanel.tsx into StatusPanel with 4 sections: System Vitals, Active Directives, Velocity, Session Health. Rename all ops->status references across 7 files.",
+  "source_directive": "ops-panel-rewrite",
+  "scope": {
+    "in": [
+      "Create StatusPanel.tsx with 4 sections: System Vitals KPI, Active Directives, Velocity, Session Health",
+      "Rename 'ops' to 'status' across all 7 files (SidePanel, GameHeader, GamePage, types, useBadgeCounts, index, panel file)",
+      "Delete all dead categories/features/backlogs code",
+      "Use activeDirectives[], sessions[], directiveHistory[], connected from Zustand store"
+    ],
+    "out": [
+      "No server-side changes",
+      "No new WebSocket message types",
+      "No new store fields"
+    ]
+  },
+  "browser_test": true,
+  "dod": [
+    {
+      "criterion": "OpsPanel.tsx replaced by StatusPanel.tsx",
+      "met": true
+    },
+    {
+      "criterion": "Tab label shows 'Status' not 'Ops'",
+      "met": true
+    },
+    {
+      "criterion": "System Vitals KPI strip shows connection, sessions, directives, projects",
+      "met": true
+    },
+    {
+      "criterion": "Active Directives section shows pipeline progress for each active directive",
+      "met": true
+    },
+    {
+      "criterion": "Velocity section shows recent completions and 7d throughput",
+      "met": true
+    },
+    {
+      "criterion": "Session Health shows status distribution bar",
+      "met": true
+    },
+    {
+      "criterion": "All 22 rename items updated (no leftover 'ops' references)",
+      "met": true
+    },
+    {
+      "criterion": "No references to FeatureRecord, BacklogRecord, or workState.features/backlogs",
+      "met": true
+    },
+    {
+      "criterion": "TypeScript compiles without errors",
+      "met": true
+    }
+  ],
+  "tasks": [
+    {
+      "id": "rename-ops-to-status",
+      "title": "Rename all ops references to status across 6 support files",
+      "priority": "P0",
+      "status": "completed",
+      "agent": [
+        "riley"
+      ],
+      "phases": [
+        "build"
+      ],
+      "user_scenario": "CEO clicks the HUD tab bar and sees 'Status' instead of 'Ops'. All routing, badges, and furniture click targets work correctly with the new name.",
+      "scope": "Update HudTab type, HudPanel type, TileType union, TAB_LIST, TAB_ICONS, HUD_TYPES, hudTypeToTab, FURNITURE_TAB_MAP, typeMap, activePanel switch cases, BadgeCounts interface, badge variable/return key, HudButton label/onClick/active/aria, and panel import/switch in SidePanel. Files: SidePanel.tsx, GameHeader.tsx, GamePage.tsx, types.ts, useBadgeCounts.ts, panels/index.ts.",
+      "dod": [
+        {
+          "criterion": "HudTab type uses 'status' not 'ops'",
+          "met": true
+        },
+        {
+          "criterion": "Tab label shows 'Status'",
+          "met": true
+        },
+        {
+          "criterion": "All 22 rename items updated",
+          "met": true
+        },
+        {
+          "criterion": "No TypeScript errors",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "build-status-panel",
+      "title": "Build StatusPanel.tsx with 4 sections",
+      "priority": "P0",
+      "status": "completed",
+      "agent": [
+        "riley"
+      ],
+      "phases": [
+        "build",
+        "review"
+      ],
+      "user_scenario": "CEO opens the Status tab and sees a system overview: vitals at top, active directives with progress, recent completions velocity, and session health distribution.",
+      "scope": "Create StatusPanel.tsx (replacing OpsPanel.tsx) with: (1) VitalsStrip — 2x2 KPI grid showing connection status, active sessions count, active directives count, in-flight projects count. (2) ActiveDirectives — list of activeDirectives[] with pipeline step name, weight badge, project count, progress bar from pipelineSteps completion. (3) Velocity — last 5 completed directives from directiveHistory with relative timestamps, plus 7d throughput count. (4) SessionHealth — horizontal stacked bar showing session status distribution (working=green, idle=gray, error=red, waiting=yellow) with counts. Use panelUtils primitives (SectionHeader, PixelProgress, ParchmentDivider, PIXEL_CARD, PARCHMENT). Delete OpsPanel.tsx after.",
+      "dod": [
+        {
+          "criterion": "System Vitals KPI strip renders with 4 metrics",
+          "met": true
+        },
+        {
+          "criterion": "Active Directives shows pipeline progress per directive",
+          "met": true
+        },
+        {
+          "criterion": "Velocity shows last 5 completed + 7d count",
+          "met": true
+        },
+        {
+          "criterion": "Session Health shows stacked bar with status distribution",
+          "met": true
+        },
+        {
+          "criterion": "No references to FeatureRecord/BacklogRecord/workState.features/backlogs",
+          "met": true
+        },
+        {
+          "criterion": "Parchment theme styling consistent with other panels",
+          "met": true
+        },
+        {
+          "criterion": "No TypeScript errors",
+          "met": true
+        }
+      ]
+    }
+  ],
+  "completed": "2026-03-07T13:15:00.000Z",
+  "created": "2026-03-07T12:45:00.000Z",
+  "updated": "2026-03-07T13:15:00.000Z"
+}

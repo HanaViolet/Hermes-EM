@@ -1,0 +1,125 @@
+{
+  "id": "cli-to-skills",
+  "title": "Delete CLI binary, create /gruai-agents and /gruai-config skills",
+  "status": "completed",
+  "priority": "P0",
+  "agent": [
+    "devon"
+  ],
+  "reviewers": [
+    "sarah"
+  ],
+  "auditor": "sarah",
+  "description": "Replace CLI init/update commands with Claude Code skills. Delete CLI code, keep templates.",
+  "source_directive": "game-productionize-and-publish",
+  "scope": {
+    "in": "Delete cli/commands/ and cli/index.ts. Remove bin and build:cli from package.json. Keep cli/templates/. Create /gruai-agents skill and /gruai-config skill.",
+    "out": "npm publish, build pipeline fixes"
+  },
+  "browser_test": false,
+  "tasks": [
+    {
+      "id": "delete-cli-code",
+      "title": "Delete CLI commands and clean package.json",
+      "status": "completed",
+      "agent": [
+        "devon"
+      ],
+      "phases": [
+        "build"
+      ],
+      "dod": [
+        {
+          "criterion": "cli/commands/init.ts, cli/commands/update.ts, cli/index.ts deleted",
+          "met": true
+        },
+        {
+          "criterion": "package.json: bin field removed, build:cli script removed, dist-cli removed from files array",
+          "met": true
+        },
+        {
+          "criterion": "cli/templates/ directory preserved (skills reference it)",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "create-gruai-agents-skill",
+      "title": "Create /gruai-agents skill",
+      "status": "completed",
+      "agent": [
+        "devon"
+      ],
+      "phases": [
+        "build"
+      ],
+      "dod": [
+        {
+          "criterion": ".claude/skills/gruai-agents/SKILL.md exists with clear instructions",
+          "met": true
+        },
+        {
+          "criterion": "Skill instructs the LLM to: read cli/templates/agent-roles/*.md, generate random names, render templates with {{NAME}}/{{FIRST_NAME}}/{{FIRST_NAME_LOWER}}, create .claude/agents/*.md files, create .claude/agent-registry.json with full schema (agents + teams), scaffold .context/ tree, create CLAUDE.md and gruai.config.json",
+          "met": true
+        },
+        {
+          "criterion": "Skill references existing templates in cli/templates/ — does NOT embed template content inline",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "create-gruai-config-skill",
+      "title": "Create /gruai-config skill",
+      "status": "completed",
+      "agent": [
+        "devon"
+      ],
+      "phases": [
+        "build"
+      ],
+      "dod": [
+        {
+          "criterion": ".claude/skills/gruai-config/SKILL.md exists with clear instructions",
+          "met": true
+        },
+        {
+          "criterion": "Skill instructs the LLM to: backup existing .claude/skills/ to .gruai-backup/{timestamp}/, copy latest skill files from package source, re-render CLAUDE.md preserving existing agent names from agent-registry.json",
+          "met": true
+        },
+        {
+          "criterion": "Skill explicitly states: does NOT overwrite .context/, agent-registry.json, or .claude/agents/*.md",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "update-readme-references",
+      "title": "Update README.md to reference skills instead of CLI",
+      "status": "completed",
+      "agent": [
+        "devon"
+      ],
+      "phases": [
+        "build",
+        "review"
+      ],
+      "dod": [
+        {
+          "criterion": "README.md quickstart uses /gruai-agents instead of npx gruai init",
+          "met": true
+        },
+        {
+          "criterion": "README.md references /gruai-config instead of npx gruai update",
+          "met": true
+        },
+        {
+          "criterion": "No remaining references to gruai CLI commands in README",
+          "met": true
+        }
+      ]
+    }
+  ],
+  "created": "2026-03-07T04:20:00Z",
+  "updated": "2026-03-07T04:45:00Z"
+}

@@ -1,0 +1,157 @@
+{
+  "id": "iteration-fallback",
+  "title": "Layer 2: Completion gate amend/extend, acceptance checklist, schema cleanup",
+  "status": "completed",
+  "priority": "P1",
+  "agent": [
+    "taylor"
+  ],
+  "reviewers": [
+    "sarah"
+  ],
+  "description": "Update completion gate with amend/extend/redirect options, acceptance scenario checklist with pass/fail evidence, intent versioning, and schema cleanup of ghost fields.",
+  "source_directive": "pipeline-iteration-model",
+  "scope": {
+    "in": [
+      "Define iterations[], revision, intent_version in directive-json.md schema",
+      "Rewrite completion gate with amend/extend/redirect options",
+      "Acceptance scenario checklist with pass/fail evidence",
+      "Intent versioning for scope changes",
+      "Add iteration failure cases to failure-handling.md",
+      "Clean up orphaned references"
+    ],
+    "out": [
+      "Pipeline reorder (project 2)",
+      "Orchestrator split (project 4)"
+    ]
+  },
+  "dod": [
+    {
+      "criterion": "directive-json.md defines iterations[], revision, and intent_version fields with types and defaults",
+      "met": true
+    },
+    {
+      "criterion": "Completion gate presents acceptance checklist with pass/fail evidence and four options: approve, amend, extend, redirect",
+      "met": true
+    },
+    {
+      "criterion": "failure-handling.md covers iteration failure cases (amend failure, extend overflow, redirect same-plan)",
+      "met": true
+    },
+    {
+      "criterion": "No orphaned references to old binary reopen flow remain in pipeline docs",
+      "met": true
+    }
+  ],
+  "browser_test": false,
+  "tasks": [
+    {
+      "id": "schema-iteration-fields",
+      "title": "Define iterations[], revision, and intent versioning in directive-json.md",
+      "status": "completed",
+      "priority": "P1",
+      "complexity": "simple",
+      "phases": [
+        "build",
+        "review"
+      ],
+      "agent": [
+        "taylor"
+      ],
+      "user_scenario": "When the pipeline reads directive-json.md, iterations[], revision, and intent_version fields are fully defined \u2014 no ghost references remain.",
+      "scope": "Add iterations[], revision, intent_version to directive-json.md. Update status lifecycle and On completion section.",
+      "dod": [
+        {
+          "criterion": "directive-json.md contains iterations[] with typed sub-fields (opened_at, reason, type, items), revision as integer, intent_version as object",
+          "met": true
+        },
+        {
+          "criterion": "Status lifecycle comment updated: awaiting_completion can transition to amend, extend, or redirect",
+          "met": true
+        },
+        {
+          "criterion": "On completion section references iterations[] and revision for reopen scenarios",
+          "met": true
+        },
+        {
+          "criterion": "Grep for iterations, revision, intent_version returns only directive-json.md and 11-completion-gate.md",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "completion-gate-rewrite",
+      "title": "Rewrite completion gate with amend/extend/redirect and acceptance checklist",
+      "status": "completed",
+      "priority": "P1",
+      "complexity": "simple",
+      "phases": [
+        "build",
+        "review"
+      ],
+      "agent": [
+        "taylor"
+      ],
+      "user_scenario": "CEO sees pass/fail acceptance checklist with evidence, then chooses amend, extend, or redirect instead of binary approve/reopen.",
+      "scope": "Rewrite 11-completion-gate.md with four options. Add acceptance checklist section. Define amend/extend/redirect flows with directive.json mutations. Remove old Reject/Reopen Flow.",
+      "dod": [
+        {
+          "criterion": "Completion gate presents acceptance checklist walking every project's DOD as pass/fail rows with evidence",
+          "met": true
+        },
+        {
+          "criterion": "Four options: approve, amend, extend, redirect \u2014 each with description and token budget hint",
+          "met": true
+        },
+        {
+          "criterion": "Each non-approve flow specifies directive.json mutations: iterations[] entry, revision increment, intent_version bump",
+          "met": true
+        },
+        {
+          "criterion": "Amend restarts from execute; extend from plan; redirect from plan with full replanning",
+          "met": true
+        },
+        {
+          "criterion": "Old Reject/Reopen Flow section fully removed",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "failure-handling-iteration-cases",
+      "title": "Add iteration failure cases and clean up orphaned references",
+      "status": "completed",
+      "priority": "P1",
+      "complexity": "simple",
+      "phases": [
+        "build",
+        "review"
+      ],
+      "agent": [
+        "taylor"
+      ],
+      "user_scenario": "When iteration failures occur, failure-handling.md provides clear action steps. No orphaned references to old reopen flow remain.",
+      "scope": "Add 4-5 new failure-handling rows for iteration cases. Grep and fix orphaned references to old reopen flow across all pipeline docs.",
+      "dod": [
+        {
+          "criterion": "failure-handling.md contains 4+ new rows: amend failure, extend overflow, redirect same-plan, amend-too-large escalation",
+          "met": true
+        },
+        {
+          "criterion": "SKILL.md completion gate references updated to approve/amend/extend/redirect",
+          "met": true
+        },
+        {
+          "criterion": "directive-json.md lifecycle and completion sections reflect amend/extend/redirect",
+          "met": true
+        },
+        {
+          "criterion": "Grep for 'reopen' returns zero results describing old binary reopen flow",
+          "met": true
+        }
+      ]
+    }
+  ],
+  "created": "2026-03-09T15:00:00Z",
+  "updated": "2026-03-09T16:30:00Z"
+}

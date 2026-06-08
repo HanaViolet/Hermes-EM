@@ -1,0 +1,95 @@
+{
+  "id": "metrocity-character-compositing",
+  "title": "MetroCity Composable Character System",
+  "status": "in_progress",
+  "priority": "P0",
+  "agent": ["devon"],
+  "reviewers": ["sarah"],
+  "description": "Build a Node/canvas script that composites MetroCity base body + hair + outfit layers into per-agent spritesheets. Map MetroCity's 24-column layout to the existing 7-frame x 3-direction format. Pre-compose 13 unique agent combinations.",
+  "source_directive": "metrocity-character-system",
+  "scope": {
+    "in": "Build-time compositing script, MetroCity asset integration, agent appearance mapping, character PNG output",
+    "out": "Runtime compositing, renderer changes, 32x32 native format support"
+  },
+  "browser_test": true,
+  "dod": [
+    { "criterion": "13 unique character PNGs at 112x96 matching current format", "met": false },
+    { "criterion": "Each agent has visually distinct body/hair/outfit combo", "met": false },
+    { "criterion": "Game renders all agents without console errors", "met": false },
+    { "criterion": "LoadedCharacterData interface unchanged", "met": false }
+  ],
+  "tasks": [
+    {
+      "id": "copy-assets-and-scaffold-script",
+      "title": "Copy MetroCity assets to repo and scaffold compositing script",
+      "status": "pending",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["devon"],
+      "user_scenario": "MetroCity source PNGs are available in the repo under public/assets/metrocity/ so the build script can reference them without depending on ~/Downloads.",
+      "scope": "Copy MetroCity assets from ~/Downloads/MetroCity/ to public/assets/metrocity/. Create scripts/compose-metrocity.ts with basic scaffold: read source PNGs with pngjs, define 13 agent combination table, write stub output loop creating 112x96 PNGs as char_0..12.png.",
+      "dod": [
+        { "criterion": "public/assets/metrocity/ contains Character Model.png (768x192), Shadow.png (32x32), Hairs.png (768x256), and Outfit1-6.png (768x32 each)", "met": false },
+        { "criterion": "scripts/compose-metrocity.ts exists and runs via `npx tsx scripts/compose-metrocity.ts` without errors", "met": false },
+        { "criterion": "Script defines AGENT_COMBOS array with 13 entries, each specifying bodyRow, hairRow, outfitIndex, all unique", "met": false },
+        { "criterion": "Script outputs 13 placeholder PNGs (char_0..12.png) to public/assets/characters/ at exactly 112x96", "met": false }
+      ]
+    },
+    {
+      "id": "frame-extraction-and-direction-mapping",
+      "title": "Extract MetroCity frames and map 24-column layout to 7-frame x 3-direction format",
+      "status": "pending",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "review"],
+      "agent": ["devon"],
+      "user_scenario": "The compositing script correctly extracts individual 32x32 frames from MetroCity's 24-column spritesheet and maps them to the target 7-frame x 3-direction layout.",
+      "scope": "Implement core frame extraction logic. MetroCity uses 24 columns = 4 directions x 6 frames. Map walk frames (3 from walk cycle), type/read frames (reuse idle frames). Downscale 32x32 → 16x32 via 2:1 horizontal pixel averaging.",
+      "dod": [
+        { "criterion": "Script extracts frames from 24-column layout with correct direction offsets (down=0-5, left=6-11, right=12-17, up=18-23)", "met": false },
+        { "criterion": "Output PNGs contain 7 frames per row (walk1-3, type1-2, read1-2) and 3 direction rows (down, up, right)", "met": false },
+        { "criterion": "Each frame downscaled from 32x32 to 16x32 via horizontal pixel averaging, output at exactly 112x96", "met": false },
+        { "criterion": "Base body character is visually recognizable when loaded in the game", "met": false }
+      ]
+    },
+    {
+      "id": "layer-compositing-and-agent-output",
+      "title": "Composite body + hair + outfit layers and generate 13 unique agent PNGs",
+      "status": "pending",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "code-review", "review"],
+      "agent": ["devon"],
+      "user_scenario": "Each of the 13 agents has a visually distinct character with unique body, hair, and outfit combination, visible in the game.",
+      "scope": "Implement multi-layer compositing: body + hair + outfit per agent. Finalize AGENT_COMBOS table. Output char_0..12.png. Update asset-loader loop to load 13 characters. Update PALETTE_COUNT to 13. Add 13th CHARACTER_PALETTES entry.",
+      "dod": [
+        { "criterion": "Running compose-metrocity.ts produces 13 PNGs at 112x96 with visible body+hair+outfit layers", "met": false },
+        { "criterion": "All 13 agent combos use different body/hair/outfit combinations", "met": false },
+        { "criterion": "asset-loader.ts loads 13 characters", "met": false },
+        { "criterion": "PALETTE_COUNT=13 and CHARACTER_PALETTES has 13 entries", "met": false },
+        { "criterion": "Game renders agents without console errors and characters are visually distinct", "met": false }
+      ]
+    },
+    {
+      "id": "registry-palette-mapping-and-integration",
+      "title": "Wire agent-registry palette indices to MetroCity characters and verify end-to-end",
+      "status": "pending",
+      "priority": "P0",
+      "complexity": "simple",
+      "phases": ["build", "code-review", "review"],
+      "agent": ["devon"],
+      "user_scenario": "Each named agent appears with their intended MetroCity character — correct body/hair/outfit maps to the right person.",
+      "scope": "Update agent-registry.json palette indices to match AGENT_COMBOS order. Remove hueShift. Verify pickDiversePalette, matrix effect, and type-check.",
+      "dod": [
+        { "criterion": "agent-registry.json palette values match AGENT_COMBOS indices", "met": false },
+        { "criterion": "All agent hueShift values are 0", "met": false },
+        { "criterion": "pickDiversePalette handles PALETTE_COUNT=13 without index errors", "met": false },
+        { "criterion": "npm run type-check passes with zero errors", "met": false },
+        { "criterion": "LoadedCharacterData interface unchanged", "met": false }
+      ]
+    }
+  ],
+  "created": "2026-03-09T12:10:00.000Z",
+  "updated": "2026-03-09T12:15:00.000Z"
+}

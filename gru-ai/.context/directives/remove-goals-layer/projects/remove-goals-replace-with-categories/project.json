@@ -1,0 +1,215 @@
+{
+  "id": "remove-goals-replace-with-categories",
+  "title": "Remove goals layer: category replaces goal_ids across pipeline docs, schemas, server, dashboard, and hooks",
+  "directive_id": "remove-goals-layer",
+  "status": "completed",
+  "priority": "P0",
+  "complexity": "complex",
+  "agent": [
+    "devon"
+  ],
+  "reviewers": [
+    "sarah"
+  ],
+  "auditor": "sarah",
+  "tasks": [
+    {
+      "id": "migrate-directive-json-goal-ids-to-category",
+      "title": "Replace goal_ids with category in all 55 directive.json files and schema doc",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": [
+        "devon"
+      ],
+      "phases": [
+        "build",
+        "review"
+      ],
+      "scope": "Update all 55 directive.json files: remove goal_ids, add category field. Update directive-json.md, morgan-plan.md, morgan-prompt.md, investigator-prompt.md schemas/templates.",
+      "dod": [
+        {
+          "criterion": "Zero directive.json files contain a goal_ids or goalIds field",
+          "met": true
+        },
+        {
+          "criterion": "All directive.json files have a category field with a value from {data-model, workflow-orchestration, ui, game}",
+          "met": true
+        },
+        {
+          "criterion": "directive-json.md schema references category (not goal_ids)",
+          "met": true
+        },
+        {
+          "criterion": "morgan-plan.md schema references category (not goal_folder)",
+          "met": true
+        },
+        {
+          "criterion": "morgan-prompt.md and investigator-prompt.md reference category instead of goal_folder/goal_ids",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "migrate-orphan-goal-projects-to-stub-directives",
+      "title": "Move 20 completed orphan goal projects to stub directives, delete 2 junk projects, delete goals/",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": [
+        "devon"
+      ],
+      "phases": [
+        "build",
+        "review"
+      ],
+      "scope": "Create stub directives for 20 orphan projects. Delete correction-to-code-pipeline and pixel-art-sprites. Delete goal copies for 22 projects with matching directives. rm -rf .context/goals/.",
+      "dod": [
+        {
+          "criterion": ".context/goals/ directory does not exist",
+          "met": true
+        },
+        {
+          "criterion": "Each of 20 orphan projects has a stub directive with status completed and category field",
+          "met": true
+        },
+        {
+          "criterion": "correction-to-code-pipeline and pixel-art-sprites do not exist anywhere",
+          "met": true
+        },
+        {
+          "criterion": "No project.json files were lost (count under directives >= prior count minus 2 deleted)",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "update-pipeline-docs-remove-goal-references",
+      "title": "Replace all goals/ path references and goal_folder in pipeline docs, CLAUDE.md, vision.md",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": [
+        "devon"
+      ],
+      "phases": [
+        "build",
+        "review"
+      ],
+      "scope": "Update 10 pipeline docs, CLAUDE.md, vision.md to replace goals/ paths with directives/ paths, goal_folder with category/directive_dir.",
+      "dod": [
+        {
+          "criterion": "grep -r 'goal_folder' in .claude/skills/directive/docs/ returns zero matches",
+          "met": true
+        },
+        {
+          "criterion": "grep -r 'goals/' in .claude/skills/directive/docs/ returns zero matches for path references",
+          "met": true
+        },
+        {
+          "criterion": "CLAUDE.md no longer shows goals/ in context tree, documents category enum instead of Four Goals",
+          "met": true
+        },
+        {
+          "criterion": "09-execute-projects.md uses DIRECTIVE_DIR instead of GOAL_FOLDER",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "update-validation-hooks",
+      "title": "Update validate-project-json.sh and validate-reviews.sh to remove goal_folder path support",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": [
+        "devon"
+      ],
+      "phases": [
+        "build",
+        "review"
+      ],
+      "scope": "Remove goal_folder code paths from both validation scripts. Replace goal_id with category in REQUIRED_FIELDS.",
+      "dod": [
+        {
+          "criterion": "validate-project-json.sh has no reference to goal_folder or GOAL_FOLDER",
+          "met": true
+        },
+        {
+          "criterion": "validate-project-json.sh REQUIRED_FIELDS includes category instead of goal_id",
+          "met": true
+        },
+        {
+          "criterion": "validate-reviews.sh has no reference to goal_folder or GOAL_FOLDER",
+          "met": true
+        },
+        {
+          "criterion": "Both scripts validate correctly with {directive_dir, project_id} input",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "remove-goal-watcher-update-server-types",
+      "title": "Delete GoalWatcher, remove goal types from server, update aggregator and index.ts",
+      "status": "completed",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": [
+        "devon"
+      ],
+      "phases": [
+        "build",
+        "review"
+      ],
+      "scope": "Delete goal-watcher.ts. Remove GoalInventory/GoalArea/goalInventory from types. Update aggregator, index.ts, state-watcher.ts, work-item-types.ts. Add category to DirectiveRecord.",
+      "dod": [
+        {
+          "criterion": "server/watchers/goal-watcher.ts does not exist",
+          "met": true
+        },
+        {
+          "criterion": "grep -r 'GoalWatcher|GoalInventory|GoalArea|goalInventory|goals_updated' in server/ returns zero matches",
+          "met": true
+        },
+        {
+          "criterion": "DirectiveRecord has category field",
+          "met": true
+        },
+        {
+          "criterion": "Server compiles without type errors",
+          "met": true
+        }
+      ]
+    },
+    {
+      "id": "update-dashboard-remove-goal-ui",
+      "title": "Update dashboard store, types, and components to remove goal references",
+      "status": "completed",
+      "priority": "P1",
+      "complexity": "simple",
+      "agent": [
+        "devon"
+      ],
+      "phases": [
+        "build",
+        "review"
+      ],
+      "scope": "Remove GoalInventory/GoalArea from dashboard types. Remove goalInventory from store. Update WebSocket hook. Update components to use category instead of goalId.",
+      "dod": [
+        {
+          "criterion": "grep -r 'goalInventory|GoalInventory|GoalArea|goals_updated|goalId|goalIds' in src/ returns zero matches",
+          "met": true
+        },
+        {
+          "criterion": "Dashboard compiles without type errors",
+          "met": true
+        },
+        {
+          "criterion": "ProjectsPage and DashboardPage still render without crashes",
+          "met": true
+        }
+      ]
+    }
+  ]
+}

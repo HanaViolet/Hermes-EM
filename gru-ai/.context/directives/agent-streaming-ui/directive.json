@@ -1,0 +1,172 @@
+{
+  "id": "agent-streaming-ui",
+  "title": "Agent Streaming UI",
+  "status": "completed",
+  "created": "2026-03-07",
+  "completed": "2026-03-07",
+  "weight": "medium",
+  "produced_features": [
+    "AgentPanel streaming tool-call log",
+    "GameHeader rolling agent ticker",
+    "Sprite brand-colored status text with shadow"
+  ],
+  "report": null,
+  "backlog_sources": [],
+  "started_at": "2026-03-07T00:00:00Z",
+  "updated_at": "2026-03-07T06:08:52.839Z",
+  "current_step": "completion",
+  "pipeline": {
+    "triage": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "weight": "medium",
+        "rationale": "2-3 related UI features within game domain"
+      }
+    },
+    "read": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Created directive files"
+      }
+    },
+    "context": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Read all game UI components, server watchers, types"
+      }
+    },
+    "challenge": {
+      "status": "skipped",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Skipped for medium weight"
+      }
+    },
+    "brainstorm": {
+      "status": "skipped",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Skipped for medium weight"
+      }
+    },
+    "plan": {
+      "status": "completed",
+      "agent": [
+        "morgan"
+      ],
+      "output": {
+        "summary": "Single project, riley builds, quinn+marcus review, sarah audits"
+      },
+      "artifacts": [
+        ".context/directives/agent-streaming-ui/plan.json"
+      ]
+    },
+    "audit": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ],
+      "output": {
+        "summary": "9 active files, no dead code. Data pipeline already built."
+      }
+    },
+    "approve": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "decision": "auto-approved"
+      }
+    },
+    "project-brainstorm": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ],
+      "output": {
+        "summary": "3 tasks: streaming log, header ticker, sprite status text. Sequenced by data dependency."
+      }
+    },
+    "setup": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "mode": "existing-branch",
+        "branch": "game",
+        "summary": "Already on game branch, no new branch needed"
+      }
+    },
+    "execute": {
+      "status": "completed",
+      "agent": [
+        "riley"
+      ],
+      "output": {
+        "progress": "3/3 tasks",
+        "summary": "All 3 tasks built, code-reviewed, and DOD verified"
+      }
+    },
+    "review-gate": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Code review pass (quinn+marcus), all 15 DOD criteria met, UX verified via Chrome MCP, auto-scroll fix applied"
+      }
+    },
+    "wrapup": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "No lessons to update. No follow-ups identified."
+      }
+    },
+    "completion": {
+      "status": "completed"
+    }
+  },
+  "projects": [
+    {
+      "id": "agent-streaming-ui",
+      "status": "completed"
+    }
+  ],
+  "planning": {
+    "coo_plan": {
+      "goal": "Agent streaming UI",
+      "projects": [
+        "agent-streaming-ui"
+      ]
+    },
+    "ceo_approval": {
+      "status": "auto-approved",
+      "modifications": []
+    },
+    "worktree_path": null
+  },
+  "wrapup": {
+    "okrs_persisted": false,
+    "follow_ups_processed": false,
+    "digest_path": null,
+    "lessons_updated": false
+  }
+}

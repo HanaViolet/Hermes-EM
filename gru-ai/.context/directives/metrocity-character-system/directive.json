@@ -1,0 +1,137 @@
+{
+  "id": "metrocity-character-system",
+  "title": "MetroCity Composable Character System",
+  "weight": "medium",
+  "status": "completed",
+  "current_step": "completion",
+  "created_at": "2026-03-09T12:00:00.000Z",
+  "updated_at": "2026-03-09T20:45:00.000Z",
+  "pipeline": {
+    "triage": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Classified as medium. Clear approach using MetroCity composable layers.",
+        "weight": "medium",
+        "decision": "auto-approve"
+      }
+    },
+    "checkpoint": {
+      "status": "skipped"
+    },
+    "read": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Read directive.md with CEO brief and MetroCity asset analysis."
+      }
+    },
+    "context": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Read vision.md, lessons, agent registry."
+      }
+    },
+    "challenge": {
+      "status": "skipped"
+    },
+    "brainstorm": {
+      "status": "skipped"
+    },
+    "plan": {
+      "status": "completed",
+      "agent": [
+        "morgan"
+      ],
+      "output": {
+        "summary": "Single project: build-time compositing script. Simplification: pre-compose at build time, not runtime. Builder: devon, Reviewer: sarah.",
+        "projects": [
+          "metrocity-character-compositing"
+        ]
+      },
+      "artifacts": [
+        ".context/directives/metrocity-character-system/plan.json"
+      ]
+    },
+    "audit": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ],
+      "output": {
+        "summary": "MetroCity frames are 32x32, 24 cols = 4 dirs x 6 frames. Critical: downscale 32x32 to 16x32. No typing/reading poses in MetroCity. 6+ files hardcode 16px width. Recommend build-time compositing with pngjs."
+      }
+    },
+    "approve": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Auto-approved (medium weight). Project.json created."
+      }
+    },
+    "project-brainstorm": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ],
+      "output": {
+        "summary": "4 tasks: (1) copy assets + scaffold script, (2) frame extraction + direction mapping, (3) layer compositing + agent output, (4) registry wiring + integration verification."
+      }
+    },
+    "setup": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Working on current branch (directive/game-ui-tmx-update). No worktree needed."
+      }
+    },
+    "execute": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Work completed outside pipeline on game-ui-tmx-update branch. Runtime compositing in asset-loader.ts + build-time script compose-metrocity.ts. All 12 agents wired with appearance configs.",
+        "progress": "4 of 4 tasks complete (superseded)"
+      }
+    },
+    "review-gate": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Verified: assets present, script complete, runtime compositing working, registry wired. Superseded by broader game-ui-tmx-update work."
+      }
+    },
+    "wrapup": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Closed as completed — all deliverables present, work done on game-ui-tmx-update branch."
+      }
+    },
+    "completion": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "CEO approved. Directive superseded by game-ui-tmx-update branch work."
+      }
+    }
+  }
+}

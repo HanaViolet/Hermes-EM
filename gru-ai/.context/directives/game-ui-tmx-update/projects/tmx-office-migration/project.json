@@ -1,0 +1,132 @@
+{
+  "id": "tmx-office-migration",
+  "title": "TMX parser + tilesets + full office data migration",
+  "status": "planned",
+  "priority": "P0",
+  "complexity": "complex",
+  "agent": ["devon"],
+  "reviewers": ["sarah"],
+  "auditor": "sarah",
+  "description": "Complete TMX v2 migration: build-time parser, 12 tilesets, tile data, 5 zones, seats, interaction points, agent registry.",
+  "scope": {
+    "in": ["TMX parser script", "tileset PNG copy + registration (12 total)", "office-layout.ts tile arrays + 23 seats + WALL_GIDS", "roomZones.ts 5-zone migration (remove server-room + lobby)", "officeState.ts meeting bounds + constants.ts interaction points", "agent-registry.json seat remapping"],
+    "out": ["Character sprite changes", "Renderer/camera changes", "New game features"]
+  },
+  "dod": [
+    { "criterion": "TMX parser generates correct TypeScript from gruai.tmx", "met": false },
+    { "criterion": "All 12 tilesets load and render correctly", "met": false },
+    { "criterion": "All 4 tile layers match TMX data exactly", "met": false },
+    { "criterion": "5 zones with correct bounds, no server-room/lobby references", "met": false },
+    { "criterion": "23 seats, 12 agents correctly mapped, TSC + Vite build pass", "met": false }
+  ],
+  "scope_summary": "Single atomic project: TMX parser script, 12 tilesets, tile data replacement, 5-zone migration, interaction points, agent seat remapping.",
+  "sequencing_rationale": "Parser first → tilesets → layout data → zones → officeState/constants → agent registry. Each task builds on the prior.",
+  "tasks": [
+    {
+      "id": "tmx-parser-script",
+      "title": "Build-time TMX parser script (scripts/parse-tmx.ts)",
+      "status": "pending",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": ["devon"],
+      "phases": ["build", "review"],
+      "user_scenario": "Developer runs npx tsx scripts/parse-tmx.ts and gets a generated TypeScript file from the TMX.",
+      "scope": "Create scripts/parse-tmx.ts that reads gruai.tmx, parses XML, extracts 4 CSV tile layers, seat objects, zone objects. Output generated .ts file with exported constants.",
+      "dod": [
+        { "criterion": "scripts/parse-tmx.ts exists and runs without error via npx tsx scripts/parse-tmx.ts", "met": false },
+        { "criterion": "Generated output contains all 4 layer arrays each with exactly 600 elements (30x20)", "met": false },
+        { "criterion": "Generated output contains SEAT_POSITIONS array with entries having col/row/dir from TMX pixel coords", "met": false },
+        { "criterion": "Generated output contains ZONE_BOUNDS record with 5 zone entries with correct tile-coordinate bounds", "met": false },
+        { "criterion": "Generated output contains TILESET_REGISTRY array with all tilesets and a WALL_GIDS set", "met": false }
+      ]
+    },
+    {
+      "id": "copy-tilesets-and-register",
+      "title": "Copy 7 new tileset PNGs and register all 12 tilesets in tilesetCache.ts",
+      "status": "pending",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": ["devon"],
+      "phases": ["build", "review"],
+      "user_scenario": "The game loads all 12 tilesets so GIDs from new TMX layers resolve to visible tiles.",
+      "scope": "Copy 6 tileset PNGs from ~/Downloads/moderninteriors-win/ to public/assets/office/. Update tilesetCache.ts to load and register all 12 tilesets with correct firstgid values.",
+      "dod": [
+        { "criterion": "6 new PNG files exist in public/assets/office/ with correct filenames", "met": false },
+        { "criterion": "tilesetCache.ts loads all 12 tileset images and registers each with correct firstgid", "met": false },
+        { "criterion": "GID comment block lists all 12 tilesets with firstgid ranges", "met": false },
+        { "criterion": "No reference to AnimBathroom tileset in the codebase", "met": false }
+      ]
+    },
+    {
+      "id": "replace-office-layout-data",
+      "title": "Replace office-layout.ts tile arrays, seats, and WALL_GIDS with TMX data",
+      "status": "pending",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": ["devon"],
+      "phases": ["build", "review"],
+      "user_scenario": "Office floor, furniture, and decorations render correctly using authoritative TMX data with all 23 seats.",
+      "scope": "Replace FLOOR/FURNITURE_BASE/FURNITURE_TOP/DECO arrays with TMX data. Replace SEAT_POSITIONS with 23 TMX seats. Update WALL_GIDS.",
+      "dod": [
+        { "criterion": "FURNITURE_TOP array matches TMX layer 3 exactly", "met": false },
+        { "criterion": "DECO array matches TMX layer 4 exactly", "met": false },
+        { "criterion": "SEAT_POSITIONS has exactly 23 entries matching TMX seat data", "met": false },
+        { "criterion": "WALL_GIDS set covers all edge GIDs in the floor layer", "met": false },
+        { "criterion": "npx tsc --noEmit passes with no errors", "met": false }
+      ]
+    },
+    {
+      "id": "zone-and-routing-migration",
+      "title": "Replace roomZones.ts with 5 TMX zones, remove server-room and lobby",
+      "status": "pending",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": ["devon"],
+      "phases": ["build", "review"],
+      "user_scenario": "Agent routing uses 5 TMX zones. Server-room and lobby no longer exist.",
+      "scope": "Replace RoomZoneId type to 5 values. Replace ROOM_ZONES with TMX bounds. Remove infra-tool routing. Propagate to ALL consumers: types.ts, GamePage.tsx, SidePanel.tsx, constants.ts, panel files.",
+      "dod": [
+        { "criterion": "RoomZoneId type has exactly 5 values: ceo-office, meeting, workspace, kitchen, break-room", "met": false },
+        { "criterion": "ROOM_ZONES has 5 entries matching TMX zone bounds", "met": false },
+        { "criterion": "Zero references to server-room or lobby in src/components/game/ (grep returns 0)", "met": false },
+        { "criterion": "chooseDestination idle routing uses break-room, kitchen, ceo-office", "met": false },
+        { "criterion": "npx tsc --noEmit passes with zero errors", "met": false }
+      ]
+    },
+    {
+      "id": "update-officestate-and-constants",
+      "title": "Fix meetingBounds, remap interaction points, update officeState references",
+      "status": "pending",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": ["devon"],
+      "phases": ["build", "review"],
+      "user_scenario": "Meeting activation uses correct TMX meeting-room bounds. Interaction points reference valid zones and walkable tiles.",
+      "scope": "Update meetingBounds in officeState.ts to {minCol:23, maxCol:29, minRow:0, maxRow:11}. Remove server-room interaction points. Remap lobby points to break-room. Add kitchen interaction point.",
+      "dod": [
+        { "criterion": "meetingBounds is { minCol: 23, maxCol: 29, minRow: 0, maxRow: 11 }", "met": false },
+        { "criterion": "No interaction points reference server-room or lobby zones", "met": false },
+        { "criterion": "At least one interaction point exists in kitchen zone", "met": false },
+        { "criterion": "Former lobby points remapped to break-room with valid coordinates", "met": false },
+        { "criterion": "npx tsc --noEmit passes", "met": false }
+      ]
+    },
+    {
+      "id": "remap-agent-registry-seats",
+      "title": "Remap agent-registry.json seatIds and positions to 23 TMX seats",
+      "status": "pending",
+      "priority": "P0",
+      "complexity": "simple",
+      "agent": ["devon"],
+      "phases": ["build", "review"],
+      "user_scenario": "All 12 agents spawn at correct TMX seat positions with logical zone placement.",
+      "scope": "Update seatId and position for all 12 agents. CEO=seat-1, Devon=seat-2, workspace seats for engineers, meeting seat for Morgan.",
+      "dod": [
+        { "criterion": "All 12 agents have valid seatId values from seat-1 through seat-23 with no duplicates", "met": false },
+        { "criterion": "Each agent's game.position matches their seat's TMX coordinates", "met": false },
+        { "criterion": "CEO at seat-1 (col 2, row 3), Devon at seat-2 (col 2, row 7)", "met": false },
+        { "criterion": "JSON is valid and parseable", "met": false }
+      ]
+    }
+  ]
+}

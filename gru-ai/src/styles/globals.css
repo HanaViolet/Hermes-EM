@@ -1,0 +1,122 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --background: 220 10% 6%;
+    --foreground: 0 0% 95%;
+    --card: 220 10% 10%;
+    --card-foreground: 0 0% 95%;
+    --popover: 220 10% 10%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 220 70% 55%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 10% 16%;
+    --secondary-foreground: 0 0% 95%;
+    --muted: 220 10% 16%;
+    --muted-foreground: 0 0% 55%;
+    --accent: 220 10% 16%;
+    --accent-foreground: 0 0% 95%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 10% 18%;
+    --input: 220 10% 18%;
+    --ring: 220 70% 55%;
+    --radius: 0.5rem;
+
+    /* Status colors */
+    --status-working: 142 70% 45%;
+    --status-done: 220 9% 56%;
+    --status-waiting: 38 92% 50%;
+    --status-idle: 0 0% 45%;
+    --status-error: 0 72% 51%;
+
+    color-scheme: dark;
+  }
+}
+
+@theme {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-status-green: hsl(var(--status-working));
+  --color-status-done: hsl(var(--status-done));
+  --color-status-yellow: hsl(var(--status-waiting));
+  --color-status-gray: hsl(var(--status-idle));
+  --color-status-red: hsl(var(--status-error));
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Parchment theme override — used when dashboard components (PipelineStepper etc.)
+   are embedded inside the game's parchment-colored panels */
+.parchment-context {
+  --color-foreground: #3D2B1F;
+  --color-muted-foreground: #1A1008;
+  --color-muted: #D4C4A0;
+  --color-primary: #2B5EA7;
+  --color-primary-foreground: #ffffff;
+  --color-border: #C4A265;
+  --color-ring: #C4A265;
+  --color-destructive: #DC2626;
+  color: #3D2B1F;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(220 10% 28%);
+}
+
+@keyframes flash {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+@keyframes tickerFadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}

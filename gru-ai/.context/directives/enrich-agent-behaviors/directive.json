@@ -1,0 +1,242 @@
+{
+  "id": "enrich-agent-behaviors",
+  "title": "Enrich Agent Actions & Status",
+  "status": "completed",
+  "created": "2026-03-10",
+  "completed": "2026-03-10",
+  "weight": "medium",
+  "produced_features": [
+    "offline agent status",
+    "3-tier idle detection (recent/moderate/long)",
+    "furniture-first wandering with 20+ interaction points",
+    "activity animations for all furniture types",
+    "30-min idle threshold for desk vs wander",
+    "mobile name pill rendering",
+    "dead code cleanup (renderStatusIcons, renderInteractionIcons)",
+    "gruAI branding (title + header)",
+    "mobile header cleanup (no time, bigger buttons with counts)"
+  ],
+  "report": "enrich-agent-behaviors-2026-03-10",
+  "backlog_sources": [],
+  "started_at": "2026-03-10T07:05:00Z",
+  "updated_at": "2026-03-10T16:25:00Z",
+  "current_step": "completion",
+  "pipeline": {
+    "triage": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "weight": "medium",
+        "rationale": "Multiple related game UI enhancements within the game engine domain."
+      }
+    },
+    "checkpoint": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "No prior progress found."
+      }
+    },
+    "read": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Created directive.md and directive.json."
+      }
+    },
+    "context": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Read vision.md, lessons/agent-behavior.md, lessons/orchestration.md."
+      }
+    },
+    "challenge": {
+      "status": "skipped",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Skipped for medium weight"
+      }
+    },
+    "brainstorm": {
+      "status": "skipped",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Skipped for medium weight"
+      }
+    },
+    "audit": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ],
+      "output": {
+        "summary": "8 active files, 16 findings. Gaps: offline status, 3-tier idle detection, visual differentiation, dead code.",
+        "findings": 16
+      },
+      "artifacts": [
+        ".context/directives/enrich-agent-behaviors/audit-findings.json"
+      ]
+    },
+    "plan": {
+      "status": "completed",
+      "agent": [
+        "morgan"
+      ],
+      "output": {
+        "summary": "1 project (agent-behavior-enrichment), P0, moderate complexity. Riley builds, Sarah reviews.",
+        "projects": [
+          "agent-behavior-enrichment"
+        ]
+      },
+      "artifacts": [
+        ".context/directives/enrich-agent-behaviors/plan.json"
+      ]
+    },
+    "approve": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "decision": "auto-approved",
+        "modifications": []
+      }
+    },
+    "project-brainstorm": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ],
+      "output": {
+        "summary": "4 tasks decomposed with DOD."
+      },
+      "artifacts": [
+        ".context/directives/enrich-agent-behaviors/projects/agent-behavior-enrichment/project.json"
+      ]
+    },
+    "setup": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "mode": "branch",
+        "branch": "directive/enrich-agent-behaviors"
+      }
+    },
+    "execute": {
+      "status": "completed",
+      "agent": [
+        "riley",
+        "ceo"
+      ],
+      "output": {
+        "summary": "All 4 tasks completed. Tasks 1-3 via pipeline agents, task 4 via CEO interactive Chrome MCP session."
+      }
+    },
+    "review-gate": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "validate-reviews.sh passed. All 4 tasks reviewed. CEO visually verified all changes via Chrome MCP.",
+        "reviews_passed": 4,
+        "unresolved_findings": []
+      }
+    },
+    "wrapup": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "Digest written. No follow-ups. No new lessons added."
+      },
+      "artifacts": [
+        ".context/reports/enrich-agent-behaviors-2026-03-10.md"
+      ]
+    },
+    "completion": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "CEO approved. Directive completed.",
+        "decision": "approve"
+      }
+    }
+  },
+  "projects": [
+    {
+      "id": "agent-behavior-enrichment",
+      "status": "completed"
+    }
+  ],
+  "planning": {
+    "coo_plan": {},
+    "ceo_approval": {
+      "status": "auto-approved",
+      "modifications": []
+    },
+    "worktree_path": null
+  },
+  "wrapup": {
+    "okrs_persisted": false,
+    "follow_ups_processed": true,
+    "digest_path": ".context/reports/enrich-agent-behaviors-2026-03-10.md",
+    "lessons_updated": false
+  },
+  "gates": {
+    "triage": {
+      "passed_at": "2026-03-09T13:38:09Z",
+      "validated_artifacts": []
+    },
+    "checkpoint": {
+      "passed_at": "2026-03-09T13:38:12Z",
+      "validated_artifacts": [
+        "directive.json:.weight",
+        "directive.json:.pipeline.triage.status"
+      ]
+    },
+    "audit": {
+      "passed_at": "2026-03-09T13:38:15Z",
+      "validated_artifacts": [
+        "directive.json:pipeline.context.status"
+      ]
+    },
+    "completion": {
+      "passed_at": "2026-03-09T13:38:19Z",
+      "validated_artifacts": [
+        "directive.json:pipeline.wrapup.status",
+        ".context/reports/enrich-agent-behaviors-2026-03-10.md"
+      ]
+    },
+    "brainstorm": {
+      "passed_at": "2026-03-09T13:38:31Z",
+      "validated_artifacts": [
+        "directive.json:pipeline.audit.status"
+      ]
+    },
+    "clarification": {
+      "passed_at": "2026-03-09T13:38:34Z",
+      "validated_artifacts": [
+        "directive.json:pipeline.brainstorm.status"
+      ]
+    }
+  }
+}

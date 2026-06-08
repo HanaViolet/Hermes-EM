@@ -1,0 +1,140 @@
+{
+  "id": "game-hud-tabs-improvement",
+  "status": "completed",
+  "weight": "heavyweight",
+  "createdAt": "2026-03-06",
+  "started_at": "2026-03-06T21:00:00.000Z",
+  "updated_at": "2026-03-07T12:33:00.000Z",
+  "title": "Game HUD Tabs Improvement",
+  "current_step": "completion",
+  "planning": {
+    "ceo_approval": {
+      "status": "approved",
+      "modifications": []
+    },
+    "worktree_path": null
+  },
+  "pipeline": {
+    "triage": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "weight": "heavyweight"
+      }
+    },
+    "read": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ]
+    },
+    "context": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ]
+    },
+    "brainstorm": {
+      "status": "completed",
+      "agent": [
+        "marcus",
+        "sarah"
+      ],
+      "output": {
+        "summary": "Marcus produced full design doc with tab restructure, badge system, KPI strip, decision cards, event feed. Sarah validated feasibility."
+      },
+      "artifacts": [
+        ".context/directives/game-hud-tabs-improvement/brainstorm.md",
+        ".context/goals/game/projects/hud-panel-redesign/design-doc.md"
+      ]
+    },
+    "plan": {
+      "status": "completed",
+      "agent": [
+        "morgan"
+      ],
+      "output": {
+        "projects": "2 sequential: shell+badges (P0), panel rewrites (P0, depends on shell). Reopened: added project 3 for ActionPanel quality fixes."
+      }
+    },
+    "audit": {
+      "status": "completed",
+      "agent": [
+        "sarah"
+      ]
+    },
+    "approve": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "decision": "approved"
+      }
+    },
+    "project-brainstorm": {
+      "status": "completed",
+      "agent": [
+        "sarah",
+        "riley"
+      ],
+      "output": {
+        "summary": "Project 1: 3 tasks. Project 2: 5 tasks. Project 3 (reopened): ActionPanel fixes — dedup, timestamps, expandable details."
+      }
+    },
+    "setup": {
+      "status": "completed"
+    },
+    "execute": {
+      "status": "completed",
+      "output": {
+        "summary": "4/5 projects completed (shell+badges, panel-rewrites, action-panel-fixes, log-panel-enrichment). multi-directive-support cancelled."
+      }
+    },
+    "review-gate": {
+      "status": "skipped",
+      "output": {
+        "summary": "Session died before review-gate. Work verified complete in project.json files."
+      }
+    },
+    "wrapup": {
+      "status": "skipped",
+      "output": {
+        "summary": "Cleaned up during state reconciliation."
+      }
+    },
+    "completion": {
+      "status": "completed",
+      "agent": [
+        "ceo"
+      ],
+      "output": {
+        "summary": "CEO approved completion during state cleanup. multi-directive-support was cancelled."
+      }
+    }
+  },
+  "projects": [
+    {
+      "id": "hud-tab-shell-and-badges",
+      "status": "completed"
+    },
+    {
+      "id": "hud-panel-rewrites",
+      "status": "completed"
+    },
+    {
+      "id": "action-panel-fixes",
+      "status": "completed"
+    },
+    {
+      "id": "multi-directive-support",
+      "status": "cancelled"
+    },
+    {
+      "id": "log-panel-enrichment",
+      "status": "completed"
+    }
+  ]
+}

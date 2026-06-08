@@ -1,0 +1,92 @@
+{
+  "id": "e2e-orchestrator-and-deterministic-dims",
+  "title": "E2E Orchestrator + Deterministic Test Dimensions",
+  "status": "completed",
+  "description": "Build the E2E test orchestrator (run-e2e.sh) with shared library and 5 deterministic test dimension scripts covering init, server, schema, multiplatform, and benchmarks.",
+  "scope": {
+    "in": ["tests/e2e/run-e2e.sh", "tests/e2e/lib/utils.sh", "tests/e2e/dim-init.sh", "tests/e2e/dim-server.sh", "tests/e2e/dim-schema.sh", "tests/e2e/dim-multiplatform.sh", "tests/e2e/dim-benchmark.sh", "tests/e2e/results/"],
+    "out": ["No production code changes", "No dashboard changes"]
+  },
+  "dod": [
+    { "criterion": "run-e2e.sh runs all dimensions and produces summary table + JSON results", "met": true }
+  ],
+  "agent": ["sam"],
+  "reviewers": ["sarah"],
+  "tasks": [
+    {
+      "id": "e2e-lib-and-orchestrator",
+      "title": "Build run-e2e.sh orchestrator with --dim flag and shared library",
+      "status": "completed",
+      "agent": ["sam"],
+      "scope": "Create tests/e2e/run-e2e.sh and tests/e2e/lib/utils.sh with assert helpers, timing, port allocation, temp dir management, JSON result output.",
+      "dod": [
+        { "criterion": "run-e2e.sh accepts --dim <name> to run single dimension or no args for all", "met": true },
+        { "criterion": "lib/utils.sh provides assert_eq, assert_contains, assert_file_exists, assert_json_field, log_pass, log_fail, find_free_port, create_test_dir, cleanup_test_dir", "met": true },
+        { "criterion": "Each dimension writes JSON to tests/e2e/results/dim-{name}.json", "met": true },
+        { "criterion": "Final summary table printed with per-dimension pass/fail and total time", "met": true }
+      ]
+    },
+    {
+      "id": "dim-init",
+      "title": "Dimension 1: Fresh Install & Init (3 Presets)",
+      "status": "completed",
+      "agent": ["sam"],
+      "scope": "tests/e2e/dim-init.sh — scaffold 3 presets in temp dirs, verify all files, agent counts, cross-references, symlinks.",
+      "dod": [
+        { "criterion": "All 3 presets tested in isolated temp directories", "met": true },
+        { "criterion": "Agent count validation: starter=5, standard=8, full=12 (including CEO)", "met": true },
+        { "criterion": "Every agentFile in registry exists as non-empty file", "met": true },
+        { "criterion": "Platform symlink and context tree verified", "met": true }
+      ]
+    },
+    {
+      "id": "dim-server",
+      "title": "Dimension 2: Server Startup & Dashboard",
+      "status": "completed",
+      "agent": ["sam"],
+      "scope": "tests/e2e/dim-server.sh — start server on dynamic port, verify /api/health, /api/state, WebSocket, dashboard HTML.",
+      "dod": [
+        { "criterion": "Server starts on dynamically allocated port", "met": true },
+        { "criterion": "/api/health returns JSON with status=ok", "met": true },
+        { "criterion": "Dashboard HTML served at / contains root div", "met": true },
+        { "criterion": "Server cleaned up via trap EXIT", "met": true }
+      ]
+    },
+    {
+      "id": "dim-schema",
+      "title": "Dimension 4: Directive JSON Schema Validation",
+      "status": "completed",
+      "agent": ["sam"],
+      "scope": "tests/e2e/dim-schema.sh — validate directive.json and expected-outcomes.json schemas across fixture directives.",
+      "dod": [
+        { "criterion": "All 5 fixture directive.json files pass structural validation", "met": true },
+        { "criterion": "Synthetic invalid directive correctly caught", "met": true },
+        { "criterion": "expected-outcomes.json schema validated", "met": true }
+      ]
+    },
+    {
+      "id": "dim-multiplatform",
+      "title": "Dimension 6: Multi-Platform Init (4 Variants)",
+      "status": "completed",
+      "agent": ["sam"],
+      "scope": "tests/e2e/dim-multiplatform.sh — init with aider/gemini-cli/codex/other, verify correct directory structures and symlinks.",
+      "dod": [
+        { "criterion": "All 4 platform variants tested", "met": true },
+        { "criterion": "Platform-specific dirs created as symlinks to .gruai/", "met": true },
+        { "criterion": "'other' creates only .gruai/", "met": true }
+      ]
+    },
+    {
+      "id": "dim-benchmark",
+      "title": "Dimension 7: Benchmark Timing Harness",
+      "status": "completed",
+      "agent": ["sam"],
+      "scope": "tests/e2e/dim-benchmark.sh — time init per preset, server cold-start, type-check. Output timing table + JSON.",
+      "dod": [
+        { "criterion": "Init timed for all 3 presets", "met": true },
+        { "criterion": "Server cold-start time measured", "met": true },
+        { "criterion": "JSON output with operation, duration_ms, status", "met": true }
+      ]
+    }
+  ]
+}

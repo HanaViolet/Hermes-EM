@@ -1,0 +1,144 @@
+{
+  "audit_date": "2026-03-09",
+  "auditor": "Sarah Chen (CTO)",
+  "directive": "enrich-agent-behaviors",
+
+  "current_state": {
+    "status_types": "AgentStatus = 'working' | 'idle' — defined in both types.ts (line 10) and pixel-types.ts (line 204). Only two states. No 'offline' status exists anywhere.",
+    "interaction_types": "InteractionType = 'planning' | 'brainstorming' | 'building' | 'reviewing' | 'auditing' — defined in types.ts (line 13). All five are mapped to pipeline steps in GamePage.tsx (lines 303-316).",
+    "idle_detection": "Single 30-minute threshold (IDLE_WANDER_THRESHOLD_MS = 30 * 60 * 1000) in characters.ts line 26. shouldWander() returns true when lastActivityMs is absent or >= 30 min ago. Idle < 30 min: agent stays at desk. Idle >= 30 min: agent wanders. No intermediate tiers (10 min, 30 min) exist.",
+    "wandering": "Robust wandering system already exists. characters.ts IDLE state counts down wanderTimer, signals needsWanderDestination. officeState.pickWanderDestination() gives 60% chance furniture interaction point, 40% random tile. Wander cycle: N moves (3-6) then return to seat for rest (120-240s). Activity types include WATCHING_TV, READING, LOUNGING, VENDING, ARCADE, EXERCISING, PLAYING_POOL, PLAYING_PINGPONG.",
+    "icons_rendering": "All icons rendered as emoji inside identity pills (rounded-pill nameplates above characters). Three emoji maps in renderer.ts: STATUS_EMOJI (working=gear, idle=coffee), INTERACTION_EMOJI (planning=clipboard, brainstorming=lightbulb, building=hammer, reviewing=magnifying_glass, auditing=shield), ACTIVITY_EMOJI (per furniture type). Priority: interaction > activity > status. Inline status dot (green=working, gray=idle) on right side of pill. renderStatusIcons() and renderInteractionIcons() are NO-OPs — everything consolidated into renderIdentityPlates()."
+  },
+
+  "active_files": [
+    "src/components/game/types.ts",
+    "src/components/game/pixel-types.ts",
+    "src/components/game/engine/characters.ts",
+    "src/components/game/engine/officeState.ts",
+    "src/components/game/engine/renderer.ts",
+    "src/components/game/GamePage.tsx",
+    "src/components/game/constants.ts",
+    "src/components/game/CanvasOffice.tsx"
+  ],
+
+  "findings": [
+    {
+      "id": "F1",
+      "severity": "info",
+      "file": "src/components/game/types.ts",
+      "description": "InteractionType already has all 5 required values: planning, brainstorming, building, reviewing, auditing. No changes needed to the type itself."
+    },
+    {
+      "id": "F2",
+      "severity": "info",
+      "file": "src/components/game/engine/renderer.ts",
+      "description": "INTERACTION_EMOJI map (lines 797-803) already maps all 5 interaction types to emoji: planning=clipboard, brainstorming=lightbulb, building=hammer, reviewing=magnifying_glass, auditing=shield. Icons render inline in identity pills with correct priority (interaction > activity > status). This KR is already met."
+    },
+    {
+      "id": "F3",
+      "severity": "info",
+      "file": "src/components/game/engine/renderer.ts",
+      "description": "STATUS_EMOJI map (lines 791-794) already maps working=gear and idle=coffee. PILL_DOT_COLORS (lines 759-762) maps working=green (#22c55e) and idle=gray (#9ca3af). Both visual indicators exist."
+    },
+    {
+      "id": "F4",
+      "severity": "gap",
+      "file": "src/components/game/types.ts",
+      "description": "AgentStatus is 'working' | 'idle' only. CEO wants 'offline' as a third distinct visual state. The toAgentStatus() function in GamePage.tsx (line 106) maps everything non-working to 'idle' — there's no detection of offline (no session at all). Need to add 'offline' to AgentStatus and distinguish 'idle with session' from 'no session at all'."
+    },
+    {
+      "id": "F5",
+      "severity": "gap",
+      "file": "src/components/game/engine/renderer.ts",
+      "description": "No 'offline' entry in STATUS_EMOJI or PILL_DOT_COLORS. Once the type is extended, renderer needs: offline emoji (e.g. moon/zzz), offline dot color (e.g. darker gray or red-gray), and potentially a visual treatment like reduced opacity or desaturated character sprite."
+    },
+    {
+      "id": "F6",
+      "severity": "gap",
+      "file": "src/components/game/engine/characters.ts",
+      "description": "Idle detection uses a single binary threshold: shouldWander() checks >= 30 min (IDLE_WANDER_THRESHOLD_MS). CEO wants 3 tiers: <10 min (recently idle), 10-30 min (moderately idle), >30 min (long idle). Currently <30 min agents stay seated at desk with no visual distinction from a 1-minute-idle agent. Need tiered thresholds that drive distinct visual treatments."
+    },
+    {
+      "id": "F7",
+      "severity": "gap",
+      "file": "src/components/game/engine/renderer.ts",
+      "description": "No idle-duration-based visual differentiation in the renderer. The identity plate renders the same idle coffee emoji and gray dot regardless of idle duration. Tiered idle needs: <10 min = at desk, normal appearance; 10-30 min = at desk, slightly dimmed/yawning; >30 min = wandering (already exists). Could use pill background color, emoji variation, or opacity."
+    },
+    {
+      "id": "F8",
+      "severity": "info",
+      "file": "src/components/game/engine/characters.ts",
+      "description": "Wandering behavior for long-idle agents (>30 min) is already well-implemented: wander timer, wander count/limit, seat rest cycles, furniture interaction points (ACTIVITY state). The 'wandering behaviors for idle agents' KR is substantially met by existing code."
+    },
+    {
+      "id": "F9",
+      "severity": "gap",
+      "file": "src/components/game/pixel-types.ts",
+      "description": "SessionInfo.lastActivityMs (line 212) is the only idle-duration signal. It's optional and populated from session.lastActivity timestamp in GamePage.tsx. For tiered idle detection, this value needs to be reliably present. When lastActivityMs is undefined, shouldWander() defaults to 'wander freely' — meaning a fresh agent with no session data immediately wanders instead of sitting at desk."
+    },
+    {
+      "id": "F10",
+      "severity": "info",
+      "file": "src/components/game/GamePage.tsx",
+      "description": "agentStatuses derivation (lines 150-200) already overrides idle agents to 'working' when they're involved in active directive steps (plan, brainstorm, execute, review-gate, audit). This is correct and should be preserved. agentSessionInfos (lines 240-274) correctly populates lastActivityMs from session timestamps."
+    },
+    {
+      "id": "F11",
+      "severity": "gap",
+      "file": "src/components/game/GamePage.tsx",
+      "description": "toAgentStatus() (lines 106-115) collapses all non-working states to 'idle'. For offline detection, GamePage needs to distinguish agents with NO active sessions from agents with idle sessions. Currently if an agent has zero sessions, they default to 'idle' (line 153) — not 'offline'."
+    },
+    {
+      "id": "F12",
+      "severity": "info",
+      "file": "src/components/game/engine/officeState.ts",
+      "description": "routeAgent() (line 854) already handles idle <30 min by sending agent to desk. The tiered idle visual treatments would primarily be in the renderer (pill appearance), not in movement logic. The movement logic only needs the binary wander threshold which already exists."
+    },
+    {
+      "id": "F13",
+      "severity": "info",
+      "file": "src/components/game/constants.ts",
+      "description": "Status-related constants are well-organized in sections: identity plates (lines 128-148), status indicators, proximity, activity durations. New idle tier thresholds should live here (e.g. IDLE_TIER_1_MS = 10 * 60 * 1000, IDLE_TIER_2_MS = 30 * 60 * 1000)."
+    },
+    {
+      "id": "F14",
+      "severity": "risk",
+      "file": "src/components/game/engine/renderer.ts",
+      "description": "renderStatusIcons() and renderInteractionIcons() are no-op functions (lines 1116-1128, 1167-1179) that are still called from renderFrame() (lines 1297-1308). Dead code — should be deleted. They were left as stubs but serve no purpose and mislead readers into thinking icons are rendered separately from pills."
+    },
+    {
+      "id": "F15",
+      "severity": "info",
+      "file": "src/components/game/CanvasOffice.tsx",
+      "description": "CanvasOffice builds the IdentityOverlay (line 541) by translating agent name-keyed maps from GamePage into character-ID-keyed maps. statusMap, interactionMap, and taskTextMap are all correctly wired. Any new status values or idle tier data needs to flow through this same path."
+    },
+    {
+      "id": "F16",
+      "severity": "gap",
+      "file": "src/components/game/pixel-types.ts",
+      "description": "Character type has agentStatus field (line 269) typed as AgentStatus which is 'working' | 'idle'. If 'offline' is added, this field and its consumers (applyAgentStatus, routeAgent, status debounce logic) need updating."
+    }
+  ],
+
+  "summary": {
+    "already_done": [
+      "Interaction type definitions (all 5 values exist)",
+      "Interaction emoji icons in identity pills (clipboard, lightbulb, hammer, magnifying glass, shield)",
+      "Session status mapping (working/idle with dot colors)",
+      "Status emoji icons (gear for working, coffee for idle)",
+      "Wandering behavior for long-idle agents (>30 min wander with furniture interactions)",
+      "Pipeline step -> interaction type mapping in GamePage.tsx"
+    ],
+    "needs_work": [
+      "Add 'offline' to AgentStatus type and detect it (no sessions = offline)",
+      "Add offline visual treatment (emoji, dot color, possible character opacity)",
+      "Implement 3-tier idle detection thresholds (<10 min, 10-30 min, >30 min)",
+      "Add distinct visual treatments per idle tier (pill color/emoji/opacity variation)",
+      "Clean up dead no-op functions (renderStatusIcons, renderInteractionIcons)"
+    ],
+    "risk_assessment": "Low complexity. Most infrastructure exists. Changes are additive — extending an enum, adding constants, and modifying renderer pill logic. Blast radius is contained to the game engine rendering layer. No backend/API changes needed. Data flow (session -> GamePage -> CanvasOffice -> renderer) is already established and just needs the new status value threaded through.",
+    "estimated_files_changed": 7,
+    "estimated_complexity": "moderate"
+  }
+}

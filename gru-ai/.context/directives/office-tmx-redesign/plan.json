@@ -1,0 +1,39 @@
+{
+  "goal": "Redesign office TMX map with Limezu Modern Interiors 16x16 asset pack",
+  "challenges": {
+    "risks": [
+      "Tile ID mapping is error-prone: the builder must visually read 16x16 tileset PNGs to identify correct tile IDs for furniture items, and wrong IDs produce garbage tiles. The Limezu master sheet (Interiors_16x16.png) is massive — using themed sub-sheets reduces this risk.",
+      "tilesetCache.ts hardcodes two tilesets (room-builder firstgid=1, furniture firstgid=225). Adding a new tileset requires updating this loader with the correct firstgid and image path, otherwise tiles render as blank. This is a code change the builder must not forget.",
+      "The seats objectgroup has 22 objects with precise pixel coordinates. Any accidental edit to this section corrupts agent seating. The builder must work carefully around it, only touching tile layers."
+    ],
+    "over_engineering_flags": [
+      "The directive asks for themed areas (lounge, kitchen, conference, CEO office) which could spiral into endless decoration tweaking. The builder should aim for 'clearly furnished and distinct' rather than pixel-perfect interior design.",
+      "Using the full Interiors_16x16.png master sheet would be overkill — the themed sub-sheets (Generic, Kitchen, Conference Hall, LivingRoom) are better scoped and easier to map tile IDs from."
+    ],
+    "recommendation": "Proceed as-is. The scope is clear: copy themed tileset PNGs, register them in TMX + tilesetCache, populate furniture layers. Single project, single builder. Use Theme_Sorter PNGs (not the massive master sheet) for manageable tile ID mapping."
+  },
+  "projects": [
+    {
+      "id": "limezu-office-redesign",
+      "title": "Populate office TMX with Limezu Modern Interiors furniture",
+      "priority": "P0",
+      "scope_summary": "Copy relevant Limezu 16x16 Theme_Sorter PNGs (Generic, LivingRoom, Kitchen, Conference Hall) into public/assets/office/. Create corresponding .tsx tileset reference files. Add the new tilesets to office.tmx with correct firstgid values. Update tilesetCache.ts to load the new tileset images. Then populate the furniture/decoration tile layers with rich content: plants, rugs, paintings, bookshelves, sofas in a lounge area, kitchen/break room with appliances, conference room with podium/projector screen, upgraded CEO office, and decorative items throughout open areas and hallway. Preserve Floors layer (locked) and seats objectgroup untouched.",
+      "complexity": "complex",
+      "agent": [
+        "devon"
+      ],
+      "reviewers": [
+        "quinn",
+        "sarah"
+      ],
+      "auditor": "sarah",
+      "depends_on": [],
+      "touches_files_hint": [
+        "public/office.tmx",
+        "public/assets/office/",
+        "src/components/game/tilesetCache.ts",
+        "public/*.tsx"
+      ]
+    }
+  ]
+}

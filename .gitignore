@@ -31,21 +31,16 @@ desktop.ini
 
 # ── Logs ───────────────────────────────────────────────────────
 *.log
-outputs/logs/
-star-office-ui/backend/outputs/logs/
-trading_agent/outputs/logs/
+quant-agent/outputs/logs/
+quant-agent/trading_agent/outputs/logs/
 
 # ── Generated outputs ──────────────────────────────────────────
-trading_agent/outputs/charts/
-trading_agent/outputs/reports/
-trading_agent/outputs/results/
-star-office-ui/backend/outputs/results/
+quant-agent/trading_agent/outputs/charts/
+quant-agent/trading_agent/outputs/reports/
+quant-agent/trading_agent/outputs/results/
 
 # ── Local cache ────────────────────────────────────────────────
-trading_agent/data/cache/
-
-# ── Runtime state ──────────────────────────────────────────────
-star-office-ui/backend/state/workflow_state.json
+quant-agent/trading_agent/data/cache/
 
 # ── Claude Code session (not project files) ────────────────────
 memory/

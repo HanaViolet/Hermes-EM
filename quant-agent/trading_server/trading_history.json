@@ -1,5 +1,23 @@
 [
   {
+    "task_id": "e1e7c10c777a",
+    "ticker": "SPY",
+    "strategy": "auto",
+    "completed_at": "2026-06-09T14:00:20+00:00"
+  },
+  {
+    "task_id": "e46ded029792",
+    "ticker": "SPY",
+    "strategy": "ma",
+    "completed_at": "2026-06-09T13:56:43+00:00"
+  },
+  {
+    "task_id": "4a7ec549b4df",
+    "ticker": "SPY",
+    "strategy": "auto",
+    "completed_at": "2026-06-09T13:49:11+00:00"
+  },
+  {
     "task_id": "549105aae5d0",
     "ticker": "AAPL",
     "strategy": "auto",

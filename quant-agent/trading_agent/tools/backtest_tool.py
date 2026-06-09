@@ -15,6 +15,11 @@ def run_backtest(
     signal: pd.Series,
     transaction_cost: float = 0.001
 ) -> dict:
+    if "close" not in data.columns:
+        raise ValueError("Backtest data must include a 'close' column.")
+    if len(data) != len(signal):
+        raise ValueError("Backtest data and signal must have the same length.")
+
     data = data.copy()
     data["signal"] = signal
 
@@ -27,6 +32,8 @@ def run_backtest(
 
     data["benchmark_return"] = data["daily_return"]
     data = data.dropna().reset_index(drop=True)
+    if len(data) < 2:
+        raise ValueError("Not enough price rows to run backtest after return calculation.")
 
     data["strategy_curve"] = (1 + data["strategy_return"]).cumprod()
     data["benchmark_curve"] = (1 + data["benchmark_return"]).cumprod()
@@ -36,13 +43,15 @@ def run_backtest(
 
     annual_return = data["strategy_curve"].iloc[-1] ** (252 / len(data)) - 1
     annual_volatility = data["strategy_return"].std() * np.sqrt(252)
-    sharpe_ratio = 0 if annual_volatility == 0 else annual_return / annual_volatility
+    sharpe_ratio = 0 if annual_volatility == 0 or np.isnan(annual_volatility) else annual_return / annual_volatility
 
     max_drawdown = calculate_max_drawdown(data["strategy_curve"])
     benchmark_max_drawdown = calculate_max_drawdown(data["benchmark_curve"])
 
     win_rate = (data["strategy_return"] > 0).mean()
     number_of_trades = int(data["trade"].sum())
+    equity_curve = data["strategy_curve"].round(6).tolist()
+    benchmark_curve = data["benchmark_curve"].round(6).tolist()
 
     return {
         "data": data,
@@ -54,7 +63,10 @@ def run_backtest(
         "max_drawdown": max_drawdown,
         "benchmark_max_drawdown": benchmark_max_drawdown,
         "win_rate": win_rate,
-        "number_of_trades": number_of_trades
+        "number_of_trades": number_of_trades,
+        "trades": number_of_trades,
+        "equity_curve": equity_curve,
+        "benchmark_curve": benchmark_curve,
     }
 
 

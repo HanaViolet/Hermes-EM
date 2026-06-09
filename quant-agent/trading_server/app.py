@@ -24,10 +24,15 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 from telemetry import get_snapshot
-from runner import start_task, get_result, get_history
+from runner import start_task, get_result, get_history, get_task_state, cancel_active_task
 
 app = Flask(__name__)
 CORS(app)
+
+SUPPORTED_TICKERS = {"SPY", "QQQ", "AAPL", "MSFT", "NVDA", "TSLA"}
+SUPPORTED_STRATEGIES = {"auto", "ma", "rsi", "momentum"}
+MIN_BACKTEST_DAYS = 60
+MAX_TRANSACTION_COST = 0.01
 
 
 # ── API Routes ─────────────────────────────────────────────────
@@ -70,17 +75,19 @@ def _validate_date(value: str, name: str):
 @app.post("/api/trading/run")
 def trading_run():
     """Submit a trading analysis task. Only one task runs at a time."""
-    # Check if a task is already running
-    snap = get_snapshot()
-    t = snap.get("trading", {})
-    status = t.get("global_status", "idle")
-    if status in ("syncing", "running", "writing"):
-        return jsonify({"ok": False, "message": f"A task is already running ({t.get('ticker')} {t.get('strategy')}). Please wait."}), 409
+    active = get_task_state()
+    if active:
+        running = active.get("task", {})
+        return jsonify({
+            "ok": False,
+            "message": f"A task is already running ({running.get('ticker')} {running.get('strategy')}). Please wait.",
+            "task_id": active.get("task_id"),
+        }), 409
 
     data = request.get_json(silent=True) or {}
     try:
         ticker = str(data.get("ticker", "SPY")).upper().strip()
-        strategy = str(data.get("strategy", "auto")).strip()
+        strategy = str(data.get("strategy", "auto")).lower().strip()
         start_date = str(data.get("start_date", "2020-01-01"))
         end_date = str(data.get("end_date", "2024-12-31"))
         transaction_cost = _parse_float(data.get("transaction_cost", 0.001), 0.001)
@@ -88,8 +95,14 @@ def trading_run():
         end_dt = _validate_date(end_date, "end_date")
         if start_dt >= end_dt:
             return jsonify({"ok": False, "message": "start_date must be before end_date"}), 400
-        if not ticker:
-            return jsonify({"ok": False, "message": "ticker is required"}), 400
+        if (end_dt - start_dt).days < MIN_BACKTEST_DAYS:
+            return jsonify({"ok": False, "message": f"date range must cover at least {MIN_BACKTEST_DAYS} days"}), 400
+        if ticker not in SUPPORTED_TICKERS:
+            return jsonify({"ok": False, "message": f"unsupported ticker: {ticker}"}), 400
+        if strategy not in SUPPORTED_STRATEGIES:
+            return jsonify({"ok": False, "message": f"unsupported strategy: {strategy}"}), 400
+        if transaction_cost < 0 or transaction_cost > MAX_TRANSACTION_COST:
+            return jsonify({"ok": False, "message": f"transaction_cost must be between 0 and {MAX_TRANSACTION_COST}"}), 400
     except ValueError as e:
         return jsonify({"ok": False, "message": str(e)}), 400
 
@@ -100,7 +113,10 @@ def trading_run():
         "strategy": strategy,
         "transaction_cost": transaction_cost,
     }
-    task_id = start_task(task_data)
+    try:
+        task_id = start_task(task_data)
+    except RuntimeError as exc:
+        return jsonify({"ok": False, "message": str(exc)}), 409
 
     return jsonify({
         "ok": True,
@@ -112,14 +128,24 @@ def trading_run():
 
 @app.post("/api/trading/reset")
 def trading_reset():
-    """Reset the workflow state to idle (delete telemetry file)."""
+    """Reset the workflow state to idle and mark any active task as cancelled."""
     from telemetry import TELEMETRY_PATH
+    from trading_agent.utils.office_bridge import reset_telemetry
+    cancelled = cancel_active_task()
     try:
         if TELEMETRY_PATH.exists():
             TELEMETRY_PATH.unlink()
     except Exception:
         pass
-    return jsonify({"ok": True, "message": "Workflow reset to idle"})
+    try:
+        reset_telemetry(None)
+    except Exception:
+        pass
+    return jsonify({
+        "ok": True,
+        "message": "Workflow reset to idle",
+        "cancelled_task_id": cancelled.get("task_id") if cancelled else None,
+    })
 
 
 @app.get("/api/trading/report/<task_id>")
@@ -155,6 +181,11 @@ def openclaw_resource():
     resource = next((r for r in resources if r.get("id") == resource_id), None)
     items = resource.get("items", []) if resource else []
     return jsonify({"ok": True, "resource": {"items": items}})
+
+@app.get("/api/openclaw/snapshot")
+def openclaw_snapshot():
+    """OpenClaw-compatible snapshot endpoint backed by trading telemetry."""
+    return jsonify(get_snapshot())
 
 @app.get("/api/openclaw/agent-focus")
 def openclaw_agent_focus():

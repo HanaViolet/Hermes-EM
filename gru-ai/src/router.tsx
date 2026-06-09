@@ -5,6 +5,7 @@ import AppLayout from '@/components/layout/AppLayout';
 import { lazy, Suspense } from 'react';
 
 const GamePage = lazy(() => import('@/components/game/GamePage'));
+const MarketSimulation = lazy(() => import('@/pages/MarketSimulation'));
 
 // eslint-disable-next-line react-refresh/only-export-components
 function PageLoader() {
@@ -25,7 +26,8 @@ export const router = createBrowserRouter([
     path: '/',
     element: <AppLayout />,
     children: [
-      { index: true, element: <SuspenseWrapper><GamePage /></SuspenseWrapper> },
+      { index: true, element: <SuspenseWrapper><MarketSimulation /></SuspenseWrapper> },
+      { path: 'office', element: <SuspenseWrapper><GamePage /></SuspenseWrapper> },
     ],
   },
 ]);

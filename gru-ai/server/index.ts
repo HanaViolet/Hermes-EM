@@ -13,6 +13,8 @@ import { focusPane } from './actions/terminal.js';
 import { sendInput } from './actions/send-input.js';
 import { Notifier } from './notifications/notifier.js';
 import { distDir, consumerRoot, loadAgentRegistry } from './paths.js';
+import { SimulationEngine } from './simulation/SimulationEngine.js';
+import { attachSimulationSocket } from './websocket/simulationSocket.js';
 import type { WsMessage, WsMessageType, SendInputRequest } from './types.js';
 
 // --- Load config and initialize ---
@@ -166,6 +168,8 @@ const server = http.createServer((req, res) => {
 
 // --- WebSocket Server ---
 const wss = new WebSocketServer({ server });
+const simulationEngine = new SimulationEngine();
+attachSimulationSocket(wss, simulationEngine);
 
 wss.on('connection', (ws) => {
   console.log(`[ws] Client connected (total: ${wss.clients.size})`);
@@ -614,6 +618,7 @@ function shutdown(): void {
 
   // Destroy aggregator (cleans up timers)
   aggregator.destroy();
+  simulationEngine.destroy();
 
   // Close WebSocket connections
   for (const client of wss.clients) {

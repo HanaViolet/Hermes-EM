@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------------------
 
 import type { AgentRegistry, CharacterAppearance } from '@/stores/agent-registry-store';
-import registryJson from '../../../.claude/agent-registry.json';
 import { generateAppearance } from './generateAppearance';
 
 /** Agent status derived from session data */
@@ -76,8 +75,8 @@ export function buildOfficeAgents(registry: AgentRegistry | null): AgentDesk[] {
     }));
 }
 
-/** Static OFFICE_AGENTS built from the local agent-registry.json at build time */
-export const OFFICE_AGENTS: AgentDesk[] = buildOfficeAgents(registryJson as AgentRegistry);
+/** Static fallback used only before the runtime registry is loaded. */
+export const OFFICE_AGENTS: AgentDesk[] = [];
 
 /** Interactive tile types the user can click (kept for compat) */
 export const INTERACTIVE_TILES: Set<TileType> = new Set([

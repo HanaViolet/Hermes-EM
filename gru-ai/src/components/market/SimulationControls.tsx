@@ -1,6 +1,7 @@
 import { Gauge, Newspaper, Pause, Play, RotateCcw, StepForward, TrendingDown, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PARCHMENT, PIXEL_CARD } from '@/components/game/panels/panelUtils';
+import { useMarketStore } from '@/stores/marketStore';
 import { useSimulationStore } from '@/stores/simulation-store';
 import type { SimulationStatus } from '@/types/market';
 
@@ -14,6 +15,7 @@ export default function SimulationControls({
   status: SimulationStatus | null;
 }) {
   const sendCommand = useSimulationStore((s) => s.sendCommand);
+  const activeSymbol = useMarketStore((s) => s.activeSymbol);
   const running = status?.running ?? false;
   const speed = status?.speed ?? 1;
 
@@ -24,7 +26,7 @@ export default function SimulationControls({
         size="sm"
         disabled={!connected}
         className="h-8 gap-1.5 font-mono text-xs"
-        onClick={() => sendCommand(running ? { command: 'pause' } : { command: 'start' })}
+        onClick={() => sendCommand(running ? { command: 'pause', symbol: activeSymbol ?? undefined } : { command: 'start', symbol: activeSymbol ?? undefined })}
       >
         {running ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
         {running ? 'Pause' : 'Start'}
@@ -35,7 +37,7 @@ export default function SimulationControls({
         variant="secondary"
         disabled={!connected || running}
         className="h-8 gap-1.5 font-mono text-xs"
-        onClick={() => sendCommand({ command: 'step' })}
+        onClick={() => sendCommand({ command: 'step', symbol: activeSymbol ?? undefined })}
       >
         <StepForward className="h-3.5 w-3.5" />
         Step
@@ -46,7 +48,7 @@ export default function SimulationControls({
         variant="secondary"
         disabled={!connected}
         className="h-8 gap-1.5 font-mono text-xs"
-        onClick={() => sendCommand({ command: 'reset' })}
+        onClick={() => sendCommand({ command: 'reset', symbol: activeSymbol ?? undefined })}
       >
         <RotateCcw className="h-3.5 w-3.5" />
         Reset
@@ -58,7 +60,7 @@ export default function SimulationControls({
         variant="secondary"
         disabled={!connected}
         className="h-8 gap-1.5 font-mono text-xs"
-        onClick={() => sendCommand({ command: 'inject_news', newsImpact: 0.55 })}
+        onClick={() => sendCommand({ command: 'inject_news', newsImpact: 0.55, symbol: activeSymbol ?? undefined })}
         title="注入利好新闻"
       >
         <Newspaper className="h-3.5 w-3.5" />
@@ -70,7 +72,7 @@ export default function SimulationControls({
         variant="secondary"
         disabled={!connected}
         className="h-8 gap-1.5 font-mono text-xs"
-        onClick={() => sendCommand({ command: 'inject_news', newsImpact: -0.55 })}
+        onClick={() => sendCommand({ command: 'inject_news', newsImpact: -0.55, symbol: activeSymbol ?? undefined })}
         title="注入利空新闻"
       >
         <Newspaper className="h-3.5 w-3.5" />
@@ -93,7 +95,7 @@ export default function SimulationControls({
                 ? 'inset 1px 1px 0 0 #2A1A10, inset -1px -1px 0 0 #7A5A42'
                 : 'inset -1px -1px 0 0 #A08040, inset 1px 1px 0 0 #F5ECD7',
             }}
-            onClick={() => sendCommand({ command: 'set_speed', speed: value })}
+            onClick={() => sendCommand({ command: 'set_speed', speed: value, symbol: activeSymbol ?? undefined })}
           >
             {value}x
           </button>

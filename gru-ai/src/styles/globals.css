@@ -120,3 +120,17 @@
   from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+.market-chart-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.market-chart-scroll::-webkit-scrollbar-track {
+  background: #e8d2a7;
+}
+
+.market-chart-scroll::-webkit-scrollbar-thumb {
+  background: #8b6914;
+  border: 2px solid #e8d2a7;
+  border-radius: 0;
+}

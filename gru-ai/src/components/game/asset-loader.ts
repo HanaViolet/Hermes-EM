@@ -1,12 +1,12 @@
 // ---------------------------------------------------------------------------
-// Asset Loader — loads floor tiles and composites character sprites at runtime
+// Asset Loader — loads floor tiles and local market character sprites
 // ---------------------------------------------------------------------------
 
 import type { SpriteData } from './pixel-types'
-import type { LoadedCharacterData } from './sprites/spriteData'
 import type { CharacterAppearance } from '@/stores/agent-registry-store'
 import { setFloorSprites } from './floorTiles'
 import { setCharacterTemplates } from './sprites/spriteData'
+import { createPixelCharacterTemplates } from './sprites/pixelCharacters'
 import { loadTilesetCache } from './tilesetCache'
 
 // ── Helpers ─────────────────────────────────────────────────────
@@ -92,75 +92,12 @@ export async function loadFloorAssets(src = '/assets/office/atlas.png'): Promise
   }
 }
 
-// ── Character Sprites (runtime compositing from MetroCity source sheets) ──
+// ── Character Sprites (local market preset library) ──
 
-/** MetroCity direction layout: Down(0-5), Right(6-11), Up(12-17), Left(18-23) */
-const DIR_COL_OFFSET = { down: 0, right: 6, up: 12 } as const
-/** Output row order: Row 0 = down, Row 1 = up, Row 2 = right */
-const OUTPUT_DIRS: Array<keyof typeof DIR_COL_OFFSET> = ['down', 'up', 'right']
-/** 7-frame output: walk1, walk2, walk3, type1, type2, read1, read2 */
-const FRAME_MAP = [1, 0, 4, 0, 0, 0, 0]
-const TILE = 32
-
-/**
- * Composite character sprites at runtime from MetroCity source sheets.
- * Each appearance config (bodyRow, hairRow, outfitIndex) produces one
- * LoadedCharacterData with 3 directions × 7 frames.
- *
- * Appearances are indexed by palette number — appearances[0] = palette 0, etc.
- */
-export async function loadCharacterAssets(appearances: CharacterAppearance[]): Promise<void> {
-  try {
-    // Load MetroCity source sheets
-    const [bodySheet, hairSheet, ...outfitSheets] = await Promise.all([
-      loadImage('/assets/metrocity/Character Model.png'),
-      loadImage('/assets/metrocity/Hairs.png'),
-      loadImage('/assets/metrocity/Outfit1.png'),
-      loadImage('/assets/metrocity/Outfit2.png'),
-      loadImage('/assets/metrocity/Outfit3.png'),
-      loadImage('/assets/metrocity/Outfit4.png'),
-      loadImage('/assets/metrocity/Outfit5.png'),
-      loadImage('/assets/metrocity/Outfit6.png'),
-    ])
-
-    // Shared compositing canvas
-    const comp = document.createElement('canvas')
-    comp.width = TILE
-    comp.height = TILE
-    const compCtx = comp.getContext('2d')!
-
-    const characters: LoadedCharacterData[] = []
-
-    for (const appearance of appearances) {
-      const outfitSheet = outfitSheets[appearance.outfitIndex - 1]
-      const dirs: Record<string, SpriteData[]> = { down: [], up: [], right: [] }
-
-      for (const dir of OUTPUT_DIRS) {
-        const dirColBase = DIR_COL_OFFSET[dir]
-
-        for (const srcFrame of FRAME_MAP) {
-          const col = dirColBase + srcFrame
-
-          // Composite: body → outfit → hair (canvas alpha blending)
-          compCtx.clearRect(0, 0, TILE, TILE)
-          compCtx.drawImage(bodySheet, col * TILE, appearance.bodyRow * TILE, TILE, TILE, 0, 0, TILE, TILE)
-          compCtx.drawImage(outfitSheet, col * TILE, 0, TILE, TILE, 0, 0, TILE, TILE)
-          compCtx.drawImage(hairSheet, col * TILE, appearance.hairRow * TILE, TILE, TILE, 0, 0, TILE, TILE)
-
-          // Extract SpriteData from composited result
-          const imageData = compCtx.getImageData(0, 0, TILE, TILE)
-          dirs[dir].push(extractSprite(imageData.data, TILE, 0, 0, TILE, TILE))
-        }
-      }
-
-      characters.push({ down: dirs.down, up: dirs.up, right: dirs.right })
-    }
-
-    setCharacterTemplates(characters)
-    console.log(`✓ Composited ${characters.length} character sprites from MetroCity sheets`)
-  } catch (e) {
-    console.warn('Failed to load MetroCity character sheets:', e)
-  }
+export function loadCharacterAssets(_appearances: CharacterAppearance[]): void {
+  const characters = createPixelCharacterTemplates()
+  setCharacterTemplates(characters)
+  console.log(`✓ Loaded ${characters.length} local market pixel character presets`)
 }
 
 // ── Load all assets ─────────────────────────────────────────────
@@ -184,9 +121,7 @@ export function loadAllAssets(appearances: CharacterAppearance[]): void {
   if (loaded) return
   loaded = true
   loadFloorAssets()
-  if (appearances.length > 0) {
-    loadCharacterAssets(appearances)
-  }
+  loadCharacterAssets(appearances)
   loadTilesetCache().then(() => {
     tilesetReady = true
     for (const cb of onTilesetReadyCallbacks) cb()

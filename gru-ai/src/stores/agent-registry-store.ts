@@ -5,9 +5,8 @@ import { create } from 'zustand';
 // ---------------------------------------------------------------------------
 
 export interface CharacterAppearance {
-  bodyRow: number;     // 0-5 (skin tone + body variant)
-  hairRow: number;     // 0-7 (hair style from Hairs.png)
-  outfitIndex: number; // 1-6 (Outfit1-6.png)
+  /** Optional local pixel-character preset id. Palette index remains the fast switch path. */
+  presetId?: string;
 }
 
 export interface AgentGameConfig {

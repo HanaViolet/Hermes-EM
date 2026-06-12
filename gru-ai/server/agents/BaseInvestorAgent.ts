@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import type { AgentDecision, AgentState, AgentType, MarketEnvironmentSnapshot, MarketEvent, MarketState, OrderSide } from '../simulation/types.js';
+import type { AgentNewsExposure } from '../news/types.js';
 
 export interface InvestorSeed {
   id: string;
@@ -10,6 +11,9 @@ export interface InvestorSeed {
   avgCost?: number;
   sentiment: number;
   riskAppetite: number;
+  groupSize?: number;
+  strategyParams?: Record<string, number | boolean | string>;
+  currentStrategy?: string;
 }
 
 export abstract class BaseInvestorAgent {
@@ -32,7 +36,16 @@ export abstract class BaseInvestorAgent {
       lastAction: 'hold',
       capitalFlow: 0,
       openOrderIds: [],
+      groupSize: seed.groupSize,
+      strategyParams: seed.strategyParams,
+      currentStrategy: seed.currentStrategy,
     };
+  }
+
+  configureGroup(groupSize: number, strategyParams: Record<string, number | boolean | string>, currentStrategy: string): void {
+    this.state.groupSize = groupSize;
+    this.state.strategyParams = strategyParams;
+    this.state.currentStrategy = currentStrategy;
   }
 
   getState(): AgentState {
@@ -46,6 +59,31 @@ export abstract class BaseInvestorAgent {
   reactToEvent(event: MarketEvent): void {
     if (!event.affectedAgentTypes.includes(this.state.type)) return;
     this.state.sentiment = Math.max(-1, Math.min(1, this.state.sentiment + event.sentimentDelta));
+  }
+
+  applyNewsEffects(activeNews: AgentNewsExposure[]): void {
+    const visible = activeNews
+      .filter((news) => news.received)
+      .slice(0, 5)
+      .map((news) => ({
+        news_id: news.news_id,
+        title: news.title,
+        source_type: news.source_type,
+        impact_direction: news.impact_direction,
+        current_impact: news.current_impact,
+        reaction_strength: news.reaction_strength,
+        action_bias: news.action_bias,
+        expected_return_delta: news.expected_return_delta,
+        sentiment_delta: news.sentiment_delta,
+      }));
+    this.state.activeNews = visible;
+    this.state.lastNewsReaction = visible[0];
+    if (visible.length === 0) return;
+
+    const sentimentDelta = visible.reduce((sum, news) => sum + news.sentiment_delta * Math.max(0.2, news.reaction_strength), 0);
+    const riskDelta = activeNews.reduce((sum, news) => sum + news.risk_preference_delta * Math.max(0.2, news.reaction_strength), 0);
+    this.state.sentiment = Math.max(-1, Math.min(1, this.state.sentiment + sentimentDelta));
+    this.state.riskAppetite = Math.max(0.05, Math.min(1, this.state.riskAppetite + riskDelta));
   }
 
   protected hold(tick: number, reason: string): AgentDecision {

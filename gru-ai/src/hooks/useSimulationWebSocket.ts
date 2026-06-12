@@ -1,6 +1,11 @@
 import { useEffect, useRef } from 'react';
 import { WS_URL } from '@/lib/api';
+import { useAgentStore } from '@/stores/agentStore';
+import { useMarketStore } from '@/stores/marketStore';
+import { useNewsStore } from '@/stores/newsStore';
+import { useScenarioStore } from '@/stores/scenarioStore';
 import { useSimulationStore } from '@/stores/simulation-store';
+import { useTrainingStore } from '@/stores/trainingStore';
 import type { SimulationCommand, SimulationMessage } from '@/types/market';
 
 const MAX_RECONNECT_DELAY = 30000;
@@ -11,10 +16,17 @@ export function useSimulationWebSocket() {
   const reconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const setConnected = useSimulationStore((s) => s.setConnected);
-  const setMarketState = useSimulationStore((s) => s.setMarketState);
+  const setSimulationMarketState = useSimulationStore((s) => s.setMarketState);
   const setStatus = useSimulationStore((s) => s.setStatus);
   const setError = useSimulationStore((s) => s.setError);
   const setCommandSender = useSimulationStore((s) => s.setCommandSender);
+  const setMarketState = useMarketStore((s) => s.setMarketState);
+  const setStockList = useMarketStore((s) => s.setStockList);
+  const setMarketUpdate = useMarketStore((s) => s.setMarketUpdate);
+  const setAgentUpdate = useAgentStore((s) => s.setAgentUpdate);
+  const setNewsUpdate = useNewsStore((s) => s.setNewsUpdate);
+  const setScenarioUpdate = useScenarioStore((s) => s.setScenarioUpdate);
+  const setTrainingUpdate = useTrainingStore((s) => s.setTrainingUpdate);
 
   useEffect(() => {
     function sendCommand(command: SimulationCommand) {
@@ -54,6 +66,7 @@ export function useSimulationWebSocket() {
           if (message.version !== 1) return;
           switch (message.type) {
             case 'simulation_state':
+              setSimulationMarketState(message.payload);
               setMarketState(message.payload);
               break;
             case 'simulation_status':
@@ -61,6 +74,24 @@ export function useSimulationWebSocket() {
               break;
             case 'simulation_error':
               setError(message.payload.message);
+              break;
+            case 'market_update':
+              setMarketUpdate(message.payload);
+              break;
+            case 'agent_update':
+              setAgentUpdate(message.payload);
+              break;
+            case 'scenario_update':
+              setScenarioUpdate(message.payload);
+              break;
+            case 'training_update':
+              setTrainingUpdate(message.payload);
+              break;
+            case 'news_update':
+              setNewsUpdate(message.payload);
+              break;
+            case 'stock_list':
+              setStockList(message.payload);
               break;
           }
         } catch {
@@ -93,5 +124,5 @@ export function useSimulationWebSocket() {
         wsRef.current = null;
       }
     };
-  }, [setConnected, setMarketState, setStatus, setError, setCommandSender]);
+  }, [setConnected, setSimulationMarketState, setStatus, setError, setCommandSender, setMarketState, setStockList, setMarketUpdate, setAgentUpdate, setNewsUpdate, setScenarioUpdate, setTrainingUpdate]);
 }

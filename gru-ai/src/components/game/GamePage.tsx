@@ -658,7 +658,7 @@ export default function GamePage() {
       <div style={{ textAlign: 'center', padding: '4px 0', fontSize: '11px', color: '#666', opacity: 0.7 }}>
         Tileset by <a href="https://limezu.itch.io/modernoffice" target="_blank" rel="noopener" style={{ color: '#888' }}>LimeZu</a>
         {' | '}
-        Characters by <a href="https://jik-a-4.itch.io/metrocity-free-topdown-character-pack" target="_blank" rel="noopener" style={{ color: '#888' }}>JIK-A-4</a> (CC0)
+        Characters: local market pixel presets
       </div>
     </div>
   );

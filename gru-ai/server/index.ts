@@ -13,7 +13,7 @@ import { focusPane } from './actions/terminal.js';
 import { sendInput } from './actions/send-input.js';
 import { Notifier } from './notifications/notifier.js';
 import { distDir, consumerRoot, loadAgentRegistry } from './paths.js';
-import { SimulationEngine } from './simulation/SimulationEngine.js';
+import { SimulationManager } from './simulation/SimulationManager.js';
 import { attachSimulationSocket } from './websocket/simulationSocket.js';
 import type { WsMessage, WsMessageType, SendInputRequest } from './types.js';
 
@@ -59,6 +59,7 @@ const stateWatcher = new StateWatcher(aggregator, config);
 stateWatcher.start();
 
 // ContextWatcher removed — StateWatcher now reads .context/ directly
+const simulationManager = new SimulationManager();
 
 // Track last event timestamp for health endpoint
 let lastEventTimestamp: string | null = null;
@@ -146,6 +147,48 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  if (url.pathname === '/api/news' && req.method === 'GET') {
+    handleGetNews(url, res);
+    return;
+  }
+
+  if (url.pathname === '/api/news/generate' && req.method === 'POST') {
+    handleGenerateNews(req, url, res);
+    return;
+  }
+
+  if (url.pathname === '/api/news/active' && req.method === 'GET') {
+    handleGetActiveNews(url, res);
+    return;
+  }
+
+  if (url.pathname === '/api/news/templates' && req.method === 'GET') {
+    handleGetNewsTemplates(url, res);
+    return;
+  }
+
+  if (url.pathname === '/api/news/templates' && req.method === 'POST') {
+    handleAddNewsTemplate(req, url, res);
+    return;
+  }
+
+  if (url.pathname === '/api/news/engine/toggle' && req.method === 'POST') {
+    handleToggleNewsEngine(req, url, res);
+    return;
+  }
+
+  const newsDetailMatch = url.pathname.match(/^\/api\/news\/([^/]+)$/);
+  if (newsDetailMatch && req.method === 'GET') {
+    handleGetNewsDetail(newsDetailMatch[1], url, res);
+    return;
+  }
+
+  const newsImpactMatch = url.pathname.match(/^\/api\/news\/([^/]+)\/impact-log$/);
+  if (newsImpactMatch && req.method === 'GET') {
+    handleGetNewsImpactLog(newsImpactMatch[1], url, res);
+    return;
+  }
+
   // Unknown /api/* routes → 404 JSON (don't fall through to SPA)
   if (url.pathname.startsWith('/api/')) {
     res.writeHead(404, { 'Content-Type': 'application/json' });
@@ -168,8 +211,7 @@ const server = http.createServer((req, res) => {
 
 // --- WebSocket Server ---
 const wss = new WebSocketServer({ server });
-const simulationEngine = new SimulationEngine();
-attachSimulationSocket(wss, simulationEngine);
+attachSimulationSocket(wss, simulationManager);
 
 wss.on('connection', (ws) => {
   console.log(`[ws] Client connected (total: ${wss.clients.size})`);
@@ -541,6 +583,125 @@ function handleGetAgentRegistry(res: http.ServerResponse): void {
   res.end(JSON.stringify(registry));
 }
 
+function sendJson(res: http.ServerResponse, payload: unknown, status = 200): void {
+  res.writeHead(status, { 'Content-Type': 'application/json' });
+  res.end(JSON.stringify(payload));
+}
+
+function readJsonBody(req: http.IncomingMessage): Promise<unknown> {
+  return new Promise((resolve, reject) => {
+    let body = '';
+    req.on('data', (chunk) => {
+      body += chunk;
+    });
+    req.on('end', () => {
+      if (!body.trim()) {
+        resolve({});
+        return;
+      }
+      try {
+        resolve(JSON.parse(body));
+      } catch (err) {
+        reject(err);
+      }
+    });
+    req.on('error', reject);
+  });
+}
+
+function newsSymbol(url: URL): string | undefined {
+  return url.searchParams.get('symbol') ?? undefined;
+}
+
+function handleGetNews(url: URL, res: http.ServerResponse): void {
+  const symbol = newsSymbol(url) ?? simulationManager.getActiveSymbol();
+  const update = simulationManager.getNewsUpdate(symbol);
+  sendJson(res, {
+    symbol,
+    news: update.news,
+    activeNews: update.activeNews,
+    config: update.config,
+  });
+}
+
+async function handleGenerateNews(req: http.IncomingMessage, url: URL, res: http.ServerResponse): Promise<void> {
+  try {
+    const body = await readJsonBody(req) as Record<string, unknown>;
+    const symbol = typeof body.target_asset === 'string' ? body.target_asset : newsSymbol(url) ?? simulationManager.getActiveSymbol();
+    const record = simulationManager.generateSyntheticNews({
+      mode: typeof body.mode === 'string' ? body.mode as 'auto' | 'manual' : 'manual',
+      source_type: typeof body.source_type === 'string' ? body.source_type as never : undefined,
+      event_type: typeof body.event_type === 'string' ? body.event_type : undefined,
+      target_asset: symbol,
+    }, symbol);
+    if (!record) {
+      sendJson(res, { ok: false, error: 'No suitable synthetic news event generated' }, 409);
+      return;
+    }
+    sendJson(res, { ok: true, record });
+  } catch (err) {
+    sendJson(res, { error: err instanceof Error ? err.message : 'Invalid news generation request' }, 400);
+  }
+}
+
+function handleGetActiveNews(url: URL, res: http.ServerResponse): void {
+  const agentId = url.searchParams.get('agent_id');
+  if (agentId) {
+    const symbol = newsSymbol(url) ?? simulationManager.getActiveSymbol();
+    sendJson(res, {
+      symbol,
+      agent_id: agentId,
+      active_news: simulationManager.getActiveNewsForAgent(agentId, symbol),
+    });
+    return;
+  }
+  const symbol = newsSymbol(url) ?? simulationManager.getActiveSymbol();
+  const update = simulationManager.getNewsUpdate(symbol);
+  sendJson(res, { symbol, activeNews: update.activeNews });
+}
+
+function handleGetNewsTemplates(url: URL, res: http.ServerResponse): void {
+  sendJson(res, { templates: simulationManager.listNewsTemplates(newsSymbol(url)) });
+}
+
+async function handleAddNewsTemplate(req: http.IncomingMessage, url: URL, res: http.ServerResponse): Promise<void> {
+  try {
+    const body = await readJsonBody(req);
+    simulationManager.addNewsTemplate(body as never, newsSymbol(url));
+    sendJson(res, { ok: true, templates: simulationManager.listNewsTemplates(newsSymbol(url)) });
+  } catch (err) {
+    sendJson(res, { error: err instanceof Error ? err.message : 'Invalid news template' }, 400);
+  }
+}
+
+async function handleToggleNewsEngine(req: http.IncomingMessage, url: URL, res: http.ServerResponse): Promise<void> {
+  try {
+    const body = await readJsonBody(req) as Record<string, unknown>;
+    const config = simulationManager.updateNewsConfig(body as never, newsSymbol(url));
+    sendJson(res, { ok: true, config });
+  } catch (err) {
+    sendJson(res, { error: err instanceof Error ? err.message : 'Invalid news engine config' }, 400);
+  }
+}
+
+function handleGetNewsDetail(newsId: string, url: URL, res: http.ServerResponse): void {
+  const record = simulationManager.getNewsRecord(newsId, newsSymbol(url));
+  if (!record) {
+    sendJson(res, { error: 'News not found' }, 404);
+    return;
+  }
+  sendJson(res, record);
+}
+
+function handleGetNewsImpactLog(newsId: string, url: URL, res: http.ServerResponse): void {
+  const record = simulationManager.getNewsRecord(newsId, newsSymbol(url));
+  if (!record) {
+    sendJson(res, { error: 'News not found' }, 404);
+    return;
+  }
+  sendJson(res, { news_id: newsId, feedback: record.feedback, exposures: record.exposures });
+}
+
 // --- Static file serving ---
 
 const MIME_TYPES: Record<string, string> = {
@@ -618,7 +779,7 @@ function shutdown(): void {
 
   // Destroy aggregator (cleans up timers)
   aggregator.destroy();
-  simulationEngine.destroy();
+  simulationManager.destroy();
 
   // Close WebSocket connections
   for (const client of wss.clients) {

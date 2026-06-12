@@ -1,11 +1,13 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 import AppLayout from '@/components/layout/AppLayout';
 
 // Lazy load pages for code splitting
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, type ReactNode } from 'react';
 
 const GamePage = lazy(() => import('@/components/game/GamePage'));
 const MarketSimulation = lazy(() => import('@/pages/MarketSimulation'));
+const MarketDataPage = lazy(() => import('@/pages/MarketDataPage'));
+const AgentStatusPage = lazy(() => import('@/pages/AgentStatusPage'));
 
 // eslint-disable-next-line react-refresh/only-export-components
 function PageLoader() {
@@ -17,7 +19,7 @@ function PageLoader() {
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
-function SuspenseWrapper({ children }: { children: React.ReactNode }) {
+function SuspenseWrapper({ children }: { children: ReactNode }) {
   return <Suspense fallback={<PageLoader />}>{children}</Suspense>;
 }
 
@@ -26,7 +28,10 @@ export const router = createBrowserRouter([
     path: '/',
     element: <AppLayout />,
     children: [
-      { index: true, element: <SuspenseWrapper><MarketSimulation /></SuspenseWrapper> },
+      { index: true, element: <Navigate to="/market-data" replace /> },
+      { path: 'market-data', element: <SuspenseWrapper><MarketDataPage /></SuspenseWrapper> },
+      { path: 'agent-status', element: <SuspenseWrapper><AgentStatusPage /></SuspenseWrapper> },
+      { path: 'simulation', element: <SuspenseWrapper><MarketSimulation /></SuspenseWrapper> },
       { path: 'office', element: <SuspenseWrapper><GamePage /></SuspenseWrapper> },
     ],
   },

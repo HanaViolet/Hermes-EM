@@ -1,32 +1,20 @@
 {
   "mode": "live",
-  "generatedAt": "2026-06-09T14:00:20.328622+00:00",
+  "generatedAt": "2026-06-13T11:01:50.760283+00:00",
   "resources": [
     {
       "id": "document",
       "title": "Reports & Analysis",
-      "status": "done",
+      "status": "idle",
       "items": [
         {
-          "id": "document-0",
-          "title": "Decision: HOLD",
-          "meta": "badge",
-          "excerpt": "SPY momentum 策略分析完成。建议谨慎持有，等待进一步确认。"
-        },
-        {
-          "id": "document-1",
-          "title": "Return: 43.2",
-          "meta": "bar",
-          "excerpt": "SPY momentum 策略分析完成。建议谨慎持有，等待进一步确认。"
-        },
-        {
-          "id": "document-2",
-          "title": "Sharpe: 0.64",
-          "meta": "number",
-          "excerpt": "SPY momentum 策略分析完成。建议谨慎持有，等待进一步确认。"
+          "id": "rp-1",
+          "title": "Report: SPY",
+          "meta": "document",
+          "excerpt": "# Trading Agent Report: SPY\n\n## Final Decision\n- Decision: hold\n- Confidence: 0.25\n\n## Strategy\n- Selected Strategy: momentum\n- Latest Signal: Cash\n\n## Backtest\n- Total Return: 43.16%\n- Benchmark Tota"
         }
       ],
-      "itemCount": 3,
+      "itemCount": 1,
       "stats": [
         {
           "label": "en",
@@ -46,67 +34,19 @@
       "status": "done",
       "items": [
         {
-          "id": "images-0",
+          "id": "nw-1",
+          "title": "News Score: ?",
+          "meta": "metric",
+          "excerpt": "Overall news sentiment score"
+        },
+        {
+          "id": "nw-2",
           "title": "Sentiment: neutral",
-          "meta": "badge",
-          "excerpt": "新闻面中性，对最终交易决策只形成轻微影响。"
-        },
-        {
-          "id": "images-1",
-          "title": "News Score: 42",
-          "meta": "number",
-          "excerpt": "新闻面中性，对最终交易决策只形成轻微影响。"
-        },
-        {
-          "id": "images-2",
-          "title": "Confidence: 50",
-          "meta": "number",
-          "excerpt": "新闻面中性，对最终交易决策只形成轻微影响。"
-        },
-        {
-          "id": "images-3",
-          "title": "Key Events: 1",
-          "meta": "number",
-          "excerpt": "新闻面中性，对最终交易决策只形成轻微影响。"
-        },
-        {
-          "id": "images-4",
-          "title": "Risk Events: 1",
-          "meta": "number",
-          "excerpt": "新闻面中性，对最终交易决策只形成轻微影响。"
-        },
-        {
-          "id": "images-5",
-          "title": "Positive Events: 0",
-          "meta": "number",
-          "excerpt": "新闻面中性，对最终交易决策只形成轻微影响。"
-        },
-        {
-          "id": "images-6",
-          "title": "Negative Events: 1",
-          "meta": "number",
-          "excerpt": "新闻面中性，对最终交易决策只形成轻微影响。"
-        },
-        {
-          "id": "images-7",
-          "title": "Net Score: 42",
-          "meta": "number",
-          "excerpt": "新闻面中性，对最终交易决策只形成轻微影响。"
-        },
-        {
-          "id": "images-8",
-          "title": "市场宏观数据受关注: 50",
-          "meta": "badge",
-          "excerpt": "新闻面中性，对最终交易决策只形成轻微影响。"
-        },
-        {
-          "id": "images-9",
-          "title": "宏观不确定性仍然存在: 35",
-          "meta": "badge",
-          "excerpt": "新闻面中性，对最终交易决策只形成轻微影响。"
+          "meta": "metric",
+          "excerpt": "News sentiment classification"
         }
       ],
-      "itemCount": 10,
+      "itemCount": 2,
       "stats": [
         {
           "label": "en",
@@ -124,33 +64,8 @@
       "id": "memory",
       "title": "Strategy Memory",
       "status": "done",
-      "items": [
-        {
-          "id": "memory-0",
-          "title": "Related Records: 1",
-          "meta": "number",
-          "excerpt": "SPY 分析记录已保存至历史策略库。历史记录对当前策略形成轻微正向加权。"
-        },
-        {
-          "id": "memory-1",
-          "title": "Avg Return: 43.2",
-          "meta": "number",
-          "excerpt": "SPY 分析记录已保存至历史策略库。历史记录对当前策略形成轻微正向加权。"
-        },
-        {
-          "id": "memory-2",
-          "title": "Avg Sharpe: 0.64",
-          "meta": "number",
-          "excerpt": "SPY 分析记录已保存至历史策略库。历史记录对当前策略形成轻微正向加权。"
-        },
-        {
-          "id": "memory-3",
-          "title": "Memory Boost: 0",
-          "meta": "number",
-          "excerpt": "SPY 分析记录已保存至历史策略库。历史记录对当前策略形成轻微正向加权。"
-        }
-      ],
-      "itemCount": 4,
+      "items": [],
+      "itemCount": 0,
       "stats": [
         {
           "label": "en",
@@ -170,25 +85,37 @@
       "status": "done",
       "items": [
         {
-          "id": "skills-0",
-          "title": "ma: 56.84",
-          "meta": "strategy_score",
-          "excerpt": "策略比较完成。"
+          "id": "st-1",
+          "title": "Strategy: auto",
+          "meta": "info",
+          "excerpt": "Selected trading strategy"
         },
         {
-          "id": "skills-1",
-          "title": "rsi: 58.93",
-          "meta": "strategy_score",
-          "excerpt": "策略比较完成。"
+          "id": "st-2",
+          "title": "Signal: hold",
+          "meta": "metric",
+          "excerpt": "Trade signal"
         },
         {
-          "id": "skills-2",
-          "title": "momentum: 59.33",
-          "meta": "strategy_score",
-          "excerpt": "策略比较完成。"
+          "id": "sc-ma",
+          "title": "ma: score=56.84",
+          "meta": "metric",
+          "excerpt": "Return 42.36% | Sharpe 0.589 | Buy"
+        },
+        {
+          "id": "sc-rsi",
+          "title": "rsi: score=58.93",
+          "meta": "metric",
+          "excerpt": "Return 39.72% | Sharpe 0.633 | Buy"
+        },
+        {
+          "id": "sc-momentum",
+          "title": "momentum: score=59.33",
+          "meta": "metric",
+          "excerpt": "Return 43.16% | Sharpe 0.64 | Buy"
         }
       ],
-      "itemCount": 3,
+      "itemCount": 5,
       "stats": [
         {
           "label": "en",
@@ -208,31 +135,19 @@
       "status": "done",
       "items": [
         {
-          "id": "gateway-0",
-          "title": "Rows: 1199",
-          "meta": "number",
-          "excerpt": "行情数据完整，无明显缺失，可支持后续分析。"
+          "id": "gw-1",
+          "title": "Data Source: Yahoo Finance",
+          "meta": "info",
+          "excerpt": "OHLCV daily data"
         },
         {
-          "id": "gateway-1",
-          "title": "Missing: 0",
-          "meta": "number",
-          "excerpt": "行情数据完整，无明显缺失，可支持后续分析。"
-        },
-        {
-          "id": "gateway-2",
-          "title": "Latest Close: 586.08",
-          "meta": "number",
-          "excerpt": "行情数据完整，无明显缺失，可支持后续分析。"
-        },
-        {
-          "id": "gateway-3",
-          "title": "Coverage: 100",
-          "meta": "bar",
-          "excerpt": "行情数据完整，无明显缺失，可支持后续分析。"
+          "id": "gw-2",
+          "title": "Rows loaded: 16",
+          "meta": "metric",
+          "excerpt": "Loaded 16 rows for SPY"
         }
       ],
-      "itemCount": 4,
+      "itemCount": 2,
       "stats": [
         {
           "label": "en",
@@ -249,22 +164,9 @@
     {
       "id": "log",
       "title": "Execution Logs",
-      "status": "done",
-      "items": [
-        {
-          "id": "log-0",
-          "title": "Events: 3",
-          "meta": "number",
-          "excerpt": "模拟执行模式，无实际订单产生。"
-        },
-        {
-          "id": "log-1",
-          "title": "Status: Done",
-          "meta": "badge",
-          "excerpt": "模拟执行模式，无实际订单产生。"
-        }
-      ],
-      "itemCount": 2,
+      "status": "idle",
+      "items": [],
+      "itemCount": 0,
       "stats": [
         {
           "label": "en",
@@ -284,43 +186,67 @@
       "status": "done",
       "items": [
         {
-          "id": "mcp-0",
-          "title": "Trend: Range-bound",
-          "meta": "badge",
-          "excerpt": "指标计算完成，RSI 未进入超买或超卖区间，MACD 动能中性。"
+          "id": "ind-rows",
+          "title": "rows: 1199.0",
+          "meta": "metric",
+          "excerpt": "1199.0"
         },
         {
-          "id": "mcp-1",
-          "title": "RSI: 36.4",
-          "meta": "number",
-          "excerpt": "指标计算完成，RSI 未进入超买或超卖区间，MACD 动能中性。"
+          "id": "ind-close",
+          "title": "close: 586.08",
+          "meta": "metric",
+          "excerpt": "586.08"
         },
         {
-          "id": "mcp-2",
-          "title": "MACD: -0.983",
-          "meta": "number",
-          "excerpt": "指标计算完成，RSI 未进入超买或超卖区间，MACD 动能中性。"
+          "id": "ind-ma20",
+          "title": "ma20: 599.5385",
+          "meta": "metric",
+          "excerpt": "599.5385"
         },
         {
-          "id": "mcp-3",
-          "title": "MA20: 599.5",
-          "meta": "number",
-          "excerpt": "指标计算完成，RSI 未进入超买或超卖区间，MACD 动能中性。"
+          "id": "ind-ma60",
+          "title": "ma60: 590.4677",
+          "meta": "metric",
+          "excerpt": "590.4677"
         },
         {
-          "id": "mcp-4",
-          "title": "MA60: 590.5",
-          "meta": "number",
-          "excerpt": "指标计算完成，RSI 未进入超买或超卖区间，MACD 动能中性。"
+          "id": "ind-rsi",
+          "title": "rsi: 36.4462",
+          "meta": "metric",
+          "excerpt": "36.4462"
         },
         {
-          "id": "mcp-5",
-          "title": "20D Return: -2.9",
-          "meta": "bar",
-          "excerpt": "指标计算完成，RSI 未进入超买或超卖区间，MACD 动能中性。"
+          "id": "ind-macd",
+          "title": "macd: -0.9834",
+          "meta": "metric",
+          "excerpt": "-0.9834"
+        },
+        {
+          "id": "ind-macd_signal",
+          "title": "macd_signal: 0.9719",
+          "meta": "metric",
+          "excerpt": "0.9719"
+        },
+        {
+          "id": "ind-volatility_20d",
+          "title": "volatility_20d: 0.1428",
+          "meta": "metric",
+          "excerpt": "0.1428"
+        },
+        {
+          "id": "ind-daily_return",
+          "title": "daily_return: -0.0036",
+          "meta": "metric",
+          "excerpt": "-0.0036"
+        },
+        {
+          "id": "ind-return_20d",
+          "title": "return_20d: -0.0291",
+          "meta": "metric",
+          "excerpt": "-0.0291"
         }
       ],
-      "itemCount": 6,
+      "itemCount": 10,
       "stats": [
         {
           "label": "en",
@@ -340,79 +266,37 @@
       "status": "done",
       "items": [
         {
-          "id": "schedule-0",
-          "title": "Decision: HOLD",
-          "meta": "number",
-          "excerpt": "HOLD is not well supported. Consider reducing position size or waiting for confirmation. | Critic: News is neutral, but some agents signal BUY — HOLD may miss early momentum."
+          "id": "sc-1",
+          "title": "Decision: HOLD · Wait",
+          "meta": "metric",
+          "excerpt": "Final decision with mode"
         },
         {
-          "id": "schedule-1",
-          "title": "Mode: Wait",
-          "meta": "number",
-          "excerpt": "HOLD is not well supported. Consider reducing position size or waiting for confirmation. | Critic: News is neutral, but some agents signal BUY — HOLD may miss early momentum."
+          "id": "sc-2",
+          "title": "Watch Priority: HIGH",
+          "meta": "metric",
+          "excerpt": "Monitoring priority level"
         },
         {
-          "id": "schedule-2",
-          "title": "Confidence: 25%",
-          "meta": "number",
-          "excerpt": "HOLD is not well supported. Consider reducing position size or waiting for confirmation. | Critic: News is neutral, but some agents signal BUY — HOLD may miss early momentum."
+          "id": "sc-3",
+          "title": "Critic Score: 35",
+          "meta": "metric",
+          "excerpt": "Critic Agent confidence"
         },
         {
-          "id": "schedule-3",
+          "id": "sc-5",
           "title": "Score: 53",
-          "meta": "number",
-          "excerpt": "HOLD is not well supported. Consider reducing position size or waiting for confirmation. | Critic: News is neutral, but some agents signal BUY — HOLD may miss early momentum."
+          "meta": "metric",
+          "excerpt": "Weighted decision score"
         },
         {
-          "id": "schedule-4",
-          "title": "Critic: 35",
-          "meta": "number",
-          "excerpt": "HOLD is not well supported. Consider reducing position size or waiting for confirmation. | Critic: News is neutral, but some agents signal BUY — HOLD may miss early momentum."
-        },
-        {
-          "id": "schedule-5",
-          "title": "Position: 0%",
-          "meta": "number",
-          "excerpt": "HOLD is not well supported. Consider reducing position size or waiting for confirmation. | Critic: News is neutral, but some agents signal BUY — HOLD may miss early momentum."
-        },
-        {
-          "id": "schedule-6",
-          "title": "Watch: HIGH",
-          "meta": "number",
-          "excerpt": "HOLD is not well supported. Consider reducing position size or waiting for confirmation. | Critic: News is neutral, but some agents signal BUY — HOLD may miss early momentum."
-        },
-        {
-          "id": "schedule-7",
-          "title": "Indicator: BUY",
-          "meta": "badge",
-          "excerpt": "HOLD is not well supported. Consider reducing position size or waiting for confirmation. | Critic: News is neutral, but some agents signal BUY — HOLD may miss early momentum."
-        },
-        {
-          "id": "schedule-8",
-          "title": "News: HOLD",
-          "meta": "badge",
-          "excerpt": "HOLD is not well supported. Consider reducing position size or waiting for confirmation. | Critic: News is neutral, but some agents signal BUY — HOLD may miss early momentum."
-        },
-        {
-          "id": "schedule-9",
-          "title": "Risk: HOLD",
-          "meta": "badge",
-          "excerpt": "HOLD is not well supported. Consider reducing position size or waiting for confirmation. | Critic: News is neutral, but some agents signal BUY — HOLD may miss early momentum."
-        },
-        {
-          "id": "schedule-10",
-          "title": "Backtest: BUY",
-          "meta": "badge",
-          "excerpt": "HOLD is not well supported. Consider reducing position size or waiting for confirmation. | Critic: News is neutral, but some agents signal BUY — HOLD may miss early momentum."
-        },
-        {
-          "id": "schedule-11",
-          "title": "Critic: HOLD",
-          "meta": "badge",
-          "excerpt": "HOLD is not well supported. Consider reducing position size or waiting for confirmation. | Critic: News is neutral, but some agents signal BUY — HOLD may miss early momentum."
+          "id": "sc-6",
+          "title": "Position: 35%",
+          "meta": "metric",
+          "excerpt": "Suggested position size"
         }
       ],
-      "itemCount": 12,
+      "itemCount": 5,
       "stats": [
         {
           "label": "en",
@@ -432,31 +316,19 @@
       "status": "done",
       "items": [
         {
-          "id": "alarm-0",
-          "title": "Risk Score: 42",
-          "meta": "bar",
-          "excerpt": "风险分数由最大回撤、波动率分位数和市场状态共同决定。"
+          "id": "rk-1",
+          "title": "Max DD: -15.42%",
+          "meta": "metric",
+          "excerpt": "Maximum drawdown"
         },
         {
-          "id": "alarm-1",
-          "title": "Max Drawdown: -15.4",
-          "meta": "bar",
-          "excerpt": "风险分数由最大回撤、波动率分位数和市场状态共同决定。"
-        },
-        {
-          "id": "alarm-2",
-          "title": "Position Limit: 40",
-          "meta": "bar",
-          "excerpt": "风险分数由最大回撤、波动率分位数和市场状态共同决定。"
-        },
-        {
-          "id": "alarm-3",
-          "title": "Vol Percentile: 49",
-          "meta": "number",
-          "excerpt": "风险分数由最大回撤、波动率分位数和市场状态共同决定。"
+          "id": "rk-2",
+          "title": "Confidence: 0.25",
+          "meta": "metric",
+          "excerpt": "Decision confidence"
         }
       ],
-      "itemCount": 4,
+      "itemCount": 2,
       "stats": [
         {
           "label": "en",
@@ -473,19 +345,19 @@
     {
       "id": "agent",
       "title": "Agent Monitor",
-      "status": "done",
+      "status": "idle",
       "items": [
         {
-          "id": "agent-0",
-          "title": "Agents: 5",
-          "meta": "number",
-          "excerpt": "所有 Agent 阶段已执行完毕，无异常报错。"
+          "id": "ag-1",
+          "title": "Stage: Done",
+          "meta": "info",
+          "excerpt": "Current workflow stage"
         },
         {
-          "id": "agent-1",
-          "title": "Avg Latency: 308",
-          "meta": "number",
-          "excerpt": "所有 Agent 阶段已执行完毕，无异常报错。"
+          "id": "ag-2",
+          "title": "Progress: 100%",
+          "meta": "metric",
+          "excerpt": "Workflow progress"
         }
       ],
       "itemCount": 2,
@@ -508,37 +380,31 @@
       "status": "done",
       "items": [
         {
-          "id": "task_queues-0",
-          "title": "Total Return: 43.2",
-          "meta": "bar",
-          "excerpt": "回测总收益 43.2%，夏普 0.64，最大回撤 -15.4%。收益为正但 Sharpe 一般。"
-        },
-        {
-          "id": "task_queues-1",
+          "id": "bt-1",
           "title": "Sharpe: 0.64",
-          "meta": "number",
-          "excerpt": "回测总收益 43.2%，夏普 0.64，最大回撤 -15.4%。收益为正但 Sharpe 一般。"
+          "meta": "metric",
+          "excerpt": "Risk-adjusted return"
         },
         {
-          "id": "task_queues-2",
-          "title": "Max Drawdown: -15.4",
-          "meta": "bar",
-          "excerpt": "回测总收益 43.2%，夏普 0.64，最大回撤 -15.4%。收益为正但 Sharpe 一般。"
+          "id": "bt-2",
+          "title": "Return: 43.16%",
+          "meta": "metric",
+          "excerpt": "Total return"
         },
         {
-          "id": "task_queues-3",
-          "title": "Win Rate: 38.0",
-          "meta": "bar",
-          "excerpt": "回测总收益 43.2%，夏普 0.64，最大回撤 -15.4%。收益为正但 Sharpe 一般。"
+          "id": "bt-3",
+          "title": "Win Rate: 0%",
+          "meta": "metric",
+          "excerpt": "Trade win rate"
         },
         {
-          "id": "task_queues-4",
+          "id": "bt-4",
           "title": "Trades: 98",
-          "meta": "number",
-          "excerpt": "回测总收益 43.2%，夏普 0.64，最大回撤 -15.4%。收益为正但 Sharpe 一般。"
+          "meta": "metric",
+          "excerpt": "Number of trades"
         }
       ],
-      "itemCount": 5,
+      "itemCount": 4,
       "stats": [
         {
           "label": "en",
@@ -558,16 +424,16 @@
       "status": "done",
       "items": [
         {
-          "id": "break_room-0",
-          "title": "Decision: HOLD",
-          "meta": "badge",
-          "excerpt": "最新分析 SPY 已完成，决策为 HOLD。Agent 返回休息室待命。"
+          "id": "br-1",
+          "title": "Last: SPY",
+          "meta": "info",
+          "excerpt": "Completed analysis for SPY"
         },
         {
-          "id": "break_room-1",
-          "title": "Strategy: momentum",
-          "meta": "badge",
-          "excerpt": "最新分析 SPY 已完成，决策为 HOLD。Agent 返回休息室待命。"
+          "id": "br-2",
+          "title": "Decision: hold",
+          "meta": "metric",
+          "excerpt": "Final trading decision"
         }
       ],
       "itemCount": 2,
@@ -590,73 +456,73 @@
       "resourceId": "break_room",
       "type": "access",
       "detail": "市场处于震荡状态，波动率正常，趋势信号不强，不适合激进追涨。",
-      "timestamp": "2026-06-09T14:00:20.328622+00:00"
+      "timestamp": "2026-06-13T11:01:50.760283+00:00"
     },
     {
       "resourceId": "break_room",
       "type": "access",
       "detail": "未启用真实 LLM，当前使用 mock 新闻摘要。",
-      "timestamp": "2026-06-09T14:00:20.328622+00:00"
+      "timestamp": "2026-06-13T11:01:50.760283+00:00"
     },
     {
       "resourceId": "break_room",
       "type": "access",
       "detail": "Compare candidate strategies",
-      "timestamp": "2026-06-09T14:00:20.328622+00:00"
+      "timestamp": "2026-06-13T11:01:50.760283+00:00"
     },
     {
       "resourceId": "break_room",
       "type": "access",
       "detail": "Apply volatility filter and stop-loss to ma signal",
-      "timestamp": "2026-06-09T14:00:20.328622+00:00"
+      "timestamp": "2026-06-13T11:01:50.760283+00:00"
     },
     {
       "resourceId": "break_room",
       "type": "access",
       "detail": "Calculate ma strategy returns vs benchmark",
-      "timestamp": "2026-06-09T14:00:20.328622+00:00"
+      "timestamp": "2026-06-13T11:01:50.760283+00:00"
     },
     {
       "resourceId": "break_room",
       "type": "access",
       "detail": "Apply volatility filter and stop-loss to rsi signal",
-      "timestamp": "2026-06-09T14:00:20.328622+00:00"
+      "timestamp": "2026-06-13T11:01:50.760283+00:00"
     },
     {
       "resourceId": "break_room",
       "type": "access",
       "detail": "Calculate rsi strategy returns vs benchmark",
-      "timestamp": "2026-06-09T14:00:20.328622+00:00"
+      "timestamp": "2026-06-13T11:01:50.760283+00:00"
     },
     {
       "resourceId": "break_room",
       "type": "access",
       "detail": "Apply volatility filter and stop-loss to momentum signal",
-      "timestamp": "2026-06-09T14:00:20.328622+00:00"
+      "timestamp": "2026-06-13T11:01:50.760283+00:00"
     },
     {
       "resourceId": "break_room",
       "type": "access",
       "detail": "Calculate momentum strategy returns vs benchmark",
-      "timestamp": "2026-06-09T14:00:20.328622+00:00"
+      "timestamp": "2026-06-13T11:01:50.760283+00:00"
     },
     {
       "resourceId": "break_room",
       "type": "access",
       "detail": "Strategies compared: 3 candidates",
-      "timestamp": "2026-06-09T14:00:20.328622+00:00"
+      "timestamp": "2026-06-13T11:01:50.760283+00:00"
     },
     {
       "resourceId": "break_room",
       "type": "access",
       "detail": "暂无相同资产和策略的历史记录。",
-      "timestamp": "2026-06-09T14:00:20.328622+00:00"
+      "timestamp": "2026-06-13T11:01:50.760283+00:00"
     },
     {
       "resourceId": "break_room",
       "type": "access",
       "detail": "Workflow completed",
-      "timestamp": "2026-06-09T14:00:20.328622+00:00"
+      "timestamp": "2026-06-13T11:01:50.760283+00:00"
     }
   ],
   "focus": {
@@ -687,10 +553,10 @@
       "revision_applied": true,
       "confidence": 0.25,
       "critic_score": 35,
-      "total_return": 0.43164576878169547,
-      "benchmark_return": 1.3126825875009445,
-      "sharpe_ratio": 0.6401191629090001,
-      "max_drawdown": -0.1542277526199506,
+      "total_return": 0.4316457687816986,
+      "benchmark_return": 1.3126825875009498,
+      "sharpe_ratio": 0.6401191629090036,
+      "max_drawdown": -0.15422775261995003,
       "trades": 98,
       "decision_score": 53,
       "risk_score": 42
@@ -737,6 +603,290 @@
         "status": "done",
         "type": "data",
         "panel_type": "data_health",
+        "market_data": {
+          "ticker": "SPY",
+          "date_range": "2020-01-01 ~ 2024-12-31",
+          "data_source": "Yahoo Finance / Stooq",
+          "rows": 1199,
+          "missing_values": 0,
+          "latest_close": 586.080017,
+          "start_price": null,
+          "end_price": 586.080017,
+          "cache_status": "cache_or_remote",
+          "coverage_pct": 100
+        },
+        "news_digest": {
+          "score": 50,
+          "sentiment": "neutral",
+          "confidence": 0.5,
+          "summary": "未启用真实 LLM，当前使用 mock 新闻摘要。",
+          "key_events": [
+            {
+              "event": "市场宏观数据受关注",
+              "evidence_ids": [
+                1
+              ],
+              "impact": "neutral"
+            }
+          ],
+          "risk_events": [
+            {
+              "event": "宏观不确定性仍然存在",
+              "evidence_ids": [],
+              "impact": "negative"
+            }
+          ],
+          "raw_news": [
+            {
+              "id": 1,
+              "title": "US spy powers lapse as World Cup raises security fears",
+              "source": "AFP",
+              "url": "https://finance.yahoo.com/m/4debdbab-df65-351c-bd4f-917ad47b2684/us-spy-powers-lapse-as-world.html",
+              "published_at": "2026-06-13 13:03:17",
+              "summary": "US spy powers lapse as World Cup raises security fears"
+            },
+            {
+              "id": 2,
+              "title": "A Wiretapping Law Aimed at Spying on Foreigners Is Expiring. What Happens Next?",
+              "source": "The Wall Street Journal",
+              "url": "https://finance.yahoo.com/m/24fd5aa2-ab49-3f5a-9fbc-ee61173e7dad/a-wiretapping-law-aimed-at.html",
+              "published_at": "2026-06-13 05:53:00",
+              "summary": "A Wiretapping Law Aimed at Spying on Foreigners Is Expiring. What Happens Next?"
+            },
+            {
+              "id": 3,
+              "title": "Stocks Rally on Hopes for a Near-term US-Iran Interim Peace Agreement",
+              "source": "Barchart",
+              "url": "https://finance.yahoo.com/m/97b70e95-f81f-3467-b59d-9af5f12bde70/stocks-rally-on-hopes-for-a.html",
+              "published_at": "2026-06-13 04:39:53",
+              "summary": "Stocks Rally on Hopes for a Near-term US-Iran Interim Peace Agreement"
+            },
+            {
+              "id": 4,
+              "title": "Batteries Beat the S&P 500: BATT Is Up 25% While SPY Hugs 11%",
+              "source": "24/7 Wall St.",
+              "url": "https://finance.yahoo.com/m/d7f08d5e-d377-30df-befe-fbc9162c3ef3/batteries-beat-the-s%26p-500%3A.html",
+              "published_at": "2026-06-12 19:30:02",
+              "summary": "Batteries Beat the S&P 500: BATT Is Up 25% While SPY Hugs 11%"
+            },
+            {
+              "id": 5,
+              "title": "VOO vs. SPY: Which S&P 500 ETF is The Better Bet?",
+              "source": "Motley Fool",
+              "url": "https://finance.yahoo.com/m/e03da248-1f61-3af7-a754-d13616602b8c/voo-vs.-spy%3A-which-s%26p-500.html",
+              "published_at": "2026-06-13 02:48:03",
+              "summary": "VOO vs. SPY: Which S&P 500 ETF is The Better Bet?"
+            },
+            {
+              "id": 6,
+              "title": "US surveillance law to expire for first time after lawmakers reject Trump’s controversial pick to lead spy agencies",
+              "source": "TechCrunch",
+              "url": "https://finance.yahoo.com/m/41e4c96a-bd17-30a8-a9d8-c597b7409ea8/us-surveillance-law-to-expire.html",
+              "published_at": "2026-06-12 19:43:32",
+              "summary": "US surveillance law to expire for first time after lawmakers reject Trump’s controversial pick to lead spy agencies"
+            },
+            {
+              "id": 7,
+              "title": "Stocks See Support from Hopes for a Near-term US-Iran Peace Agreement",
+              "source": "Barchart",
+              "url": "https://finance.yahoo.com/m/864d8f12-dd50-32b0-8f40-0d114dc48427/stocks-see-support-from-hopes.html",
+              "published_at": "2026-06-12 23:51:42",
+              "summary": "Stocks See Support from Hopes for a Near-term US-Iran Peace Agreement"
+            },
+            {
+              "id": 8,
+              "title": "What Stripping the Weakest Stocks From the S&P 500 Actually Does for Your Portfolio",
+              "source": "24/7 Wall St.",
+              "url": "https://finance.yahoo.com/m/6cbe1636-7a6d-3b6e-aefe-cb6a67378f6b/what-stripping-the-weakest.html",
+              "published_at": "2026-06-12 23:17:01",
+              "summary": "What Stripping the Weakest Stocks From the S&P 500 Actually Does for Your Portfolio"
+            },
+            {
+              "id": 9,
+              "title": "Exchange-Traded Funds, Equity Futures Mixed Pre-Bell Friday Ahead of SpaceX Debut",
+              "source": "MT Newswires",
+              "url": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131503816.html",
+              "published_at": "2026-06-12 21:15:03",
+              "summary": "Exchange-Traded Funds, Equity Futures Mixed Pre-Bell Friday Ahead of SpaceX Debut"
+            },
+            {
+              "id": 10,
+              "title": "Stocks See Support from Hopes for a Near-term US-Iran Agreement",
+              "source": "Barchart",
+              "url": "https://finance.yahoo.com/m/dde32de5-5361-3c5f-945f-4e80e9cc7097/stocks-see-support-from-hopes.html",
+              "published_at": "2026-06-12 22:28:13",
+              "summary": "Stocks See Support from Hopes for a Near-term US-Iran Agreement"
+            }
+          ],
+          "ranked_news": [
+            {
+              "type": "key_event",
+              "title": "市场宏观数据受关注",
+              "source": "",
+              "published_at": "",
+              "summary": "",
+              "url": "",
+              "rec_score": 3,
+              "risk_score": 3,
+              "confidence": 0.5,
+              "final_score": 2.02
+            },
+            {
+              "type": "news",
+              "title": "US spy powers lapse as World Cup raises security fears",
+              "source": "AFP",
+              "published_at": "2026-06-13 13:03:17",
+              "summary": "US spy powers lapse as World Cup raises security fears",
+              "url": "https://finance.yahoo.com/m/4debdbab-df65-351c-bd4f-917ad47b2684/us-spy-powers-lapse-as-world.html",
+              "rec_score": 3,
+              "risk_score": 3,
+              "confidence": 0.5,
+              "final_score": 1.69
+            },
+            {
+              "type": "news",
+              "title": "A Wiretapping Law Aimed at Spying on Foreigners Is Expiring. What Happens Next?",
+              "source": "The Wall Street Journal",
+              "published_at": "2026-06-13 05:53:00",
+              "summary": "A Wiretapping Law Aimed at Spying on Foreigners Is Expiring. What Happens Next?",
+              "url": "https://finance.yahoo.com/m/24fd5aa2-ab49-3f5a-9fbc-ee61173e7dad/a-wiretapping-law-aimed-at.html",
+              "rec_score": 3,
+              "risk_score": 3,
+              "confidence": 0.5,
+              "final_score": 1.69
+            },
+            {
+              "type": "news",
+              "title": "Stocks Rally on Hopes for a Near-term US-Iran Interim Peace Agreement",
+              "source": "Barchart",
+              "published_at": "2026-06-13 04:39:53",
+              "summary": "Stocks Rally on Hopes for a Near-term US-Iran Interim Peace Agreement",
+              "url": "https://finance.yahoo.com/m/97b70e95-f81f-3467-b59d-9af5f12bde70/stocks-rally-on-hopes-for-a.html",
+              "rec_score": 3,
+              "risk_score": 3,
+              "confidence": 0.5,
+              "final_score": 1.69
+            },
+            {
+              "type": "news",
+              "title": "Batteries Beat the S&P 500: BATT Is Up 25% While SPY Hugs 11%",
+              "source": "24/7 Wall St.",
+              "published_at": "2026-06-12 19:30:02",
+              "summary": "Batteries Beat the S&P 500: BATT Is Up 25% While SPY Hugs 11%",
+              "url": "https://finance.yahoo.com/m/d7f08d5e-d377-30df-befe-fbc9162c3ef3/batteries-beat-the-s%26p-500%3A.html",
+              "rec_score": 3,
+              "risk_score": 3,
+              "confidence": 0.5,
+              "final_score": 1.69
+            },
+            {
+              "type": "news",
+              "title": "VOO vs. SPY: Which S&P 500 ETF is The Better Bet?",
+              "source": "Motley Fool",
+              "published_at": "2026-06-13 02:48:03",
+              "summary": "VOO vs. SPY: Which S&P 500 ETF is The Better Bet?",
+              "url": "https://finance.yahoo.com/m/e03da248-1f61-3af7-a754-d13616602b8c/voo-vs.-spy%3A-which-s%26p-500.html",
+              "rec_score": 3,
+              "risk_score": 3,
+              "confidence": 0.5,
+              "final_score": 1.69
+            },
+            {
+              "type": "news",
+              "title": "US surveillance law to expire for first time after lawmakers reject Trump’s controversial pick to lead spy agencies",
+              "source": "TechCrunch",
+              "published_at": "2026-06-12 19:43:32",
+              "summary": "US surveillance law to expire for first time after lawmakers reject Trump’s controversial pick to lead spy agencies",
+              "url": "https://finance.yahoo.com/m/41e4c96a-bd17-30a8-a9d8-c597b7409ea8/us-surveillance-law-to-expire.html",
+              "rec_score": 3,
+              "risk_score": 3,
+              "confidence": 0.5,
+              "final_score": 1.69
+            },
+            {
+              "type": "news",
+              "title": "Stocks See Support from Hopes for a Near-term US-Iran Peace Agreement",
+              "source": "Barchart",
+              "published_at": "2026-06-12 23:51:42",
+              "summary": "Stocks See Support from Hopes for a Near-term US-Iran Peace Agreement",
+              "url": "https://finance.yahoo.com/m/864d8f12-dd50-32b0-8f40-0d114dc48427/stocks-see-support-from-hopes.html",
+              "rec_score": 3,
+              "risk_score": 3,
+              "confidence": 0.5,
+              "final_score": 1.69
+            },
+            {
+              "type": "news",
+              "title": "What Stripping the Weakest Stocks From the S&P 500 Actually Does for Your Portfolio",
+              "source": "24/7 Wall St.",
+              "published_at": "2026-06-12 23:17:01",
+              "summary": "What Stripping the Weakest Stocks From the S&P 500 Actually Does for Your Portfolio",
+              "url": "https://finance.yahoo.com/m/6cbe1636-7a6d-3b6e-aefe-cb6a67378f6b/what-stripping-the-weakest.html",
+              "rec_score": 3,
+              "risk_score": 3,
+              "confidence": 0.5,
+              "final_score": 1.69
+            },
+            {
+              "type": "news",
+              "title": "Exchange-Traded Funds, Equity Futures Mixed Pre-Bell Friday Ahead of SpaceX Debut",
+              "source": "MT Newswires",
+              "published_at": "2026-06-12 21:15:03",
+              "summary": "Exchange-Traded Funds, Equity Futures Mixed Pre-Bell Friday Ahead of SpaceX Debut",
+              "url": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-131503816.html",
+              "rec_score": 3,
+              "risk_score": 3,
+              "confidence": 0.5,
+              "final_score": 1.69
+            },
+            {
+              "type": "news",
+              "title": "Stocks See Support from Hopes for a Near-term US-Iran Agreement",
+              "source": "Barchart",
+              "published_at": "2026-06-12 22:28:13",
+              "summary": "Stocks See Support from Hopes for a Near-term US-Iran Agreement",
+              "url": "https://finance.yahoo.com/m/dde32de5-5361-3c5f-945f-4e80e9cc7097/stocks-see-support-from-hopes.html",
+              "rec_score": 3,
+              "risk_score": 3,
+              "confidence": 0.5,
+              "final_score": 1.69
+            },
+            {
+              "type": "risk_event",
+              "title": "宏观不确定性仍然存在",
+              "source": "",
+              "published_at": "",
+              "summary": "",
+              "url": "",
+              "rec_score": 1,
+              "risk_score": 5,
+              "confidence": 0.5,
+              "final_score": 0.49
+            }
+          ]
+        },
+        "quality_checks": [
+          {
+            "label": "Market rows",
+            "status": "pass",
+            "detail": "1199 rows"
+          },
+          {
+            "label": "Latest close",
+            "status": "pass",
+            "detail": "586.08"
+          },
+          {
+            "label": "News input",
+            "status": "pass",
+            "detail": "10 articles"
+          },
+          {
+            "label": "Next-step readiness",
+            "status": "pass",
+            "detail": "Ready for indicators, strategy, and backtest"
+          }
+        ],
         "primary": {
           "label": "数据条数",
           "value": "1199",
@@ -754,28 +904,28 @@
         ],
         "metrics": [
           {
-            "label": "Rows",
+            "label": "样本量",
             "value": "1199",
             "unit": "bars",
             "display": "number",
             "level": "positive"
           },
           {
-            "label": "Missing",
+            "label": "缺失值",
             "value": 0,
             "unit": "",
             "display": "number",
             "level": "positive"
           },
           {
-            "label": "Latest Close",
+            "label": "最新收盘",
             "value": "586.08",
             "unit": "",
             "display": "number",
             "level": "neutral"
           },
           {
-            "label": "Coverage",
+            "label": "覆盖率",
             "value": 100,
             "unit": "%",
             "display": "bar",
@@ -800,7 +950,7 @@
             "数据从缓存或远程源加载。"
           ]
         },
-        "updated_at": "2026-06-09 22:00:20"
+        "updated_at": "2026-06-13 19:01:52"
       },
       "mcp": {
         "room_id": "mcp",
@@ -810,60 +960,88 @@
         "panel_type": "indicator_dashboard",
         "primary": {
           "label": "RSI",
+          "label_zh": "RSI",
           "value": "36.4",
           "unit": "",
           "level": "neutral"
         },
-        "summary": "RSI 36.4 · MACD -0.983 · Vol 14.3%",
-        "insight": "指标计算完成，RSI 未进入超买或超卖区间，MACD 动能中性。",
-        "impact_on_decision": "技术指标中性偏强，但 MACD 动能不足，因此不支持激进买入。",
-        "next_action": "等待 MACD 进一步转强。",
+        "summary": {
+          "en": "RSI 36.4 · MACD -0.983 · Vol 14.3%",
+          "zh": "RSI 36.4 · MACD -0.983 · 波动率 14.3%"
+        },
+        "insight": {
+          "en": "Indicators calculated. RSI remains neutral, MACD momentum is moderate.",
+          "zh": "指标计算完成，RSI 未进入超买或超卖区间，MACD 动能中性。"
+        },
+        "impact_on_decision": {
+          "en": "Technical indicators are neutral-to-mildly-bullish, but MACD momentum is insufficient for aggressive buying.",
+          "zh": "技术指标中性偏强，但 MACD 动能不足，因此不支持激进买入。"
+        },
+        "next_action": {
+          "en": "Wait for MACD momentum to strengthen further.",
+          "zh": "等待 MACD 进一步转强。"
+        },
         "monitor_focus": [
-          "RSI 是否进入 50-65 稳定区间",
-          "MACD 是否连续转强",
-          "Volatility 是否下降"
+          {
+            "en": "RSI stabilizes in the 50-65 range",
+            "zh": "RSI 进入 50-65 稳定区间"
+          },
+          {
+            "en": "MACD histogram turns positive consecutively",
+            "zh": "MACD 连续转强"
+          },
+          {
+            "en": "20D volatility falls below the medium level",
+            "zh": "20日波动率下降至中等以下"
+          }
         ],
         "metrics": [
           {
             "label": "Trend",
             "value": "Range-bound",
             "display": "badge",
-            "level": "neutral"
+            "level": "neutral",
+            "label_zh": "震荡盘整"
           },
           {
             "label": "RSI",
             "value": "36.4",
             "unit": "",
             "display": "number",
-            "level": "neutral"
+            "level": "neutral",
+            "label_zh": "RSI"
           },
           {
             "label": "MACD",
             "value": "-0.983",
             "unit": "",
             "display": "number",
-            "level": "neutral"
+            "level": "neutral",
+            "label_zh": "MACD"
           },
           {
             "label": "MA20",
             "value": "599.5",
             "unit": "",
             "display": "number",
-            "level": "neutral"
+            "level": "neutral",
+            "label_zh": "MA20"
           },
           {
             "label": "MA60",
             "value": "590.5",
             "unit": "",
             "display": "number",
-            "level": "neutral"
+            "level": "neutral",
+            "label_zh": "MA60"
           },
           {
             "label": "20D Return",
             "value": -2.9,
             "unit": "%",
             "display": "bar",
-            "level": "danger"
+            "level": "danger",
+            "label_zh": "20日收益"
           }
         ],
         "visual": {
@@ -872,26 +1050,34 @@
             "cards": [
               {
                 "label": "RSI",
+                "label_zh": "RSI",
                 "value": "36.4",
                 "state": "Neutral",
+                "state_zh": "中性",
                 "level": "neutral"
               },
               {
                 "label": "MACD",
+                "label_zh": "MACD",
                 "value": "-0.983",
                 "state": "Weak Momentum",
+                "state_zh": "动能偏弱",
                 "level": "neutral"
               },
               {
                 "label": "Volatility",
+                "label_zh": "波动率",
                 "value": "14.3%",
                 "state": "Medium",
+                "state_zh": "波动中等",
                 "level": "neutral"
               },
               {
                 "label": "Return 20D",
+                "label_zh": "20日收益",
                 "value": "-2.9%",
                 "state": "Negative",
+                "state_zh": "收益为负",
                 "level": "danger"
               }
             ]
@@ -911,338 +1097,183 @@
             "Volatility"
           ],
           "reasoning": [
-            "RSI 未进入超买或超卖区间。"
+            {
+              "en": "Indicators calculated. RSI remains neutral, MACD momentum is moderate.",
+              "zh": "指标计算完成，RSI 未进入超买或超卖区间，MACD 动能中性。"
+            }
           ]
         },
-        "updated_at": "2026-06-09 22:00:20"
+        "updated_at": "2026-06-13 19:01:52"
       },
       "images": {
         "room_id": "images",
-        "room_name": "资讯分析室",
+        "room_name": "图表分析室",
         "status": "done",
-        "type": "news",
-        "panel_type": "news_evidence",
+        "type": "chart",
+        "panel_type": "chart_panel",
         "primary": {
-          "label": "News Score",
-          "value": "42",
-          "unit": "/100",
-          "level": "neutral"
+          "label": "图表摘要",
+          "value": "586.08",
+          "unit": "",
+          "level": "positive"
         },
-        "summary": "News: neutral · 42/100",
-        "insight": "新闻面中性，对最终交易决策只形成轻微影响。",
-        "impact_on_decision": "新闻面略偏负面，对最终评分形成轻微负向扣分。",
-        "next_action": "若出现重大宏观事件，重新运行新闻分析。",
+        "summary": "最新收盘 586.08 · 多头排列 · 信号 HOLD",
+        "insight": "当前 SPY 最新收盘 586.08，多头排列，RSI 中性，MACD 偏空，策略信号为 HOLD。",
+        "impact_on_decision": "图表摘要为决策调度室提供可视化依据，但最终仓位仍需结合风险报警室综合判断。",
+        "next_action": "持续观察价格与均线的偏离程度，以及回测夏普比率是否稳定。",
         "monitor_focus": [
-          "News Score > 70",
-          "重大宏观事件",
-          "负面风险事件数量"
+          "MA20/MA60 交叉",
+          "RSI 是否进入极值区间",
+          "MACD 方向变化",
+          "夏普比率是否低于 1.0"
         ],
         "metrics": [
           {
-            "label": "Sentiment",
-            "value": "neutral",
-            "display": "badge",
-            "level": "neutral"
-          },
-          {
-            "label": "News Score",
-            "value": 42,
-            "unit": "/100",
+            "label": "最新收盘",
+            "value": "586.08",
+            "unit": "",
             "display": "number",
             "level": "neutral"
           },
           {
-            "label": "Confidence",
-            "value": 50,
+            "label": "均线状态",
+            "value": "多头排列",
+            "display": "badge",
+            "level": "positive"
+          },
+          {
+            "label": "RSI 状态",
+            "value": "中性",
+            "display": "badge",
+            "level": "neutral"
+          },
+          {
+            "label": "MACD 状态",
+            "value": "偏空",
+            "display": "badge",
+            "level": "danger"
+          },
+          {
+            "label": "20日收益",
+            "value": "-2.9",
+            "unit": "%",
+            "display": "number",
+            "level": "danger"
+          },
+          {
+            "label": "20日波动",
+            "value": "14.3",
             "unit": "%",
             "display": "number",
             "level": "neutral"
           },
           {
-            "label": "Key Events",
-            "value": 1,
-            "unit": "",
-            "display": "number",
-            "level": "neutral"
-          },
-          {
-            "label": "Risk Events",
-            "value": 1,
-            "unit": "",
-            "display": "number",
-            "level": "neutral"
-          },
-          {
-            "label": "Positive Events",
-            "value": "0",
-            "unit": "",
-            "display": "number",
-            "level": "neutral"
-          },
-          {
-            "label": "Negative Events",
-            "value": "1",
-            "unit": "",
-            "display": "number",
-            "level": "neutral"
-          },
-          {
-            "label": "Net Score",
-            "value": "42",
-            "unit": "",
-            "display": "number",
-            "level": "neutral"
-          },
-          {
-            "label": "市场宏观数据受关注",
-            "value": 50,
-            "unit": "NEU",
+            "label": "策略信号",
+            "value": "HOLD",
             "display": "badge",
+            "level": "warning"
+          },
+          {
+            "label": "策略评分",
+            "value": "59",
+            "unit": "",
+            "display": "number",
+            "level": "warning"
+          },
+          {
+            "label": "回测收益",
+            "value": 43.2,
+            "unit": "%",
+            "display": "bar",
+            "level": "positive"
+          },
+          {
+            "label": "夏普比率",
+            "value": "0.64",
+            "unit": "",
+            "display": "number",
             "level": "neutral"
           },
           {
-            "label": "宏观不确定性仍然存在",
-            "value": 35,
-            "unit": "NEG",
-            "display": "badge",
+            "label": "最大回撤",
+            "value": "15.4",
+            "unit": "%",
+            "display": "number",
             "level": "danger"
+          },
+          {
+            "label": "胜率",
+            "value": "38",
+            "unit": "%",
+            "display": "number",
+            "level": "neutral"
+          },
+          {
+            "label": "交易次数",
+            "value": 98,
+            "unit": "",
+            "display": "number",
+            "level": "neutral"
           }
         ],
         "visual": {
-          "kind": "news_evidence_list",
+          "kind": "chart_dashboard",
           "data": {
-            "news_score": 42,
-            "news_confidence": 0.5,
-            "sentiment": "neutral",
-            "key_events": [
-              {
-                "event": "市场宏观数据受关注",
-                "evidence_ids": [
-                  1
-                ],
-                "impact": "neutral"
-              }
-            ],
-            "risk_events": [
-              {
-                "event": "宏观不确定性仍然存在",
-                "evidence_ids": [],
-                "impact": "negative"
-              }
-            ],
-            "raw_news": [
-              {
-                "id": 1,
-                "title": "Exchange-Traded Funds, Equity Futures Higher Pre-Bell Tuesday Amid Inflation Data",
-                "source": "MT Newswires",
-                "url": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-130406510.html",
-                "published_at": "2026-06-09 21:04:06",
-                "summary": "Exchange-Traded Funds, Equity Futures Higher Pre-Bell Tuesday Amid Inflation Data"
-              },
-              {
-                "id": 2,
-                "title": "The Zacks Analyst Blog Highlights SMH, QQQ, SPY, AIQ, EWY, SPY, NVIDIA and Microsoft",
-                "source": "Zacks",
-                "url": "https://finance.yahoo.com/markets/stocks/articles/zacks-analyst-blog-highlights-smh-112300934.html",
-                "published_at": "2026-06-09 19:23:00",
-                "summary": "The Zacks Analyst Blog Highlights SMH, QQQ, SPY, AIQ, EWY, SPY, NVIDIA and Microsoft"
-              },
-              {
-                "id": 3,
-                "title": "Nasdaq, S&P 500 Futures Gain After Tech-Led Rebound: Why NVDA, QCOM, AAPL, APLD, ASTS, NUVL Are Keeping Traders Engaged Today",
-                "source": "Stocktwits",
-                "url": "https://finance.yahoo.com/m/acb209ee-f2f1-3200-8753-c5975c3faa93/nasdaq%2C-s%26p-500-futures-gain.html",
-                "published_at": "2026-06-09 16:49:10",
-                "summary": "Nasdaq, S&P 500 Futures Gain After Tech-Led Rebound: Why NVDA, QCOM, AAPL, APLD, ASTS, NUVL Are Keeping Traders Engaged Today"
-              },
-              {
-                "id": 4,
-                "title": "REGENT Accelerates Production of Its All-Electric Seaglider with RTI Connext Amid Growing Customer Demand",
-                "source": "GlobeNewswire",
-                "url": "https://finance.yahoo.com/sectors/technology/articles/regent-accelerates-production-electric-seaglider-120000176.html",
-                "published_at": "2026-06-09 20:00:00",
-                "summary": "REGENT Accelerates Production of Its All-Electric Seaglider with RTI Connext Amid Growing Customer Demand"
-              },
-              {
-                "id": 5,
-                "title": "What is Elon Musk's net worth?",
-                "source": "Moneyweek",
-                "url": "https://finance.yahoo.com/m/e549b1e9-7a89-3699-8968-a21957c67c7e/what-is-elon-musk%27s-net-worth%3F.html",
-                "published_at": "2026-06-09 19:07:36",
-                "summary": "What is Elon Musk's net worth?"
-              },
-              {
-                "id": 6,
-                "title": "China’s Xi Projects Strength. His Constant Purges Reveal Insecurity.",
-                "source": "The Wall Street Journal",
-                "url": "https://finance.yahoo.com/m/a2e8cd75-15d5-3fd2-b207-a3408ac98d60/china%E2%80%99s-xi-projects-strength..html",
-                "published_at": "2026-06-09 18:55:00",
-                "summary": "China’s Xi Projects Strength. His Constant Purges Reveal Insecurity."
-              },
-              {
-                "id": 7,
-                "title": "Michael Burry Loads Up On HCA, Says Selloff Created A Buying Opportunity — ‘Insanely Efficient Compounder'",
-                "source": "Stocktwits",
-                "url": "https://finance.yahoo.com/m/9c077b09-e5f8-3919-8130-388737b9365c/michael-burry-loads-up-on.html",
-                "published_at": "2026-06-09 18:27:42",
-                "summary": "Michael Burry Loads Up On HCA, Says Selloff Created A Buying Opportunity — ‘Insanely Efficient Compounder'"
-              },
-              {
-                "id": 8,
-                "title": "Is There Any Reason Left to Buy Cryptocurrency in 2026?",
-                "source": "Motley Fool",
-                "url": "https://finance.yahoo.com/m/26d34566-c698-3f90-8c5a-92cc9e51bd6d/is-there-any-reason-left-to.html",
-                "published_at": "2026-06-09 17:20:00",
-                "summary": "Is There Any Reason Left to Buy Cryptocurrency in 2026?"
-              },
-              {
-                "id": 9,
-                "title": "Broader Market Settles Higher as Chipmakers Rally",
-                "source": "Barchart",
-                "url": "https://finance.yahoo.com/m/44f66610-9a2a-3dce-8379-9d4904fe693f/broader-market-settles-higher.html",
-                "published_at": "2026-06-09 04:33:03",
-                "summary": "Broader Market Settles Higher as Chipmakers Rally"
-              },
-              {
-                "id": 10,
-                "title": "Stock Market Today: Dow Rises On Trump Comments; Micron, Sandisk Continue To Rebound (Live Coverage)",
-                "source": "Investor's Business Daily",
-                "url": "https://finance.yahoo.com/m/71c85e22-1ecc-3887-994b-fafd66da9153/stock-market-today%3A-dow-rises.html",
-                "published_at": "2026-06-09 20:51:49",
-                "summary": "Stock Market Today: Dow Rises On Trump Comments; Micron, Sandisk Continue To Rebound (Live Coverage)"
-              }
-            ]
+            "ticker": "SPY",
+            "rows": 1199,
+            "has_price_data": true,
+            "price_summary": {
+              "latest_close": 586.080017,
+              "ma20": 599.538498,
+              "ma60": 590.467668,
+              "trend": "多头排列",
+              "change_pct_20d": -0.029074
+            },
+            "indicator_summary": {
+              "rsi": 36.446209,
+              "rsi_state": "中性",
+              "macd": -0.983444,
+              "macd_state": "偏空",
+              "volatility_20d": 0.142818
+            },
+            "strategy_signal": {
+              "name": "20日动量",
+              "name_zh": "20日动量",
+              "name_en": "momentum",
+              "signal": "HOLD",
+              "score": 59.33,
+              "reasoning": "20日收益率 (-2.91%) 为负，momentum 偏空，产生卖出/观望信号。",
+              "reasoning_en": "MA20/MA60 trend is positive; RSI is neutral; MACD is danger. The current strategy signal is HOLD with score 59."
+            },
+            "backtest_summary": {
+              "total_return": 43.16457687816986,
+              "sharpe": 0.6401191629090036,
+              "max_drawdown": 15.422775261995003,
+              "win_rate": 37.97996661101836,
+              "trades": 98
+            },
+            "sparkline": [],
+            "date_range": ""
           }
         },
         "details": {
           "input": [
-            "市场宏观数据受关注"
+            "SPY",
+            "OHLCV",
+            "技术指标",
+            "回测结果"
           ],
           "output": [
-            "未启用真实 LLM，当前使用 mock 新闻摘要。"
+            "价格走势摘要",
+            "指标可视化摘要",
+            "策略信号摘要",
+            "回测表现摘要"
           ],
           "reasoning": [
-            "宏观不确定性仍然存在"
-          ],
-          "raw_news": [
-            {
-              "id": 1,
-              "title": "Exchange-Traded Funds, Equity Futures Higher Pre-Bell Tuesday Amid Inflation Data",
-              "source": "MT Newswires",
-              "url": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-130406510.html",
-              "published_at": "2026-06-09 21:04:06",
-              "summary": "Exchange-Traded Funds, Equity Futures Higher Pre-Bell Tuesday Amid Inflation Data"
-            },
-            {
-              "id": 2,
-              "title": "The Zacks Analyst Blog Highlights SMH, QQQ, SPY, AIQ, EWY, SPY, NVIDIA and Microsoft",
-              "source": "Zacks",
-              "url": "https://finance.yahoo.com/markets/stocks/articles/zacks-analyst-blog-highlights-smh-112300934.html",
-              "published_at": "2026-06-09 19:23:00",
-              "summary": "The Zacks Analyst Blog Highlights SMH, QQQ, SPY, AIQ, EWY, SPY, NVIDIA and Microsoft"
-            },
-            {
-              "id": 3,
-              "title": "Nasdaq, S&P 500 Futures Gain After Tech-Led Rebound: Why NVDA, QCOM, AAPL, APLD, ASTS, NUVL Are Keeping Traders Engaged Today",
-              "source": "Stocktwits",
-              "url": "https://finance.yahoo.com/m/acb209ee-f2f1-3200-8753-c5975c3faa93/nasdaq%2C-s%26p-500-futures-gain.html",
-              "published_at": "2026-06-09 16:49:10",
-              "summary": "Nasdaq, S&P 500 Futures Gain After Tech-Led Rebound: Why NVDA, QCOM, AAPL, APLD, ASTS, NUVL Are Keeping Traders Engaged Today"
-            },
-            {
-              "id": 4,
-              "title": "REGENT Accelerates Production of Its All-Electric Seaglider with RTI Connext Amid Growing Customer Demand",
-              "source": "GlobeNewswire",
-              "url": "https://finance.yahoo.com/sectors/technology/articles/regent-accelerates-production-electric-seaglider-120000176.html",
-              "published_at": "2026-06-09 20:00:00",
-              "summary": "REGENT Accelerates Production of Its All-Electric Seaglider with RTI Connext Amid Growing Customer Demand"
-            },
-            {
-              "id": 5,
-              "title": "What is Elon Musk's net worth?",
-              "source": "Moneyweek",
-              "url": "https://finance.yahoo.com/m/e549b1e9-7a89-3699-8968-a21957c67c7e/what-is-elon-musk%27s-net-worth%3F.html",
-              "published_at": "2026-06-09 19:07:36",
-              "summary": "What is Elon Musk's net worth?"
-            },
-            {
-              "id": 6,
-              "title": "China’s Xi Projects Strength. His Constant Purges Reveal Insecurity.",
-              "source": "The Wall Street Journal",
-              "url": "https://finance.yahoo.com/m/a2e8cd75-15d5-3fd2-b207-a3408ac98d60/china%E2%80%99s-xi-projects-strength..html",
-              "published_at": "2026-06-09 18:55:00",
-              "summary": "China’s Xi Projects Strength. His Constant Purges Reveal Insecurity."
-            },
-            {
-              "id": 7,
-              "title": "Michael Burry Loads Up On HCA, Says Selloff Created A Buying Opportunity — ‘Insanely Efficient Compounder'",
-              "source": "Stocktwits",
-              "url": "https://finance.yahoo.com/m/9c077b09-e5f8-3919-8130-388737b9365c/michael-burry-loads-up-on.html",
-              "published_at": "2026-06-09 18:27:42",
-              "summary": "Michael Burry Loads Up On HCA, Says Selloff Created A Buying Opportunity — ‘Insanely Efficient Compounder'"
-            },
-            {
-              "id": 8,
-              "title": "Is There Any Reason Left to Buy Cryptocurrency in 2026?",
-              "source": "Motley Fool",
-              "url": "https://finance.yahoo.com/m/26d34566-c698-3f90-8c5a-92cc9e51bd6d/is-there-any-reason-left-to.html",
-              "published_at": "2026-06-09 17:20:00",
-              "summary": "Is There Any Reason Left to Buy Cryptocurrency in 2026?"
-            },
-            {
-              "id": 9,
-              "title": "Broader Market Settles Higher as Chipmakers Rally",
-              "source": "Barchart",
-              "url": "https://finance.yahoo.com/m/44f66610-9a2a-3dce-8379-9d4904fe693f/broader-market-settles-higher.html",
-              "published_at": "2026-06-09 04:33:03",
-              "summary": "Broader Market Settles Higher as Chipmakers Rally"
-            },
-            {
-              "id": 10,
-              "title": "Stock Market Today: Dow Rises On Trump Comments; Micron, Sandisk Continue To Rebound (Live Coverage)",
-              "source": "Investor's Business Daily",
-              "url": "https://finance.yahoo.com/m/71c85e22-1ecc-3887-994b-fafd66da9153/stock-market-today%3A-dow-rises.html",
-              "published_at": "2026-06-09 20:51:49",
-              "summary": "Stock Market Today: Dow Rises On Trump Comments; Micron, Sandisk Continue To Rebound (Live Coverage)"
-            }
-          ],
-          "key_events": [
-            {
-              "event": "市场宏观数据受关注",
-              "evidence_ids": [
-                1
-              ],
-              "impact": "neutral"
-            }
-          ],
-          "risk_events": [
-            {
-              "event": "宏观不确定性仍然存在",
-              "evidence_ids": [],
-              "impact": "negative"
-            }
-          ],
-          "event_scores": [
-            {
-              "event": "市场宏观数据受关注",
-              "impact": "neutral",
-              "impact_score": 50,
-              "confidence": 0.5,
-              "evidence_ids": [
-                1
-              ]
-            },
-            {
-              "event": "宏观不确定性仍然存在",
-              "impact": "negative",
-              "impact_score": 35,
-              "confidence": 0.5,
-              "evidence_ids": []
-            }
-          ],
-          "news_confidence": 0.5
+            "20日收益率 (-2.91%) 为负，momentum 偏空，产生卖出/观望信号。"
+          ]
         },
-        "updated_at": "2026-06-09 22:00:20"
+        "updated_at": "2026-06-13 19:01:52"
       },
       "skills": {
         "room_id": "skills",
@@ -1251,37 +1282,64 @@
         "type": "strategy",
         "panel_type": "strategy_ranking",
         "primary": {
-          "label": "Top 策略",
-          "value": "ma",
-          "unit": "56.84",
-          "level": "positive"
+          "label": "当前策略",
+          "value": "20日动量",
+          "unit": "59.33",
+          "level": "warning"
         },
-        "summary": "ma · Score 56.84",
-        "insight": "策略比较完成。",
+        "summary": "20日动量 · 信号 HOLD · 评分 59.33 · 多因子 50.29",
+        "insight": "20日收益率 (-2.91%) 为负，momentum 偏空，产生卖出/观望信号。",
         "impact_on_decision": "策略得分分布均匀，优势不明显，最终保持谨慎。",
         "next_action": "继续观察 Top 策略是否获得趋势确认。",
         "monitor_focus": [
-          "Top strategy gap",
-          "LLM adjustment",
-          "Regime fit"
+          "当前策略信号",
+          "策略评分",
+          "多因子评分",
+          "趋势匹配度"
         ],
         "metrics": [
           {
-            "label": "ma",
+            "label": "信号",
+            "value": "HOLD",
+            "display": "badge",
+            "level": "neutral"
+          },
+          {
+            "label": "策略评分",
+            "value": 59.33,
+            "unit": "pts",
+            "display": "number",
+            "level": "neutral"
+          },
+          {
+            "label": "多因子评分",
+            "value": 50.29,
+            "unit": "pts",
+            "display": "number",
+            "level": "neutral"
+          },
+          {
+            "label": "策略",
+            "value": "20日动量",
+            "display": "badge",
+            "level": "neutral"
+          },
+          {
+            "label": "均线交叉",
             "value": 56.84,
             "display": "strategy_score",
             "signal": "buy",
             "unit": "score"
           },
           {
-            "label": "rsi",
+            "label": "RSI 动量",
             "value": 58.93,
             "display": "strategy_score",
             "signal": "buy",
             "unit": "score"
           },
           {
-            "label": "momentum",
+            "label": "20日动量",
             "value": 59.33,
             "display": "strategy_score",
             "signal": "buy",
@@ -1289,28 +1347,50 @@
           }
         ],
         "visual": {
-          "kind": "strategy_bar_chart",
+          "kind": "strategy_lab",
           "data": {
+            "current_strategy": {
+              "name": "momentum",
+              "name_zh": "20日动量",
+              "signal": "HOLD",
+              "score": 59.33,
+              "params": [
+                {
+                  "label": "回看周期",
+                  "value": "20 日"
+                },
+                {
+                  "label": "交易规则",
+                  "value": "20日收益 > 0 → 做多"
+                }
+              ],
+              "reasoning": "20日收益率 (-2.91%) 为负，momentum 偏空，产生卖出/观望信号。",
+              "description": "动量策略：20日收益为正买入，为负卖出。"
+            },
             "strategies": [
               {
                 "name": "ma",
                 "base_score": 56.84,
                 "llm_adjustment": 0,
-                "final_score": 56.84
+                "final_score": 55.53,
+                "multi_factor_score": 50.29
               },
               {
                 "name": "rsi",
                 "base_score": 58.93,
                 "llm_adjustment": 0,
-                "final_score": 58.93
+                "final_score": 57.2,
+                "multi_factor_score": 50.29
               },
               {
                 "name": "momentum",
                 "base_score": 59.33,
                 "llm_adjustment": 0,
-                "final_score": 59.33
+                "final_score": 57.52,
+                "multi_factor_score": 50.29
               }
-            ]
+            ],
+            "multi_factor_score": 50.29
           }
         },
         "details": {
@@ -1320,14 +1400,15 @@
             "Risk"
           ],
           "output": [
-            "Strategy Ranking",
-            "LLM Advice"
+            "当前策略",
+            "策略排名"
           ],
           "reasoning": [
+            "20日收益率 (-2.91%) 为负，momentum 偏空，产生卖出/观望信号。",
             ""
           ]
         },
-        "updated_at": "2026-06-09 22:00:20"
+        "updated_at": "2026-06-13 19:01:52"
       },
       "alarm": {
         "room_id": "alarm",
@@ -1336,44 +1417,44 @@
         "type": "risk",
         "panel_type": "risk_gauge",
         "primary": {
-          "label": "Risk",
-          "value": 42,
-          "unit": "/100",
+          "label": "Risk Gate",
+          "value": "限制仓位",
+          "unit": "",
           "level": "warning"
         },
-        "summary": "Medium · 42/100",
+        "summary": "限制仓位 · 42/100 · 仓位上限 40%",
         "insight": "风险分数由最大回撤、波动率分位数和市场状态共同决定。",
         "impact_on_decision": "风险门控限制激进买入，并降低建议仓位。",
-        "next_action": "等待 Risk Score 下降到 35 以下。",
+        "next_action": "等待风险分数下降到 35 以下。",
         "monitor_focus": [
-          "Risk Score < 35",
-          "Max Drawdown",
-          "Volatility Percentile"
+          "风险分数 < 35",
+          "最大回撤 < 15%",
+          "波动率分位回落"
         ],
         "metrics": [
           {
-            "label": "Risk Score",
+            "label": "风险分数",
             "value": 42,
             "unit": "/100",
             "display": "bar",
             "level": "warning"
           },
           {
-            "label": "Max Drawdown",
+            "label": "最大回撤",
             "value": -15.4,
             "unit": "%",
             "display": "bar",
             "level": "warning"
           },
           {
-            "label": "Position Limit",
+            "label": "仓位上限",
             "value": 40,
             "unit": "%",
             "display": "bar",
             "level": "warning"
           },
           {
-            "label": "Vol Percentile",
+            "label": "波动率分位",
             "value": 49,
             "unit": "%",
             "display": "number",
@@ -1385,8 +1466,44 @@
           "data": {
             "risk_score": 42,
             "risk_level": "medium",
-            "risk_gate": "active",
+            "gate_status": "limited",
+            "gate_level": "warning",
+            "gate_label_zh": "限制仓位",
+            "gate_label_en": "Position Limited",
+            "position_limit_pct": 40,
             "sources": [
+              {
+                "key": "max_drawdown",
+                "label": "Max Drawdown",
+                "label_zh": "最大回撤",
+                "value": -15.4,
+                "unit": "%",
+                "threshold": "< 15%",
+                "status": "warn",
+                "impact": "限制仓位"
+              },
+              {
+                "key": "volatility_percentile",
+                "label": "Volatility Percentile",
+                "label_zh": "波动率分位",
+                "value": 49,
+                "unit": "%",
+                "threshold": "< 60%",
+                "status": "pass",
+                "impact": "正常"
+              },
+              {
+                "key": "position_limit",
+                "label": "Position Limit",
+                "label_zh": "仓位上限",
+                "value": 40,
+                "unit": "%",
+                "threshold": ">= 50%",
+                "status": "warn",
+                "impact": "限制最终仓位"
+              }
+            ],
+            "legacy_sources": [
               {
                 "label": "Max Drawdown",
                 "value": -15.4,
@@ -1399,6 +1516,26 @@
                 "unit": "%",
                 "impact": "medium"
               }
+            ],
+            "review_conditions": [
+              {
+                "label": "Risk Score < 35",
+                "label_zh": "风险分数 < 35",
+                "current": 42,
+                "status": "wait"
+              },
+              {
+                "label": "Max Drawdown < 15%",
+                "label_zh": "最大回撤 < 15%",
+                "current": 15.4,
+                "status": "wait"
+              },
+              {
+                "label": "Volatility Percentile < 60%",
+                "label_zh": "波动率分位 < 60%",
+                "current": 49,
+                "status": "pass"
+              }
             ]
           }
         },
@@ -1409,15 +1546,15 @@
             "Regime"
           ],
           "output": [
-            "Risk Score",
-            "Risk Level",
-            "Position Constraint"
+            "Risk Gate",
+            "Position Constraint",
+            "Review Conditions"
           ],
           "reasoning": [
             "回撤和波动率共同决定风险水平。"
           ]
         },
-        "updated_at": "2026-06-09 22:00:20"
+        "updated_at": "2026-06-13 19:01:52"
       },
       "task_queues": {
         "room_id": "task_queues",
@@ -1426,51 +1563,51 @@
         "type": "backtest",
         "panel_type": "backtest_curve",
         "primary": {
-          "label": "Sharpe",
-          "value": "0.64",
+          "label": "验证结论",
+          "value": "谨慎通过",
           "unit": "",
-          "level": "positive"
+          "level": "warning"
         },
-        "summary": "Return 43.2% · Sharpe 0.64 · DD -15.4%",
+        "summary": "回测收益 43.2% · 夏普 0.64 · 最大回撤 -15.4%",
         "insight": "回测总收益 43.2%，夏普 0.64，最大回撤 -15.4%。收益为正但 Sharpe 一般。",
         "impact_on_decision": "回测收益为正，但 Sharpe 一般且最大回撤较大，因此只能形成有限正向支持。",
         "next_action": "继续监控策略表现。",
         "monitor_focus": [
-          "Sharpe > 1.0",
-          "Max Drawdown < 15%",
-          "Win Rate"
+          "夏普 > 1.0",
+          "最大回撤 < 15%",
+          "胜率稳定性"
         ],
         "metrics": [
           {
-            "label": "Total Return",
+            "label": "总收益",
             "value": 43.2,
             "unit": "%",
             "display": "bar",
             "level": "positive"
           },
           {
-            "label": "Sharpe",
+            "label": "夏普比率",
             "value": "0.64",
             "unit": "",
             "display": "number",
             "level": "neutral"
           },
           {
-            "label": "Max Drawdown",
+            "label": "最大回撤",
             "value": -15.4,
             "unit": "%",
             "display": "bar",
             "level": "warning"
           },
           {
-            "label": "Win Rate",
+            "label": "胜率",
             "value": 38.0,
             "unit": "%",
             "display": "bar",
             "level": "neutral"
           },
           {
-            "label": "Trades",
+            "label": "交易次数",
             "value": 98,
             "unit": "",
             "display": "number",
@@ -1481,2404 +1618,60 @@
           "kind": "equity_curve",
           "data": {
             "strategy_curve": [
-              1.0,
-              1.0,
-              1.0,
-              1.0,
-              1.0,
-              1.0,
-              1.0,
-              1.0,
-              1.0,
-              1.0,
-              1.0,
-              1.0,
-              1.0,
-              1.0,
-              1.0,
-              1.0,
-              1.0,
-              1.0,
-              1.0,
-              1.013418,
-              1.008758,
-              1.035166,
-              1.025528,
-              0.998379,
-              1.001133,
-              1.010382,
-              1.003533,
-              1.015643,
-              1.032448,
-              1.032659,
-              1.012077,
-              0.994178,
-              1.006075,
-              1.0107,
-              1.009689,
-              0.998309,
-              1.015268,
-              1.008259,
-              1.010174,
-              1.02262,
-              1.037835,
-              1.03592,
-              1.040536,
-              1.044742,
-              1.053392,
-              1.067411,
-              1.064608,
-              1.091893,
-              1.105091,
-              1.096851,
-              1.09073,
-              1.027851,
-              1.04016,
-              1.049871,
-              1.070078,
-              1.065633,
-              1.066044,
-              1.055307,
-              1.062077,
-              1.066967,
-              1.03975,
-              1.050897,
-              1.025936,
-              1.02491,
-              1.02491,
-              1.031065,
-              1.030034,
-              1.044904,
-              1.04386,
-              1.04386,
-              1.04386,
-              1.04386,
-              1.033777,
-              1.047174,
-              1.056794,
-              1.053314,
-              1.056367,
-              1.064905,
-              1.06717,
-              1.073245,
-              1.060439,
-              1.053609,
-              1.061293,
-              1.054562,
-              1.067531,
-              1.063722,
-              1.072128,
-              1.079582,
-              1.083752,
-              1.090483,
-              1.097772,
-              1.09856,
-              1.101844,
-              1.092749,
-              1.107984,
-              1.105981,
-              1.106014,
-              1.109527,
-              1.111924,
-              1.107295,
-              1.110742,
-              1.114682,
-              1.125978,
-              1.129918,
-              1.141246,
-              1.143741,
-              1.151129,
-              1.146959,
-              1.157762,
-              1.174508,
-              1.134088,
-              1.124828,
-              1.094095,
-              1.093001,
-              1.072929,
-              1.071856,
-              1.071856,
-              1.0762,
-              1.071929,
-              1.062501,
-              1.061438,
-              1.061438,
-              1.061438,
-              1.061438,
-              1.061438,
-              1.061438,
-              1.061438,
-              1.061438,
-              1.061438,
-              1.061438,
-              1.061438,
-              1.061438,
-              1.061438,
-              1.078853,
-              1.088414,
-              1.098134,
-              1.1158,
-              1.108519,
-              1.101553,
-              1.100192,
-              1.099527,
-              1.082811,
-              1.087148,
-              1.08509,
-              1.091042,
-              1.094746,
-              1.074516,
-              1.070811,
-              1.034212,
-              1.033178,
-              1.033178,
-              1.033178,
-              1.033178,
-              1.055236,
-              1.075816,
-              1.07557,
-              1.089085,
-              1.087488,
-              1.095566,
-              1.084938,
-              1.099959,
-              1.113689,
-              1.107699,
-              1.094368,
-              1.098976,
-              1.09145,
-              1.097993,
-              1.115686,
-              1.113965,
-              1.117068,
-              1.112122,
-              1.124286,
-              1.126651,
-              1.126344,
-              1.136051,
-              1.133716,
-              1.137034,
-              1.126836,
-              1.126467,
-              1.125146,
-              1.120109,
-              1.135252,
-              1.137034,
-              1.143392,
-              1.133993,
-              1.129938,
-              1.128034,
-              1.129047,
-              1.13344,
-              1.143177,
-              1.140996,
-              1.142624,
-              1.148429,
-              1.132795,
-              1.140597,
-              1.147416,
-              1.164463,
-              1.171098,
-              1.163204,
-              1.16345,
-              1.166583,
-              1.162498,
-              1.15402,
-              1.163081,
-              1.179177,
-              1.180252,
-              1.176074,
-              1.180713,
-              1.17887,
-              1.150057,
-              1.159948,
-              1.136726,
-              1.13559,
-              1.150512,
-              1.151416,
-              1.164503,
-              1.169086,
-              1.177529,
-              1.176745,
-              1.176233,
-              1.178132,
-              1.183952,
-              1.182927,
-              1.183198,
-              1.178163,
-              1.176082,
-              1.167036,
-              1.168453,
-              1.181329,
-              1.152864,
-              1.146923,
-              1.174725,
-              1.165558,
-              1.15012,
-              1.14897,
-              1.14897,
-              1.14897,
-              1.14897,
-              1.14897,
-              1.14897,
-              1.149368,
-              1.156222,
-              1.154764,
-              1.158702,
-              1.141843,
-              1.136009,
-              1.134873,
-              1.124806,
-              1.119088,
-              1.117969,
-              1.134867,
-              1.134294,
-              1.131285,
-              1.13587,
-              1.148137,
-              1.164616,
-              1.163928,
-              1.165275,
-              1.170806,
-              1.179318,
-              1.179748,
-              1.183245,
-              1.179204,
-              1.191871,
-              1.195855,
-              1.18998,
-              1.181267,
-              1.192445,
-              1.181554,
-              1.194365,
-              1.196858,
-              1.1966,
-              1.196256,
-              1.20388,
-              1.19597,
-              1.198549,
-              1.191155,
-              1.191527,
-              1.201042,
-              1.209784,
-              1.197804,
-              1.187114,
-              1.161893,
-              1.160731,
-              1.160731,
-              1.160731,
-              1.14957,
-              1.148421,
-              1.148421,
-              1.146332,
-              1.145186,
-              1.1415,
-              1.143765,
-              1.144365,
-              1.143221,
-              1.141071,
-              1.142865,
-              1.138624,
-              1.149037,
-              1.147923,
-              1.148167,
-              1.146454,
-              1.151783,
-              1.153687,
-              1.15627,
-              1.154149,
-              1.147705,
-              1.147324,
-              1.128156,
-              1.127028,
-              1.131926,
-              1.130562,
-              1.13725,
-              1.141289,
-              1.14359,
-              1.144205,
-              1.145168,
-              1.151509,
-              1.16031,
-              1.158197,
-              1.16229,
-              1.15282,
-              1.165126,
-              1.169299,
-              1.165313,
-              1.167052,
-              1.163066,
-              1.153943,
-              1.136902,
-              1.153194,
-              1.162531,
-              1.164965,
-              1.17695,
-              1.17984,
-              1.174462,
-              1.173981,
-              1.17885,
-              1.173125,
-              1.170664,
-              1.180187,
-              1.174382,
-              1.181819,
-              1.183772,
-              1.182809,
-              1.184281,
-              1.187223,
-              1.190781,
-              1.192948,
-              1.195757,
-              1.187919,
-              1.174917,
-              1.176736,
-              1.1861,
-              1.196533,
-              1.198433,
-              1.200947,
-              1.193858,
-              1.204532,
-              1.209829,
-              1.208037,
-              1.208679,
-              1.212397,
-              1.212103,
-              1.207769,
-              1.206298,
-              1.201135,
-              1.191664,
-              1.194714,
-              1.188267,
-              1.187078,
-              1.18401,
-              1.168732,
-              1.149244,
-              1.148095,
-              1.148095,
-              1.148095,
-              1.148095,
-              1.148095,
-              1.148095,
-              1.148095,
-              1.148095,
-              1.148095,
-              1.148095,
-              1.148095,
-              1.148095,
-              1.148095,
-              1.148095,
-              1.148095,
-              1.148095,
-              1.148095,
-              1.148095,
-              1.148095,
-              1.150346,
-              1.159221,
-              1.163774,
-              1.166809,
-              1.1656,
-              1.171851,
-              1.172906,
-              1.167709,
-              1.178976,
-              1.181369,
-              1.183401,
-              1.188186,
-              1.19544,
-              1.201073,
-              1.205241,
-              1.206269,
-              1.202282,
-              1.19261,
-              1.192996,
-              1.201999,
-              1.202411,
-              1.20717,
-              1.204237,
-              1.208327,
-              1.206167,
-              1.202771,
-              1.204366,
-              1.207581,
-              1.180649,
-              1.195131,
-              1.171877,
-              1.170705,
-              1.170705,
-              1.170705,
-              1.170705,
-              1.170705,
-              1.170705,
-              1.16163,
-              1.172565,
-              1.162178,
-              1.161016,
-              1.161016,
-              1.149616,
-              1.148467,
-              1.148467,
-              1.148467,
-              1.148467,
-              1.148467,
-              1.163572,
-              1.162621,
-              1.164108,
-              1.16089,
-              1.157964,
-              1.164669,
-              1.164279,
-              1.141922,
-              1.140849,
-              1.139708,
-              1.139708,
-              1.139708,
-              1.14165,
-              1.12592,
-              1.124794,
-              1.124794,
-              1.124794,
-              1.124794,
-              1.124794,
-              1.124794,
-              1.124794,
-              1.124794,
-              1.124794,
-              1.124794,
-              1.124794,
-              1.124794,
-              1.124794,
-              1.124794,
-              1.124794,
-              1.124794,
-              1.124794,
-              1.124794,
-              1.124794,
-              1.124794,
-              1.124794,
-              1.124794,
-              1.124794,
-              1.124794,
-              1.124794,
-              1.124794,
-              1.124794,
-              1.124794,
-              1.124794,
-              1.120791,
-              1.11967,
-              1.11967,
-              1.11967,
-              1.11967,
-              1.11967,
-              1.11967,
-              1.11967,
-              1.11967,
-              1.11967,
-              1.11967,
-              1.11967,
-              1.11967,
-              1.11967,
-              1.11967,
-              1.118223,
-              1.131308,
-              1.116738,
-              1.133573,
-              1.139109,
-              1.147211,
-              1.161403,
-              1.154232,
-              1.136466,
-              1.139687,
-              1.149451,
-              1.134931,
-              1.123583,
-              1.129245,
-              1.126225,
-              1.106975,
-              1.102874,
-              1.115506,
-              1.101616,
-              1.100514,
-              1.100514,
-              1.098597,
-              1.097499,
-              1.097499,
-              1.097499,
-              1.097499,
-              1.097499,
-              1.097499,
-              1.097499,
-              1.097499,
-              1.097499,
-              1.097499,
-              1.097499,
-              1.097499,
-              1.097499,
-              1.097499,
-              1.097499,
-              1.097499,
-              1.097499,
-              1.097499,
-              1.097499,
-              1.097499,
-              1.097499,
-              1.097499,
-              1.097499,
-              1.097499,
-              1.097499,
-              1.097499,
-              1.097499,
-              1.090243,
-              1.089153,
-              1.089153,
-              1.089153,
-              1.089153,
-              1.098511,
-              1.086568,
-              1.060726,
-              1.02997,
-              1.02894,
-              1.02894,
-              1.02894,
-              1.02894,
-              1.02894,
-              1.02894,
-              1.02894,
-              1.02894,
-              1.02894,
-              1.02894,
-              1.02894,
-              1.02894,
-              1.02894,
-              1.02894,
-              1.02894,
-              1.02894,
-              1.02894,
-              1.02894,
-              1.02894,
-              1.02894,
-              1.02894,
-              1.025412,
-              1.045003,
-              1.036374,
-              1.064376,
-              1.07116,
-              1.082067,
-              1.072028,
-              1.07333,
-              1.060632,
-              1.088173,
-              1.101821,
-              1.117884,
-              1.114574,
-              1.10722,
-              1.124559,
-              1.123799,
-              1.1219,
-              1.120597,
-              1.116147,
-              1.139591,
-              1.139591,
-              1.158883,
-              1.163659,
-              1.165938,
-              1.157662,
-              1.161027,
-              1.145425,
-              1.121574,
-              1.118861,
-              1.122442,
-              1.138289,
-              1.099759,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.098659,
-              1.111004,
-              1.128745,
-              1.120241,
-              1.114259,
-              1.140768,
-              1.132528,
-              1.127572,
-              1.099274,
-              1.098175,
-              1.098175,
-              1.107581,
-              1.113557,
-              1.090616,
-              1.15055,
-              1.161685,
-              1.151803,
-              1.161627,
-              1.152765,
-              1.149238,
-              1.154456,
-              1.150258,
-              1.165737,
-              1.173083,
-              1.172821,
-              1.154106,
-              1.152124,
-              1.188416,
-              1.187542,
-              1.186172,
-              1.164833,
-              1.148043,
-              1.14609,
-              1.155068,
-              1.146439,
-              1.145293,
-              1.152817,
-              1.145447,
-              1.117427,
-              1.11631,
-              1.11631,
-              1.11631,
-              1.11631,
-              1.11631,
-              1.11631,
-              1.11631,
-              1.11631,
-              1.11631,
-              1.11631,
-              1.11631,
-              1.11631,
-              1.11631,
-              1.11631,
-              1.11631,
-              1.11631,
-              1.11631,
-              1.11631,
-              1.11631,
-              1.11631,
-              1.097569,
-              1.089579,
-              1.109877,
-              1.123194,
-              1.121988,
-              1.122409,
-              1.134744,
-              1.137352,
-              1.123082,
-              1.139595,
-              1.151706,
-              1.168471,
-              1.156052,
-              1.148987,
-              1.164014,
-              1.151286,
-              1.141305,
-              1.143968,
-              1.157397,
-              1.156865,
-              1.160621,
-              1.144641,
-              1.141781,
-              1.118876,
-              1.117757,
-              1.117757,
-              1.104699,
-              1.103595,
-              1.103595,
-              1.103595,
-              1.103595,
-              1.103595,
-              1.103595,
-              1.103595,
-              1.103595,
-              1.103595,
-              1.103595,
-              1.103595,
-              1.103595,
-              1.103595,
-              1.103595,
-              1.103595,
-              1.103595,
-              1.103595,
-              1.103595,
-              1.103595,
-              1.103595,
-              1.103595,
-              1.103595,
-              1.103595,
-              1.108953,
-              1.124583,
-              1.128868,
-              1.122605,
-              1.119666,
-              1.124034,
-              1.125187,
-              1.12549,
-              1.120902,
-              1.135791,
-              1.133016,
-              1.137082,
-              1.137824,
-              1.137631,
-              1.131423,
-              1.132302,
-              1.133483,
-              1.115491,
-              1.110766,
-              1.132879,
-              1.142548,
-              1.141395,
-              1.128566,
-              1.127438,
-              1.127438,
-              1.127438,
-              1.126611,
-              1.12167,
-              1.126911,
-              1.124946,
-              1.123821,
-              1.123821,
-              1.123821,
-              1.123821,
-              1.133523,
-              1.131874,
-              1.132333,
-              1.119625,
-              1.111514,
-              1.121139,
-              1.135659,
-              1.136092,
-              1.129792,
-              1.140526,
-              1.157019,
-              1.154802,
-              1.157317,
-              1.153315,
-              1.160291,
-              1.162373,
-              1.172918,
-              1.180651,
-              1.182057,
-              1.196711,
-              1.188221,
-              1.182057,
-              1.176,
-              1.180245,
-              1.171322,
-              1.166537,
-              1.179326,
-              1.179921,
-              1.184571,
-              1.19855,
-              1.199929,
-              1.198144,
-              1.188762,
-              1.185761,
-              1.188762,
-              1.196333,
-              1.205958,
-              1.21553,
-              1.214773,
-              1.218991,
-              1.228049,
-              1.230779,
-              1.222614,
-              1.222614,
-              1.228076,
-              1.231428,
-              1.231618,
-              1.223452,
-              1.23543,
-              1.237782,
-              1.23424,
-              1.217071,
-              1.213583,
-              1.208094,
-              1.218639,
-              1.21334,
-              1.205228,
-              1.204023,
-              1.204023,
-              1.204023,
-              1.204023,
-              1.204023,
-              1.204023,
-              1.204023,
-              1.204023,
-              1.204023,
-              1.204023,
-              1.204023,
-              1.204023,
-              1.204023,
-              1.204023,
-              1.204023,
-              1.201057,
-              1.203297,
-              1.198097,
-              1.196899,
-              1.196899,
-              1.196899,
-              1.196899,
-              1.189136,
-              1.187947,
-              1.197002,
-              1.178423,
-              1.179114,
-              1.176669,
-              1.165852,
-              1.146582,
-              1.145435,
-              1.145435,
-              1.145435,
-              1.145435,
-              1.145435,
-              1.145435,
-              1.145435,
-              1.145435,
-              1.145435,
-              1.145435,
-              1.145435,
-              1.145435,
-              1.145435,
-              1.145435,
-              1.145435,
-              1.145435,
-              1.145435,
-              1.145435,
-              1.145435,
-              1.145435,
-              1.145435,
-              1.145435,
-              1.145435,
-              1.145435,
-              1.145435,
-              1.145435,
-              1.145435,
-              1.145435,
-              1.145435,
-              1.145435,
-              1.15474,
-              1.157397,
-              1.160691,
-              1.161541,
-              1.152482,
-              1.170466,
-              1.169351,
-              1.192037,
-              1.194561,
-              1.196022,
-              1.197509,
-              1.206727,
-              1.204097,
-              1.208746,
-              1.20949,
-              1.207312,
-              1.208507,
-              1.207657,
-              1.212412,
-              1.219585,
-              1.213183,
-              1.212943,
-              1.208056,
-              1.217273,
-              1.222507,
-              1.227262,
-              1.232867,
-              1.249868,
-              1.25388,
-              1.24676,
-              1.253773,
-              1.261397,
-              1.243918,
-              1.255713,
-              1.258236,
-              1.263549,
-              1.265834,
-              1.266312,
-              1.262646,
-              1.25558,
-              1.245326,
-              1.241315,
-              1.243015,
-              1.26076,
-              1.258847,
-              1.265967,
-              1.265409,
-              1.266285,
-              1.261636,
-              1.254623,
-              1.265781,
-              1.28156,
-              1.28427,
-              1.288015,
-              1.289423,
-              1.296436,
-              1.294789,
-              1.305043,
-              1.304034,
-              1.282755,
-              1.299544,
-              1.313225,
-              1.308443,
-              1.312242,
-              1.323187,
-              1.323771,
-              1.331422,
-              1.330838,
-              1.312508,
-              1.324435,
-              1.333574,
-              1.326933,
-              1.319627,
-              1.320823,
-              1.348158,
-              1.349087,
-              1.344146,
-              1.346643,
-              1.344864,
-              1.349698,
-              1.36237,
-              1.360909,
-              1.347308,
-              1.354135,
-              1.367576,
-              1.359368,
-              1.358199,
-              1.37281,
-              1.370658,
-              1.367948,
-              1.354347,
-              1.362396,
-              1.369967,
-              1.382639,
-              1.387208,
-              1.384578,
-              1.380753,
-              1.378202,
-              1.389784,
-              1.389519,
-              1.387101,
-              1.378282,
-              1.379796,
-              1.362954,
-              1.377193,
-              1.377963,
-              1.379557,
-              1.365743,
-              1.364378,
-              1.344181,
-              1.342837,
-              1.342837,
-              1.342837,
-              1.342837,
-              1.342837,
-              1.342837,
-              1.342837,
-              1.342837,
-              1.342837,
-              1.342837,
-              1.342837,
-              1.342837,
-              1.342837,
-              1.342837,
-              1.342837,
-              1.342837,
-              1.342837,
-              1.342837,
-              1.349231,
-              1.350969,
-              1.35115,
-              1.35735,
-              1.374158,
-              1.37133,
-              1.373302,
-              1.374884,
-              1.378256,
-              1.374287,
-              1.364249,
-              1.373276,
-              1.374235,
-              1.364612,
-              1.35556,
-              1.367907,
-              1.369022,
-              1.370552,
-              1.386841,
-              1.386815,
-              1.38513,
-              1.389409,
-              1.392755,
-              1.404194,
-              1.407022,
-              1.407878,
-              1.419083,
-              1.422688,
-              1.418823,
-              1.412365,
-              1.407774,
-              1.413195,
-              1.414959,
-              1.417189,
-              1.411612,
-              1.414518,
-              1.424037,
-              1.430392,
-              1.43864,
-              1.4403,
-              1.441701,
-              1.455967,
-              1.443413,
-              1.452517,
-              1.456512,
-              1.465149,
-              1.444606,
-              1.433504,
-              1.423985,
-              1.438666,
-              1.43641,
-              1.403857,
-              1.402453,
-              1.402453,
-              1.402453,
-              1.393945,
-              1.392551,
-              1.371439,
-              1.370067,
-              1.370067,
-              1.370067,
-              1.370067,
-              1.370067,
-              1.370067,
-              1.370067,
-              1.370067,
-              1.370067,
-              1.370067,
-              1.371769,
-              1.384885,
-              1.382633,
-              1.387385,
-              1.376496,
-              1.391121,
-              1.387805,
-              1.389711,
-              1.381643,
-              1.381767,
-              1.394957,
-              1.36625,
-              1.363454,
-              1.360138,
-              1.337246,
-              1.352219,
-              1.358108,
-              1.372041,
-              1.383598,
-              1.390825,
-              1.392879,
-              1.393448,
-              1.389315,
-              1.413023,
-              1.406267,
-              1.409781,
-              1.413815,
-              1.410697,
-              1.416289,
-              1.414235,
-              1.419903,
-              1.407182,
-              1.407776,
-              1.405203,
-              1.417972,
-              1.405153,
-              1.418442,
-              1.428267,
-              1.425768,
-              1.434306,
-              1.446036,
-              1.434801,
-              1.441037,
-              1.44116,
-              1.446704,
-              1.444328,
-              1.443561,
-              1.430371,
-              1.433464,
-              1.432969,
-              1.437399,
-              1.439725,
-              1.43537,
-              1.407232,
-              1.413171,
-              1.411758,
-              1.427417,
-              1.462911,
-              1.474222,
-              1.480608,
-              1.482019,
-              1.477415,
-              1.478133,
-              1.468628,
-              1.449817,
-              1.455757,
-              1.461079,
-              1.461574,
-              1.46942,
-              1.473974,
-              1.478974,
-              1.486697,
-              1.482192,
-              1.491399,
-              1.494073,
-              1.494766,
-              1.504047,
-              1.501572,
-              1.504419,
-              1.496672,
-              1.492018,
-              1.503553,
-              1.495805,
-              1.495508,
-              1.501894,
-              1.495706,
-              1.451129,
-              1.449678,
-              1.449678,
-              1.449678,
-              1.449678,
-              1.448325,
-              1.433079,
-              1.431646,
-              1.431646
+              1.0
             ],
             "benchmark_curve": [
-              1.032476,
-              1.017086,
-              0.971312,
-              0.993726,
-              0.979362,
-              1.045142,
-              1.046208,
-              1.081327,
-              1.097782,
-              1.087759,
-              1.119841,
-              1.096046,
-              1.101334,
-              1.131087,
-              1.111159,
-              1.077421,
-              1.101334,
-              1.101255,
-              1.116605,
-              1.132705,
-              1.127496,
-              1.157012,
-              1.146239,
-              1.115895,
-              1.118972,
-              1.129311,
-              1.121656,
-              1.135191,
-              1.153974,
-              1.15421,
-              1.131205,
-              1.111199,
-              1.124497,
-              1.129666,
-              1.164075,
-              1.152119,
-              1.171691,
-              1.163602,
-              1.165812,
-              1.180175,
-              1.197735,
-              1.195525,
-              1.200852,
-              1.205706,
-              1.215689,
-              1.231868,
-              1.228632,
-              1.260122,
-              1.275353,
-              1.265843,
-              1.25878,
-              1.186213,
-              1.200418,
-              1.211625,
-              1.234946,
-              1.229816,
-              1.23029,
-              1.217899,
-              1.225712,
-              1.231355,
-              1.199945,
-              1.212809,
-              1.184003,
-              1.201405,
-              1.216794,
-              1.225318,
-              1.232065,
-              1.251085,
-              1.238182,
-              1.247652,
-              1.240549,
-              1.253216,
-              1.242364,
-              1.258464,
-              1.270026,
-              1.265843,
-              1.269513,
-              1.279773,
-              1.282496,
-              1.289796,
-              1.274406,
-              1.266198,
-              1.275432,
-              1.267343,
-              1.28293,
-              1.278352,
-              1.288454,
-              1.297411,
-              1.302423,
-              1.310512,
-              1.319272,
-              1.320219,
-              1.324165,
-              1.313235,
-              1.331544,
-              1.329137,
-              1.329177,
-              1.333399,
-              1.33628,
-              1.330716,
-              1.334859,
-              1.339594,
-              1.353169,
-              1.357904,
-              1.371518,
-              1.374517,
-              1.383395,
-              1.378384,
-              1.391366,
-              1.411491,
-              1.362915,
-              1.351788,
-              1.314853,
-              1.340818,
-              1.317536,
-              1.318207,
-              1.335569,
-              1.342317,
-              1.33699,
-              1.325231,
-              1.304751,
-              1.29023,
-              1.30337,
-              1.273143,
-              1.276537,
-              1.297175,
-              1.31872,
-              1.311538,
-              1.321482,
-              1.329966,
-              1.317339,
-              1.340699,
-              1.32164,
-              1.344645,
-              1.356562,
-              1.368677,
-              1.390695,
-              1.381619,
-              1.372938,
-              1.371241,
-              1.370413,
-              1.349578,
-              1.354984,
-              1.352419,
-              1.359837,
-              1.364454,
-              1.339239,
-              1.334622,
-              1.289006,
-              1.302107,
-              1.288533,
-              1.302975,
-              1.325981,
-              1.355615,
-              1.382053,
-              1.381738,
-              1.3991,
-              1.397048,
-              1.407426,
-              1.393773,
-              1.413069,
-              1.430708,
-              1.423013,
-              1.405887,
-              1.411806,
-              1.402139,
-              1.410544,
-              1.433273,
-              1.431063,
-              1.435049,
-              1.428695,
-              1.444322,
-              1.44736,
-              1.446966,
-              1.459435,
-              1.456436,
-              1.460698,
-              1.447597,
-              1.447123,
-              1.445427,
-              1.438955,
-              1.458409,
-              1.460698,
-              1.468866,
-              1.456791,
-              1.451582,
-              1.449136,
-              1.450438,
-              1.456081,
-              1.46859,
-              1.465788,
-              1.467879,
-              1.475337,
-              1.455252,
-              1.465275,
-              1.474035,
-              1.495936,
-              1.504459,
-              1.494318,
-              1.494633,
-              1.498658,
-              1.49341,
-              1.482519,
-              1.49416,
-              1.514837,
-              1.516218,
-              1.510852,
-              1.51681,
-              1.514442,
-              1.477429,
-              1.490135,
-              1.460303,
-              1.484611,
-              1.505603,
-              1.506787,
-              1.523913,
-              1.529911,
-              1.54096,
-              1.539934,
-              1.539263,
-              1.541749,
-              1.549365,
-              1.548023,
-              1.548378,
-              1.541788,
-              1.539066,
-              1.527228,
-              1.529082,
-              1.545932,
-              1.508681,
-              1.500908,
-              1.53729,
-              1.525294,
-              1.50509,
-              1.486465,
-              1.513811,
-              1.506274,
-              1.52778,
-              1.53729,
-              1.552877,
-              1.554968,
-              1.564241,
-              1.562268,
-              1.567595,
-              1.544787,
-              1.536895,
-              1.549167,
-              1.536974,
-              1.529161,
-              1.537763,
-              1.562544,
-              1.561755,
-              1.557612,
-              1.563925,
-              1.580814,
-              1.603504,
-              1.602557,
-              1.604412,
-              1.612027,
-              1.623747,
-              1.624339,
-              1.629153,
-              1.623589,
-              1.641031,
-              1.646516,
-              1.638426,
-              1.62643,
-              1.64182,
-              1.626825,
-              1.644464,
-              1.647897,
-              1.647542,
-              1.647068,
-              1.657565,
-              1.646673,
-              1.650225,
-              1.640044,
-              1.640557,
-              1.653658,
-              1.665693,
-              1.649199,
-              1.63448,
-              1.599755,
-              1.618972,
-              1.643832,
-              1.63965,
-              1.625523,
-              1.621261,
-              1.638703,
-              1.637361,
-              1.654053,
-              1.650383,
-              1.653658,
-              1.654526,
-              1.657486,
-              1.656026,
-              1.65863,
-              1.652474,
-              1.667587,
-              1.66597,
-              1.666325,
-              1.663839,
-              1.671573,
-              1.674335,
-              1.678084,
-              1.675006,
-              1.665654,
-              1.665101,
-              1.637282,
-              1.660721,
-              1.6696,
-              1.667587,
-              1.677452,
-              1.683411,
-              1.686805,
-              1.687712,
-              1.689133,
-              1.698485,
-              1.711467,
-              1.70835,
-              1.714387,
-              1.700418,
-              1.71857,
-              1.724726,
-              1.718846,
-              1.721411,
-              1.715532,
-              1.702076,
-              1.676939,
-              1.700971,
-              1.714742,
-              1.718333,
-              1.736011,
-              1.740273,
-              1.732342,
-              1.731631,
-              1.738813,
-              1.730369,
-              1.726738,
-              1.740786,
-              1.732223,
-              1.743193,
-              1.746074,
-              1.744653,
-              1.746823,
-              1.751164,
-              1.756412,
-              1.759609,
-              1.763752,
-              1.75219,
-              1.733012,
-              1.735696,
-              1.749507,
-              1.764896,
-              1.767698,
-              1.771407,
-              1.76095,
-              1.776695,
-              1.784508,
-              1.781864,
-              1.782811,
-              1.788296,
-              1.787862,
-              1.781469,
-              1.779299,
-              1.771683,
-              1.757714,
-              1.762213,
-              1.752703,
-              1.767343,
-              1.764541,
-              1.741773,
-              1.71273,
-              1.711112,
-              1.727804,
-              1.748796,
-              1.751677,
-              1.746666,
-              1.711467,
-              1.714348,
-              1.693394,
-              1.713519,
-              1.691421,
-              1.709021,
-              1.716123,
-              1.73096,
-              1.727804,
-              1.715295,
-              1.711073,
-              1.717228,
-              1.746113,
-              1.759411,
-              1.76462,
-              1.778234,
-              1.785218,
-              1.789875,
-              1.78802,
-              1.797609,
-              1.799227,
-              1.791256,
-              1.808539,
-              1.812209,
-              1.815326,
-              1.822666,
-              1.833794,
-              1.842436,
-              1.848828,
-              1.850406,
-              1.84429,
-              1.829453,
-              1.830045,
-              1.843856,
-              1.844487,
-              1.851788,
-              1.847289,
-              1.853563,
-              1.850249,
-              1.84504,
-              1.847486,
-              1.852419,
-              1.811104,
-              1.83332,
-              1.797648,
-              1.777681,
-              1.804909,
-              1.789204,
-              1.810394,
-              1.847842,
-              1.852735,
-              1.840226,
-              1.857549,
-              1.841094,
-              1.828427,
-              1.856996,
-              1.84062,
-              1.814656,
-              1.79536,
-              1.827243,
-              1.845513,
-              1.856996,
-              1.883277,
-              1.881738,
-              1.884145,
-              1.878936,
-              1.874201,
-              1.885052,
-              1.884421,
-              1.848236,
-              1.8465,
-              1.8392,
-              1.836911,
-              1.853642,
-              1.858654,
-              1.833044,
-              1.833794,
-              1.801318,
-              1.782614,
-              1.762884,
-              1.728277,
-              1.735617,
-              1.714427,
-              1.710126,
-              1.701681,
-              1.743943,
-              1.775353,
-              1.787349,
-              1.804712,
-              1.762292,
-              1.770579,
-              1.764896,
-              1.779418,
-              1.805461,
-              1.773025,
-              1.738063,
-              1.732381,
-              1.760319,
-              1.762292,
-              1.724647,
-              1.71348,
-              1.695091,
-              1.665023,
-              1.69008,
-              1.72737,
-              1.72295,
-              1.696709,
-              1.727922,
-              1.71932,
-              1.705351,
-              1.655079,
-              1.64253,
-              1.686568,
-              1.678952,
-              1.657604,
-              1.64549,
-              1.681675,
-              1.718965,
-              1.74047,
-              1.754084,
-              1.753571,
-              1.77409,
-              1.751243,
-              1.777642,
-              1.786323,
-              1.799029,
-              1.821285,
-              1.810039,
-              1.78218,
-              1.787231,
-              1.802541,
-              1.779773,
-              1.761976,
-              1.770855,
-              1.76612,
-              1.735933,
-              1.7295,
-              1.749309,
-              1.727527,
-              1.728238,
-              1.756136,
-              1.754834,
-              1.728593,
-              1.681162,
-              1.690908,
-              1.641938,
-              1.646555,
-              1.688146,
-              1.62576,
-              1.635546,
-              1.643043,
-              1.693079,
-              1.632902,
-              1.623155,
-              1.571186,
-              1.574817,
-              1.549799,
-              1.548181,
-              1.585195,
-              1.578763,
-              1.611238,
-              1.546287,
-              1.536816,
-              1.537487,
-              1.566254,
-              1.554297,
-              1.568029,
-              1.599361,
-              1.638624,
-              1.629429,
-              1.61625,
-              1.647029,
-              1.619998,
-              1.624931,
-              1.640518,
-              1.622682,
-              1.58409,
-              1.538158,
-              1.479757,
-              1.475298,
-              1.49633,
-              1.446808,
-              1.44369,
-              1.480033,
-              1.47735,
-              1.491832,
-              1.539263,
-              1.533383,
-              1.502052,
-              1.500829,
-              1.488635,
-              1.50438,
-              1.507221,
-              1.512312,
-              1.534962,
-              1.533699,
-              1.516179,
-              1.502762,
-              1.49487,
-              1.49124,
-              1.51973,
-              1.507182,
-              1.547905,
-              1.55777,
-              1.573633,
-              1.559032,
-              1.560927,
-              1.542459,
-              1.582511,
-              1.60236,
-              1.62572,
-              1.620906,
-              1.610212,
-              1.635427,
-              1.634323,
-              1.63156,
-              1.629666,
-              1.623195,
-              1.657288,
-              1.657288,
-              1.685345,
-              1.692289,
-              1.695604,
-              1.683569,
-              1.688462,
-              1.665772,
-              1.631087,
-              1.627141,
-              1.63235,
-              1.655394,
-              1.599361,
-              1.588785,
-              1.571344,
-              1.559388,
-              1.564281,
-              1.547786,
-              1.541946,
-              1.569647,
-              1.579907,
-              1.604451,
-              1.621695,
-              1.55118,
-              1.557099,
-              1.539421,
-              1.521427,
-              1.533225,
-              1.515626,
-              1.489188,
-              1.476679,
-              1.451938,
-              1.437574,
-              1.433904,
-              1.462118,
-              1.431576,
-              1.409439,
-              1.44665,
-              1.491477,
-              1.488004,
-              1.472654,
-              1.431576,
-              1.420646,
-              1.411649,
-              1.406992,
-              1.444124,
-              1.411215,
-              1.447479,
-              1.464486,
-              1.454108,
-              1.441915,
-              1.476955,
-              1.495028,
-              1.518901,
-              1.507458,
-              1.499408,
-              1.53508,
-              1.523992,
-              1.517323,
-              1.479244,
-              1.464012,
-              1.485084,
-              1.49929,
-              1.507379,
-              1.476324,
-              1.557454,
-              1.572528,
-              1.559151,
-              1.572449,
-              1.560453,
-              1.555678,
-              1.562742,
-              1.557059,
-              1.578013,
-              1.587957,
-              1.587602,
-              1.562268,
-              1.559585,
-              1.608713,
-              1.607529,
-              1.605674,
-              1.57679,
-              1.55406,
-              1.551417,
-              1.56357,
-              1.55189,
-              1.574264,
-              1.586181,
-              1.57604,
-              1.537487,
-              1.51239,
-              1.499566,
-              1.501618,
-              1.524071,
-              1.502328,
-              1.51097,
-              1.505011,
-              1.486307,
-              1.513061,
-              1.509076,
-              1.502723,
-              1.514324,
-              1.497041,
-              1.531371,
-              1.530503,
-              1.541236,
-              1.560729,
-              1.566411,
-              1.572488,
-              1.569608,
-              1.544827,
-              1.533581,
-              1.56215,
-              1.580893,
-              1.579197,
-              1.579789,
-              1.597151,
-              1.600821,
-              1.580736,
-              1.603978,
-              1.621024,
-              1.644622,
-              1.627141,
-              1.617197,
-              1.638347,
-              1.620432,
-              1.606385,
-              1.610133,
-              1.629035,
-              1.628285,
-              1.633573,
-              1.61108,
-              1.607056,
-              1.574817,
-              1.572646,
-              1.581012,
-              1.564123,
-              1.56945,
-              1.563649,
-              1.557651,
-              1.569766,
-              1.594941,
-              1.596046,
-              1.571581,
-              1.574146,
-              1.545103,
-              1.522808,
-              1.520638,
-              1.545774,
-              1.536106,
-              1.563057,
-              1.538908,
-              1.553705,
-              1.574106,
-              1.547273,
-              1.551456,
-              1.561637,
-              1.564557,
-              1.561045,
-              1.583735,
-              1.593008,
-              1.615461,
-              1.621616,
-              1.612619,
-              1.608397,
-              1.614671,
-              1.616329,
-              1.616763,
-              1.610173,
-              1.63156,
-              1.627575,
-              1.633415,
-              1.63448,
-              1.634204,
-              1.625286,
-              1.626549,
-              1.628246,
-              1.602399,
-              1.595612,
-              1.627378,
-              1.641267,
-              1.63961,
-              1.621182,
-              1.610054,
-              1.59865,
-              1.628246,
-              1.62868,
-              1.621537,
-              1.629114,
-              1.626273,
-              1.624142,
-              1.629745,
-              1.618854,
-              1.638505,
-              1.654289,
-              1.651882,
-              1.652553,
-              1.634007,
-              1.622169,
-              1.636217,
-              1.657407,
-              1.658038,
-              1.648844,
-              1.66451,
-              1.68858,
-              1.685345,
-              1.689014,
-              1.683174,
-              1.693355,
-              1.696393,
-              1.711783,
-              1.723068,
-              1.72512,
-              1.746508,
-              1.734117,
-              1.72512,
-              1.716281,
-              1.722477,
-              1.709455,
-              1.70247,
-              1.721135,
-              1.722003,
-              1.72879,
-              1.749191,
-              1.751204,
-              1.748599,
-              1.734907,
-              1.730526,
-              1.734907,
-              1.745955,
-              1.760003,
-              1.773972,
-              1.772867,
-              1.779023,
-              1.792242,
-              1.796228,
-              1.784311,
-              1.784311,
-              1.792282,
-              1.797175,
-              1.797451,
-              1.785534,
-              1.803015,
-              1.806448,
-              1.801279,
-              1.776221,
-              1.771131,
-              1.763121,
-              1.77851,
-              1.770776,
-              1.758938,
-              1.759569,
-              1.758543,
-              1.76825,
-              1.747652,
-              1.734828,
-              1.721608,
-              1.722437,
-              1.733644,
-              1.728948,
-              1.748205,
-              1.723976,
-              1.73613,
-              1.747139,
-              1.772394,
-              1.779694,
-              1.777089,
-              1.780404,
-              1.772709,
-              1.760792,
-              1.755386,
-              1.75803,
-              1.769592,
-              1.759885,
-              1.761937,
-              1.777129,
-              1.749546,
-              1.750572,
-              1.746942,
-              1.730882,
-              1.702273,
-              1.698445,
-              1.705588,
-              1.68053,
-              1.681201,
-              1.690948,
-              1.686844,
-              1.686173,
-              1.663602,
-              1.675716,
-              1.675085,
-              1.694973,
-              1.705824,
-              1.714703,
-              1.721727,
-              1.71123,
-              1.702707,
-              1.720622,
-              1.720543,
-              1.697617,
-              1.682701,
-              1.662024,
-              1.659143,
-              1.671652,
-              1.64766,
-              1.62793,
-              1.620551,
-              1.639926,
-              1.650225,
-              1.667824,
-              1.699787,
-              1.715295,
-              1.719241,
-              1.724134,
-              1.725397,
-              1.711941,
-              1.738655,
-              1.736998,
-              1.770697,
-              1.774446,
-              1.776616,
-              1.778826,
-              1.792518,
-              1.788612,
-              1.795517,
-              1.796622,
-              1.793387,
-              1.795162,
-              1.793899,
-              1.800963,
-              1.811617,
-              1.802107,
-              1.801752,
-              1.794491,
-              1.808184,
-              1.815958,
-              1.823021,
-              1.831347,
-              1.856602,
-              1.86256,
-              1.851985,
-              1.862402,
-              1.873727,
-              1.847763,
-              1.865283,
-              1.869032,
-              1.876924,
-              1.880317,
-              1.881028,
-              1.875582,
-              1.865086,
-              1.849854,
-              1.843896,
-              1.846421,
-              1.87278,
-              1.869939,
-              1.880515,
-              1.879686,
-              1.880988,
-              1.874083,
-              1.863665,
-              1.880238,
-              1.903678,
-              1.907703,
-              1.913266,
-              1.915358,
-              1.925775,
-              1.923329,
-              1.93856,
-              1.937061,
-              1.905453,
-              1.930392,
-              1.950714,
-              1.943611,
-              1.949254,
-              1.965512,
-              1.96638,
-              1.977745,
-              1.976876,
-              1.949649,
-              1.967366,
-              1.980941,
-              1.971076,
-              1.960224,
-              1.962,
-              2.002604,
-              2.003986,
-              1.996646,
-              2.000355,
-              1.997711,
-              2.004893,
-              2.023715,
-              2.021545,
-              2.001342,
-              2.011483,
-              2.03145,
-              2.019257,
-              2.01752,
-              2.039224,
-              2.036027,
-              2.032002,
-              2.011799,
-              2.023755,
-              2.035001,
-              2.053824,
-              2.060611,
-              2.056704,
-              2.051022,
-              2.047234,
-              2.064438,
-              2.064044,
-              2.060453,
-              2.047352,
-              2.049601,
-              2.024584,
-              2.045734,
-              2.046879,
-              2.049246,
-              2.028727,
-              2.044038,
-              2.015824,
-              1.990569,
-              1.986939,
-              1.97518,
-              1.971115,
-              1.953911,
-              1.971904,
-              1.995304,
-              1.994357,
-              1.986781,
-              2.005603,
-              2.012706,
-              1.980822,
-              1.97439,
-              1.992858,
-              2.01756,
-              2.038395,
-              2.040644,
-              2.040841,
-              2.0526,
-              2.055244,
-              2.05552,
-              2.064951,
-              2.090522,
-              2.086221,
-              2.08922,
-              2.091627,
-              2.096756,
-              2.090719,
-              2.075448,
-              2.08918,
-              2.09064,
-              2.076,
-              2.062229,
-              2.081012,
-              2.082709,
-              2.085037,
-              2.109818,
-              2.109778,
-              2.107213,
-              2.113724,
-              2.118815,
-              2.136217,
-              2.140518,
-              2.14182,
-              2.158867,
-              2.164352,
-              2.158472,
-              2.148647,
-              2.141662,
-              2.149909,
-              2.152593,
-              2.155986,
-              2.147502,
-              2.151922,
-              2.166404,
-              2.176071,
-              2.18862,
-              2.191145,
-              2.193276,
-              2.214979,
-              2.19588,
-              2.209731,
-              2.215808,
-              2.228948,
-              2.197696,
-              2.180806,
-              2.166325,
-              2.188659,
-              2.185226,
-              2.135704,
-              2.124576,
-              2.14837,
-              2.149633,
-              2.138742,
-              2.173506,
-              2.142728,
-              2.102833,
-              2.041591,
-              2.060414,
-              2.046642,
-              2.093955,
-              2.103188,
-              2.104293,
-              2.1389,
-              2.145648,
-              2.182424,
-              2.187318,
-              2.208231,
-              2.204641,
-              2.212217,
-              2.194854,
-              2.218175,
-              2.212888,
-              2.215926,
-              2.203062,
-              2.203259,
-              2.224292,
-              2.178518,
-              2.174059,
-              2.168771,
-              2.13227,
-              2.156144,
-              2.165535,
-              2.187752,
-              2.20618,
-              2.217702,
-              2.220977,
-              2.221885,
-              2.215295,
-              2.253098,
-              2.242325,
-              2.247928,
-              2.25436,
-              2.249388,
-              2.258306,
-              2.255031,
-              2.264068,
-              2.243785,
-              2.244732,
-              2.240628,
-              2.26099,
-              2.240549,
-              2.261739,
-              2.277405,
-              2.27342,
-              2.287033,
-              2.305738,
-              2.287823,
-              2.297767,
-              2.297964,
-              2.306803,
-              2.303015,
-              2.301792,
-              2.280759,
-              2.285692,
-              2.284902,
-              2.291966,
-              2.295675,
-              2.28873,
-              2.243864,
-              2.253334,
-              2.248481,
-              2.275669,
-              2.332255,
-              2.350288,
-              2.360469,
-              2.362718,
-              2.355379,
-              2.356523,
-              2.34137,
-              2.31138,
-              2.320851,
-              2.329335,
-              2.330124,
-              2.342633,
-              2.349894,
-              2.357865,
-              2.370176,
-              2.362994,
-              2.377673,
-              2.381935,
-              2.38304,
-              2.397837,
-              2.393891,
-              2.398429,
-              2.386078,
-              2.37866,
-              2.397048,
-              2.384697,
-              2.384224,
-              2.394404,
-              2.384539,
-              2.313472,
-              2.312761,
-              2.332689,
-              2.346658,
-              2.372741,
-              2.372899,
-              2.347921,
-              2.321127,
-              2.312683
+              1.0
+            ],
+            "validation": {
+              "status": "caution",
+              "status_zh": "谨慎通过",
+              "status_en": "Caution",
+              "total_return": 43.2,
+              "sharpe": "0.64",
+              "max_drawdown": -15.4,
+              "win_rate": 38.0,
+              "trades": 98
+            },
+            "risk_handoff": [
+              {
+                "label": "Max Drawdown",
+                "label_zh": "最大回撤",
+                "value": -15.4,
+                "unit": "%",
+                "status": "warn"
+              },
+              {
+                "label": "Sharpe",
+                "label_zh": "夏普比率",
+                "value": "0.64",
+                "unit": "",
+                "status": "warn"
+              },
+              {
+                "label": "Win Rate",
+                "label_zh": "胜率",
+                "value": 38.0,
+                "unit": "%",
+                "status": "warn"
+              }
+            ],
+            "retest_plan": [
+              {
+                "label": "Parameter sensitivity",
+                "label_zh": "参数敏感性复测",
+                "status": "todo"
+              },
+              {
+                "label": "Segmented market regimes",
+                "label_zh": "市场状态分段复测",
+                "status": "todo"
+              },
+              {
+                "label": "Recent period replay",
+                "label_zh": "近期区间复盘",
+                "status": "todo"
+              }
             ]
           }
         },
@@ -3888,16 +1681,15 @@
             "Price Data"
           ],
           "output": [
-            "Return",
-            "Sharpe",
-            "Drawdown",
-            "Win Rate"
+            "Validation",
+            "Risk Handoff",
+            "Retest Plan"
           ],
           "reasoning": [
             "基于历史数据模拟策略表现。"
           ]
         },
-        "updated_at": "2026-06-09 22:00:20"
+        "updated_at": "2026-06-13 19:01:52"
       },
       "schedule": {
         "room_id": "schedule",
@@ -3907,18 +1699,40 @@
         "panel_type": "decision_dashboard",
         "primary": {
           "label": "Decision",
+          "label_zh": "决策",
           "value": "HOLD",
           "unit": "",
           "level": "warning"
         },
-        "summary": "HOLD · Wait",
-        "insight": "HOLD is not well supported. Consider reducing position size or waiting for confirmation. | Critic: News is neutral, but some agents signal BUY — HOLD may miss early momentum.",
-        "impact_on_decision": "最终决策整合所有 Agent 投票，由 Risk Gate 和 Critic Review 限制激进买入。",
-        "next_action": "进入 Wait for Confirmation 模式。",
+        "summary": {
+          "en": "HOLD · Wait",
+          "zh": "HOLD · 等待确认"
+        },
+        "insight": {
+          "en": "HOLD is not well supported. Consider reducing position size or waiting for confirmation. | Critic: News is neutral, but some agents signal BUY — HOLD may miss early momentum.",
+          "zh": "最终选择 HOLD，等待进一步确认。"
+        },
+        "impact_on_decision": {
+          "en": "The final decision integrates all agent votes, constrained by the risk gate and Critic review to avoid aggressive entries.",
+          "zh": "最终决策整合所有 Agent 投票，由风险闸门和 Critic Review 限制激进买入。"
+        },
+        "next_action": {
+          "en": "Enter Wait for Confirmation mode.",
+          "zh": "进入等待确认模式。"
+        },
         "monitor_focus": [
-          "Risk Score < 35",
-          "MACD crossover",
-          "News Score > 70"
+          {
+            "en": "Risk score falls below 35",
+            "zh": "风险分数低于 35"
+          },
+          {
+            "en": "MACD crossover turns positive",
+            "zh": "MACD 转强"
+          },
+          {
+            "en": "News score rises above 70",
+            "zh": "新闻评分高于 70"
+          }
         ],
         "metrics": [
           {
@@ -3926,52 +1740,60 @@
             "value": "HOLD",
             "unit": "",
             "display": "number",
-            "level": "neutral"
+            "level": "neutral",
+            "label_zh": "决策"
           },
           {
             "label": "Mode",
             "value": "Wait",
             "unit": "",
             "display": "number",
-            "level": "neutral"
+            "level": "neutral",
+            "label_zh": "等待确认"
           },
           {
             "label": "Confidence",
             "value": "25%",
             "unit": "",
             "display": "number",
-            "level": "neutral"
+            "level": "neutral",
+            "label_zh": "置信度"
           },
           {
             "label": "Score",
             "value": "53",
             "unit": "",
             "display": "number",
-            "level": "neutral"
+            "level": "neutral",
+            "label_zh": "评分"
           },
           {
             "label": "Critic",
             "value": "35",
             "unit": "",
             "display": "number",
-            "level": "neutral"
+            "level": "neutral",
+            "label_zh": "Critic"
           },
           {
             "label": "Position",
             "value": "0%",
             "unit": "",
             "display": "number",
-            "level": "neutral"
+            "level": "neutral",
+            "label_zh": "仓位"
           },
           {
             "label": "Watch",
             "value": "HIGH",
             "unit": "",
             "display": "number",
-            "level": "neutral"
+            "level": "neutral",
+            "label_zh": "观察优先级"
           },
           {
             "label": "Indicator",
+            "label_zh": "指标 Agent",
             "value": "BUY",
             "unit": "67",
             "display": "badge",
@@ -3979,6 +1801,7 @@
           },
           {
             "label": "News",
+            "label_zh": "新闻 Agent",
             "value": "HOLD",
             "unit": "50",
             "display": "badge",
@@ -3986,6 +1809,7 @@
           },
           {
             "label": "Risk",
+            "label_zh": "风险 Agent",
             "value": "HOLD",
             "unit": "58",
             "display": "badge",
@@ -3993,6 +1817,7 @@
           },
           {
             "label": "Backtest",
+            "label_zh": "回测 Agent",
             "value": "BUY",
             "unit": "82",
             "display": "badge",
@@ -4000,6 +1825,7 @@
           },
           {
             "label": "Critic",
+            "label_zh": "Critic",
             "value": "HOLD",
             "unit": "30",
             "display": "badge",
@@ -4022,6 +1848,89 @@
               "watch_priority": "high",
               "revision_applied": true,
               "revision_reason": "Backtest Sharpe is decent; consider small position if confirmation arrives."
+            },
+            "input_summary": {
+              "strategy": {
+                "room": "skills",
+                "room_label": {
+                  "en": "Strategy Lab",
+                  "zh": "策略实验室"
+                },
+                "signal": "HOLD",
+                "strategy": "momentum",
+                "strategy_zh": "20日动量",
+                "score": 59.33
+              },
+              "risk": {
+                "room": "alarm",
+                "room_label": {
+                  "en": "Risk Alert",
+                  "zh": "风险报警室"
+                },
+                "gate_status": "limited",
+                "gate_label": {
+                  "en": "Position Limited",
+                  "zh": "限制仓位"
+                },
+                "position_limit_pct": 40,
+                "risk_score": 42
+              },
+              "backtest": {
+                "room": "task_queues",
+                "room_label": {
+                  "en": "Backtest Lab",
+                  "zh": "回测实验室"
+                },
+                "validation": "Cautious Pass",
+                "validation_label": {
+                  "en": "Cautious Pass",
+                  "zh": "谨慎通过"
+                },
+                "total_return_pct": 43.2,
+                "sharpe": 0.64,
+                "max_drawdown_pct": 15.4
+              },
+              "market": {
+                "room": "gateway",
+                "room_label": {
+                  "en": "Market Data",
+                  "zh": "市场数据室"
+                },
+                "ticker": "SPY",
+                "news_sentiment": "neutral",
+                "news_sentiment_zh": "中性",
+                "news_score": 50,
+                "data_quality": "ok"
+              },
+              "indicator": {
+                "room": "mcp",
+                "room_label": {
+                  "en": "Indicator Lab",
+                  "zh": "指标实验室"
+                },
+                "trend": {
+                  "en": "Range-bound",
+                  "zh": "震荡盘整"
+                },
+                "rsi_state": {
+                  "en": "Neutral",
+                  "zh": "中性"
+                },
+                "macd_signal": "Weak",
+                "macd_signal_zh": "偏弱",
+                "return_20d_pct": -2.9,
+                "volatility_20d_pct": 14.3
+              }
+            },
+            "final_strategy": {
+              "name": "momentum",
+              "name_zh": "20日动量",
+              "signal": "HOLD",
+              "score": 59.33
+            },
+            "mode_reason": {
+              "en": "Auto selected HOLD based on strategy signal, risk gate, backtest validation, and agent consensus.",
+              "zh": "Auto 模式综合策略信号、风险闸门、回测验证和 Agent 共识，最终选择 HOLD 动作。"
             },
             "agent_votes_table": [
               {
@@ -4069,42 +1978,58 @@
             ],
             "why_not": {
               "action": "buy",
-              "title": "Why not Buy?",
+              "title": {
+                "en": "Why not Buy?",
+                "zh": "为什么不买入？"
+              },
               "reasons": [
-                "MACD is negative — momentum does not support entry",
-                "Risk gate blocks aggressive entry"
+                {
+                  "en": "MACD is negative — momentum does not support entry",
+                  "zh": "MACD 为负，动能不支持入场"
+                },
+                {
+                  "en": "Risk gate blocks aggressive entry",
+                  "zh": "风险闸门阻止激进入场"
+                }
               ]
             },
             "trigger_conditions": [
               {
                 "condition": "Risk Score < 35 (current: 42)",
-                "type": "entry"
+                "type": "entry",
+                "condition_zh": "风险分数 < 35（当前：42）"
               },
               {
                 "condition": "RSI < 30 (current: 36.4)",
-                "type": "momentum"
+                "type": "momentum",
+                "condition_zh": "RSI < 30（当前：36.4）"
               },
               {
                 "condition": "MACD > signal for 3 consecutive days",
-                "type": "confirmation"
+                "type": "confirmation",
+                "condition_zh": "MACD 连续 3 天高于信号线"
               },
               {
                 "condition": "News Score > 70",
-                "type": "sentiment"
+                "type": "sentiment",
+                "condition_zh": "新闻评分 > 70"
               }
             ],
             "next_plan": [
               {
                 "action": "Re-check next trading day",
-                "priority": "high"
+                "priority": "high",
+                "action_zh": "下个交易日复检"
               },
               {
                 "action": "Monitor MACD divergence",
-                "priority": "medium"
+                "priority": "medium",
+                "action_zh": "关注 MACD 背离"
               },
               {
                 "action": "Wait for trigger condition fulfillment before entry",
-                "priority": "high"
+                "priority": "high",
+                "action_zh": "等待触发条件满足后再进场"
               }
             ]
           }
@@ -4147,6 +2072,89 @@
             "watch_priority": "high",
             "revision_applied": true,
             "revision_reason": "Backtest Sharpe is decent; consider small position if confirmation arrives."
+          },
+          "input_summary": {
+            "strategy": {
+              "room": "skills",
+              "room_label": {
+                "en": "Strategy Lab",
+                "zh": "策略实验室"
+              },
+              "signal": "HOLD",
+              "strategy": "momentum",
+              "strategy_zh": "20日动量",
+              "score": 59.33
+            },
+            "risk": {
+              "room": "alarm",
+              "room_label": {
+                "en": "Risk Alert",
+                "zh": "风险报警室"
+              },
+              "gate_status": "limited",
+              "gate_label": {
+                "en": "Position Limited",
+                "zh": "限制仓位"
+              },
+              "position_limit_pct": 40,
+              "risk_score": 42
+            },
+            "backtest": {
+              "room": "task_queues",
+              "room_label": {
+                "en": "Backtest Lab",
+                "zh": "回测实验室"
+              },
+              "validation": "Cautious Pass",
+              "validation_label": {
+                "en": "Cautious Pass",
+                "zh": "谨慎通过"
+              },
+              "total_return_pct": 43.2,
+              "sharpe": 0.64,
+              "max_drawdown_pct": 15.4
+            },
+            "market": {
+              "room": "gateway",
+              "room_label": {
+                "en": "Market Data",
+                "zh": "市场数据室"
+              },
+              "ticker": "SPY",
+              "news_sentiment": "neutral",
+              "news_sentiment_zh": "中性",
+              "news_score": 50,
+              "data_quality": "ok"
+            },
+            "indicator": {
+              "room": "mcp",
+              "room_label": {
+                "en": "Indicator Lab",
+                "zh": "指标实验室"
+              },
+              "trend": {
+                "en": "Range-bound",
+                "zh": "震荡盘整"
+              },
+              "rsi_state": {
+                "en": "Neutral",
+                "zh": "中性"
+              },
+              "macd_signal": "Weak",
+              "macd_signal_zh": "偏弱",
+              "return_20d_pct": -2.9,
+              "volatility_20d_pct": 14.3
+            }
+          },
+          "final_strategy": {
+            "name": "momentum",
+            "name_zh": "20日动量",
+            "signal": "HOLD",
+            "score": 59.33
+          },
+          "mode_reason": {
+            "en": "Auto selected HOLD based on strategy signal, risk gate, backtest validation, and agent consensus.",
+            "zh": "Auto 模式综合策略信号、风险闸门、回测验证和 Agent 共识，最终选择 HOLD 动作。"
           },
           "agent_votes_table": [
             {
@@ -4194,10 +2202,19 @@
           ],
           "why_not": {
             "action": "buy",
-            "title": "Why not Buy?",
+            "title": {
+              "en": "Why not Buy?",
+              "zh": "为什么不买入？"
+            },
             "reasons": [
-              "MACD is negative — momentum does not support entry",
-              "Risk gate blocks aggressive entry"
+              {
+                "en": "MACD is negative — momentum does not support entry",
+                "zh": "MACD 为负，动能不支持入场"
+              },
+              {
+                "en": "Risk gate blocks aggressive entry",
+                "zh": "风险闸门阻止激进入场"
+              }
             ]
           },
           "main_objections": [
@@ -4213,19 +2230,23 @@
           "trigger_conditions": [
             {
               "condition": "Risk Score < 35 (current: 42)",
-              "type": "entry"
+              "type": "entry",
+              "condition_zh": "风险分数 < 35（当前：42）"
             },
             {
               "condition": "RSI < 30 (current: 36.4)",
-              "type": "momentum"
+              "type": "momentum",
+              "condition_zh": "RSI < 30（当前：36.4）"
             },
             {
               "condition": "MACD > signal for 3 consecutive days",
-              "type": "confirmation"
+              "type": "confirmation",
+              "condition_zh": "MACD 连续 3 天高于信号线"
             },
             {
               "condition": "News Score > 70",
-              "type": "sentiment"
+              "type": "sentiment",
+              "condition_zh": "新闻评分 > 70"
             }
           ],
           "trigger_status": [
@@ -4269,20 +2290,23 @@
           "next_plan": [
             {
               "action": "Re-check next trading day",
-              "priority": "high"
+              "priority": "high",
+              "action_zh": "下个交易日复检"
             },
             {
               "action": "Monitor MACD divergence",
-              "priority": "medium"
+              "priority": "medium",
+              "action_zh": "关注 MACD 背离"
             },
             {
               "action": "Wait for trigger condition fulfillment before entry",
-              "priority": "high"
+              "priority": "high",
+              "action_zh": "等待触发条件满足后再进场"
             }
           ],
           "strategy_adjustments": []
         },
-        "updated_at": "2026-06-09 22:00:20"
+        "updated_at": "2026-06-13 19:01:52"
       },
       "document": {
         "room_id": "document",
@@ -4291,74 +2315,195 @@
         "type": "report",
         "panel_type": "report_summary",
         "primary": {
-          "label": "Report",
-          "value": "Ready",
+          "label": "Decision",
+          "label_zh": "决策",
+          "value": "HOLD",
           "unit": "",
-          "level": "positive"
+          "level": "neutral"
         },
-        "summary": "Report ready · SPY",
-        "insight": "SPY momentum 策略分析完成。建议谨慎持有，等待进一步确认。",
-        "impact_on_decision": "报告整合所有模块输出，用于作业展示和最终解释。",
-        "next_action": "复制报告或导出 Markdown。",
+        "summary": {
+          "zh": "对 SPY 的最终决策为 观望。20日动量 策略发出 观望 信号，风险闸门为 限制仓位，回测验证为 谨慎通过。",
+          "en": "Final decision for SPY is HOLD. The momentum strategy signals HOLD, risk gate is Position Limited, and backtest validation is Cautious Pass."
+        },
+        "insight": {
+          "zh": "当前对 SPY 的决策为 观望。系统基于策略信号、风险约束、回测验证和 Agent 共识生成此结果。",
+          "en": "The current decision for SPY is HOLD. The system generated this result based on strategy signals, risk constraints, backtest validation, and agent consensus."
+        },
+        "impact_on_decision": {
+          "zh": "规则模板：当前对 SPY 的决策为 观望。系统基于策略信号、风险约束、回测验证和 Agent 共识生成此结果。",
+          "en": "Rule template: The current decision for SPY is HOLD. The system generated this result based on strategy signals, risk constraints, backtest validation, and agent consensus."
+        },
+        "next_action": {
+          "zh": "继续持有现有仓位，等待更强确认信号后再行动。",
+          "en": "Maintain current position and wait for stronger confirmation signals before acting."
+        },
         "monitor_focus": [
-          "Key drivers",
-          "Key risks",
-          "Suggested action"
+          {
+            "en": "Wait for AI report generation",
+            "zh": "等待 AI 报告生成"
+          }
         ],
         "metrics": [
           {
             "label": "Decision",
             "value": "HOLD",
-            "display": "badge",
-            "level": "warning"
-          },
-          {
-            "label": "Return",
-            "value": 43.2,
-            "unit": "%",
-            "display": "bar",
-            "level": "positive"
-          },
-          {
-            "label": "Sharpe",
-            "value": "0.64",
             "unit": "",
             "display": "number",
-            "level": "neutral"
+            "level": "neutral",
+            "label_zh": "决策"
+          },
+          {
+            "label": "Strategy",
+            "value": "momentum",
+            "unit": "",
+            "display": "number",
+            "level": "neutral",
+            "label_zh": "20日动量"
+          },
+          {
+            "label": "Signal",
+            "value": "HOLD",
+            "unit": "",
+            "display": "number",
+            "level": "neutral",
+            "label_zh": "信号"
+          },
+          {
+            "label": "Confidence",
+            "value": "25%",
+            "unit": "",
+            "display": "number",
+            "level": "neutral",
+            "label_zh": "置信度"
+          },
+          {
+            "label": "Position",
+            "value": "0%",
+            "unit": "",
+            "display": "number",
+            "level": "neutral",
+            "label_zh": "仓位"
           }
         ],
         "visual": {
-          "kind": "report_card",
+          "kind": "report_summary",
           "data": {
             "final_decision": "HOLD",
+            "suggested_action": {
+              "zh": "继续持有现有仓位，等待更强确认信号后再行动。",
+              "en": "Maintain current position and wait for stronger confirmation signals before acting."
+            },
+            "executive_summary": {
+              "zh": "当前对 SPY 的决策为 观望。系统基于策略信号、风险约束、回测验证和 Agent 共识生成此结果。",
+              "en": "The current decision for SPY is HOLD. The system generated this result based on strategy signals, risk constraints, backtest validation, and agent consensus."
+            },
             "key_drivers": [
-              "neutral",
-              "Risk medium"
+              {
+                "zh": "策略信号：观望",
+                "en": "Strategy signal: HOLD"
+              },
+              {
+                "zh": "风险闸门限制了激进仓位",
+                "en": "Risk gate limits aggressive position sizing"
+              },
+              {
+                "zh": "回测验证提供了历史参考",
+                "en": "Backtest validation provides historical reference"
+              }
             ],
             "key_risks": [
-              "Max drawdown -15.4%",
-              "MACD weak"
+              {
+                "zh": "MACD 动能尚未完全确认",
+                "en": "MACD momentum has not fully confirmed"
+              },
+              {
+                "zh": "新闻情绪处于中性区间",
+                "en": "News sentiment remains neutral"
+              }
             ],
-            "suggested_action": "Wait",
-            "monitor_focus": [
-              "Risk Score",
-              "MACD",
-              "News Score"
-            ]
+            "references": [
+              {
+                "paper": "Edwards & Magee (1948)",
+                "paper_url": "https://archive.org/details/technicalanalysi00edwa",
+                "why_zh": "策略使用经典均线交叉方法",
+                "why_en": "Strategy uses classic moving-average crossover methodology"
+              }
+            ],
+            "llm_status": "fallback",
+            "llm_note": {
+              "zh": "未启用 LLM，当前为规则模板生成。",
+              "en": "LLM not enabled; showing rule-based template."
+            }
           }
         },
         "details": {
           "input": [
-            "All room artifacts"
+            "Decision Desk",
+            "Strategy Memory",
+            "Risk Alert",
+            "Backtest Lab"
           ],
           "output": [
-            "SPY Report"
+            "Final Report",
+            "Executive Summary",
+            "Key Drivers",
+            "Key Risks",
+            "References"
           ],
           "reasoning": [
-            "基于各步骤结果生成综合报告。"
-          ]
+            {
+              "zh": "对 SPY 的最终决策为 观望。20日动量 策略发出 观望 信号，风险闸门为 限制仓位，回测验证为 谨慎通过。",
+              "en": "Final decision for SPY is HOLD. The momentum strategy signals HOLD, risk gate is Position Limited, and backtest validation is Cautious Pass."
+            }
+          ],
+          "final_decision": "HOLD",
+          "suggested_action": {
+            "zh": "继续持有现有仓位，等待更强确认信号后再行动。",
+            "en": "Maintain current position and wait for stronger confirmation signals before acting."
+          },
+          "executive_summary": {
+            "zh": "当前对 SPY 的决策为 观望。系统基于策略信号、风险约束、回测验证和 Agent 共识生成此结果。",
+            "en": "The current decision for SPY is HOLD. The system generated this result based on strategy signals, risk constraints, backtest validation, and agent consensus."
+          },
+          "key_drivers": [
+            {
+              "zh": "策略信号：观望",
+              "en": "Strategy signal: HOLD"
+            },
+            {
+              "zh": "风险闸门限制了激进仓位",
+              "en": "Risk gate limits aggressive position sizing"
+            },
+            {
+              "zh": "回测验证提供了历史参考",
+              "en": "Backtest validation provides historical reference"
+            }
+          ],
+          "key_risks": [
+            {
+              "zh": "MACD 动能尚未完全确认",
+              "en": "MACD momentum has not fully confirmed"
+            },
+            {
+              "zh": "新闻情绪处于中性区间",
+              "en": "News sentiment remains neutral"
+            }
+          ],
+          "references": [
+            {
+              "paper": "Edwards & Magee (1948)",
+              "paper_url": "https://archive.org/details/technicalanalysi00edwa",
+              "why_zh": "策略使用经典均线交叉方法",
+              "why_en": "Strategy uses classic moving-average crossover methodology"
+            }
+          ],
+          "llm_status": "fallback",
+          "llm_note": {
+            "zh": "未启用 LLM，当前为规则模板生成。",
+            "en": "LLM not enabled; showing rule-based template."
+          }
         },
-        "updated_at": "2026-06-09 22:00:20"
+        "updated_at": "2026-06-13 19:01:52"
       },
       "agent": {
         "room_id": "agent",
@@ -4367,19 +2512,47 @@
         "type": "monitor",
         "panel_type": "agent_monitor",
         "primary": {
-          "label": "Agent 状态",
-          "value": "完成",
+          "label": {
+            "en": "Agent Status",
+            "zh": "Agent 状态"
+          },
+          "label_zh": "Agent 状态",
+          "value": {
+            "en": "Done",
+            "zh": "完成"
+          },
           "unit": "",
           "level": "positive"
         },
-        "summary": "Pipeline completed",
-        "insight": "所有 Agent 阶段已执行完毕，无异常报错。",
-        "impact_on_decision": "运行监控室展示 Agent 状态，不直接改变最终决策。",
-        "next_action": "如某个 Agent 失败，切换 fallback 逻辑。",
+        "summary": {
+          "en": "Pipeline completed",
+          "zh": "Pipeline 完成"
+        },
+        "insight": {
+          "en": "All agent stages completed without errors.",
+          "zh": "所有 Agent 阶段已执行完毕，无异常报错。"
+        },
+        "impact_on_decision": {
+          "en": "The monitor room displays agent status and does not directly change the final decision.",
+          "zh": "运行监控室展示 Agent 状态，不直接改变最终决策。"
+        },
+        "next_action": {
+          "en": "If any agent fails, switch to fallback logic.",
+          "zh": "如某个 Agent 失败，切换 fallback 逻辑。"
+        },
         "monitor_focus": [
-          "Agent latency",
-          "LLM failure",
-          "fallback usage"
+          {
+            "en": "Agent latency",
+            "zh": "Agent 耗时"
+          },
+          {
+            "en": "LLM failure",
+            "zh": "LLM 失败"
+          },
+          {
+            "en": "fallback usage",
+            "zh": "fallback 使用情况"
+          }
         ],
         "metrics": [
           {
@@ -4387,14 +2560,32 @@
             "value": 5,
             "unit": "",
             "display": "number",
-            "level": "neutral"
+            "level": "neutral",
+            "label_zh": "Agent 数"
           },
           {
             "label": "Avg Latency",
             "value": 308,
             "unit": "ms",
             "display": "number",
-            "level": "neutral"
+            "level": "neutral",
+            "label_zh": "平均耗时"
+          },
+          {
+            "label": "Healthy",
+            "value": 5,
+            "unit": "",
+            "display": "number",
+            "level": "positive",
+            "label_zh": "健康"
+          },
+          {
+            "label": "Errors",
+            "value": 0,
+            "unit": "",
+            "display": "number",
+            "level": "positive",
+            "label_zh": "错误数"
           }
         ],
         "visual": {
@@ -4402,44 +2593,152 @@
           "data": {
             "agents": [
               {
-                "name": "Data Agent",
+                "name_key": "data",
+                "role_key": "data",
                 "status": "done",
                 "latency_ms": 120,
-                "summary": "1199 bars loaded"
+                "task": {
+                  "en": "Load market data",
+                  "zh": "加载市场数据"
+                },
+                "input": {
+                  "en": "SPY OHLCV",
+                  "zh": "SPY 行情数据"
+                },
+                "output": {
+                  "en": "1199 daily bars",
+                  "zh": "1199 条日线数据"
+                },
+                "summary": {
+                  "en": "1199 bars loaded",
+                  "zh": "已加载 1199 条数据"
+                },
+                "progress_pct": 100,
+                "health": "healthy",
+                "error_count": 0,
+                "last_seen": "2026-06-13 19:01:52"
               },
               {
-                "name": "Indicator Agent",
+                "name_key": "indicator",
+                "role_key": "indicator",
                 "status": "done",
                 "latency_ms": 80,
-                "summary": "RSI 36.4"
+                "task": {
+                  "en": "Compute technical indicators",
+                  "zh": "计算技术指标"
+                },
+                "input": {
+                  "en": "Price & volume series",
+                  "zh": "价格与成交量序列"
+                },
+                "output": {
+                  "en": "RSI 36.4, MACD -0.983",
+                  "zh": "RSI 36.4, MACD -0.983"
+                },
+                "summary": {
+                  "en": "RSI 36.4, MACD -0.983",
+                  "zh": "RSI 36.4, MACD -0.983"
+                },
+                "progress_pct": 100,
+                "health": "healthy",
+                "error_count": 0,
+                "last_seen": "2026-06-13 19:01:52"
               },
               {
-                "name": "News Agent",
+                "name_key": "news",
+                "role_key": "news",
                 "status": "done",
                 "latency_ms": 1200,
-                "summary": "News score 50"
+                "task": {
+                  "en": "Fetch and score news",
+                  "zh": "获取并评分新闻"
+                },
+                "input": {
+                  "en": "SPY news feed",
+                  "zh": "SPY 新闻流"
+                },
+                "output": {
+                  "en": "Sentiment neutral, score 50",
+                  "zh": "情绪 neutral，评分 50"
+                },
+                "summary": {
+                  "en": "News score 50",
+                  "zh": "新闻评分 50"
+                },
+                "progress_pct": 100,
+                "health": "healthy",
+                "error_count": 0,
+                "last_seen": "2026-06-13 19:01:52"
               },
               {
-                "name": "Risk Agent",
+                "name_key": "risk",
+                "role_key": "risk",
                 "status": "done",
                 "latency_ms": 60,
-                "summary": "Risk 42/100"
+                "task": {
+                  "en": "Evaluate risk constraints",
+                  "zh": "评估风险约束"
+                },
+                "input": {
+                  "en": "Returns & drawdown series",
+                  "zh": "收益与回撤序列"
+                },
+                "output": {
+                  "en": "Risk score 42/100",
+                  "zh": "风险分数 42/100"
+                },
+                "summary": {
+                  "en": "Risk 42/100",
+                  "zh": "风险 42/100"
+                },
+                "progress_pct": 100,
+                "health": "healthy",
+                "error_count": 0,
+                "last_seen": "2026-06-13 19:01:52"
               },
               {
-                "name": "Decision Agent",
+                "name_key": "decision",
+                "role_key": "decision",
                 "status": "done",
                 "latency_ms": 80,
-                "summary": "HOLD"
+                "task": {
+                  "en": "Aggregate signals into decision",
+                  "zh": "汇总信号生成决策"
+                },
+                "input": {
+                  "en": "Strategy + risk + backtest + news",
+                  "zh": "策略 + 风险 + 回测 + 新闻"
+                },
+                "output": {
+                  "en": "Final decision HOLD",
+                  "zh": "最终决策 HOLD"
+                },
+                "summary": {
+                  "en": "HOLD",
+                  "zh": "HOLD"
+                },
+                "progress_pct": 100,
+                "health": "healthy",
+                "error_count": 0,
+                "last_seen": "2026-06-13 19:01:52"
               }
             ]
           }
         },
         "details": {
-          "input": [],
-          "output": [],
-          "reasoning": []
+          "input": [
+            "Pipeline stages"
+          ],
+          "output": [
+            "Agent health",
+            "Latency",
+            "Error count"
+          ],
+          "reasoning": [
+            "Monitors data, indicator, news, risk and decision agents across the execution pipeline."
+          ]
         },
-        "updated_at": "2026-06-09 22:00:20"
+        "updated_at": "2026-06-13 19:01:52"
       },
       "log": {
         "room_id": "log",
@@ -4448,33 +2747,65 @@
         "type": "execution",
         "panel_type": "execution_timeline",
         "primary": {
-          "label": "Order",
-          "value": "Simulated",
+          "label": {
+            "en": "Order",
+            "zh": "订单"
+          },
+          "value": {
+            "en": "Simulated",
+            "zh": "模拟"
+          },
           "unit": "",
           "level": "neutral"
         },
-        "summary": "No order · Simulated",
-        "insight": "模拟执行模式，无实际订单产生。",
-        "impact_on_decision": "日志用于追踪完整执行链路，不直接改变决策。",
-        "next_action": "保留最近关键事件用于复盘。",
+        "summary": {
+          "en": "No order · Simulated · 8 events",
+          "zh": "未下单 · 模拟执行 · 8 条事件"
+        },
+        "insight": {
+          "en": "Simulation mode: no real orders were executed. The log records the full execution chain for audit.",
+          "zh": "模拟执行模式，未产生实际订单。日志用于审计完整执行链路。"
+        },
+        "impact_on_decision": {
+          "en": "Execution logs trace the full pipeline but do not directly change the decision.",
+          "zh": "日志用于追踪完整执行链路，不直接改变决策。"
+        },
+        "next_action": {
+          "en": "Keep recent key events for post-run review.",
+          "zh": "保留最近关键事件用于复盘。"
+        },
         "monitor_focus": [
-          "异常日志",
-          "失败阶段",
-          "执行耗时"
+          {
+            "en": "Exception logs",
+            "zh": "异常日志"
+          },
+          {
+            "en": "Failed stages",
+            "zh": "失败阶段"
+          },
+          {
+            "en": "Execution latency",
+            "zh": "执行耗时"
+          }
         ],
         "metrics": [
           {
             "label": "Events",
-            "value": 3,
+            "value": 8,
             "unit": "",
             "display": "number",
-            "level": "neutral"
+            "level": "neutral",
+            "label_zh": "事件数"
           },
           {
             "label": "Status",
-            "value": "Done",
+            "value": {
+              "en": "Done",
+              "zh": "完成"
+            },
             "display": "badge",
-            "level": "positive"
+            "level": "positive",
+            "label_zh": "状态"
           }
         ],
         "visual": {
@@ -4482,29 +2813,92 @@
           "data": {
             "events": [
               {
-                "time": "22:00:20",
-                "stage": "Data",
-                "message": "Loaded 1199 bars for SPY"
+                "time": "19:01:52",
+                "stage": "start",
+                "level": "info",
+                "message": {
+                  "en": "Analysis started for SPY",
+                  "zh": "开始分析 SPY"
+                }
               },
               {
-                "time": "22:00:20",
-                "stage": "Indicator",
-                "message": "RSI 36.4, MACD -0.983"
+                "time": "19:01:52",
+                "stage": "data",
+                "level": "success",
+                "message": {
+                  "en": "Loaded 1199 bars for SPY",
+                  "zh": "已加载 SPY 的 1199 根 K 线"
+                }
               },
               {
-                "time": "22:00:20",
-                "stage": "Decision",
-                "message": "Final decision: HOLD"
+                "time": "19:01:52",
+                "stage": "indicator",
+                "level": "info",
+                "message": {
+                  "en": "RSI 36.4, MACD -0.983",
+                  "zh": "RSI 36.4，MACD -0.983"
+                }
+              },
+              {
+                "time": "19:01:52",
+                "stage": "news",
+                "level": "info",
+                "message": {
+                  "en": "News sentiment neutral (score 50)",
+                  "zh": "新闻情绪 中性（分数 50）"
+                }
+              },
+              {
+                "time": "19:01:52",
+                "stage": "risk",
+                "level": "warning",
+                "message": {
+                  "en": "Risk gate Position Limited (score 42)",
+                  "zh": "风险闸门 限制仓位（分数 42）"
+                }
+              },
+              {
+                "time": "19:01:52",
+                "stage": "backtest",
+                "level": "success",
+                "message": {
+                  "en": "Backtest return 43.2%, Sharpe 0.64, Max DD 15.4%",
+                  "zh": "回测收益 43.2%，夏普 0.64，最大回撤 15.4%"
+                }
+              },
+              {
+                "time": "19:01:52",
+                "stage": "decision",
+                "level": "info",
+                "message": {
+                  "en": "Final decision: HOLD at 40% position",
+                  "zh": "最终决策：观望，仓位 40%"
+                }
+              },
+              {
+                "time": "19:01:52",
+                "stage": "report",
+                "level": "success",
+                "message": {
+                  "en": "Report generated and agents returned to idle",
+                  "zh": "报告已生成，Agent 返回待命"
+                }
               }
             ]
           }
         },
         "details": {
-          "input": [],
-          "output": [],
-          "reasoning": []
+          "input": [
+            "All pipeline stages"
+          ],
+          "output": [
+            "Execution timeline"
+          ],
+          "reasoning": [
+            "Records the start, data, indicator, news, risk, backtest, decision and report stages for audit."
+          ]
         },
-        "updated_at": "2026-06-09 22:00:20"
+        "updated_at": "2026-06-13 19:01:52"
       },
       "memory": {
         "room_id": "memory",
@@ -4513,62 +2907,407 @@
         "type": "memory",
         "panel_type": "memory_panel",
         "primary": {
-          "label": "策略记忆",
-          "value": "已记录",
+          "label": {
+            "en": "Strategy Memory",
+            "zh": "策略记忆"
+          },
+          "value": {
+            "en": "Recorded",
+            "zh": "已记录"
+          },
           "unit": "",
           "level": "positive"
         },
-        "summary": "Records: 1 · Avg Return: 43.2%",
-        "insight": "SPY 分析记录已保存至历史策略库。历史记录对当前策略形成轻微正向加权。",
-        "impact_on_decision": "历史记录对当前策略形成轻微正向加权，但不足以覆盖风险约束。",
-        "next_action": "继续积累相似市场状态下的策略表现。",
+        "summary": {
+          "en": "Records: 7 · Avg Return: 43.2% · Knowledge: 12",
+          "zh": "运行记录 7 条 · 平均收益 43.2% · 策略知识 12 条"
+        },
+        "insight": {
+          "en": "Strategy memory has accumulated 7 run records and 12 strategy knowledge entries (2 from literature).",
+          "zh": "策略记忆库已积累 7 条运行记录和 12 条策略知识（含文献策略 2 条）。"
+        },
+        "impact_on_decision": {
+          "en": "Historical records exert a slight positive weight on the current strategy, but not enough to override risk constraints.",
+          "zh": "历史记录对当前策略形成轻微正向加权，但不足以覆盖风险约束。"
+        },
+        "next_action": {
+          "en": "Continue accumulating strategy performance under similar market regimes.",
+          "zh": "继续积累相似市场状态下的策略表现。"
+        },
         "monitor_focus": [
-          "相似策略表现",
-          "历史成功率",
-          "历史回撤"
+          {
+            "en": "Similar strategy performance",
+            "zh": "相似策略表现"
+          },
+          {
+            "en": "Historical win rate",
+            "zh": "历史成功率"
+          },
+          {
+            "en": "Historical drawdown",
+            "zh": "历史回撤"
+          }
         ],
         "metrics": [
           {
-            "label": "Related Records",
-            "value": 1,
+            "label": "Run Records",
+            "value": 7,
             "unit": "",
             "display": "number",
-            "level": "neutral"
+            "level": "neutral",
+            "label_zh": "运行记录"
+          },
+          {
+            "label": "Knowledge",
+            "value": 12,
+            "unit": "",
+            "display": "number",
+            "level": "neutral",
+            "label_zh": "策略知识"
           },
           {
             "label": "Avg Return",
             "value": "43.2",
             "unit": "%",
             "display": "number",
-            "level": "neutral"
+            "level": "neutral",
+            "label_zh": "平均收益"
           },
           {
             "label": "Avg Sharpe",
             "value": "0.64",
             "unit": "",
             "display": "number",
-            "level": "neutral"
-          },
-          {
-            "label": "Memory Boost",
-            "value": 0,
-            "unit": "",
-            "display": "number",
-            "level": "neutral"
+            "level": "neutral",
+            "label_zh": "平均夏普"
           }
         ],
         "visual": {
-          "kind": "timeline",
+          "kind": "memory_archive",
           "data": {
             "records": [
+              {
+                "ticker": "SPY",
+                "strategy": "auto",
+                "decision": "HOLD",
+                "return": "N/A",
+                "sharpe": "N/A",
+                "date": "2026-06-13"
+              },
+              {
+                "ticker": "SPY",
+                "strategy": "auto",
+                "decision": "HOLD",
+                "return": "N/A",
+                "sharpe": "N/A",
+                "date": "2026-06-12"
+              },
+              {
+                "ticker": "SPY",
+                "strategy": "auto",
+                "decision": "HOLD",
+                "return": "N/A",
+                "sharpe": "N/A",
+                "date": "2026-06-10"
+              },
+              {
+                "ticker": "AAPL",
+                "strategy": "auto",
+                "decision": "HOLD",
+                "return": "N/A",
+                "sharpe": "N/A",
+                "date": "2026-06-05"
+              },
+              {
+                "ticker": "SPY",
+                "strategy": "auto",
+                "decision": "HOLD",
+                "return": "N/A",
+                "sharpe": "N/A",
+                "date": "2026-06-05"
+              },
+              {
+                "ticker": "AAPL",
+                "strategy": "ma",
+                "decision": "HOLD",
+                "return": "N/A",
+                "sharpe": "N/A",
+                "date": "2026-06-05"
+              },
               {
                 "ticker": "SPY",
                 "strategy": "momentum",
                 "decision": "HOLD",
                 "return": "43.2%",
-                "date": "2026-06-09"
+                "sharpe": "0.64",
+                "date": "2026-06-13"
               }
-            ]
+            ],
+            "knowledge_base": [
+              {
+                "id": "ma_crossover",
+                "name": "MA Crossover",
+                "name_zh": "均线交叉策略",
+                "type": "classic",
+                "source": "built-in",
+                "paper": "Edwards & Magee (1948), Technical Analysis of Stock Trends",
+                "paper_url": "https://archive.org/details/technicalanalysi00edwa",
+                "description": "双均线（短期/长期）交叉产生买卖信号。金叉买入，死叉卖出。",
+                "description_en": "Dual moving-average (short/long) crossover generates buy/sell signals: golden cross to buy, death cross to sell.",
+                "adopted": true,
+                "tags": [
+                  "趋势跟踪",
+                  "技术分析"
+                ]
+              },
+              {
+                "id": "rsi_momentum",
+                "name": "RSI Momentum",
+                "name_zh": "RSI 动量策略",
+                "type": "classic",
+                "source": "built-in",
+                "paper": "Wilder (1978), New Concepts in Technical Trading Systems",
+                "paper_url": "https://archive.org/details/newconceptsinite00wild",
+                "description": "利用 RSI 超买（>70）超卖（<30）区域判断反转时机。",
+                "description_en": "Uses RSI overbought (>70) and oversold (<30) zones to identify reversal timing.",
+                "adopted": true,
+                "tags": [
+                  "均值回归",
+                  "技术分析"
+                ]
+              },
+              {
+                "id": "macd_signal",
+                "name": "MACD Signal",
+                "name_zh": "MACD 信号策略",
+                "type": "classic",
+                "source": "built-in",
+                "paper": "Appel (1979), The Stock Option and No-Load Switch Fund Scalper's Manual",
+                "paper_url": "https://www.cmtassociation.org/presenter/gerald-appel/",
+                "description": "MACD 线与信号线交叉 + 柱状图背离确认趋势方向。",
+                "description_en": "MACD line/signal-line crossovers plus histogram divergence confirm trend direction.",
+                "adopted": true,
+                "tags": [
+                  "趋势跟踪",
+                  "技术分析"
+                ]
+              },
+              {
+                "id": "momentum_20d",
+                "name": "Momentum (20D)",
+                "name_zh": "20日动量策略",
+                "type": "classic",
+                "source": "built-in",
+                "paper": "Jegadeesh & Titman (1993), Returns to Buying Winners and Selling Losers",
+                "paper_url": "https://doi.org/10.1111/j.1540-6261.1993.tb04703.x",
+                "description": "以过去 20 日收益率为动量代理变量，正收益做多，负收益离场。",
+                "description_en": "Uses past 20-day return as a momentum proxy: go long on positive return, exit on negative.",
+                "adopted": true,
+                "tags": [
+                  "动量",
+                  "技术分析"
+                ]
+              },
+              {
+                "id": "multi_agent_llm",
+                "name": "Multi-Agent LLM Voting",
+                "name_zh": "多Agent LLM投票框架",
+                "type": "llm",
+                "source": "paper",
+                "paper": "Xiao et al. (2025), TradingAgents: Multi-Agents LLM Financial Trading Framework, AAAI",
+                "paper_url": "https://arxiv.org/abs/2412.20138",
+                "description": "Data/News/Technical/Risk/Decision 五个Agent协作，通过投票+辩论达成共识决策。",
+                "description_en": "Five agents (Data/News/Technical/Risk/Decision) collaborate and reach consensus via voting and debate.",
+                "adopted": true,
+                "tags": [
+                  "LLM智能体",
+                  "多智能体",
+                  "投票"
+                ]
+              },
+              {
+                "id": "finrl_deepseek",
+                "name": "FinRL-DeepSeek RL",
+                "name_zh": "FinRL-DeepSeek 强化学习",
+                "type": "rl",
+                "source": "paper",
+                "paper": "Benhenda (2025), FinRL-DeepSeek: LLM-Infused Risk-Sensitive RL for Trading Agents",
+                "paper_url": "https://arxiv.org/abs/2502.07393",
+                "description": "LLM 注入的 PPO/A2C 强化学习框架，带有风险敏感机制。",
+                "description_en": "LLM-infused PPO/A2C reinforcement learning framework with risk-sensitive mechanisms.",
+                "adopted": false,
+                "tags": [
+                  "强化学习",
+                  "LLM",
+                  "PPO",
+                  "A2C",
+                  "风险敏感"
+                ]
+              },
+              {
+                "id": "finrl_ensemble",
+                "name": "FinRL Ensemble (5-Agent)",
+                "name_zh": "FinRL 集成策略（5-Agent）",
+                "type": "rl",
+                "source": "literature",
+                "paper": "Liu et al. (2020), FinRL: A Deep Reinforcement Learning Library for Automated Stock Trading",
+                "paper_url": "https://arxiv.org/abs/2011.09607",
+                "description": "A2C + PPO + DDPG + SAC + TD3 五算法集成，通过Sharpe比率加权投票。",
+                "description_en": "Ensemble of A2C, PPO, DDPG, SAC and TD3 algorithms weighted by Sharpe-ratio voting.",
+                "adopted": false,
+                "tags": [
+                  "强化学习",
+                  "集成",
+                  "PPO",
+                  "A2C",
+                  "SAC"
+                ]
+              },
+              {
+                "id": "maddqn_timesnet",
+                "name": "MADDQN + TimesNet",
+                "name_zh": "MADDQN + TimesNet",
+                "type": "rl",
+                "source": "literature",
+                "paper": "Huang et al. (2024), A multi-agent reinforcement learning framework for optimizing financial trading strategies based on TimesNet",
+                "paper_url": "https://doi.org/10.1016/j.eswa.2023.121502",
+                "description": "多Agent Double DQN 配 TimesNet 时序网络，一Agent追收益一Agent管风险。",
+                "description_en": "Multi-agent Double DQN with TimesNet temporal network: one agent targets returns, another manages risk.",
+                "adopted": false,
+                "tags": [
+                  "强化学习",
+                  "多智能体",
+                  "TimesNet",
+                  "风险控制"
+                ]
+              },
+              {
+                "id": "marl_hft",
+                "name": "MARL for HFT",
+                "name_zh": "多Agent强化学习高频交易",
+                "type": "rl",
+                "source": "literature",
+                "paper": "Wei et al. (2024), Multi-Agent Reinforcement Learning for High-Frequency Trading Strategy Optimization",
+                "paper_url": "https://doi.org/10.60087/vol2iissue1.p008",
+                "description": "VDN + MAPPO 协调高频交易Agent，Sharpe 2.87，最大回撤 12.3%。",
+                "description_en": "VDN + MAPPO coordinate high-frequency trading agents; reported Sharpe 2.87, max drawdown 12.3%.",
+                "adopted": false,
+                "tags": [
+                  "强化学习",
+                  "多智能体",
+                  "高频交易",
+                  "VIX"
+                ]
+              },
+              {
+                "id": "multi_timeframe_madrl",
+                "name": "Multi-Timeframe MADRL",
+                "name_zh": "多时间框架MADRL",
+                "type": "rl",
+                "source": "literature",
+                "paper": "López Figueroa (2025), A multi-agent deep reinforcement learning framework using multiple timeframe data for algorithmic trading",
+                "paper_url": "https://upcommons.upc.edu/entities/publication/2b83f758-56df-44d7-8121-6fa3e8185c50",
+                "description": "分层 MADRL 架构：小时/日/周专用 Agent 输入 Meta-Agent 决策，S&P 500 上收益 21.58%，Sharpe 1.69。",
+                "description_en": "Hierarchical MADRL with hour/day/week specialist agents feeding a meta-agent; reported S&P 500 return 21.58%, Sharpe 1.69.",
+                "adopted": false,
+                "tags": [
+                  "强化学习",
+                  "多智能体",
+                  "多时间框架",
+                  "元智能体"
+                ]
+              },
+              {
+                "id": "multi_asset_marl",
+                "name": "Multi-Asset MARL",
+                "name_zh": "多资产MARL自适应交易",
+                "type": "rl",
+                "source": "literature",
+                "paper": "Cheng & Sun (2024), Multiagent-based deep reinforcement learning framework for multi-asset adaptive trading and portfolio management",
+                "paper_url": "https://doi.org/10.1016/j.neucom.2024.127800",
+                "description": "合作式 MARL 系统同时管理多资产，动态调整配置，提升 Sharpe 和下行保护。",
+                "description_en": "Cooperative MARL system manages multiple assets simultaneously, dynamically adjusting allocation to improve Sharpe and downside protection.",
+                "adopted": false,
+                "tags": [
+                  "强化学习",
+                  "多智能体",
+                  "投资组合",
+                  "多资产"
+                ]
+              },
+              {
+                "id": "flag_trader",
+                "name": "FLAG-TRADER",
+                "name_zh": "FLAG-TRADER",
+                "type": "llm",
+                "source": "literature",
+                "paper": "Xiong et al. (2025), FLAG-TRADER: Fusion LLM-Agent with Gradient-based Reinforcement Learning for Financial Trading",
+                "paper_url": "https://arxiv.org/abs/2502.11433",
+                "description": "LLM Agent 与梯度强化学习融合，自然语言推理 + 可微分策略优化。",
+                "description_en": "Fuses LLM agents with gradient-based reinforcement learning, combining natural-language reasoning and differentiable policy optimization.",
+                "adopted": false,
+                "tags": [
+                  "LLM",
+                  "强化学习",
+                  "梯度优化",
+                  "自然语言"
+                ]
+              }
+            ],
+            "selected_strategy": {
+              "id": "momentum_20d",
+              "name": "momentum",
+              "name_zh": "20日动量",
+              "signal": "HOLD",
+              "score": 59.33,
+              "date": "2026-06-13"
+            },
+            "rankings": {
+              "by_return": [
+                {
+                  "ticker": "SPY",
+                  "strategy": "momentum",
+                  "return": "43.2%",
+                  "date": "2026-06-13"
+                }
+              ],
+              "by_sharpe": [
+                {
+                  "ticker": "SPY",
+                  "strategy": "momentum",
+                  "sharpe": "0.64",
+                  "date": "2026-06-13"
+                }
+              ]
+            },
+            "stats": {
+              "total_runs": 7,
+              "best_strategy_by_return": "momentum",
+              "best_return": "43.2%",
+              "best_strategy_by_sharpe": "momentum",
+              "best_sharpe": "0.64"
+            },
+            "reflection": {
+              "match_count": 1,
+              "avg_return": 43.2,
+              "reflection": "当前 20 日收益为负，依据 Jegadeesh & Titman (1993) 的动量效应，短期趋势偏空。 MA20 上穿 MA60，符合 Edwards & Magee (1948) 的趋势跟踪原则。 历史记录中该策略仅有 1 条可计算收益记录（43.20%），样本不足，应谨慎外推。",
+              "reflection_en": "The current 20-day return is negative; per Jegadeesh & Titman (1993), short-term momentum is bearish. MA20 is above MA60, consistent with Edwards & Magee (1948) trend-following principles. Only 1 return-calculable record (43.20%) exists for this strategy; sample is too small to extrapolate.",
+              "recommendations": [
+                {
+                  "id": "ma_crossover",
+                  "reason": "均线金叉支持趋势跟踪。",
+                  "reason_en": "Moving-average golden cross supports trend following.",
+                  "paper": "Edwards & Magee (1948)"
+                }
+              ],
+              "paper_refs": [
+                "Carhart (1997)",
+                "Jegadeesh & Titman (1993)",
+                "Edwards & Magee (1948)",
+                "Wilder (1978)",
+                "Benhenda (2025)"
+              ]
+            }
           }
         },
         "details": {
@@ -4578,7 +3317,7 @@
             "暂无相同资产和策略的历史记录。"
           ]
         },
-        "updated_at": "2026-06-09 22:00:20"
+        "updated_at": "2026-06-13 19:01:52"
       },
       "break_room": {
         "room_id": "break_room",
@@ -4587,48 +3326,92 @@
         "type": "idle",
         "panel_type": "idle_summary",
         "primary": {
-          "label": "Last Task",
+          "label": {
+            "en": "Last Task",
+            "zh": "最近任务"
+          },
           "value": "SPY",
           "unit": "",
           "level": "positive"
         },
-        "summary": "SPY · HOLD",
-        "insight": "最新分析 SPY 已完成，决策为 HOLD。Agent 返回休息室待命。",
-        "impact_on_decision": "休息室不参与当前决策，仅展示系统待命状态。",
-        "next_action": "等待用户提交下一次分析任务。",
+        "summary": {
+          "en": "SPY · HOLD",
+          "zh": "SPY · 观望"
+        },
+        "insight": {
+          "en": "Latest analysis for SPY is complete. Decision: HOLD. Agents have returned to the break room.",
+          "zh": "最新分析 SPY 已完成，决策为 观望。Agent 返回休息室待命。"
+        },
+        "impact_on_decision": {
+          "en": "The break room does not participate in the current decision; it only shows system standby status.",
+          "zh": "休息室不参与当前决策，仅展示系统待命状态。"
+        },
+        "next_action": {
+          "en": "Waiting for the user to submit the next analysis task.",
+          "zh": "等待用户提交下一次分析任务。"
+        },
         "monitor_focus": [
-          "new task",
-          "last task summary"
+          {
+            "en": "New task",
+            "zh": "新任务"
+          },
+          {
+            "en": "Last task summary",
+            "zh": "最近任务摘要"
+          }
         ],
         "metrics": [
           {
             "label": "Decision",
-            "value": "HOLD",
+            "value": {
+              "en": "HOLD",
+              "zh": "观望"
+            },
             "display": "badge",
-            "level": "warning"
+            "level": "warning",
+            "label_zh": "决策"
           },
           {
             "label": "Strategy",
-            "value": "momentum",
+            "value": {
+              "en": "momentum",
+              "zh": "20日动量"
+            },
             "display": "badge",
-            "level": "neutral"
+            "level": "neutral",
+            "label_zh": "策略"
           }
         ],
         "visual": {
-          "kind": "report_card",
+          "kind": "idle_status",
           "data": {
-            "status": "idle",
+            "system_status": "idle",
+            "next_ready": true,
             "last_asset": "SPY",
             "last_decision": "HOLD",
-            "next_ready": true
+            "last_decision_zh": "观望",
+            "last_run_at": "2026-06-13 19:01:52",
+            "tasks_completed": 7,
+            "ready_message": {
+              "en": "System ready for next task",
+              "zh": "系统已就绪，等待下一次任务"
+            }
           }
         },
         "details": {
-          "input": [],
-          "output": [],
-          "reasoning": []
+          "input": [
+            "Decision Desk",
+            "Agent Monitor"
+          ],
+          "output": [
+            "Standby Status",
+            "Next Task Readiness"
+          ],
+          "reasoning": [
+            "Agents return to idle after the pipeline completes; the break room reflects system readiness."
+          ]
         },
-        "updated_at": "2026-06-09 22:00:20"
+        "updated_at": "2026-06-13 19:01:52"
       }
     }
   }

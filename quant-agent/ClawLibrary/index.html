@@ -74,10 +74,7 @@
         backdrop-filter: blur(10px);
         background-clip: padding-box;
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-        overflow-x: hidden;
-        overflow-y: auto;
-        scrollbar-gutter: stable;
-        overscroll-behavior: contain;
+        overflow: hidden;
       }
 
       .menu-panel-head {
@@ -85,7 +82,6 @@
         align-items: flex-start;
         justify-content: space-between;
         gap: 8px;
-        flex: 0 0 auto;
       }
 
       .menu-panel-stamp {
@@ -162,17 +158,11 @@
         gap: 6px;
         overflow: auto;
         padding-right: 2px;
-        position: relative;
-        z-index: 3;
-        flex: 0 0 auto;
-        min-height: 0;
-        overscroll-behavior: contain;
       }
 
       .resource-menu button {
         --accent-color: var(--accent-2);
         position: relative;
-        z-index: 1;
         width: 100%;
         display: grid;
         grid-template-columns: auto minmax(0, 1fr) auto;
@@ -184,9 +174,6 @@
         color: var(--ink);
         padding: 6px 7px 6px 10px;
         text-align: left;
-        cursor: pointer;
-        pointer-events: auto;
-        user-select: none;
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
         transition:
           transform 120ms ease,
@@ -1131,6 +1118,20 @@
           linear-gradient(180deg, rgba(8, 21, 19, 0.26) 0%, rgba(6, 16, 15, 0.16) 100%);
       }
 
+      /* Gateway (market data room) overrides */
+      #asset-modal[data-room-id="gateway"] .asset-modal-card {
+        width: min(1200px, 94vw);
+        max-height: 90vh;
+      }
+      #asset-modal[data-room-id="gateway"] .asset-modal-body {
+        padding: 0;
+        background:
+          linear-gradient(90deg, rgba(148, 163, 184, 0.06) 1px, transparent 1px),
+          linear-gradient(180deg, rgba(148, 163, 184, 0.04) 1px, transparent 1px),
+          linear-gradient(180deg, rgba(5, 14, 12, 0.95), rgba(4, 10, 9, 0.92));
+        background-size: 42px 42px, 42px 42px, 100% 100%;
+      }
+
       .asset-modal-head strong {
         display: block;
         color: rgba(244, 255, 247, 0.94);
@@ -1176,9 +1177,13 @@
         border: 1px solid rgba(171, 218, 201, 0.34);
         background: rgba(9, 24, 22, 0.74);
         color: #d6eee5;
-        padding: 6px 10px;
+        width: 32px;
+        height: 32px;
+        padding: 0;
         border-radius: 10px;
-        font-size: 11px;
+        font-size: 16px;
+        line-height: 30px;
+        text-align: center;
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
       }
 
@@ -2735,9 +2740,6 @@
 
       /* ── Trading Dashboard: Right Panel sections ──────────────── */
       .panel-section {
-        position: relative;
-        z-index: 1;
-        flex: 0 0 auto;
         border-top: 1px solid rgba(148,163,184,0.12);
         padding: 12px 16px;
         background: rgba(15, 23, 32, 0.6);
@@ -2778,178 +2780,6 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-      }
-
-      .trading-task-form {
-        position: relative;
-        z-index: 2;
-        flex: 0 0 auto;
-        padding: 14px 14px 15px;
-        border: 1px solid rgba(171, 218, 201, 0.16);
-        border-radius: 10px;
-        background:
-          linear-gradient(180deg, rgba(18, 39, 42, 0.88), rgba(11, 24, 29, 0.84)),
-          radial-gradient(circle at top left, rgba(54, 211, 153, 0.10), transparent 42%);
-        box-shadow:
-          inset 0 1px 0 rgba(255, 255, 255, 0.06),
-          0 10px 26px rgba(0, 0, 0, 0.18);
-      }
-
-      .task-card-head {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        gap: 10px;
-        margin-bottom: 12px;
-      }
-
-      .task-card-title {
-        font-family: 'ArkPixel', 'VT323', monospace;
-        font-size: 14px;
-        color: #facc15;
-        letter-spacing: 0.03em;
-      }
-
-      .task-card-sub {
-        margin-top: 3px;
-        font-family: var(--font-mono);
-        font-size: 10px;
-        color: #8aa4a0;
-      }
-
-      .task-live-chip {
-        flex: 0 0 auto;
-        padding: 3px 7px;
-        border: 1px solid rgba(54, 211, 153, 0.34);
-        border-radius: 999px;
-        background: rgba(13, 43, 36, 0.72);
-        color: #86efac;
-        font-family: var(--font-mono);
-        font-size: 9px;
-        line-height: 1.2;
-        text-transform: uppercase;
-      }
-
-      .task-form-stack {
-        display: grid;
-        gap: 9px;
-      }
-
-      .task-field {
-        display: grid;
-        gap: 4px;
-      }
-
-      .task-label {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 8px;
-        color: #9fb7b1;
-        font-family: var(--font-mono);
-        font-size: 9px;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      .task-input,
-      .task-select {
-        width: 100%;
-        min-height: 32px;
-        border: 1px solid rgba(148, 163, 184, 0.24);
-        border-radius: 7px;
-        background: rgba(8, 18, 24, 0.92);
-        color: #edf7f3;
-        padding: 7px 9px;
-        font-family: var(--font-mono);
-        font-size: 11px;
-        outline: none;
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
-        transition: border-color 140ms ease, box-shadow 140ms ease, background 140ms ease;
-      }
-
-      .task-input:focus,
-      .task-select:focus {
-        border-color: rgba(54, 211, 153, 0.66);
-        background: rgba(10, 26, 31, 0.96);
-        box-shadow: 0 0 0 2px rgba(54, 211, 153, 0.12);
-      }
-
-      .task-two-col {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-        gap: 8px;
-      }
-
-      .task-actions {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) auto;
-        gap: 8px;
-        align-items: stretch;
-      }
-
-      .task-primary-btn,
-      .task-secondary-btn {
-        min-height: 34px;
-        border-radius: 8px;
-        font-family: 'ArkPixel', 'VT323', monospace;
-        font-size: 12px;
-        letter-spacing: 0.02em;
-        cursor: pointer;
-        transition: transform 120ms ease, border-color 120ms ease, background 120ms ease, opacity 120ms ease;
-      }
-
-      .task-primary-btn {
-        border: 1px solid rgba(74, 222, 128, 0.50);
-        background: linear-gradient(180deg, #22c55e, #15803d);
-        color: #f7fff9;
-        box-shadow: 0 8px 18px rgba(34, 197, 94, 0.18);
-      }
-
-      .task-secondary-btn {
-        border: 1px solid rgba(148, 163, 184, 0.25);
-        background: rgba(20, 32, 42, 0.92);
-        color: #d7e5e2;
-        padding: 0 10px;
-      }
-
-      .task-primary-btn:hover,
-      .task-secondary-btn:hover {
-        transform: translateY(-1px);
-      }
-
-      .task-primary-btn:disabled,
-      .task-secondary-btn:disabled {
-        opacity: 0.54;
-        cursor: wait;
-        transform: none;
-      }
-
-      .task-status-msg {
-        min-height: 30px;
-        padding: 8px 9px;
-        border: 1px solid rgba(148, 163, 184, 0.16);
-        border-radius: 8px;
-        background: rgba(6, 15, 20, 0.62);
-        color: #93c5fd;
-        font-family: var(--font-mono);
-        font-size: 10px;
-        line-height: 1.35;
-      }
-
-      .task-status-msg[data-tone="success"] {
-        border-color: rgba(54, 211, 153, 0.34);
-        color: #86efac;
-      }
-
-      .task-status-msg[data-tone="error"] {
-        border-color: rgba(251, 113, 133, 0.38);
-        color: #fda4af;
-      }
-
-      .task-status-msg[data-tone="busy"] {
-        border-color: rgba(251, 191, 36, 0.34);
-        color: #fde68a;
       }
 
       /* ── Decision badge colors ────────────────────────────────── */
@@ -3037,48 +2867,82 @@
       .schedule-priority[data-priority="medium"] { background: rgba(251,191,36,0.18); color: #fbbf24; border: 1px solid rgba(251,191,36,0.35); }
       .schedule-priority[data-priority="low"] { background: rgba(148,163,184,0.14); color: #94a3b8; border: 1px solid rgba(148,163,184,0.25); }
 
-      /* ── News Panel (images room modal) ───────────────────────── */
-      .news-panel {
+      /* ── Chart Analysis Room (images room modal) ──────────────── */
+      .chart-analysis-room .room-visual { margin-bottom: 14px; }
+      .chart-analysis-room .room-visual-title { font-size: 13px; font-weight: 600; color: #7cf0d0; margin-bottom: 8px; }
+      .chart-analysis-room .room-visual-placeholder {
         display: flex;
-        flex-direction: column;
-        gap: 14px;
-        padding: 4px 2px;
+        align-items: center;
+        justify-content: center;
+        min-height: 120px;
+        background: rgba(8,20,19,0.4);
+        border: 1px dashed rgba(171,218,201,0.18);
+        border-radius: 10px;
+        color: rgba(152,181,172,0.72);
+        font-size: 12px;
       }
-      .news-list {
+      .chart-analysis-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+      .chart-analysis-card {
+        background: linear-gradient(180deg, rgba(12,30,27,0.56), rgba(8,21,19,0.38));
+        border: 1px solid rgba(171,218,201,0.12);
+        border-radius: 10px;
+        padding: 12px;
         display: flex;
         flex-direction: column;
         gap: 10px;
       }
-      .news-list-item {
-        background: linear-gradient(180deg, rgba(12,30,27,0.56), rgba(8,21,19,0.38));
-        border: 1px solid rgba(171,218,201,0.12);
-        border-radius: 8px;
-        padding: 10px 12px;
-      }
-      .news-title {
+      .chart-card-title {
+        font-size: 12px;
+        font-weight: 700;
         color: #7cf0d0;
-        font-size: 13px;
+        letter-spacing: 0.02em;
+      }
+      .chart-card-body {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .chart-metric-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        font-size: 12px;
+      }
+      .chart-metric-row span {
+        color: rgba(152,181,172,0.78);
+      }
+      .chart-metric-row strong {
+        color: rgba(236,247,243,0.9);
         font-weight: 600;
-        text-decoration: none;
-        line-height: 1.4;
-        display: block;
-        margin-bottom: 4px;
+        text-align: right;
       }
-      .news-title:hover { text-decoration: underline; color: #a6f5d8; }
-      .news-meta {
-        color: rgba(152,181,172,0.72);
+      .chart-metric-row .decision-badge {
         font-size: 10px;
-        margin-bottom: 4px;
+        padding: 2px 8px;
+        border-radius: 12px;
+        text-transform: uppercase;
+        font-weight: 700;
       }
-      .news-summary {
-        color: rgba(236,247,243,0.68);
+      .chart-metric-row .decision-badge.buy { background: rgba(54,211,153,0.18); color: #36d399; border: 1px solid rgba(54,211,153,0.35); }
+      .chart-metric-row .decision-badge.sell { background: rgba(251,113,133,0.18); color: #fb7185; border: 1px solid rgba(251,113,133,0.35); }
+      .chart-metric-row .decision-badge.hold { background: rgba(251,191,36,0.18); color: #fbbf24; border: 1px solid rgba(251,191,36,0.35); }
+      .chart-card-reasoning {
+        color: rgba(236,247,243,0.72);
         font-size: 11px;
-        line-height: 1.4;
+        line-height: 1.5;
+        padding: 8px;
+        background: rgba(8,20,19,0.35);
+        border-radius: 6px;
+        border-left: 2px solid rgba(124,240,208,0.35);
       }
-      .news-evidence {
-        color: rgba(126,202,184,0.6);
-        font-size: 10px;
-        font-family: var(--font-mono);
+      @media (max-width: 640px) {
+        .chart-analysis-grid { grid-template-columns: 1fr; }
       }
 
       /* ── Trading Dashboard: Bottom Chat Drawer (hidden) ─────── */
@@ -3212,6 +3076,47 @@
       }
       .room-modal-content.hidden { display: none; }
 
+      .room-modal[data-room-id="gateway"] {
+        width: min(1360px, 96vw);
+        max-height: 92vh;
+        border-radius: 10px;
+        border-color: rgba(73,104,128,.36);
+        background:
+          linear-gradient(180deg, rgba(4,10,16,.98), rgba(5,14,22,.94));
+      }
+      .room-modal[data-room-id="gateway"] .room-modal-header {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 4;
+        padding: 0;
+      }
+      .room-modal[data-room-id="gateway"] .room-modal-title,
+      .room-modal[data-room-id="gateway"] .room-modal-meta,
+      .room-modal[data-room-id="gateway"] .room-modal-tabs {
+        display: none;
+      }
+      .room-modal[data-room-id="gateway"] .room-modal-close {
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        background: rgba(8,18,28,.86);
+        color: rgba(226,232,240,.92);
+      }
+      .room-modal[data-room-id="gateway"] .room-modal-content {
+        max-height: 92vh;
+        padding: 16px;
+        background:
+          linear-gradient(90deg, rgba(148,163,184,.08) 1px, transparent 1px),
+          linear-gradient(180deg, rgba(148,163,184,.06) 1px, transparent 1px);
+        background-size: 42px 42px;
+      }
+      .room-modal[data-room-id="gateway"] #rm-content-timeline,
+      .room-modal[data-room-id="gateway"] #rm-content-history,
+      .room-modal[data-room-id="gateway"] #rm-content-ai {
+        display: none !important;
+      }
+
       /* Hero */
       .room-hero-summary {
         padding: 16px; border-radius: 14px;
@@ -3256,8 +3161,7 @@
         font-size: 10px; color: #94a3b8; margin-left: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
       }
 
-      /* Hide old asset-modal (replaced by Room Modal) */
-      .asset-modal { display: none !important; }
+      /* Both asset-modal and room-modal can be active; main.ts controls asset-modal */
       .chat-messages {
         padding: 12px;
         min-height: 60px;
@@ -3366,9 +3270,9 @@
       .topbar-status-line .pill .lbl { color: #64748b; margin-right: 4px; }
 
       /* Adjust menu panel width and spacing */
-      .menu-panel { width: 280px; right: 8px; top: 8px; bottom: 54px; border-radius: 8px; transition: transform 0.35s, opacity 0.35s; overflow-x: hidden; overflow-y: auto; }
+      .menu-panel { width: 280px; right: 8px; top: 8px; bottom: 54px; border-radius: 8px; transition: transform 0.35s, opacity 0.35s; }
       .menu-panel.collapsed { transform: translateX(350px) !important; opacity: 0 !important; pointer-events: none !important; }
-      .resource-menu { max-height: min(34vh, 280px); }
+      .resource-menu { max-height: 40vh; }
       .resource-menu button { font-size: 11px; padding: 5px 10px; transition: border-color 0.3s, box-shadow 0.3s; }
 
       /* Room status color coding */
@@ -3497,6 +3401,1613 @@
         text-align: center;
         color: rgba(148,163,184,0.5);
         font-size: 12px;
+      }
+
+      .market-data-room {
+        gap: 12px;
+      }
+      .market-room-header,
+      .market-panel {
+        border: 1px solid rgba(72,104,128,.35);
+        background: rgba(8,18,28,.72);
+        border-radius: 10px;
+      }
+      .market-room-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 16px 18px;
+      }
+      .market-room-kicker,
+      .market-panel-title,
+      .market-subtitle {
+        color: #94a3b8;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .market-room-title {
+        margin-top: 4px;
+        color: rgba(236,247,243,0.96);
+        font-size: 28px;
+        font-weight: 900;
+        line-height: 1;
+      }
+      .market-room-status {
+        flex: 0 0 auto;
+        border-radius: 999px;
+        padding: 6px 12px;
+        font-size: 12px;
+        font-weight: 800;
+        border: 1px solid rgba(148,163,184,0.24);
+      }
+      .market-room-status.positive {
+        color: #36d399;
+        border-color: rgba(54,211,153,0.34);
+        background: rgba(54,211,153,0.1);
+      }
+      .market-room-status.warning {
+        color: #fbbf24;
+        border-color: rgba(251,191,36,0.32);
+        background: rgba(251,191,36,0.1);
+      }
+      .market-room-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+        gap: 12px;
+      }
+      .market-panel {
+        padding: 14px 16px;
+      }
+      .market-panel-title {
+        margin-bottom: 12px;
+        padding-bottom: 7px;
+        border-bottom: 1px solid rgba(72,104,128,.2);
+        color: rgba(236,247,243,0.86);
+      }
+      .market-facts {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+      .market-facts div,
+      .market-metrics-strip div {
+        min-width: 0;
+        border-radius: 8px;
+        border: 1px solid rgba(72,104,128,.22);
+        background: rgba(3,10,18,.38);
+        padding: 10px;
+      }
+      .market-facts span,
+      .market-metrics-strip span,
+      .market-news-row span,
+      .market-news-score small {
+        display: block;
+        color: rgba(148,163,184,0.82);
+        font-size: 11px;
+      }
+      .market-facts strong,
+      .market-metrics-strip strong {
+        display: block;
+        overflow-wrap: anywhere;
+        color: rgba(236,247,243,0.92);
+        font-size: 13px;
+        margin-top: 4px;
+      }
+      .market-metrics-strip {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+        margin-top: 10px;
+      }
+      .market-metrics-strip strong {
+        color: #7ce6c7;
+        font-family: var(--font-mono);
+        font-size: 18px;
+      }
+      .market-news-score {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+        border-radius: 8px;
+        border: 1px solid rgba(72,104,128,.22);
+        background: rgba(3,10,18,.38);
+        padding: 10px;
+      }
+      .market-news-score strong {
+        color: #f4d06f;
+        font-family: var(--font-mono);
+        font-size: 24px;
+        line-height: 1;
+      }
+      .market-news-score strong span {
+        color: rgba(148,163,184,0.78);
+        font-size: 12px;
+      }
+      .market-news-score div span {
+        color: rgba(236,247,243,0.9);
+        font-weight: 800;
+      }
+      .market-subtitle {
+        margin: 12px 0 7px;
+      }
+      .market-event-list,
+      .market-news-list,
+      .market-check-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .market-event-card,
+      .market-news-row,
+      .market-check {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        border-radius: 8px;
+        border: 1px solid rgba(72,104,128,.22);
+        background: rgba(3,10,18,.34);
+        padding: 9px 10px;
+      }
+      .market-event-text,
+      .market-news-row strong,
+      .market-check strong {
+        color: rgba(236,247,243,0.9);
+        font-size: 12px;
+        line-height: 1.45;
+      }
+      .market-news-row {
+        display: block;
+      }
+      .market-news-row strong {
+        display: block;
+        overflow-wrap: anywhere;
+      }
+      .market-check {
+        align-items: center;
+      }
+      .market-check > span:last-child {
+        margin-left: auto;
+        color: rgba(148,163,184,0.82);
+        font-size: 12px;
+        text-align: right;
+      }
+      .market-check-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: #94a3b8;
+        box-shadow: 0 0 0 3px rgba(148,163,184,0.12);
+      }
+      .market-check-dot.positive {
+        background: #36d399;
+        box-shadow: 0 0 0 3px rgba(54,211,153,0.14);
+      }
+      .market-check-dot.warning {
+        background: #fbbf24;
+        box-shadow: 0 0 0 3px rgba(251,191,36,0.14);
+      }
+      @media (max-width: 760px) {
+        .market-room-header,
+        .market-news-score {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+        .market-room-grid,
+        .market-facts,
+        .market-metrics-strip {
+          grid-template-columns: 1fr;
+        }
+        .market-check {
+          align-items: flex-start;
+        }
+        .market-check > span:last-child {
+          margin-left: 0;
+          text-align: left;
+        }
+      }
+
+      .asset-modal[data-room-id="gateway"] .asset-modal-tools,
+      .asset-modal[data-room-id="gateway"] .asset-modal-context,
+      .asset-modal[data-room-id="gateway"] .asset-modal-summary,
+      .asset-modal[data-room-id="gateway"] .asset-modal-head-main,
+      .asset-modal[data-room-id="gateway"] #asset-modal-copy-context,
+      .asset-modal[data-room-id="gateway"] #asset-modal-view,
+      .asset-modal[data-room-id="gateway"] .asset-modal-shortcuts,
+      .asset-modal[data-room-id="gateway"] #asset-modal-sub {
+        display: none !important;
+      }
+      .asset-modal[data-room-id="gateway"] {
+        align-items: stretch;
+        justify-content: stretch;
+        padding: 18px;
+        background:
+          radial-gradient(circle at 18% 0%, rgba(54, 211, 153, .12), transparent 34%),
+          linear-gradient(135deg, rgba(2, 6, 12, .72), rgba(6, 12, 20, .92));
+      }
+      .asset-modal[data-room-id="gateway"] .asset-modal-card {
+        position: relative;
+        width: min(1360px, calc(100vw - 36px));
+        max-width: none;
+        max-height: calc(100vh - 36px);
+        margin: auto;
+        border-radius: 10px;
+        border-color: rgba(73, 104, 128, .36);
+        background:
+          linear-gradient(180deg, rgba(4, 10, 16, .96), rgba(5, 14, 22, .9));
+        box-shadow:
+          0 28px 84px rgba(0, 0, 0, .48),
+          inset 0 1px 0 rgba(255, 255, 255, .04);
+      }
+      .asset-modal[data-room-id="gateway"] .asset-modal-head {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 3;
+        display: block;
+        padding: 0;
+        border: 0;
+        background: transparent;
+      }
+      .asset-modal[data-room-id="gateway"] .asset-modal-head-top {
+        display: block;
+      }
+      .asset-modal[data-room-id="gateway"] .asset-modal-actions {
+        display: block;
+      }
+      .asset-modal[data-room-id="gateway"] #asset-modal-close {
+        border-color: rgba(148, 163, 184, .26);
+        background: rgba(8, 18, 28, .82);
+        color: rgba(226, 232, 240, .9);
+      }
+      .asset-modal[data-room-id="gateway"] .asset-modal-body {
+        min-height: min(820px, calc(100vh - 36px));
+        padding: 16px;
+        background:
+          linear-gradient(90deg, rgba(148, 163, 184, .08) 1px, transparent 1px),
+          linear-gradient(180deg, rgba(148, 163, 184, .06) 1px, transparent 1px);
+        background-size: 42px 42px;
+      }
+      .asset-modal[data-room-id="gateway"] .asset-modal-items {
+        height: 100%;
+      }
+
+      /* Strategy Lab overrides */
+      .asset-modal[data-room-id="skills"] .asset-modal-tools,
+      .asset-modal[data-room-id="skills"] .asset-modal-context,
+      .asset-modal[data-room-id="skills"] .asset-modal-summary,
+      .asset-modal[data-room-id="skills"] .asset-modal-head-main,
+      .asset-modal[data-room-id="skills"] #asset-modal-copy-context,
+      .asset-modal[data-room-id="skills"] #asset-modal-view,
+      .asset-modal[data-room-id="skills"] .asset-modal-shortcuts,
+      .asset-modal[data-room-id="skills"] #asset-modal-sub {
+        display: none !important;
+      }
+      .asset-modal[data-room-id="skills"] {
+        align-items: stretch;
+        justify-content: stretch;
+        padding: 18px;
+        background:
+          radial-gradient(circle at 18% 0%, rgba(251, 191, 36, .08), transparent 30%),
+          linear-gradient(135deg, rgba(2, 6, 12, .72), rgba(6, 12, 20, .92));
+      }
+      .asset-modal[data-room-id="skills"] .asset-modal-card {
+        position: relative;
+        width: min(1200px, calc(100vw - 36px));
+        max-width: none;
+        max-height: calc(100vh - 36px);
+        margin: auto;
+        border-radius: 10px;
+        border-color: rgba(180, 140, 60, .32);
+        background: linear-gradient(180deg, rgba(4, 10, 16, .96), rgba(5, 14, 22, .9));
+      }
+      .asset-modal[data-room-id="skills"] .asset-modal-head {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 3;
+        display: block;
+        padding: 0;
+        border: 0;
+        background: transparent;
+      }
+      .asset-modal[data-room-id="skills"] .asset-modal-head-top,
+      .asset-modal[data-room-id="skills"] .asset-modal-actions {
+        display: block;
+      }
+      .asset-modal[data-room-id="skills"] #asset-modal-close {
+        border-color: rgba(148, 163, 184, .26);
+        background: rgba(8, 18, 28, .82);
+        color: rgba(226, 232, 240, .9);
+      }
+      .asset-modal[data-room-id="skills"] .asset-modal-body {
+        min-height: min(820px, calc(100vh - 36px));
+        padding: 16px;
+      }
+      .asset-modal[data-room-id="skills"] .asset-modal-items {
+        height: 100%;
+      }
+
+      /* Memory (strategy archive room) overrides */
+      .asset-modal[data-room-id="memory"] .asset-modal-tools,
+      .asset-modal[data-room-id="memory"] .asset-modal-context,
+      .asset-modal[data-room-id="memory"] .asset-modal-summary,
+      .asset-modal[data-room-id="memory"] .asset-modal-head-main,
+      .asset-modal[data-room-id="memory"] #asset-modal-copy-context,
+      .asset-modal[data-room-id="memory"] #asset-modal-view,
+      .asset-modal[data-room-id="memory"] .asset-modal-shortcuts,
+      .asset-modal[data-room-id="memory"] #asset-modal-sub {
+        display: none !important;
+      }
+      .asset-modal[data-room-id="memory"] {
+        align-items: stretch;
+        justify-content: stretch;
+        padding: 18px;
+        background:
+          radial-gradient(circle at 82% 0%, rgba(192, 132, 252, .1), transparent 34%),
+          linear-gradient(135deg, rgba(2, 6, 12, .72), rgba(6, 12, 20, .92));
+      }
+      .asset-modal[data-room-id="memory"] .asset-modal-card {
+        position: relative;
+        width: min(1360px, calc(100vw - 36px));
+        max-width: none;
+        max-height: calc(100vh - 36px);
+        margin: auto;
+        border-radius: 10px;
+        border-color: rgba(100, 80, 140, .32);
+        background:
+          linear-gradient(180deg, rgba(4, 10, 16, .96), rgba(5, 14, 22, .9));
+        box-shadow:
+          0 28px 84px rgba(0, 0, 0, .48),
+          inset 0 1px 0 rgba(255, 255, 255, .04);
+      }
+      .asset-modal[data-room-id="memory"] .asset-modal-head {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 3;
+        display: block;
+        padding: 0;
+        border: 0;
+        background: transparent;
+      }
+      .asset-modal[data-room-id="memory"] .asset-modal-head-top {
+        display: block;
+      }
+      .asset-modal[data-room-id="memory"] .asset-modal-actions {
+        display: block;
+      }
+      .asset-modal[data-room-id="memory"] #asset-modal-close {
+        border-color: rgba(148, 163, 184, .26);
+        background: rgba(8, 18, 28, .82);
+        color: rgba(226, 232, 240, .9);
+      }
+      .asset-modal[data-room-id="memory"] .asset-modal-body {
+        min-height: min(820px, calc(100vh - 36px));
+        padding: 16px;
+      }
+      .asset-modal[data-room-id="memory"] .asset-modal-items {
+        height: 100%;
+      }
+
+      .market-command-room {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 0 2px 8px;
+      }
+      .market-command-bar {
+        display: grid;
+        grid-template-columns: minmax(0, 1.3fr) minmax(220px, .8fr) auto;
+        align-items: stretch;
+        gap: 10px;
+      }
+      .market-command-identity,
+      .market-command-source,
+      .market-command-state,
+      .market-console-panel,
+      .market-pipeline-step {
+        border: 1px solid rgba(72,104,128,.34);
+        background: rgba(3,10,18,.58);
+        border-radius: 8px;
+      }
+      .market-command-identity,
+      .market-command-source {
+        padding: 14px 16px;
+      }
+      .market-command-identity span,
+      .market-command-source span,
+      .market-console-title,
+      .market-console-section > span {
+        display: block;
+        color: #8ea4b8;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .market-command-identity strong {
+        display: block;
+        margin-top: 5px;
+        color: rgba(236,247,243,.96);
+        font-size: 34px;
+        line-height: 1;
+      }
+      .market-command-source strong {
+        display: block;
+        margin-top: 5px;
+        color: rgba(236,247,243,.92);
+        font-size: 15px;
+      }
+      .market-command-identity small,
+      .market-command-source small {
+        display: block;
+        margin-top: 6px;
+        color: rgba(148,163,184,.82);
+        font-size: 12px;
+      }
+      .market-command-state {
+        display: grid;
+        place-items: center;
+        min-width: 132px;
+        padding: 12px;
+        color: #fbbf24;
+        font-family: var(--font-mono);
+        font-size: 13px;
+        font-weight: 900;
+        text-align: center;
+      }
+      .market-command-state.pass {
+        color: #36d399;
+        border-color: rgba(54,211,153,.34);
+        background: rgba(54,211,153,.09);
+      }
+      .market-command-state.missing {
+        color: #fb7185;
+        border-color: rgba(251,113,133,.32);
+        background: rgba(251,113,133,.08);
+      }
+      .market-pipeline {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 8px;
+      }
+      .market-pipeline-step {
+        position: relative;
+        min-height: 82px;
+        padding: 10px;
+        overflow: hidden;
+      }
+      .market-pipeline-step::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 3px;
+        background: #94a3b8;
+      }
+      .market-pipeline-step.pass::after { background: #36d399; }
+      .market-pipeline-step.warn::after { background: #fbbf24; }
+      .market-pipeline-step.missing::after { background: #fb7185; }
+      .market-pipeline-step span {
+        color: rgba(148,163,184,.75);
+        font-family: var(--font-mono);
+        font-size: 11px;
+      }
+      .market-pipeline-step strong {
+        display: block;
+        margin-top: 8px;
+        color: rgba(236,247,243,.92);
+        font-size: 13px;
+      }
+      .market-pipeline-step small {
+        display: block;
+        margin-top: 5px;
+        color: rgba(148,163,184,.82);
+        font-size: 11px;
+        overflow-wrap: anywhere;
+      }
+      .market-console-grid {
+        display: grid;
+        grid-template-columns: minmax(260px, .85fr) minmax(340px, 1.2fr) minmax(260px, .9fr);
+        gap: 10px;
+      }
+      .market-console-panel {
+        min-width: 0;
+        padding: 13px;
+      }
+      .market-console-title {
+        margin-bottom: 10px;
+        padding-bottom: 7px;
+        border-bottom: 1px solid rgba(72,104,128,.22);
+        color: rgba(236,247,243,.86);
+      }
+      .market-contract-table,
+      .market-console-section,
+      .downstream-gates {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .market-contract-row,
+      .market-console-row,
+      .market-feed-row,
+      .market-gate-row,
+      .market-check-compact,
+      .market-empty-line {
+        border: 1px solid rgba(72,104,128,.22);
+        background: rgba(8,18,28,.56);
+        border-radius: 7px;
+        padding: 9px 10px;
+      }
+      .market-contract-row {
+        display: grid;
+        grid-template-columns: minmax(90px, .8fr) minmax(0, 1fr) 70px;
+        align-items: center;
+        gap: 8px;
+      }
+      .market-contract-row span,
+      .market-gate-row span,
+      .market-check-compact span,
+      .market-feed-row span,
+      .market-empty-line {
+        color: rgba(148,163,184,.82);
+        font-size: 11px;
+      }
+      .market-contract-row strong,
+      .market-gate-row strong,
+      .market-check-compact strong,
+      .market-feed-row strong {
+        color: rgba(236,247,243,.92);
+        font-size: 12px;
+        overflow-wrap: anywhere;
+      }
+      .market-contract-row em,
+      .market-gate-row em {
+        justify-self: end;
+        border-radius: 999px;
+        padding: 3px 7px;
+        font-style: normal;
+        font-size: 10px;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+      .market-contract-row em.pass,
+      .market-gate-row.pass em {
+        color: #36d399;
+        background: rgba(54,211,153,.12);
+      }
+      .market-contract-row em.warn,
+      .market-gate-row.warn em {
+        color: #fbbf24;
+        background: rgba(251,191,36,.12);
+      }
+      .market-contract-row em.missing,
+      .market-gate-row.missing em {
+        color: #fb7185;
+        background: rgba(251,113,133,.12);
+      }
+      .market-feed-meter {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+      .market-feed-meter div {
+        border: 1px solid rgba(72,104,128,.22);
+        background: rgba(8,18,28,.56);
+        border-radius: 7px;
+        padding: 9px 10px;
+      }
+      .market-feed-meter span {
+        display: block;
+        color: rgba(148,163,184,.82);
+        font-size: 11px;
+      }
+      .market-feed-meter strong {
+        display: block;
+        margin-top: 5px;
+        color: #f4d06f;
+        font-family: var(--font-mono);
+        font-size: 18px;
+        line-height: 1;
+        overflow-wrap: anywhere;
+      }
+      .market-feed-meter small {
+        color: rgba(148,163,184,.78);
+        font-size: 11px;
+      }
+      .market-console-row {
+        display: grid;
+        grid-template-columns: 68px minmax(0, 1fr) auto;
+        align-items: start;
+        gap: 8px;
+      }
+      .market-console-impact {
+        border-radius: 5px;
+        padding: 2px 6px;
+        font-size: 10px;
+        font-weight: 900;
+        text-align: center;
+        text-transform: uppercase;
+      }
+      .market-console-impact.pass { color: #36d399; background: rgba(54,211,153,.12); }
+      .market-console-impact.warn { color: #fbbf24; background: rgba(251,191,36,.12); }
+      .market-console-impact.missing { color: #fb7185; background: rgba(251,113,133,.12); }
+      .market-console-text {
+        color: rgba(236,247,243,.9);
+        font-size: 12px;
+        line-height: 1.45;
+      }
+      .market-gate-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .market-gate-row div,
+      .market-check-compact {
+        min-width: 0;
+      }
+      .market-check-compact {
+        display: grid;
+        grid-template-columns: minmax(92px, .75fr) minmax(0, 1fr);
+        gap: 8px;
+        border-left-width: 3px;
+      }
+      .market-check-compact.pass { border-left-color: #36d399; }
+      .market-check-compact.warn { border-left-color: #fbbf24; }
+      .market-check-compact.missing { border-left-color: #fb7185; }
+      @media (max-width: 980px) {
+        .market-command-bar,
+        .market-console-grid {
+          grid-template-columns: 1fr;
+        }
+        .market-pipeline {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      @media (max-width: 620px) {
+        .market-pipeline,
+        .market-feed-meter,
+        .market-contract-row,
+        .market-console-row,
+        .market-check-compact {
+          grid-template-columns: 1fr;
+        }
+        .market-contract-row em,
+        .market-gate-row em {
+          justify-self: start;
+        }
+      }
+
+      .market-intake-room {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 0 2px 8px;
+      }
+      .market-intake-topline {
+        display: grid;
+        grid-template-columns: minmax(280px, 1.2fr) minmax(230px, .8fr) 132px;
+        gap: 10px;
+        align-items: stretch;
+      }
+      .market-intake-topline > div,
+      .market-intake-block,
+      .market-feed-step {
+        border: 1px solid rgba(84, 108, 128, .34);
+        background: linear-gradient(180deg, rgba(6, 14, 22, .88), rgba(8, 20, 30, .72));
+        border-radius: 8px;
+      }
+      .market-intake-topline > div {
+        padding: 14px 16px;
+      }
+      .market-intake-topline span,
+      .market-intake-title,
+      .market-event-columns > div > span,
+      .market-news-feed > span {
+        display: block;
+        color: #91a4b7;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+      .market-intake-topline strong {
+        display: block;
+        margin-top: 5px;
+        color: rgba(239, 247, 243, .96);
+        font-size: 32px;
+        line-height: 1;
+        overflow-wrap: anywhere;
+      }
+      .market-intake-source strong {
+        font-size: 15px;
+      }
+      .market-intake-topline small {
+        display: block;
+        margin-top: 7px;
+        color: rgba(148, 163, 184, .82);
+        font-size: 12px;
+      }
+      .market-intake-ready {
+        display: grid;
+        place-items: center;
+        min-height: 76px;
+        font-family: var(--font-mono);
+        font-size: 14px;
+        font-weight: 900;
+        text-align: center;
+      }
+      .market-intake-ready.pass {
+        color: #36d399;
+        border-color: rgba(54, 211, 153, .36);
+        background: rgba(54, 211, 153, .09);
+      }
+      .market-intake-ready.missing {
+        color: #fb7185;
+        border-color: rgba(251, 113, 133, .32);
+        background: rgba(251, 113, 133, .08);
+      }
+      .market-feed-rail {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 8px;
+      }
+      .market-feed-step {
+        position: relative;
+        min-height: 86px;
+        padding: 10px;
+        overflow: hidden;
+      }
+      .market-feed-step::before {
+        content: "";
+        position: absolute;
+        inset: auto 0 0 0;
+        height: 3px;
+        background: #94a3b8;
+      }
+      .market-feed-step.pass::before { background: #36d399; }
+      .market-feed-step.warn::before { background: #f4d06f; }
+      .market-feed-step.missing::before { background: #fb7185; }
+      .market-feed-step em {
+        color: rgba(148, 163, 184, .72);
+        font-family: var(--font-mono);
+        font-size: 11px;
+        font-style: normal;
+      }
+      .market-feed-step strong {
+        display: block;
+        margin-top: 8px;
+        color: rgba(239, 247, 243, .94);
+        font-size: 13px;
+      }
+      .market-feed-step span {
+        display: block;
+        margin-top: 5px;
+        color: rgba(148, 163, 184, .82);
+        font-size: 11px;
+        overflow-wrap: anywhere;
+      }
+      .market-intake-grid {
+        display: grid;
+        grid-template-columns: minmax(260px, .95fr) minmax(360px, 1.28fr) minmax(260px, .9fr);
+        gap: 10px;
+      }
+      .market-intake-block {
+        min-width: 0;
+        padding: 13px;
+      }
+      .market-intake-title {
+        margin-bottom: 10px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid rgba(84, 108, 128, .24);
+        color: rgba(239, 247, 243, .88);
+      }
+      .market-contract-matrix,
+      .market-handoff-list,
+      .market-news-feed,
+      .market-event-columns > div {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .market-contract-cell,
+      .market-intake-event,
+      .market-intake-news-row,
+      .market-handoff-row,
+      .market-empty-state,
+      .market-event-columns p,
+      .market-news-feed p {
+        border: 1px solid rgba(84, 108, 128, .22);
+        background: rgba(5, 12, 18, .46);
+        border-radius: 7px;
+        padding: 9px 10px;
+      }
+      .market-ranked-feed {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+      .market-ranked-feed-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 12px;
+        font-weight: 700;
+        color: rgba(226, 232, 240, .9);
+      }
+      .market-ranked-feed-title small {
+        font-size: 10px;
+        font-weight: 400;
+        color: rgba(148, 163, 184, .6);
+      }
+      .market-ranked-news-row {
+        display: grid;
+        grid-template-columns: 22px 1fr 70px;
+        gap: 8px;
+        align-items: center;
+        border: 1px solid rgba(84, 108, 128, .22);
+        background: rgba(5, 12, 18, .46);
+        border-radius: 7px;
+        padding: 8px 10px;
+      }
+      .market-ranked-index {
+        font-size: 11px;
+        font-weight: 700;
+        color: rgba(148, 163, 184, .7);
+        text-align: center;
+      }
+      .market-ranked-body {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 0;
+      }
+      .market-ranked-body strong {
+        color: rgba(239, 247, 243, .9);
+        font-size: 12px;
+        overflow-wrap: anywhere;
+      }
+      .market-ranked-body span {
+        color: rgba(148, 163, 184, .7);
+        font-size: 10px;
+      }
+      .market-ranked-score {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 1px;
+      }
+      .market-ranked-score span {
+        font-size: 10px;
+        font-weight: 700;
+        padding: 2px 6px;
+        border-radius: 999px;
+      }
+      .market-ranked-score small {
+        font-size: 10px;
+        color: rgba(148, 163, 184, .65);
+      }
+      .market-ranked-score.pass span {
+        color: #36d399;
+        background: rgba(54, 211, 153, .12);
+      }
+      .market-ranked-score.warn span {
+        color: #f4d06f;
+        background: rgba(244, 208, 111, .12);
+      }
+      .market-ranked-score.missing span {
+        color: #f87171;
+        background: rgba(248, 113, 113, .12);
+      }
+      .market-contract-cell {
+        display: grid;
+        grid-template-columns: 76px minmax(0, 1fr) 48px;
+        gap: 8px;
+        align-items: center;
+      }
+      .market-contract-cell span,
+      .market-handoff-row span,
+      .market-intake-news-row span,
+      .market-empty-state,
+      .market-event-columns p,
+      .market-news-feed p {
+        color: rgba(148, 163, 184, .82);
+        font-size: 11px;
+      }
+      .market-contract-cell strong,
+      .market-handoff-row strong,
+      .market-intake-news-row strong,
+      .market-intake-event strong {
+        color: rgba(239, 247, 243, .92);
+        font-size: 12px;
+        overflow-wrap: anywhere;
+      }
+      .market-contract-cell em,
+      .market-handoff-row em {
+        justify-self: end;
+        border-radius: 999px;
+        padding: 3px 7px;
+        font-size: 10px;
+        font-style: normal;
+        font-weight: 900;
+      }
+      .market-contract-cell.pass em,
+      .market-handoff-row.pass em {
+        color: #36d399;
+        background: rgba(54, 211, 153, .12);
+      }
+      .market-contract-cell.warn em,
+      .market-handoff-row.warn em {
+        color: #f4d06f;
+        background: rgba(244, 208, 111, .12);
+      }
+      .market-contract-cell.missing em,
+      .market-handoff-row.missing em {
+        color: #fb7185;
+        background: rgba(251, 113, 133, .12);
+      }
+      .market-news-meter {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+      .market-news-meter div {
+        border: 1px solid rgba(84, 108, 128, .22);
+        background: rgba(5, 12, 18, .46);
+        border-radius: 7px;
+        padding: 9px 10px;
+      }
+      .market-news-meter span {
+        display: block;
+        color: rgba(148, 163, 184, .82);
+        font-size: 11px;
+      }
+      .market-news-meter strong {
+        display: block;
+        margin-top: 5px;
+        color: #f4d06f;
+        font-family: var(--font-mono);
+        font-size: 18px;
+        line-height: 1;
+        overflow-wrap: anywhere;
+      }
+      .market-news-meter small {
+        color: rgba(148, 163, 184, .78);
+        font-size: 11px;
+      }
+      .market-event-columns {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+      .market-intake-event {
+        display: grid;
+        grid-template-columns: 46px minmax(0, 1fr);
+        gap: 8px;
+        align-items: start;
+      }
+      .market-intake-event span {
+        border-radius: 5px;
+        padding: 2px 6px;
+        font-size: 10px;
+        font-weight: 900;
+        text-align: center;
+      }
+      .market-intake-event span.pass { color: #36d399; background: rgba(54, 211, 153, .12); }
+      .market-intake-event span.warn { color: #f4d06f; background: rgba(244, 208, 111, .12); }
+      .market-intake-event span.missing { color: #fb7185; background: rgba(251, 113, 133, .12); }
+      .market-intake-event small {
+        grid-column: 2;
+        color: rgba(148, 163, 184, .72);
+        font-size: 10px;
+      }
+      .market-intake-news-row strong,
+      .market-intake-news-row span {
+        display: block;
+      }
+      .market-intake-news-row span {
+        margin-top: 4px;
+      }
+      .market-handoff-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .market-readiness-note {
+        margin-top: 10px;
+        border-radius: 8px;
+        padding: 11px 12px;
+        border: 1px solid rgba(84, 108, 128, .24);
+        background: rgba(5, 12, 18, .42);
+      }
+      .market-readiness-note.pass {
+        border-left: 3px solid #36d399;
+      }
+      .market-readiness-note.missing {
+        border-left: 3px solid #fb7185;
+      }
+      .market-readiness-note strong,
+      .market-readiness-note span {
+        display: block;
+      }
+      .market-readiness-note strong {
+        color: rgba(239, 247, 243, .94);
+        font-size: 13px;
+      }
+      .market-readiness-note span {
+        margin-top: 5px;
+        color: rgba(148, 163, 184, .82);
+        font-size: 11px;
+        line-height: 1.45;
+      }
+      @media (max-width: 1040px) {
+        .market-intake-topline,
+        .market-intake-grid {
+          grid-template-columns: 1fr;
+        }
+        .market-feed-rail {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      @media (max-width: 620px) {
+        .market-feed-rail,
+        .market-contract-cell,
+        .market-news-meter,
+        .market-event-columns,
+        .market-intake-event {
+          grid-template-columns: 1fr;
+        }
+        .market-contract-cell em,
+        .market-handoff-row em {
+          justify-self: start;
+        }
+      }
+
+      /* ── Memory Archive Room ── */
+      .memory-archive-room {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding: 8px 4px 16px;
+      }
+      .memory-stats-bar {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+      }
+      .memory-stat {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 12px 8px;
+        border-radius: 10px;
+        border: 1px solid rgba(84, 108, 128, .28);
+        background: rgba(4, 14, 24, .55);
+      }
+      .memory-stat-label {
+        font-size: 11px;
+        color: rgba(148, 163, 184, .8);
+        text-transform: uppercase;
+        letter-spacing: .6px;
+      }
+      .memory-stat-value {
+        margin-top: 6px;
+        font-size: 20px;
+        font-weight: 700;
+        color: rgba(226, 232, 240, .92);
+      }
+      .memory-archive-grid {
+        display: grid;
+        grid-template-columns: minmax(320px, 1.1fr) minmax(340px, .9fr);
+        gap: 14px;
+      }
+      .memory-section-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: rgba(226, 232, 240, .88);
+        margin-bottom: 10px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid rgba(84, 108, 128, .22);
+      }
+      .memory-section-sub {
+        font-size: 11px;
+        font-weight: 400;
+        color: rgba(148, 163, 184, .65);
+        margin-left: 6px;
+      }
+      /* Knowledge Base */
+      .memory-knowledge-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 10px;
+      }
+      .memory-knowledge-card {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(84, 108, 128, .24);
+        background: rgba(6, 16, 26, .6);
+        transition: border-color .2s;
+      }
+      .memory-knowledge-card.adopted {
+        border-color: rgba(54, 211, 153, .32);
+        background: rgba(6, 22, 18, .55);
+      }
+      .memory-knowledge-header {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+      .memory-knowledge-type {
+        font-size: 10px;
+        font-weight: 700;
+        padding: 2px 7px;
+        border-radius: 5px;
+        text-transform: uppercase;
+        letter-spacing: .4px;
+      }
+      .memory-knowledge-type.type-classic {
+        color: #7dd3fc;
+        background: rgba(125, 211, 252, .12);
+      }
+      .memory-knowledge-type.type-llm {
+        color: #c084fc;
+        background: rgba(192, 132, 252, .12);
+      }
+      .memory-knowledge-type.type-rl {
+        color: #fbbf24;
+        background: rgba(251, 191, 36, .12);
+      }
+      .memory-adopted-badge {
+        font-size: 10px;
+        font-weight: 700;
+        padding: 2px 7px;
+        border-radius: 5px;
+        color: #36d399;
+        background: rgba(54, 211, 153, .12);
+      }
+      .source-badge {
+        font-size: 10px;
+        padding: 1px 5px;
+        border-radius: 4px;
+        color: rgba(148, 163, 184, .8);
+        background: rgba(30, 41, 59, .7);
+      }
+      .source-badge.source-paper {
+        color: #7dd3fc;
+        background: rgba(125, 211, 252, .1);
+      }
+      .source-badge.source-lit {
+        color: #fbbf24;
+        background: rgba(251, 191, 36, .1);
+      }
+      .memory-knowledge-name {
+        font-size: 13px;
+        font-weight: 700;
+        color: rgba(226, 232, 240, .92);
+      }
+      .memory-knowledge-paper {
+        font-size: 10px;
+        color: rgba(148, 163, 184, .65);
+        line-height: 1.3;
+        overflow-wrap: anywhere;
+      }
+      .memory-paper-link {
+        color: rgba(96, 165, 250, .85);
+        text-decoration: none;
+      }
+      .memory-paper-link:hover {
+        color: rgba(96, 165, 250, 1);
+        text-decoration: underline;
+      }
+      .memory-knowledge-desc {
+        font-size: 11px;
+        color: rgba(148, 163, 184, .78);
+        line-height: 1.45;
+        overflow-wrap: anywhere;
+      }
+      .memory-knowledge-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-top: 2px;
+      }
+      .memory-tag {
+        font-size: 10px;
+        padding: 1px 6px;
+        border-radius: 4px;
+        color: rgba(148, 163, 184, .75);
+        background: rgba(30, 41, 59, .55);
+        border: 1px solid rgba(84, 108, 128, .2);
+      }
+      /* Run Archive */
+      .memory-rankings {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+      .memory-rank-block {
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid rgba(84, 108, 128, .22);
+        background: rgba(6, 16, 26, .5);
+      }
+      .memory-rank-title {
+        font-size: 11px;
+        font-weight: 700;
+        color: rgba(148, 163, 184, .7);
+        text-transform: uppercase;
+        letter-spacing: .4px;
+        margin-bottom: 8px;
+      }
+      .rank-row {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 0;
+        font-size: 11px;
+        border-bottom: 1px solid rgba(84, 108, 128, .1);
+      }
+      .rank-row:last-child {
+        border-bottom: 0;
+      }
+      .rank-medal {
+        width: 20px;
+        text-align: center;
+        font-size: 13px;
+      }
+      .rank-ticker {
+        font-weight: 700;
+        color: rgba(226, 232, 240, .88);
+        min-width: 40px;
+      }
+      .rank-strategy {
+        color: rgba(148, 163, 184, .7);
+        flex: 1;
+      }
+      .rank-value {
+        font-weight: 700;
+        color: #36d399;
+      }
+      .memory-rank-empty {
+        font-size: 11px;
+        color: rgba(148, 163, 184, .5);
+        padding: 8px 0;
+      }
+      .memory-run-table-wrap {
+        overflow-x: auto;
+        border-radius: 8px;
+        border: 1px solid rgba(84, 108, 128, .2);
+      }
+      .memory-run-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 11px;
+      }
+      .memory-run-table thead {
+        background: rgba(6, 16, 26, .7);
+      }
+      .memory-run-table th {
+        padding: 8px 10px;
+        text-align: left;
+        font-weight: 700;
+        color: rgba(148, 163, 184, .7);
+        text-transform: uppercase;
+        font-size: 10px;
+        letter-spacing: .3px;
+        border-bottom: 1px solid rgba(84, 108, 128, .22);
+      }
+      .memory-run-table td {
+        padding: 7px 10px;
+        color: rgba(226, 232, 240, .82);
+        border-bottom: 1px solid rgba(84, 108, 128, .1);
+      }
+      .memory-run-table tbody tr:last-child td {
+        border-bottom: 0;
+      }
+      .memory-run-table tbody tr:hover {
+        background: rgba(30, 41, 59, .25);
+      }
+      /* Empty state */
+      .memory-empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 32px 16px;
+        color: rgba(148, 163, 184, .6);
+      }
+      .memory-empty-icon {
+        font-size: 28px;
+        margin-bottom: 8px;
+      }
+      .memory-empty-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: rgba(148, 163, 184, .75);
+        margin-bottom: 4px;
+      }
+      .memory-empty-desc {
+        font-size: 11px;
+      }
+      .memory-knowledge-card.recently-tested {
+        border-color: rgba(251, 191, 36, .4);
+        background: rgba(30, 22, 6, .55);
+        box-shadow: 0 0 0 1px rgba(251, 191, 36, .15);
+      }
+      .memory-tested-badge {
+        font-size: 10px;
+        font-weight: 700;
+        padding: 2px 7px;
+        border-radius: 5px;
+        color: #fbbf24;
+        background: rgba(251, 191, 36, .12);
+      }
+      .memory-reflection {
+        border: 1px solid rgba(139, 92, 246, .28);
+        background: rgba(15, 10, 28, .55);
+        border-radius: 12px;
+        padding: 14px 16px;
+        margin-bottom: 14px;
+      }
+      .memory-reflection-text {
+        font-size: 12px;
+        line-height: 1.7;
+        color: rgba(226, 232, 240, .82);
+        margin-bottom: 10px;
+      }
+      .memory-ref-refs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        font-size: 10px;
+        color: rgba(148, 163, 184, .65);
+        margin-bottom: 10px;
+      }
+      .memory-ref-refs span {
+        background: rgba(139, 92, 246, .12);
+        border: 1px solid rgba(139, 92, 246, .2);
+        border-radius: 4px;
+        padding: 2px 6px;
+        color: rgba(196, 181, 253, .85);
+      }
+      .memory-ref-recs {
+        border-top: 1px solid rgba(139, 92, 246, .16);
+        padding-top: 10px;
+      }
+      .memory-ref-recs-title {
+        font-size: 11px;
+        font-weight: 700;
+        color: rgba(226, 232, 240, .8);
+        margin-bottom: 8px;
+      }
+      .memory-ref-rec {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 7px 10px;
+        border-radius: 7px;
+        background: rgba(4, 14, 24, .45);
+        border: 1px solid rgba(84, 108, 128, .16);
+        margin-bottom: 6px;
+        font-size: 11px;
+      }
+      .memory-ref-rec-name {
+        font-weight: 700;
+        color: rgba(226, 232, 240, .9);
+        min-width: 90px;
+      }
+      .memory-ref-rec-reason {
+        flex: 1;
+        color: rgba(148, 163, 184, .8);
+      }
+      .memory-ref-rec-paper {
+        color: rgba(196, 181, 253, .7);
+        font-size: 10px;
+        white-space: nowrap;
+      }
+      @media (max-width: 1040px) {
+        .memory-stats-bar {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .memory-archive-grid {
+          grid-template-columns: 1fr;
+        }
+        .memory-knowledge-grid {
+          grid-template-columns: 1fr;
+        }
+        .memory-rankings {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* ── Strategy Lab Room ── */
+      .strategy-lab-room {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        padding: 8px 4px 16px;
+      }
+      .strategy-current-card {
+        border: 1px solid rgba(180, 140, 60, .28);
+        background: rgba(6, 16, 26, .6);
+        border-radius: 12px;
+        padding: 16px;
+      }
+      .strategy-current-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 14px;
+      }
+      .strategy-current-label {
+        font-size: 11px;
+        color: rgba(148, 163, 184, .7);
+        text-transform: uppercase;
+        letter-spacing: .5px;
+      }
+      .strategy-current-name {
+        font-size: 20px;
+        font-weight: 700;
+        color: rgba(226, 232, 240, .92);
+        margin-top: 4px;
+      }
+      .strategy-current-body {
+        display: grid;
+        grid-template-columns: 140px 140px 1fr;
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+      .strategy-current-score {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 12px;
+        border-radius: 10px;
+        background: rgba(4, 14, 24, .55);
+        border: 1px solid rgba(84, 108, 128, .22);
+      }
+      .strategy-current-score span {
+        font-size: 11px;
+        color: rgba(148, 163, 184, .7);
+      }
+      .strategy-current-score strong {
+        font-size: 26px;
+        font-weight: 700;
+        color: #fbbf24;
+      }
+      .strategy-current-params {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-content: flex-start;
+      }
+      .strategy-param {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        padding: 10px 12px;
+        border-radius: 8px;
+        background: rgba(4, 14, 24, .45);
+        border: 1px solid rgba(84, 108, 128, .18);
+        min-width: 100px;
+      }
+      .strategy-param span {
+        font-size: 10px;
+        color: rgba(148, 163, 184, .65);
+      }
+      .strategy-param strong {
+        font-size: 13px;
+        color: rgba(226, 232, 240, .88);
+      }
+      .strategy-current-reasoning {
+        border-top: 1px solid rgba(84, 108, 128, .18);
+        padding-top: 12px;
+      }
+      .strategy-reasoning-title {
+        font-size: 12px;
+        font-weight: 700;
+        color: rgba(226, 232, 240, .8);
+        margin-bottom: 6px;
+      }
+      .strategy-reasoning-text {
+        font-size: 12px;
+        line-height: 1.6;
+        color: rgba(148, 163, 184, .85);
+      }
+      .strategy-ranking-section {
+        border: 1px solid rgba(84, 108, 128, .22);
+        background: rgba(6, 16, 26, .5);
+        border-radius: 12px;
+        padding: 14px;
+      }
+      .strategy-section-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: rgba(226, 232, 240, .88);
+        margin-bottom: 12px;
+      }
+      .strategy-ranking-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .strategy-row {
+        display: grid;
+        grid-template-columns: 90px 1fr 48px;
+        align-items: center;
+        gap: 10px;
+      }
+      .strategy-row.current .strategy-name {
+        color: #fbbf24;
+      }
+      .strategy-row.current .strategy-name em {
+        font-size: 10px;
+        font-style: normal;
+        color: rgba(251, 191, 36, .8);
+        margin-left: 6px;
+        text-transform: uppercase;
+      }
+      .strategy-name {
+        font-size: 12px;
+        font-weight: 600;
+        color: rgba(226, 232, 240, .82);
+      }
+      .strategy-bar-track {
+        position: relative;
+        height: 10px;
+        background: rgba(30, 41, 59, .6);
+        border-radius: 5px;
+        overflow: hidden;
+      }
+      .strategy-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, rgba(251, 191, 36, .7), rgba(251, 191, 36, .95));
+        border-radius: 5px;
+      }
+      .strategy-bar-adjustment {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        background: rgba(192, 132, 252, .6);
+        border-radius: 5px;
+      }
+      .strategy-score {
+        font-size: 13px;
+        font-weight: 700;
+        color: rgba(226, 232, 240, .9);
+        text-align: right;
+      }
+      .strategy-meta {
+        grid-column: 2;
+        font-size: 10px;
+        color: rgba(148, 163, 184, .6);
+        margin-top: -6px;
+      }
+      .strategy-rank-empty {
+        font-size: 12px;
+        color: rgba(148, 163, 184, .6);
+        padding: 16px;
+        text-align: center;
+      }
+      @media (max-width: 1040px) {
+        .strategy-current-body {
+          grid-template-columns: 1fr;
+        }
       }
 
       .mini-chart {
@@ -3760,8 +5271,9 @@
       .timeline-list { display: flex; flex-direction: column; }
       .timeline-item {
         display: grid;
-        grid-template-columns: 80px 1fr;
+        grid-template-columns: 70px 1fr auto;
         gap: 12px;
+        align-items: start;
         padding: 8px 0;
         border-bottom: 1px solid rgba(72,104,128,.2);
       }
@@ -3769,8 +5281,28 @@
       .timeline-time { font-size: 11px; color: #94a3b8; font-family: var(--font-mono); }
       .timeline-date { font-size: 11px; color: #94a3b8; font-family: var(--font-mono); }
       .timeline-body { font-size: 12px; color: #e5edf5; line-height: 1.5; }
-      .timeline-stage { display: block; font-size: 10px; color: #22d3ee; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; }
+      .timeline-stage { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; }
+      .timeline-stage[data-tone="positive"] { color: #36d399; }
+      .timeline-stage[data-tone="warm"] { color: #fbbf24; }
+      .timeline-stage[data-tone="danger"] { color: #fb7185; }
+      .timeline-stage[data-tone="neutral"] { color: #22d3ee; }
       .timeline-message { color: #cbd5e1; }
+      .timeline-pill {
+        font-size: 9px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        padding: 2px 6px;
+        border-radius: 4px;
+        border: 1px solid;
+        align-self: center;
+      }
+      .timeline-pill.hidden { visibility: hidden; }
+      .timeline-pill[data-tone="positive"] { color: #36d399; border-color: rgba(54,211,153,.35); background: rgba(54,211,153,.10); }
+      .timeline-pill[data-tone="warm"] { color: #fbbf24; border-color: rgba(251,191,36,.35); background: rgba(251,191,36,.10); }
+      .timeline-pill[data-tone="danger"] { color: #fb7185; border-color: rgba(251,113,133,.35); background: rgba(251,113,133,.10); }
+      .timeline-pill[data-tone="neutral"] { color: #94a3b8; border-color: rgba(148,163,184,.35); background: rgba(148,163,184,.10); }
+      .timeline-empty { padding: 18px; text-align: center; color: #94a3b8; font-size: 12px; }
       .timeline-decision { font-weight: 700; }
       .timeline-decision.positive { color: #36d399; }
       .timeline-decision.danger { color: #fb7185; }
@@ -3779,30 +5311,140 @@
 
       /* Agent monitor */
       .agent-status-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      @media (max-width: 700px) {
+        .agent-status-grid { grid-template-columns: 1fr; }
+      }
       .agent-status-card {
-        padding: 14px;
+        padding: 12px 14px;
         border-radius: 12px;
         background: rgba(15,30,44,.88);
         border: 1px solid rgba(72,104,128,.42);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
       }
-      .agent-status-card.done { border-color: rgba(54,211,153,.35); }
+      .agent-status-card.positive { border-color: rgba(54,211,153,.35); }
       .agent-status-card.active { border-color: rgba(56,189,248,.35); }
-      .agent-status-card.error { border-color: rgba(251,113,133,.35); }
-      .agent-status-name { font-size: 12px; font-weight: 700; color: #e5edf5; }
-      .agent-status-badge {
+      .agent-status-card.warning { border-color: rgba(251,191,36,.35); }
+      .agent-status-card.danger { border-color: rgba(251,113,133,.35); }
+
+      .agent-status-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 8px;
+      }
+      .agent-status-name {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #e5edf5;
+      }
+      .agent-status-role {
+        font-size: 10px;
+        font-weight: 500;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      .agent-status-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        justify-content: flex-end;
+      }
+      .agent-status-badge,
+      .agent-status-health,
+      .agent-status-errors {
         display: inline-block;
-        margin-top: 6px;
         padding: 2px 8px;
         border-radius: 6px;
         font-size: 10px;
         font-weight: 700;
-        text-transform: uppercase;
       }
-      .agent-status-badge.done { background: rgba(54,211,153,0.14); color: #36d399; border: 1px solid rgba(54,211,153,0.3); }
+      .agent-status-badge.positive { background: rgba(54,211,153,0.14); color: #36d399; border: 1px solid rgba(54,211,153,0.3); }
       .agent-status-badge.active { background: rgba(56,189,248,0.14); color: #38bdf8; border: 1px solid rgba(56,189,248,0.3); }
-      .agent-status-badge.error { background: rgba(251,113,133,0.14); color: #fb7185; border: 1px solid rgba(251,113,133,0.3); }
-      .agent-status-latency { margin-top: 6px; font-size: 11px; color: #64748b; }
-      .agent-status-summary { margin-top: 4px; font-size: 11px; color: #94a3b8; }
+      .agent-status-badge.warning { background: rgba(251,191,36,0.14); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+      .agent-status-badge.danger { background: rgba(251,113,133,0.14); color: #fb7185; border: 1px solid rgba(251,113,133,0.3); }
+
+      .agent-status-health.positive { background: rgba(54,211,153,0.1); color: #36d399; }
+      .agent-status-health.warning { background: rgba(251,191,36,0.1); color: #fbbf24; }
+      .agent-status-health.danger { background: rgba(251,113,133,0.1); color: #fb7185; }
+
+      .agent-status-errors { background: rgba(251,113,133,0.18); color: #fb7185; }
+
+      .agent-status-summary {
+        font-size: 12px;
+        color: #e2e8f0;
+        line-height: 1.4;
+      }
+      .agent-status-meta {
+        display: grid;
+        gap: 4px;
+        font-size: 11px;
+      }
+      .agent-status-meta-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        color: #94a3b8;
+      }
+      .agent-status-meta-row strong {
+        color: #cbd5e1;
+        font-weight: 500;
+        text-align: right;
+      }
+      .agent-status-meta-row span {
+        flex-shrink: 0;
+      }
+
+      .agent-progress-track {
+        position: relative;
+        height: 14px;
+        border-radius: 7px;
+        background: rgba(30,41,59,0.7);
+        overflow: hidden;
+      }
+      .agent-progress-fill {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        background: linear-gradient(90deg, rgba(56,189,248,0.8), rgba(56,189,248,0.4));
+        border-radius: 7px;
+      }
+      .agent-progress-track span {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 9px;
+        font-weight: 700;
+        color: #e2e8f0;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+      }
+
+      .agent-total-latency {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+        padding: 8px 12px;
+        border-radius: 8px;
+        background: rgba(15,30,44,.7);
+        font-size: 12px;
+        color: #94a3b8;
+      }
+      .agent-total-latency strong { color: #e2e8f0; }
+
+      .agent-empty {
+        padding: 24px;
+        text-align: center;
+        color: #94a3b8;
+        font-size: 13px;
+      }
 
       /* Dashboard sections (used in decision/report panels) */
       .dashboard-section { margin-top: 12px; }
@@ -3863,6 +5505,28 @@
       .decision-kv-row { display: flex; justify-content: space-between; gap: 12px; padding: 3px 0; }
       .decision-kv-label { color: #94a3b8; font-size: 11px; }
       .decision-kv-value { color: #e5e7eb; font-weight: 600; font-size: 12px; }
+      .input-summary-list { display: flex; flex-direction: column; gap: 6px; }
+      .input-summary-row { display: flex; gap: 10px; align-items: center; padding: 6px 8px; border-radius: 8px; background: rgba(8,18,28,.5); font-size: 12px; }
+      .input-summary-room { min-width: 90px; color: #94a3b8; }
+      .input-summary-value { color: #e5edf5; flex: 1; }
+      .final-strategy-row { display: flex; gap: 12px; align-items: center; padding: 8px; border-radius: 8px; background: rgba(8,18,28,.5); font-size: 12px; }
+      .final-strategy-name { color: #e5edf5; font-weight: 600; }
+      .final-strategy-signal { font-size: 11px; padding: 2px 8px; border-radius: 6px; font-weight: 700; text-transform: uppercase; }
+      .final-strategy-signal.buy { background: rgba(54,211,153,0.14); color: #36d399; border: 1px solid rgba(54,211,153,0.3); }
+      .final-strategy-signal.sell { background: rgba(251,113,133,0.14); color: #fb7185; border: 1px solid rgba(251,113,133,0.3); }
+      .final-strategy-signal.hold { background: rgba(251,191,36,0.14); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+      .final-strategy-score { color: #94a3b8; }
+      .mode-reason-body { padding: 8px; border-radius: 8px; background: rgba(8,18,28,.5); color: rgba(236,247,243,0.78); font-size: 12px; line-height: 1.5; }
+      .llm-status-banner { padding: 8px 12px; border-radius: 8px; margin-bottom: 10px; font-size: 12px; font-weight: 600; }
+      .llm-status-banner.pending { background: rgba(251,191,36,0.14); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+      .llm-status-banner.ready { background: rgba(54,211,153,0.14); color: #36d399; border: 1px solid rgba(54,211,153,0.3); }
+      .llm-status-banner.fallback { background: rgba(148,163,184,0.14); color: #94a3b8; border: 1px solid rgba(148,163,184,0.3); }
+      .reference-list { display: flex; flex-direction: column; gap: 8px; }
+      .reference-row { padding: 8px; border-radius: 8px; background: rgba(8,18,28,.5); font-size: 12px; }
+      .reference-paper { color: #e5edf5; font-weight: 600; }
+      .reference-why { color: #94a3b8; margin-top: 4px; line-height: 1.4; }
+      .reference-link { display: inline-block; margin-top: 6px; color: #22d3ee; text-decoration: none; font-size: 11px; }
+      .reference-link:hover { text-decoration: underline; }
 
       /* Report summary */
       .report-summary-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
@@ -3875,9 +5539,17 @@
 
       /* Idle summary */
       .idle-status-card { padding: 20px; text-align: center; border-radius: 12px; background: rgba(15,30,44,.6); border: 1px solid rgba(72,104,128,.3); }
-      .idle-status-icon { font-size: 28px; color: #36d399; line-height: 1; }
+      .idle-status-card[data-tone="positive"] { border-color: rgba(54,211,153,.35); background: rgba(54,211,153,.08); }
+      .idle-status-card[data-tone="warm"] { border-color: rgba(251,191,36,.35); background: rgba(251,191,36,.08); }
+      .idle-status-card[data-tone="neutral"] { border-color: rgba(148,163,184,.35); background: rgba(148,163,184,.08); }
+      .idle-status-icon { font-size: 28px; line-height: 1; }
+      .idle-status-card[data-tone="positive"] .idle-status-icon { color: #36d399; }
+      .idle-status-card[data-tone="warm"] .idle-status-icon { color: #fbbf24; }
+      .idle-status-card[data-tone="neutral"] .idle-status-icon { color: #94a3b8; }
       .idle-status-text { margin-top: 8px; font-size: 14px; font-weight: 700; color: #e5edf5; }
-      .idle-last-task { margin-top: 8px; font-size: 12px; color: #94a3b8; }
+      .idle-status-message { margin-top: 4px; font-size: 12px; color: #cbd5e1; }
+      .idle-last-task { margin-top: 12px; font-size: 12px; color: #94a3b8; }
+      .idle-meta { margin-top: 4px; font-size: 11px; color: #64748b; }
 
     </style>
   </head>
@@ -3886,45 +5558,45 @@
 
     <!-- Trading Dashboard: Top Status Bar -->
     <div class="topbar-status-line" id="topbar-status-line">
-      <span class="pill"><span class="lbl">Asset:</span> <span class="val" id="pill-asset">-</span></span>
-      <span class="pill"><span class="lbl">Mode:</span> <span class="val" id="pill-mode">-</span></span>
-      <span class="pill"><span class="lbl">Status:</span> <span class="val" id="pill-status">Idle</span></span>
-      <span class="pill"><span class="lbl">Decision:</span> <span class="val" id="pill-decision">-</span></span>
+      <span class="pill"><span class="lbl">标的：</span> <span class="val" id="pill-asset">-</span></span>
+      <span class="pill"><span class="lbl">模式：</span> <span class="val" id="pill-mode">-</span></span>
+      <span class="pill"><span class="lbl">状态：</span> <span class="val" id="pill-status">空闲</span></span>
+      <span class="pill"><span class="lbl">决策：</span> <span class="val" id="pill-decision">-</span></span>
     </div>
 
     <!-- Trading Dashboard: Left Panel -->
     <div class="left-panel" id="left-panel">
       <div class="panel-card">
-        <div class="card-header" onclick="var b=this.nextElementSibling;b.classList.toggle('collapsed');this.classList.toggle('collapsed');"><span>Current Analysis</span><span class="toggle-icon">▼</span></div>
+        <div class="card-header" onclick="var b=this.nextElementSibling;b.classList.toggle('collapsed');this.classList.toggle('collapsed');"><span>当前分析</span><span class="toggle-icon">▼</span></div>
         <div class="card-body" id="card-task-body">
-          <div class="kv-row"><span class="kv-label">Asset</span><span class="kv-value" id="kv-asset">-</span></div>
-          <div class="kv-row"><span class="kv-label">Period</span><span class="kv-value" id="kv-period">-</span></div>
-          <div class="kv-row"><span class="kv-label">Mode</span><span class="kv-value" id="kv-mode">-</span></div>
-          <div class="kv-row"><span class="kv-label">Status</span><span class="kv-value" id="kv-status">Idle</span></div>
+          <div class="kv-row"><span class="kv-label">标的</span><span class="kv-value" id="kv-asset">-</span></div>
+          <div class="kv-row"><span class="kv-label">周期</span><span class="kv-value" id="kv-period">-</span></div>
+          <div class="kv-row"><span class="kv-label">模式</span><span class="kv-value" id="kv-mode">-</span></div>
+          <div class="kv-row"><span class="kv-label">状态</span><span class="kv-value" id="kv-status">空闲</span></div>
         </div>
       </div>
       <div class="panel-card">
-        <div class="card-header" onclick="var b=this.nextElementSibling;b.classList.toggle('collapsed');this.classList.toggle('collapsed');"><span>Decision</span><span class="toggle-icon">▼</span></div>
+        <div class="card-header" onclick="var b=this.nextElementSibling;b.classList.toggle('collapsed');this.classList.toggle('collapsed');"><span>决策结果</span><span class="toggle-icon">▼</span></div>
         <div class="card-body" id="card-decision-body">
-          <div class="kv-row"><span class="kv-label">Action</span><span class="kv-value hold" id="kv-action">-</span></div>
-          <div class="kv-row"><span class="kv-label">Confidence</span><span class="kv-value" id="kv-confidence">-</span></div>
-          <div class="kv-row"><span class="kv-label">Strategy</span><span class="kv-value" id="kv-strategy">-</span></div>
+          <div class="kv-row"><span class="kv-label">动作</span><span class="kv-value hold" id="kv-action">-</span></div>
+          <div class="kv-row"><span class="kv-label">置信度</span><span class="kv-value" id="kv-confidence">-</span></div>
+          <div class="kv-row"><span class="kv-label">策略</span><span class="kv-value" id="kv-strategy">-</span></div>
         </div>
       </div>
       <div class="panel-card">
-        <div class="card-header" onclick="var b=this.nextElementSibling;b.classList.toggle('collapsed');this.classList.toggle('collapsed');"><span>Performance</span><span class="toggle-icon">▼</span></div>
+        <div class="card-header" onclick="var b=this.nextElementSibling;b.classList.toggle('collapsed');this.classList.toggle('collapsed');"><span>绩效表现</span><span class="toggle-icon">▼</span></div>
         <div class="card-body" id="card-metrics-body">
-          <div class="kv-row"><span class="kv-label">Total Return</span><span class="kv-value" id="kv-return">-</span></div>
-          <div class="kv-row"><span class="kv-label">Sharpe</span><span class="kv-value" id="kv-sharpe">-</span></div>
-          <div class="kv-row"><span class="kv-label">Max Drawdown</span><span class="kv-value" id="kv-dd">-</span></div>
-          <div class="kv-row"><span class="kv-label">Win Rate</span><span class="kv-value" id="kv-winrate">-</span></div>
-          <div class="kv-row"><span class="kv-label">Trades</span><span class="kv-value" id="kv-trades">-</span></div>
+          <div class="kv-row"><span class="kv-label">总收益</span><span class="kv-value" id="kv-return">-</span></div>
+          <div class="kv-row"><span class="kv-label">夏普比率</span><span class="kv-value" id="kv-sharpe">-</span></div>
+          <div class="kv-row"><span class="kv-label">最大回撤</span><span class="kv-value" id="kv-dd">-</span></div>
+          <div class="kv-row"><span class="kv-label">胜率</span><span class="kv-value" id="kv-winrate">-</span></div>
+          <div class="kv-row"><span class="kv-label">交易数</span><span class="kv-value" id="kv-trades">-</span></div>
         </div>
       </div>
     </div>
 
     <!-- Right panel restore tab (visible when panel is hidden) -->
-    <div class="right-panel-tab" id="right-panel-tab" onclick="document.querySelector('.menu-panel').classList.remove('collapsed');this.classList.remove('visible');document.getElementById('archive-hide-btn').textContent='◀';document.documentElement.style.setProperty('--stage-right-gutter','194px');setTimeout(function(){window.dispatchEvent(new Event('resize'));},350);" title="Show Control Panel">▶ Control Panel</div>
+    <div class="right-panel-tab" id="right-panel-tab" onclick="document.querySelector('.menu-panel').classList.remove('collapsed');this.classList.remove('visible');document.getElementById('archive-hide-btn').textContent='◀';document.documentElement.style.setProperty('--stage-right-gutter','194px');setTimeout(function(){window.dispatchEvent(new Event('resize'));},350);" title="显示控制面板">▶ 控制面板</div>
 
     <!-- Room Modal -->
     <div class="room-modal-backdrop hidden" id="room-modal-backdrop" onclick="if(event.target===this)closeRoomModal()">
@@ -3990,52 +5662,29 @@
         </div>
       </div>
       <!-- Trading Task Form -->
-      <div class="trading-task-form" id="trading-task-form">
-        <div class="task-card-head">
-          <div>
-            <div class="task-card-title">Trading Task</div>
-            <div class="task-card-sub">single run · simulated analysis</div>
+      <div class="trading-task-form" id="trading-task-form" style="padding:12px 16px;border-bottom:1px solid rgba(148,163,184,0.15);background:rgba(23,42,45,0.6);">
+        <div style="font-family:'ArkPixel',monospace;font-size:13px;color:#ffd700;margin-bottom:10px;">&#9874; 新建分析任务</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <select id="task-ticker" style="background:#1f2937;color:#fff;border:1px solid rgba(148,163,184,0.3);padding:6px 8px;border-radius:4px;font-family:monospace;">
+            <option value="SPY">SPY</option><option value="QQQ">QQQ</option>
+            <option value="AAPL">AAPL</option><option value="MSFT">MSFT</option>
+            <option value="NVDA">NVDA</option><option value="TSLA">TSLA</option>
+          </select>
+          <div style="display:flex;gap:6px;">
+            <input id="task-start" type="text" value="2020-01-01" style="flex:1;background:#1f2937;color:#fff;border:1px solid rgba(148,163,184,0.3);padding:6px 8px;border-radius:4px;font-family:monospace;font-size:11px;" title="开始日期">
+            <input id="task-end" type="text" value="2024-12-31" style="flex:1;background:#1f2937;color:#fff;border:1px solid rgba(148,163,184,0.3);padding:6px 8px;border-radius:4px;font-family:monospace;font-size:11px;" title="结束日期">
           </div>
-          <div class="task-live-chip">paper only</div>
+          <select id="task-strategy" style="background:#1f2937;color:#fff;border:1px solid rgba(148,163,184,0.3);padding:6px 8px;border-radius:4px;font-family:monospace;">
+            <option value="auto">自动选择</option><option value="ma">均线交叉</option>
+            <option value="rsi">RSI 动量</option><option value="momentum">20日动量</option>
+          </select>
+          <div style="display:flex;gap:6px;">
+            <input id="task-cost" type="number" value="0.001" step="0.0005" min="0" max="0.01" style="flex:1;background:#1f2937;color:#fff;border:1px solid rgba(148,163,184,0.3);padding:6px 8px;border-radius:4px;font-family:monospace;font-size:11px;" title="交易成本">
+            <button id="task-run-btn" type="button" style="flex:1;background:#16a34a;color:#fff;border:none;padding:6px 12px;border-radius:4px;font-family:'ArkPixel',monospace;font-size:12px;cursor:pointer;">运行分析</button>
+          </div>
+          <button id="task-reset-btn" type="button" style="background:#374151;color:#fff;border:1px solid rgba(148,163,184,0.2);padding:4px 8px;border-radius:4px;font-family:'ArkPixel',monospace;font-size:10px;cursor:pointer;">重置状态</button>
         </div>
-        <div class="task-form-stack">
-          <label class="task-field" for="task-ticker">
-            <span class="task-label">Ticker</span>
-            <select id="task-ticker" class="task-select">
-              <option value="SPY">SPY</option><option value="QQQ">QQQ</option>
-              <option value="AAPL">AAPL</option><option value="MSFT">MSFT</option>
-              <option value="NVDA">NVDA</option><option value="TSLA">TSLA</option>
-            </select>
-          </label>
-          <div class="task-two-col">
-            <label class="task-field" for="task-start">
-              <span class="task-label">Start</span>
-              <input id="task-start" class="task-input" type="date" value="2020-01-01" title="Start Date">
-            </label>
-            <label class="task-field" for="task-end">
-              <span class="task-label">End</span>
-              <input id="task-end" class="task-input" type="date" value="2024-12-31" title="End Date">
-            </label>
-          </div>
-          <div class="task-two-col">
-            <label class="task-field" for="task-strategy">
-              <span class="task-label">Strategy</span>
-              <select id="task-strategy" class="task-select">
-                <option value="auto">Auto</option><option value="ma">MA</option>
-                <option value="rsi">RSI</option><option value="momentum">Momentum</option>
-              </select>
-            </label>
-            <label class="task-field" for="task-cost">
-              <span class="task-label">Cost</span>
-              <input id="task-cost" class="task-input" type="number" value="0.001" step="0.0005" min="0" max="0.01" title="Transaction Cost">
-            </label>
-          </div>
-          <div class="task-actions">
-            <button id="task-run-btn" class="task-primary-btn" type="button">Run Analysis</button>
-            <button id="task-reset-btn" class="task-secondary-btn" type="button">Reset</button>
-          </div>
-          <div id="task-status-msg" class="task-status-msg" data-tone="idle">Ready. Configure a task and run the simulated workflow.</div>
-        </div>
+        <div id="task-status-msg" style="margin-top:8px;font-family:monospace;font-size:11px;color:#93c5fd;min-height:18px;"></div>
       </div>
       <!-- Task form JS -->
       <script>
@@ -4045,85 +5694,47 @@
           const statusMsg = document.getElementById('task-status-msg');
           const API_BASE = '/api/trading';
 
-          function setStatus(message, tone) {
-            statusMsg.textContent = message;
-            statusMsg.dataset.tone = tone || 'idle';
-          }
-
-          function setBusy(isBusy) {
-            runBtn.disabled = isBusy;
-            resetBtn.disabled = isBusy;
-            runBtn.textContent = isBusy ? 'Running...' : 'Run Analysis';
-          }
-
-          function taskPayload() {
-            return {
+          runBtn.addEventListener('click', async () => {
+            runBtn.disabled = true;
+            runBtn.textContent = '运行中...';
+            statusMsg.textContent = '正在提交任务...';
+            const task = {
               ticker: document.getElementById('task-ticker').value,
               start_date: document.getElementById('task-start').value,
               end_date: document.getElementById('task-end').value,
               strategy: document.getElementById('task-strategy').value,
               transaction_cost: parseFloat(document.getElementById('task-cost').value) || 0.001
             };
-          }
-
-          function validateTask(task) {
-            const start = Date.parse(task.start_date);
-            const end = Date.parse(task.end_date);
-            if (Number.isNaN(start) || Number.isNaN(end)) return 'Dates must be valid.';
-            if (start >= end) return 'Start date must be before end date.';
-            if ((end - start) / 86400000 < 60) return 'Date range must cover at least 60 days.';
-            if (task.transaction_cost < 0 || task.transaction_cost > 0.01) return 'Cost must be between 0 and 0.01.';
-            return '';
-          }
-
-          runBtn.addEventListener('click', async () => {
-            const task = taskPayload();
-            const validationError = validateTask(task);
-            if (validationError) {
-              setStatus(validationError, 'error');
-              return;
-            }
-
-            setBusy(true);
-            setStatus('Submitting ' + task.ticker + ' · ' + task.strategy + '...', 'busy');
             try {
               const res = await fetch(API_BASE + '/run', {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(task)
               });
-              const data = await res.json().catch(function() { return {}; });
+              const data = await res.json();
+              statusMsg.textContent = data.ok
+                ? '✅ ' + task.ticker + ' ' + document.getElementById('task-strategy').selectedOptions[0].text + ' 分析已开始'
+                : '❌ 启动失败';
               if (data.ok) {
-                setStatus(task.ticker + ' ' + task.strategy + ' workflow started.', 'success');
+                // Force refresh panels to clear stale data immediately
                 if (window.updatePanels) { window.updatePanels(); window.updatePanels(); }
-                setTimeout(function() { setBusy(false); }, 2500);
+                setTimeout(function() { runBtn.disabled = false; runBtn.textContent = '运行分析'; }, 2000);
               } else {
-                setStatus(data.message || 'Failed to start task.', 'error');
-                setBusy(false);
+                runBtn.disabled = false;
+                runBtn.textContent = '运行分析';
               }
             } catch (e) {
-              setStatus('Server not reachable. Start trading_server first.', 'error');
-              setBusy(false);
+              statusMsg.textContent = '⚠ 无法连接服务，trading_server 是否已启动？';
+              runBtn.disabled = false;
+              runBtn.textContent = '运行分析';
             }
           });
 
           resetBtn.addEventListener('click', async () => {
-            resetBtn.disabled = true;
-            setStatus('Resetting workflow state...', 'busy');
             try {
-              const res = await fetch(API_BASE + '/reset', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ keep_report: true })
-              });
-              const data = await res.json().catch(function() { return {}; });
-              setStatus(data.message || 'Workflow reset to idle.', data.ok === false ? 'error' : 'success');
-              if (window.updatePanels) { window.updatePanels(); }
+              await fetch(API_BASE + '/reset', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ keep_report: true }) });
+              statusMsg.textContent = '状态已重置为空闲。';
             } catch (e) {
-              setStatus('Reset failed. Check server status.', 'error');
-            } finally {
-              resetBtn.disabled = false;
-              runBtn.disabled = false;
-              runBtn.textContent = 'Run Analysis';
+              statusMsg.textContent = '重置失败。';
             }
           });
         })();
@@ -4131,21 +5742,21 @@
       <div class="resource-menu" id="resource-menu"></div>
       <!-- Agent Status -->
       <div class="panel-section" id="agent-status-section">
-        <div class="section-header">Agent Status</div>
+        <div class="section-header">Agent 状态</div>
         <div id="agent-status-list">
-          <div class="agent-status-row"><span><span class="agent-status-dot idle"></span>Data Agent</span><span style="color:#94a3b8">idle</span></div>
-          <div class="agent-status-row"><span><span class="agent-status-dot idle"></span>Indicator Agent</span><span style="color:#94a3b8">idle</span></div>
-          <div class="agent-status-row"><span><span class="agent-status-dot idle"></span>Strategy Agent</span><span style="color:#94a3b8">idle</span></div>
-          <div class="agent-status-row"><span><span class="agent-status-dot idle"></span>Risk Agent</span><span style="color:#94a3b8">idle</span></div>
-          <div class="agent-status-row"><span><span class="agent-status-dot idle"></span>Backtest Agent</span><span style="color:#94a3b8">idle</span></div>
-          <div class="agent-status-row"><span><span class="agent-status-dot idle"></span>Report Agent</span><span style="color:#94a3b8">idle</span></div>
+          <div class="agent-status-row"><span><span class="agent-status-dot idle"></span>数据 Agent</span><span style="color:#94a3b8">空闲</span></div>
+          <div class="agent-status-row"><span><span class="agent-status-dot idle"></span>指标 Agent</span><span style="color:#94a3b8">空闲</span></div>
+          <div class="agent-status-row"><span><span class="agent-status-dot idle"></span>策略 Agent</span><span style="color:#94a3b8">空闲</span></div>
+          <div class="agent-status-row"><span><span class="agent-status-dot idle"></span>风险 Agent</span><span style="color:#94a3b8">空闲</span></div>
+          <div class="agent-status-row"><span><span class="agent-status-dot idle"></span>回测 Agent</span><span style="color:#94a3b8">空闲</span></div>
+          <div class="agent-status-row"><span><span class="agent-status-dot idle"></span>报告 Agent</span><span style="color:#94a3b8">空闲</span></div>
         </div>
       </div>
       <!-- Runtime Log -->
       <div class="panel-section" id="runtime-log-section">
-        <div class="section-header">Runtime Log</div>
+        <div class="section-header">运行日志</div>
         <div id="runtime-log-list">
-          <div class="runtime-log-line">Ready. Submit a new task to begin.</div>
+          <div class="runtime-log-line">就绪。提交新任务开始分析。</div>
         </div>
       </div>
     </aside>
@@ -4163,7 +5774,7 @@
               <button id="asset-modal-copy-context" type="button">Copy Context</button>
               <button id="asset-modal-view" type="button">Grid</button>
               <div class="asset-modal-shortcuts" id="asset-modal-shortcuts">Shortcuts · / Search · ⇧C Copy Context · Esc Close</div>
-              <button id="asset-modal-close" class="asset-modal-close" type="button">Close</button>
+              <button id="asset-modal-close" class="asset-modal-close" type="button" title="Close (ESC)">✕</button>
             </div>
           </div>
           <div class="asset-modal-tools">
@@ -4694,70 +6305,16 @@
       }
 
       // ── Room Modal ───────────────────────────────────────────
-      var ROOM_FALLBACK_META = {
-        document:    { name: '报告与分析室', type: 'report',   hint: '生成交易报告、风险提示和结论摘要。' },
-        images:      { name: '图表分析室',   type: 'chart',    hint: '展示价格图、收益曲线和新闻证据。' },
-        memory:      { name: '策略记忆库',   type: 'memory',   hint: '复用历史任务表现，辅助当前策略判断。' },
-        skills:      { name: '策略实验室',   type: 'strategy', hint: '比较 MA、RSI、Momentum 等策略候选。' },
-        gateway:     { name: '市场数据室',   type: 'data',     hint: '读取本地缓存或下载 OHLCV 市场数据。' },
-        log:         { name: '执行日志台',   type: 'log',      hint: '记录每一步 Agent 工作流和运行状态。' },
-        mcp:         { name: '指标实验室',   type: 'indicator',hint: '计算 MA、RSI、MACD、波动率等指标。' },
-        schedule:    { name: '决策调度台',   type: 'decision', hint: '聚合多 Agent 投票、批判和最终决策。' },
-        alarm:       { name: '风险报警室',   type: 'risk',     hint: '评估回撤、波动率和风险等级。' },
-        agent:       { name: '运行监控室',   type: 'monitor',  hint: '展示 Data、Indicator、Risk、Backtest 等 Agent 状态。' },
-        task_queues: { name: '回测实验室',   type: 'backtest', hint: '运行历史回测并输出收益、夏普和胜率。' },
-        break_room:  { name: '休息室',       type: 'idle',     hint: '等待新任务，显示最近一次分析摘要。' }
-      };
-
-      function defaultRoomArtifact(roomId) {
-        var meta = ROOM_FALLBACK_META[roomId] || { name: roomId, type: 'info', hint: 'Run an analysis to populate this room.' };
-        return {
-          room_id: roomId,
-          room_name: meta.name,
-          status: roomId === 'break_room' ? 'active' : 'idle',
-          type: meta.type,
-          primary: { label: '状态', value: roomId === 'break_room' ? 'Ready' : 'Idle', unit: '', level: 'neutral' },
-          summary: meta.hint,
-          insight: '点击 Run Analysis 后，这个房间会展示对应 Agent 的输入、输出、指标和推理过程。',
-          metrics: [
-            { label: 'Room', value: meta.name, display: 'badge', level: 'neutral' },
-            { label: 'Status', value: roomId === 'break_room' ? 'ready' : 'idle', display: 'badge', level: 'neutral' }
-          ],
-          details: {
-            input: ['等待新的分析任务'],
-            output: [meta.hint],
-            reasoning: ['当前为预备状态；运行分析后会由 workflow telemetry 自动更新。']
-          },
-          updated_at: ''
-        };
-      }
-
-      function fetchTradingSnapshot() {
-        return fetch('/api/trading/snapshot?t=' + Date.now(), { cache: 'no-store' })
-          .then(function(r) {
-            if (!r.ok) throw new Error('backend status ' + r.status);
-            return r.json();
-          })
-          .catch(function() {
-            return fetch('/src/data/trading-telemetry.json?t=' + Date.now(), { cache: 'no-store' })
-              .then(function(r) {
-                if (!r.ok) throw new Error('static telemetry status ' + r.status);
-                return r.json();
-              })
-              .catch(function() {
-                return {
-                  resources: [],
-                  trading: { room_artifacts: {}, visited_rooms: [], logs: [], global_status: 'idle', current_stage: 'waiting', progress: 0 },
-                  focus: { resourceId: 'break_room', reason: 'Ready' }
-                };
-              });
-          });
-      }
-      window.fetchTradingSnapshot = fetchTradingSnapshot;
-
       function openRoomModal(roomId) {
+        var assetModal = document.getElementById('asset-modal');
+        if (assetModal && !assetModal.classList.contains('hidden')) {
+          return;
+        }
         var backdrop = document.getElementById('room-modal-backdrop');
-        fetchTradingSnapshot()
+        var modal = document.getElementById('room-modal');
+        if (modal) modal.setAttribute('data-room-id', roomId || '');
+        fetch('/api/trading/snapshot?t=' + Date.now(), { cache: 'no-store' })
+          .then(function(r) { return r.json(); })
           .then(function(snap) {
             var arts = (snap.trading || {}).room_artifacts || {};
             var a = arts[roomId];
@@ -4771,13 +6328,8 @@
                   metrics:[], details:{input:[],output:[],reasoning:[]}, updated_at:''};
               }
             }
-            if (!a) a = defaultRoomArtifact(roomId);
+            if (!a) return;
             populateRoomModal(a);
-            backdrop.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-          })
-          .catch(function() {
-            populateRoomModal(defaultRoomArtifact(roomId));
             backdrop.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
           });
@@ -4787,8 +6339,6 @@
         document.getElementById('room-modal-backdrop').classList.add('hidden');
         document.body.style.overflow = '';
       }
-      window.openRoomModal = openRoomModal;
-      window.closeRoomModal = closeRoomModal;
 
       function switchRoomModalTab(tab) {
         document.querySelectorAll('.room-modal-tab').forEach(function(t){ t.classList.toggle('active', t.dataset.rmtab === tab); });
@@ -4798,7 +6348,6 @@
         if (tab === 'history') loadHistoryContent();
         if (tab === 'ai') populateAITab();
       }
-      window.switchRoomModalTab = switchRoomModalTab;
 
       // ESC key
       document.addEventListener('keydown', function(e) {
@@ -4908,7 +6457,7 @@
 
       function populateTimelineTab() {
         var el = document.getElementById('rm-content-timeline');
-        fetchTradingSnapshot().then(function(snap){
+        fetch('/api/trading/snapshot?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json();}).then(function(snap){
           var visited = (snap.trading||{}).visited_rooms || [];
           var rooms = snap.resources || [];
           var map = {}; rooms.forEach(function(r){ map[r.id] = r; });
@@ -4965,36 +6514,12 @@
 
       // ── Room click → open Room Modal (capture phase to beat ClawLibrary) ──
       var _lastClickedRoomId = null;
-      function findRoomButtonFromPointerEvent(e) {
-        var target = e.target;
-        var direct = target && target.closest ? target.closest('button[data-resource-id]') : null;
-        if (direct) return direct;
-        if (!document.elementsFromPoint || typeof e.clientX !== 'number' || typeof e.clientY !== 'number') return null;
-        var stack = document.elementsFromPoint(e.clientX, e.clientY) || [];
-        for (var i = 0; i < stack.length; i++) {
-          var el = stack[i];
-          var btn = el && el.closest ? el.closest('button[data-resource-id]') : null;
-          if (!btn) continue;
-          var menu = btn.closest('.resource-menu');
-          var rect = btn.getBoundingClientRect();
-          var menuRect = menu ? menu.getBoundingClientRect() : null;
-          var insideButton = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
-          var insideMenu = !menuRect || (e.clientX >= menuRect.left && e.clientX <= menuRect.right && e.clientY >= menuRect.top && e.clientY <= menuRect.bottom);
-          if (insideButton && insideMenu) return btn;
-        }
-        return null;
-      }
       document.addEventListener('click', function(e) {
-        var btn = findRoomButtonFromPointerEvent(e);
+        var btn = e.target.closest ? e.target.closest('button[data-resource-id]') : null;
         if (!btn) return;
         var roomId = btn.getAttribute('data-resource-id');
         if (!roomId) return;
-        if (btn.disabled) return;
-        e.preventDefault();
-        e.stopPropagation();
-        if (roomId === _lastClickedRoomId) return;
         _lastClickedRoomId = roomId;
-        setTimeout(function(){ _lastClickedRoomId = null; }, 2000);
         openRoomModal(roomId);
       }, true);  // capture phase
 
@@ -5002,7 +6527,7 @@
       var _lastSelectedRoom = null;
       setInterval(function() {
         var sel = document.querySelector('.resource-menu button[data-selected=\"true\"]');
-        if (!sel) return;
+        if (!sel) { _lastSelectedRoom = null; return; }
         var rid = sel.getAttribute('data-resource-id');
         if (!rid || rid === _lastSelectedRoom) return;
         _lastSelectedRoom = rid;
@@ -5090,7 +6615,7 @@
               void focused.offsetWidth;
               focused.classList.add('room-just-visited');
               // Update tooltip with current snapshot data
-              fetchTradingSnapshot().then(function(snap){
+              fetch('/api/trading/snapshot?t='+Date.now(), {cache:'no-store'}).then(function(r){return r.json()}).then(function(snap){
                 var room = (snap.resources||[]).find(function(rr){return rr.id===roomId;});
                 if (room) {
                   var items = room.items || [];
@@ -5131,26 +6656,14 @@
             })
             .catch(function() {});
 
-          fetchTradingSnapshot()
+          fetch('/api/trading/snapshot?t=' + Date.now(), { cache: 'no-store' })
+            .then(function(r) { return r.ok ? r.json() : null; })
             .then(function(snap) {
               if (!snap) return;
               var t = snap.trading || {};
               var summary = t.summary || {};
               var task = t.task || {};
               var logs = t.logs || [];
-              var snapTicker = t.ticker || task.ticker;
-              var snapStrategy = t.strategy || task.strategy;
-              var snapStatus = t.global_status || 'idle';
-              var snapDecision = t.decision || (summary && summary.decision);
-
-              pillAsset.textContent    = s(snapTicker);
-              pillMode.textContent     = s(snapStrategy);
-              pillStatus.textContent   = snapStatus === 'done' ? 'Completed' : s(snapStatus, 'Idle');
-              pillDecision.textContent = snapDecision ? String(snapDecision).replace('Completed. Decision: ','') : '-';
-              kvAsset.textContent      = s(snapTicker);
-              kvMode.textContent       = s(snapStrategy);
-              kvStatus.textContent     = snapStatus === 'done' ? 'Completed' : s(snapStatus, 'Idle');
-              kvStrategy.textContent   = s(snapStrategy);
 
               // Period
               if (task.start_date || task.end_date) {

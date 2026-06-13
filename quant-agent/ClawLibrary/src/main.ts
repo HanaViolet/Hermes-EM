@@ -30,7 +30,7 @@ const MENU_RESOURCE_IDS: ResourcePartitionId[] = [
   'schedule'      // 12. Decision Desk
 ];
 const MERGED_RESOURCE_IDS = new Set<ResourcePartitionId>([]);
-const EXTERNAL_KIND_MENU_RESOURCE_IDS = new Set<ResourcePartitionId>(['gateway', 'document', 'memory', 'break_room', 'task_queues']);
+const EXTERNAL_KIND_MENU_RESOURCE_IDS = new Set<ResourcePartitionId>([]);
 const RESOURCE_UI_ALIAS: Partial<Record<ResourcePartitionId, ResourcePartitionId>> = {};
 const DEFAULT_UI_LOCALE = (appConfig.ui.defaultLocale === 'zh' ? 'zh' : 'en') as UiLocale;
 
@@ -751,7 +751,7 @@ function modalDefaultsForResource(resourceId: ResourcePartitionId): {
   if (resourceId === 'images') {
     return {
       sortMode: 'date-desc',
-      viewMode: 'grid'
+      viewMode: 'list'
     };
   }
 
@@ -1246,7 +1246,9 @@ function renderMarkdownPreview(raw: string): string {
 
 function kindOrderForResource(resourceId: ResourcePartitionId): string[] {
   if (resourceId === 'images') {
-    return ['Actor Art', 'Layer Assets', 'Layout Concepts', 'Project Art', 'Legacy References', 'Run Media', 'Images'];
+    return uiLocale === 'zh'
+      ? ['价格走势', '指标摘要', '策略信号', '回测表现', '图表产物']
+      : ['Price Trend', 'Indicator Summary', 'Strategy Signal', 'Backtest Performance', 'Chart Artifacts'];
   }
   if (resourceId === 'skills') {
     return ['Art & Image', 'Browser & Automation', 'Coding & Agent Ops', 'Content & Publishing', 'Finance', 'Utility Skills', 'Skills'];
@@ -1307,13 +1309,7 @@ function itemKindGroupOf(resourceId: ResourcePartitionId, entry: OpenClawResourc
   }
 
   if (resourceId === 'images') {
-    if (pathValue.includes('/actors/')) return 'Actor Art';
-    if (pathValue.includes('cutout') || pathValue.includes('floor') || pathValue.includes('backwall') || pathValue.includes('midprops') || pathValue.includes('occluder')) return 'Layer Assets';
-    if (pathValue.includes('ll3-master-layout')) return 'Layout Concepts';
-    if (pathValue.includes('project/clawlibrary')) return 'Project Art';
-    if (pathValue.includes('star-office')) return 'Legacy References';
-    if (pathValue.includes('tmp/weibo-runs') || pathValue.includes('tmp/zsxq-runs')) return 'Run Media';
-    return 'Images';
+    return uiLocale === 'zh' ? '图表产物' : 'Chart Artifacts';
   }
 
   if (resourceId === 'skills') {
@@ -2179,9 +2175,6 @@ function applyLocaleToChrome(): void {
   if (assetModalCopyContext) {
     assetModalCopyContext.textContent = uiText('copyContext', uiLocale);
   }
-  if (assetModalClose) {
-    assetModalClose.textContent = uiText('close', uiLocale);
-  }
   if (assetModalView) {
     assetModalView.textContent = modalViewMode === 'list' ? uiText('grid', uiLocale) : uiText('list', uiLocale);
   }
@@ -2227,7 +2220,7 @@ function searchPlaceholderForResource(resourceId: ResourcePartitionId): string {
     if (resourceId === 'break_room') return '搜索健康、维护、升级…';
     return '搜索条目…';
   }
-  if (resourceId === 'images') return 'Search actor, room layer, layout…';
+  if (resourceId === 'images') return 'Search chart, indicator, backtest…';
   if (resourceId === 'skills') return 'Search skill, capability, workflow…';
   if (resourceId === 'document') return 'Search task, report, plan…';
   if (resourceId === 'memory') return 'Search note, topic, date…';
@@ -2400,18 +2393,7 @@ function openResourceModal(
   renderRoomModal();
 }
 
-type TradingRoomWindow = typeof window & {
-  openRoomModal?: (resourceId: ResourcePartitionId) => void;
-};
-
-function openTradingRoomModal(resourceId: ResourcePartitionId): boolean {
-  const openRoomModal = (window as TradingRoomWindow).openRoomModal;
-  if (typeof openRoomModal !== 'function') {
-    return false;
-  }
-  openRoomModal(resourceId);
-  return true;
-}
+(window as typeof window & { openTradingResourceModal?: typeof openResourceModal }).openTradingResourceModal = openResourceModal;
 
 function ensureSceneBindings(): void {
   const activeScene = getActiveScene();
@@ -2431,20 +2413,19 @@ function ensureSceneBindings(): void {
     return;
   }
 
-	activeScene.events.on('select-resource', (event: string | ResourceSelectEvent) => {
-	  const payload = typeof event === 'string'
-	    ? { resourceId: event as ResourcePartitionId }
-	    : event;
-    if (openTradingRoomModal(payload.resourceId)) {
-      return;
-    }
-	  openResourceModal(payload.resourceId, payload.anchor ? {
-	    anchor: {
-	      ...clientPointFromScenePoint(payload.anchor),
+  activeScene.events.on('select-resource', (event: string | ResourceSelectEvent) => {
+    const payload = typeof event === 'string'
+      ? { resourceId: event as ResourcePartitionId }
+      : event;
+    const options = payload.anchor ? {
+      anchor: {
+        ...clientPointFromScenePoint(payload.anchor),
         scenePoint: payload.anchor,
-        source: 'scene'
-      }
-    } : undefined);
+        source: 'scene' as const
+      },
+      forceModal: payload.resourceId === 'gateway' || payload.resourceId === 'document'
+    } : payload.resourceId === 'gateway' ? { forceModal: true } : undefined;
+    openResourceModal(payload.resourceId, options);
   });
 
   sceneEventsBound = true;
@@ -2595,6 +2576,10 @@ function closeRoomModal(): void {
   closeCategoryMenu();
   assetModal?.classList.add('hidden');
   assetModal?.setAttribute('aria-hidden', 'true');
+  const roomModalBackdrop = document.getElementById('room-modal-backdrop');
+  if (roomModalBackdrop) {
+    roomModalBackdrop.classList.add('hidden');
+  }
   if (assetModalFeedback) {
     assetModalFeedback.textContent = '';
     assetModalFeedback.classList.remove('error');
@@ -2661,15 +2646,209 @@ function _levelClass(level?: string): string {
   return 'neutral';
 }
 
+const CHART_ROOM_TEXT: Record<string, { en: string; zh: string }> = {
+  chartSummary: { en: 'Chart Summary', zh: '图表摘要' },
+  close: { en: 'Close', zh: '收盘价' },
+  priceTrendSummary: { en: 'Price Trend Summary', zh: '价格走势摘要' },
+  noFullPriceSeries: { en: 'No full price series; showing summary only', zh: '暂无完整价格序列，仅展示摘要' },
+  noData: { en: 'No data', zh: '暂无数据' },
+  noStrategyReasoning: { en: 'No strategy reasoning available', zh: '暂无策略推理' },
+  priceSummary: { en: 'Price Summary', zh: '价格摘要' },
+  latestClose: { en: 'Latest Close', zh: '最新收盘' },
+  return20d: { en: '20D Return', zh: '20日收益' },
+  trendState: { en: 'Trend State', zh: '均线状态' },
+  indicatorSummary: { en: 'Indicator Summary', zh: '指标摘要' },
+  volatility20d: { en: '20D Volatility', zh: '20日波动率' },
+  strategySignal: { en: 'Strategy Signal', zh: '策略信号' },
+  currentStrategy: { en: 'Current Strategy', zh: '当前策略' },
+  signal: { en: 'Signal', zh: '信号' },
+  score: { en: 'Score', zh: '评分' },
+  backtestSummary: { en: 'Backtest Summary', zh: '回测摘要' },
+  totalReturn: { en: 'Total Return', zh: '总收益' },
+  sharpe: { en: 'Sharpe Ratio', zh: '夏普比率' },
+  maxDrawdown: { en: 'Max Drawdown', zh: '最大回撤' },
+  winRate: { en: 'Win Rate', zh: '胜率' },
+  trades: { en: 'Trades', zh: '交易次数' },
+  impact: { en: 'Impact', zh: '决策影响' },
+  nextAction: { en: 'Next Action', zh: '下一步' },
+  monitor: { en: 'Monitor', zh: '监控重点' },
+  // Schedule (Decision Desk) labels
+  decision: { en: 'Decision', zh: '决策' },
+  inputSummary: { en: 'Input Summary', zh: '输入摘要' },
+  agentVotes: { en: 'Agent Votes', zh: 'Agent 投票' },
+  conflictResolution: { en: 'Conflict Resolution', zh: '冲突解决' },
+  whyNot: { en: 'Why not?', zh: '为什么不？' },
+  triggerConditions: { en: 'Trigger Conditions', zh: '触发条件' },
+  nextPlan: { en: 'Next Plan', zh: '复检计划' },
+  finalStrategy: { en: 'Final Strategy', zh: '最终策略' },
+  modeReason: { en: 'Mode Reason', zh: '模式原因' },
+  confidence: { en: 'Confidence', zh: '置信度' },
+  position: { en: 'Position', zh: '仓位' },
+  riskScore: { en: 'Risk Score', zh: '风险分数' },
+  news: { en: 'News', zh: '新闻' },
+  macdSignal: { en: 'MACD Signal', zh: 'MACD 信号' },
+  triggerStatusMet: { en: 'Met', zh: '已满足' },
+  triggerStatusNotMet: { en: 'Not met', zh: '未满足' },
+  priorityHigh: { en: 'High', zh: '高' },
+  priorityMedium: { en: 'Medium', zh: '中' },
+  priorityLow: { en: 'Low', zh: '低' },
+  // Report (Reports & Analysis) labels
+  executiveSummary: { en: 'Executive Summary', zh: '执行摘要' },
+  suggestedAction: { en: 'Suggested Action', zh: '建议动作' },
+  keyDrivers: { en: 'Key Drivers', zh: '关键驱动' },
+  keyRisks: { en: 'Key Risks', zh: '关键风险' },
+  references: { en: 'References', zh: '方法依据' },
+  aiGenerating: { en: 'AI report generating...', zh: 'AI 报告生成中...' },
+  aiGenerated: { en: 'AI generated', zh: 'AI 生成' },
+  ruleTemplate: { en: 'Rule-based template', zh: '规则模板' },
+  noReferences: { en: 'No references', zh: '暂无方法依据' }
+};
+
+const CHART_VALUE_TRANSLATIONS: Record<string, { en: string; zh: string }> = {
+  '暂无数据': { en: 'No data', zh: '暂无数据' },
+  '盘整': { en: 'Sideways', zh: '盘整' },
+  '多头排列': { en: 'Bullish alignment', zh: '多头排列' },
+  '空头排列': { en: 'Bearish alignment', zh: '空头排列' },
+  '超买': { en: 'Overbought', zh: '超买' },
+  '超卖': { en: 'Oversold', zh: '超卖' },
+  '中性': { en: 'Neutral', zh: '中性' },
+  '偏多': { en: 'Bullish', zh: '偏多' },
+  '偏空': { en: 'Bearish', zh: '偏空' },
+  '买入': { en: 'BUY', zh: '买入' },
+  '卖出': { en: 'SELL', zh: '卖出' },
+  '观望': { en: 'HOLD', zh: '观望' }
+};
+
+const CHART_LABEL_TRANSLATIONS: Record<string, { en: string; zh: string }> = {
+  '图表摘要': CHART_ROOM_TEXT.chartSummary,
+  '最新收盘': CHART_ROOM_TEXT.latestClose,
+  '均线状态': CHART_ROOM_TEXT.trendState,
+  'RSI 状态': { en: 'RSI State', zh: 'RSI 状态' },
+  'MACD 状态': { en: 'MACD State', zh: 'MACD 状态' },
+  '20日收益': CHART_ROOM_TEXT.return20d,
+  '20日波动': { en: '20D Volatility', zh: '20日波动' },
+  '策略信号': CHART_ROOM_TEXT.strategySignal,
+  '策略评分': { en: 'Strategy Score', zh: '策略评分' },
+  '回测收益': { en: 'Backtest Return', zh: '回测收益' },
+  '夏普比率': CHART_ROOM_TEXT.sharpe,
+  '最大回撤': CHART_ROOM_TEXT.maxDrawdown,
+  '胜率': CHART_ROOM_TEXT.winRate,
+  '交易次数': CHART_ROOM_TEXT.trades
+};
+
+function chartText(key: keyof typeof CHART_ROOM_TEXT): string {
+  return CHART_ROOM_TEXT[key]?.[uiLocale] ?? String(key);
+}
+
+function localizeChartLabel(value: unknown): string {
+  const text = String(value ?? '');
+  return CHART_LABEL_TRANSLATIONS[text]?.[uiLocale] ?? text;
+}
+
+function localizeChartValue(value: unknown): string {
+  if (value && typeof value === 'object' && !Array.isArray(value)) {
+    const obj = value as Record<string, unknown>;
+    if ('en' in obj || 'zh' in obj) {
+      return roomLocalized(value, uiLocale);
+    }
+  }
+  const text = String(value ?? '');
+  const upper = text.toUpperCase();
+  if (uiLocale === 'zh') {
+    if (upper === 'BUY') return '买入';
+    if (upper === 'SELL') return '卖出';
+    if (upper === 'HOLD' || upper === 'CASH') return '观望';
+  }
+  const exact = CHART_VALUE_TRANSLATIONS[text]?.[uiLocale];
+  if (exact) {
+    return exact;
+  }
+  if (uiLocale === 'en') {
+    return Object.entries(CHART_VALUE_TRANSLATIONS).reduce(
+      (current, [source, labels]) => current.replace(new RegExp(source, 'g'), labels.en),
+      text
+    );
+  }
+  return text;
+}
+
+function localizeChartSentence(value: unknown): string {
+  let text = String(value ?? '');
+  if (uiLocale === 'zh') {
+    return text
+      .replace(/\bBUY\b/g, '买入')
+      .replace(/\bSELL\b/g, '卖出')
+      .replace(/\bHOLD\b/g, '观望')
+      .replace(/\bCASH\b/g, '观望');
+  }
+  const chartInsight = text.match(/^当前\s+(.+?)\s+最新收盘\s+([^，]+)，([^，]+)，RSI\s+([^，]+)，MACD\s+([^，]+)，策略信号为\s+(.+?)。$/);
+  if (chartInsight) {
+    const [, ticker, close, trend, rsi, macd, signal] = chartInsight;
+    return `Current ${ticker} latest close is ${close}; trend is ${localizeChartValue(trend)}; RSI is ${localizeChartValue(rsi)}; MACD is ${localizeChartValue(macd)}; strategy signal is ${localizeChartValue(signal)}.`;
+  }
+  const replacements: Array<[RegExp, string]> = [
+    [/暂无图表数据/g, 'No chart data'],
+    [/暂无数据/g, 'No data'],
+    [/最新收盘/g, 'latest close'],
+    [/信号/g, 'signal'],
+    [/当前/g, 'Current'],
+    [/多头排列/g, 'bullish alignment'],
+    [/空头排列/g, 'bearish alignment'],
+    [/盘整/g, 'sideways'],
+    [/中性/g, 'neutral'],
+    [/超买/g, 'overbought'],
+    [/超卖/g, 'oversold'],
+    [/偏多/g, 'bullish'],
+    [/偏空/g, 'bearish'],
+    [/图表摘要为决策调度室提供可视化依据，但最终仓位仍需结合风险报警室综合判断。/g, 'Chart summaries provide visual evidence for the Decision Desk, while final sizing still depends on the Risk Alert Room.'],
+    [/持续观察价格与均线的偏离程度，以及回测夏普比率是否稳定。/g, 'Keep monitoring price deviation from moving averages and whether the backtest Sharpe remains stable.'],
+    [/行情数据未就绪，图表分析室暂无有效价格序列。/g, 'Market data is not ready; the Chart Room has no valid price series yet.'],
+    [/缺少价格输入，无法为决策提供图形化依据。/g, 'Price input is missing, so no visual evidence can be provided for the decision.'],
+    [/等待市场数据室完成数据接入后重新运行。/g, 'Wait for the Market Data Room to finish ingestion, then rerun.'],
+    [/价格序列是否加载/g, 'Price series loaded'],
+    [/指标计算是否完成/g, 'Indicator calculation completed'],
+    [/回测结果是否生成/g, 'Backtest result generated'],
+    [/MA20\/MA60 交叉/g, 'MA20/MA60 crossover'],
+    [/RSI 是否进入极值区间/g, 'RSI extreme zone'],
+    [/MACD 方向变化/g, 'MACD direction change'],
+    [/夏普比率是否低于 1\.0/g, 'Sharpe below 1.0']
+  ];
+  for (const [pattern, replacement] of replacements) {
+    text = text.replace(pattern, replacement);
+  }
+  return text;
+}
+
+function roomLocalized(value: unknown, locale: UiLocale = uiLocale): string {
+  if (value && typeof value === 'object' && !Array.isArray(value)) {
+    const obj = value as Record<string, unknown>;
+    if ('en' in obj || 'zh' in obj) {
+      return String(obj[locale] ?? obj['en'] ?? obj['zh'] ?? '');
+    }
+  }
+  return String(value ?? '');
+}
+
+function roomLabel(label: unknown, labelZh: unknown, locale: UiLocale = uiLocale): string {
+  if (locale === 'zh' && labelZh !== undefined && labelZh !== null && labelZh !== '') {
+    return String(labelZh);
+  }
+  const labelText = String(label ?? '');
+  if (locale === 'en') {
+    return localizeChartLabel(labelText);
+  }
+  return labelText;
+}
+
 function _renderHero(artifact: any): string {
   const p = artifact.primary ?? {};
   const unit = p.unit || '';
-  const sub = artifact.summary || '';
+  const sub = roomLocalized(artifact.summary);
   return `
     <div class="room-hero">
-      <div class="room-hero-main ${escapeHtml(_levelClass(p.level))}">${escapeHtml(String(p.value))}${unit ? `<span class="room-hero-unit">${escapeHtml(unit)}</span>` : ''}</div>
-      <div class="room-hero-label">${escapeHtml(p.label || '')}</div>
-      ${sub ? `<div class="room-hero-sub">${escapeHtml(sub)}</div>` : ''}
+      <div class="room-hero-main ${escapeHtml(_levelClass(p.level))}">${escapeHtml(localizeChartValue(p.value))}${unit ? `<span class="room-hero-unit">${escapeHtml(unit)}</span>` : ''}</div>
+      <div class="room-hero-label">${escapeHtml(roomLocalized(p.label))}</div>
+      ${sub ? `<div class="room-hero-sub">${escapeHtml(localizeChartSentence(sub))}</div>` : ''}
     </div>
   `;
 }
@@ -2681,13 +2860,14 @@ function _renderMetricsGrid(metrics: any[]): string {
       ${metrics.map((m: any) => {
         const level = _levelClass(m.level);
         const unit = m.unit || '';
-        let display = `<span class="room-metric-value ${level}">${escapeHtml(String(m.value))}${unit ? `<span class="room-metric-unit">${escapeHtml(unit)}</span>` : ''}</span>`;
+        const localizedValue = localizeChartValue(m.value);
+        let display = `<span class="room-metric-value ${level}">${escapeHtml(localizedValue)}${unit ? `<span class="room-metric-unit">${escapeHtml(unit)}</span>` : ''}</span>`;
         if (m.display === 'bar') {
           const pct = Math.max(0, Math.min(100, Number(m.value) || 0));
-          display = `<div class="metric-bar-track"><div class="metric-bar-fill" style="width:${pct}%"></div></div><span class="room-metric-value ${level}">${escapeHtml(String(m.value))}${unit ? escapeHtml(unit) : ''}</span>`;
+          display = `<div class="metric-bar-track"><div class="metric-bar-fill" style="width:${pct}%"></div></div><span class="room-metric-value ${level}">${escapeHtml(localizedValue)}${unit ? escapeHtml(unit) : ''}</span>`;
         }
         if (m.display === 'badge') {
-          display = `<span class="room-metric-badge ${level}">${escapeHtml(String(m.value))}</span>`;
+          display = `<span class="room-metric-badge ${level}">${escapeHtml(localizedValue)}</span>`;
         }
         if (m.display === 'strategy_score') {
           const pct = Math.max(0, Math.min(100, Number(m.value) || 0));
@@ -2696,7 +2876,7 @@ function _renderMetricsGrid(metrics: any[]): string {
         }
         return `
           <div class="room-metric-card">
-            <div class="room-metric-label">${escapeHtml(m.label || '')}</div>
+            <div class="room-metric-label">${escapeHtml(roomLabel(m.label, m.label_zh))}</div>
             <div class="room-metric-display">${display}</div>
           </div>
         `;
@@ -2707,7 +2887,7 @@ function _renderMetricsGrid(metrics: any[]): string {
 
 function _renderInsight(artifact: any): string {
   if (!artifact.insight) return '';
-  return `<div class="room-insight">${escapeHtml(artifact.insight)}</div>`;
+  return `<div class="room-insight">${escapeHtml(localizeChartSentence(roomLocalized(artifact.insight)))}</div>`;
 }
 
 function _renderActionPlan(artifact: any): string {
@@ -2717,35 +2897,202 @@ function _renderActionPlan(artifact: any): string {
   if (!impact && !next && focus.length === 0) return '';
   return `
     <div class="room-action-plan">
-      ${impact ? `<div class="room-action-card"><div class="room-action-title">Impact</div><div class="room-action-body">${escapeHtml(impact)}</div></div>` : ''}
-      ${next ? `<div class="room-action-card"><div class="room-action-title">Next Action</div><div class="room-action-body">${escapeHtml(next)}</div></div>` : ''}
-      ${focus.length > 0 ? `<div class="room-action-card"><div class="room-action-title">Monitor</div><div class="room-action-body"><ul>${focus.map((f: string) => `<li>${escapeHtml(f)}</li>`).join('')}</ul></div></div>` : ''}
+      ${impact ? `<div class="room-action-card"><div class="room-action-title">${escapeHtml(chartText('impact'))}</div><div class="room-action-body">${escapeHtml(localizeChartSentence(roomLocalized(impact)))}</div></div>` : ''}
+      ${next ? `<div class="room-action-card"><div class="room-action-title">${escapeHtml(chartText('nextAction'))}</div><div class="room-action-body">${escapeHtml(localizeChartSentence(roomLocalized(next)))}</div></div>` : ''}
+      ${focus.length > 0 ? `<div class="room-action-card"><div class="room-action-title">${escapeHtml(chartText('monitor'))}</div><div class="room-action-body"><ul>${focus.map((f: string | { en?: string; zh?: string }) => `<li>${escapeHtml(localizeChartSentence(roomLocalized(f)))}</li>`).join('')}</ul></div></div>` : ''}
     </div>
   `;
 }
 
-function renderDataHealthPanel(artifact: any): string {
-  const visual = artifact.visual?.data ?? {};
-  return `
-    <section class="advanced-room-panel">
-      ${_renderHero(artifact)}
-      <div class="room-visual">
-        <div class="room-visual-title">Data Coverage</div>
-        <div class="room-visual-sub">${escapeHtml(visual.date_range || '')}</div>
-        ${visual.sparkline && visual.sparkline.length > 0
-          ? `<svg class="mini-chart" viewBox="0 0 ${visual.sparkline.length} 100" preserveAspectRatio="none"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="${visual.sparkline.map((v: number, i: number) => `${i},${100 - Math.max(0, Math.min(100, v))}`).join(' ')}"/></svg>`
-          : '<div class="room-visual-placeholder">Sparkline unavailable</div>'}
+function renderMarketCommandRoomPanel(artifact: any): string {
+  return renderMarketDataIntakePanel(artifact);
+}
+
+function renderMarketDataIntakePanel(artifact: any): string {
+  const metricValue = (label: string) => (artifact.metrics || []).find((m: any) => m.label === label)?.value;
+  const legacyVisual = artifact.visual?.data ?? {};
+  const market = {
+    ticker: (lastSnapshot as any)?.trading?.ticker,
+    date_range: legacyVisual.date_range,
+    data_source: artifact.details?.input?.[0],
+    rows: metricValue('样本量'),
+    missing_values: metricValue('缺失值'),
+    latest_close: metricValue('最新收盘'),
+    cache_status: 'cache_or_remote',
+    coverage_pct: metricValue('覆盖率'),
+    ...(artifact.market_data ?? {})
+  };
+  const news = {
+    score: undefined,
+    sentiment: undefined,
+    confidence: undefined,
+    key_events: [],
+    risk_events: [],
+    raw_news: [],
+    ...(artifact.news_digest ?? {})
+  };
+  const rawNews = Array.isArray(news.raw_news) ? news.raw_news : [];
+  const keyEvents = Array.isArray(news.key_events) ? news.key_events : [];
+  const riskEvents = Array.isArray(news.risk_events) ? news.risk_events : [];
+  const rankedNews = Array.isArray(news.ranked_news) ? news.ranked_news : [];
+  const rows = Number(market.rows);
+  const missing = Number(market.missing_values);
+  const latestClose = Number(market.latest_close);
+  const coverage = Number(market.coverage_pct);
+  const hasRows = Number.isFinite(rows) && rows > 0;
+  const hasLatestClose = Number.isFinite(latestClose);
+  const hasNews = rawNews.length > 0 || keyEvents.length > 0 || riskEvents.length > 0 || news.score !== undefined;
+  const isReady = hasRows && hasLatestClose;
+  const tone = (status: string) => status === 'pass' ? 'pass' : status === 'warn' || status === 'warning' ? 'warn' : 'missing';
+  const badge = (status: string) => tone(status) === 'pass' ? '通过' : tone(status) === 'warn' ? '检查' : '缺失';
+  const feedSteps = [
+    { name: '数据源连接', status: market.data_source ? 'pass' : 'missing', detail: market.data_source || '暂无来源' },
+    { name: '缓存/远程读取', status: market.cache_status ? 'pass' : 'missing', detail: market.cache_status || '未知' },
+    { name: 'OHLCV 标准化', status: hasRows ? 'pass' : 'missing', detail: hasRows ? `${rows.toFixed(0)} 条K线` : '暂无行情数据' },
+    { name: '时间区间校验', status: market.date_range ? 'pass' : 'missing', detail: market.date_range || '暂无时间区间' },
+    { name: '下游交接', status: isReady ? 'pass' : 'missing', detail: isReady ? '允许进入指标/策略/回测' : '行情输入不足' }
+  ];
+  const ohlcvRows = [
+    { label: '标的', value: market.ticker || '暂无数据', status: market.ticker ? 'pass' : 'missing' },
+    { label: '时间范围', value: market.date_range || '暂无数据', status: market.date_range ? 'pass' : 'missing' },
+    { label: '样本量', value: hasRows ? rows.toFixed(0) : '暂无数据', status: hasRows ? 'pass' : 'missing' },
+    { label: '缺失值', value: Number.isFinite(missing) ? missing.toFixed(0) : '暂无数据', status: missing === 0 ? 'pass' : 'warn' },
+    { label: '最新收盘', value: hasLatestClose ? latestClose.toFixed(2) : '暂无数据', status: hasLatestClose ? 'pass' : 'missing' },
+    { label: '覆盖率', value: Number.isFinite(coverage) ? `${coverage.toFixed(0)}%` : '暂无数据', status: coverage >= 95 ? 'pass' : 'warn' }
+  ];
+  const handoffRooms = [
+    { room: '指标实验室', input: 'OHLCV + Close Series', status: isReady ? 'pass' : 'missing' },
+    { room: '策略实验室', input: '行情样本 + 指标信号', status: isReady ? 'pass' : 'missing' },
+    { room: '回测实验室', input: '历史K线 + 策略规则', status: isReady ? 'pass' : 'missing' },
+    { room: '风险/决策室', input: '等待后续房间产出', status: isReady ? 'warn' : 'missing' }
+  ];
+  const eventRow = (event: any) => {
+    const impact = String(event?.impact || 'neutral').toLowerCase();
+    const text = typeof event === 'string' ? event : String(event?.event || '');
+    const label = impact === 'positive' ? '利好' : impact === 'negative' ? '风险' : '中性';
+    const ids = Array.isArray(event?.evidence_ids) ? event.evidence_ids : [];
+    return `
+      <div class="market-intake-event">
+        <span class="${impact === 'positive' ? 'pass' : impact === 'negative' ? 'missing' : 'warn'}">${escapeHtml(label)}</span>
+        <strong>${escapeHtml(text || '暂无事件文本')}</strong>
+        ${ids.length ? `<small>[#${ids.map((id: any) => escapeHtml(String(id))).join(', #')}]</small>` : ''}
       </div>
-      ${_renderMetricsGrid(artifact.metrics)}
-      ${_renderInsight(artifact)}
-      ${_renderActionPlan(artifact)}
+    `;
+  };
+  const newsRow = (item: any) => `
+    <div class="market-intake-news-row">
+      <strong>${escapeHtml(item?.title || '未命名新闻')}</strong>
+      <span>${escapeHtml([item?.source, item?.published_at].filter(Boolean).join(' · ') || '来源未知')}</span>
+    </div>
+  `;
+  const rankedNewsRow = (item: any, index: number) => {
+    const recLabel = item.rec_score >= 4 ? '推荐买入' : item.rec_score <= 2 ? '推荐卖出' : '中性观望';
+    const recCls = item.rec_score >= 4 ? 'pass' : item.rec_score <= 2 ? 'missing' : 'warn';
+    return `
+      <div class="market-ranked-news-row">
+        <span class="market-ranked-index">${index + 1}</span>
+        <div class="market-ranked-body">
+          <strong>${escapeHtml(item?.title || '未命名新闻')}</strong>
+          <span>${escapeHtml([item?.source, item?.published_at].filter(Boolean).join(' · ') || '来源未知')}</span>
+        </div>
+        <div class="market-ranked-score ${recCls}">
+          <span>${escapeHtml(recLabel)}</span>
+          <small>${escapeHtml(String(item?.final_score ?? '-'))}分</small>
+        </div>
+      </div>
+    `;
+  };
+
+  return `
+    <section class="market-intake-room">
+      <div class="market-intake-topline">
+        <div>
+          <span>市场输入闸口</span>
+          <strong>${escapeHtml(market.ticker || '暂无标的')}</strong>
+          <small>${escapeHtml(market.date_range || '暂无时间范围')}</small>
+        </div>
+        <div class="market-intake-source">
+          <span>行情源</span>
+          <strong>${escapeHtml(market.data_source || '暂无数据源')}</strong>
+          <small>${escapeHtml(market.cache_status || '缓存状态未知')}</small>
+        </div>
+        <div class="market-intake-ready ${isReady ? 'pass' : 'missing'}">${escapeHtml(isReady ? '可交接' : '未就绪')}</div>
+      </div>
+
+      <div class="market-feed-rail">
+        ${feedSteps.map((step, index) => `
+          <div class="market-feed-step ${escapeHtml(tone(step.status))}">
+            <em>${escapeHtml(String(index + 1).padStart(2, '0'))}</em>
+            <strong>${escapeHtml(step.name)}</strong>
+            <span>${escapeHtml(step.detail)}</span>
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="market-intake-grid">
+        <section class="market-intake-block ohlcv-contract">
+          <div class="market-intake-title">行情输入合约</div>
+          <div class="market-contract-matrix">
+            ${ohlcvRows.map((row) => `
+              <div class="market-contract-cell ${escapeHtml(tone(row.status))}">
+                <span>${escapeHtml(row.label)}</span>
+                <strong>${escapeHtml(String(row.value))}</strong>
+                <em>${escapeHtml(badge(row.status))}</em>
+              </div>
+            `).join('')}
+          </div>
+        </section>
+
+        <section class="market-intake-block news-intake">
+          <div class="market-intake-title">新闻与事件输入</div>
+          ${hasNews ? `
+            <div class="market-news-meter">
+              <div><span>新闻分数</span><strong>${escapeHtml(String(news.score ?? '暂无数据'))}<small>/100</small></strong></div>
+              <div><span>情绪</span><strong>${escapeHtml({'positive':'偏多','negative':'偏空','neutral':'中性'}[String(news.sentiment || 'neutral')] || '中性')}</strong></div>
+              <div><span>置信度</span><strong>${escapeHtml(news.confidence !== undefined && news.confidence !== null ? `${Math.round(Number(news.confidence) * 100)}%` : '暂无数据')}</strong></div>
+            </div>
+            ${rankedNews.length ? `
+              <div class="market-ranked-feed">
+                <div class="market-ranked-feed-title">推荐新闻（按情绪风险加权排序）<small>参考：Benhenda (2025) FinRL-DeepSeek</small></div>
+                ${rankedNews.slice(0, 5).map((item: any, i: number) => rankedNewsRow(item, i)).join('')}
+              </div>
+            ` : ''}
+            <div class="market-event-columns">
+              <div><span>关键事件</span>${keyEvents.length ? keyEvents.map(eventRow).join('') : '<p>暂无关键事件</p>'}</div>
+              <div><span>风险事件</span>${riskEvents.length ? riskEvents.map(eventRow).join('') : '<p>暂无风险事件</p>'}</div>
+            </div>
+            <div class="market-news-feed"><span>新闻来源</span>${rawNews.length ? rawNews.slice(0, 5).map(newsRow).join('') : '<p>暂无原始新闻</p>'}</div>
+          ` : '<div class="market-empty-state">暂无新闻资讯数据</div>'}
+        </section>
+
+        <section class="market-intake-block handoff-board">
+          <div class="market-intake-title">下游交接板</div>
+          <div class="market-handoff-list">
+            ${handoffRooms.map((gate) => `
+              <div class="market-handoff-row ${escapeHtml(tone(gate.status))}">
+                <div><strong>${escapeHtml(gate.room)}</strong><span>${escapeHtml(gate.input)}</span></div>
+                <em>${escapeHtml(badge(gate.status))}</em>
+              </div>
+            `).join('')}
+          </div>
+          <div class="market-readiness-note ${isReady ? 'pass' : 'missing'}">
+            <strong>${escapeHtml(isReady ? '市场输入已就绪' : '市场输入未就绪')}</strong>
+            <span>${escapeHtml(isReady ? '本房间只负责输入可信度，不输出策略结论。' : '缺少行情主输入，后续分析应暂停。')}</span>
+          </div>
+        </section>
+      </div>
     </section>
   `;
+}
+
+function renderDataHealthPanel(artifact: any): string {
+  return renderMarketCommandRoomPanel(artifact);
 }
 
 function renderChartPanel(artifact: any): string {
   const visual = artifact.visual?.data ?? {};
   const hasChart = visual.dates && visual.close && visual.dates.length > 0;
+  const numberLocale = uiLocale === 'zh' ? 'zh-CN' : 'en-US';
 
   let chartSvg = '';
   if (hasChart) {
@@ -2755,7 +3102,7 @@ function renderChartPanel(artifact: any): string {
     const ma60Pts = visual.ma60 ? visual.ma60.map((v: number, i: number) => `${i},${100 - v}`).join(' ') : '';
 
     chartSvg = '<div class="room-chart-legend">' +
-      '<span class="legend-close">Close</span>' +
+      `<span class="legend-close">${escapeHtml(chartText('close'))}</span>` +
       '<span class="legend-ma20">MA20</span>' +
       '<span class="legend-ma60">MA60</span>' +
       '</div>';
@@ -2770,13 +3117,124 @@ function renderChartPanel(artifact: any): string {
     chartSvg += '</svg>';
   }
 
+  const price = visual.price_summary || {};
+  const indicator = visual.indicator_summary || {};
+  const strategy = visual.strategy_signal || {};
+  const backtest = visual.backtest_summary || {};
+
+  const fmt = (v: any, suffix = '') => {
+    if (v === undefined || v === null || v === '') return chartText('noData');
+    if (typeof v === 'number') return `${v.toLocaleString(numberLocale)}${suffix}`;
+    return `${localizeChartValue(v)}${suffix}`;
+  };
+
+  const signalClass = (signal: string) => {
+    const s = String(signal).toLowerCase();
+    return s === 'buy' || s === '买入' ? 'buy' : s === 'sell' || s === '卖出' ? 'sell' : 'hold';
+  };
+
   return `
-    <section class="advanced-room-panel">
+    <section class="advanced-room-panel chart-analysis-room">
       ${_renderHero(artifact)}
+
       <div class="room-visual">
-        <div class="room-visual-title">Price Chart</div>
-        ${hasChart ? chartSvg : '<div class="room-visual-placeholder">Chart data unavailable</div>'}
+        <div class="room-visual-title">${escapeHtml(chartText('priceTrendSummary'))}</div>
+        ${hasChart ? chartSvg : `<div class="room-visual-placeholder">${escapeHtml(chartText('noFullPriceSeries'))}</div>`}
       </div>
+
+      <div class="chart-analysis-grid">
+        <div class="chart-analysis-card price-summary-card">
+          <div class="chart-card-title">${escapeHtml(chartText('priceSummary'))}</div>
+          <div class="chart-card-body">
+            <div class="chart-metric-row">
+              <span>${escapeHtml(chartText('latestClose'))}</span>
+              <strong>${fmt(price.latest_close)}</strong>
+            </div>
+            <div class="chart-metric-row">
+              <span>MA20</span>
+              <strong>${fmt(price.ma20)}</strong>
+            </div>
+            <div class="chart-metric-row">
+              <span>MA60</span>
+              <strong>${fmt(price.ma60)}</strong>
+            </div>
+            <div class="chart-metric-row">
+              <span>${escapeHtml(chartText('return20d'))}</span>
+              <strong>${price.change_pct_20d !== undefined && price.change_pct_20d !== null ? `${(Number(price.change_pct_20d) * 100).toFixed(1)}%` : chartText('noData')}</strong>
+            </div>
+            <div class="chart-metric-row">
+              <span>${escapeHtml(chartText('trendState'))}</span>
+              <strong>${fmt(price.trend)}</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-analysis-card indicator-summary-card">
+          <div class="chart-card-title">${escapeHtml(chartText('indicatorSummary'))}</div>
+          <div class="chart-card-body">
+            <div class="chart-metric-row">
+              <span>RSI</span>
+              <strong>${fmt(indicator.rsi)} ${indicator.rsi_state ? `· ${localizeChartValue(indicator.rsi_state)}` : ''}</strong>
+            </div>
+            <div class="chart-metric-row">
+              <span>MACD</span>
+              <strong>${fmt(indicator.macd)} ${indicator.macd_state ? `· ${localizeChartValue(indicator.macd_state)}` : ''}</strong>
+            </div>
+            <div class="chart-metric-row">
+              <span>${escapeHtml(chartText('volatility20d'))}</span>
+              <strong>${indicator.volatility_20d !== undefined && indicator.volatility_20d !== null ? `${(Number(indicator.volatility_20d) * 100).toFixed(1)}%` : chartText('noData')}</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-analysis-card strategy-signal-card">
+          <div class="chart-card-title">${escapeHtml(chartText('strategySignal'))}</div>
+          <div class="chart-card-body">
+            <div class="chart-metric-row">
+              <span>${escapeHtml(chartText('currentStrategy'))}</span>
+              <strong>${fmt(uiLocale === 'zh' ? (strategy.name_zh || strategy.name) : (strategy.name_en || strategy.name))}</strong>
+            </div>
+            <div class="chart-metric-row">
+              <span>${escapeHtml(chartText('signal'))}</span>
+              <span class="decision-badge ${signalClass(strategy.signal)}">${escapeHtml(fmt(strategy.signal))}</span>
+            </div>
+            <div class="chart-metric-row">
+              <span>${escapeHtml(chartText('score'))}</span>
+              <strong>${fmt(strategy.score)}</strong>
+            </div>
+            <div class="chart-card-reasoning">
+              ${strategy.reasoning || strategy.reasoning_en ? escapeHtml(uiLocale === 'zh' ? (strategy.reasoning || chartText('noStrategyReasoning')) : (strategy.reasoning_en || localizeChartSentence(strategy.reasoning))) : escapeHtml(chartText('noStrategyReasoning'))}
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-analysis-card backtest-summary-card">
+          <div class="chart-card-title">${escapeHtml(chartText('backtestSummary'))}</div>
+          <div class="chart-card-body">
+            <div class="chart-metric-row">
+              <span>${escapeHtml(chartText('totalReturn'))}</span>
+              <strong>${backtest.total_return !== undefined && backtest.total_return !== null ? `${Number(backtest.total_return).toFixed(1)}%` : chartText('noData')}</strong>
+            </div>
+            <div class="chart-metric-row">
+              <span>${escapeHtml(chartText('sharpe'))}</span>
+              <strong>${fmt(backtest.sharpe)}</strong>
+            </div>
+            <div class="chart-metric-row">
+              <span>${escapeHtml(chartText('maxDrawdown'))}</span>
+              <strong>${backtest.max_drawdown !== undefined && backtest.max_drawdown !== null ? `${Number(backtest.max_drawdown).toFixed(1)}%` : chartText('noData')}</strong>
+            </div>
+            <div class="chart-metric-row">
+              <span>${escapeHtml(chartText('winRate'))}</span>
+              <strong>${backtest.win_rate !== undefined && backtest.win_rate !== null ? `${Number(backtest.win_rate).toFixed(0)}%` : chartText('noData')}</strong>
+            </div>
+            <div class="chart-metric-row">
+              <span>${escapeHtml(chartText('trades'))}</span>
+              <strong>${fmt(backtest.trades)}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
       ${_renderMetricsGrid(artifact.metrics)}
       ${_renderInsight(artifact)}
       ${_renderActionPlan(artifact)}
@@ -2794,9 +3252,9 @@ function renderIndicatorDashboard(artifact: any): string {
         <div class="indicator-card-grid">
           ${cards.map((c: any) => `
             <div class="indicator-card">
-              <div class="indicator-card-label">${escapeHtml(c.label || '')}</div>
+              <div class="indicator-card-label">${escapeHtml(roomLabel(c.label, c.label_zh))}</div>
               <div class="indicator-card-value ${_levelClass(c.level)}">${escapeHtml(String(c.value || ''))}</div>
-              <div class="indicator-card-state">${escapeHtml(c.state || '')}</div>
+              <div class="indicator-card-state">${escapeHtml(roomLabel(c.state, c.state_zh))}</div>
             </div>
           `).join('')}
         </div>
@@ -2861,35 +3319,80 @@ function renderNewsEvidencePanel(artifact: any): string {
 
 function renderStrategyRankingPanel(artifact: any): string {
   const visual = artifact.visual?.data ?? {};
+  const current = visual.current_strategy ?? {};
   const strategies = visual.strategies || [];
+  const multiFactorScore = visual.multi_factor_score;
   const maxScore = Math.max(1, ...strategies.map((s: any) => s.final_score || 0));
+  const signalCls = (current.signal || '').toLowerCase() === 'buy' ? 'buy' : (current.signal || '').toLowerCase() === 'sell' ? 'sell' : 'hold';
+  const isZh = uiLocale === 'zh';
+
+  const strategyNameZh = (name: string) => {
+    const map: Record<string, string> = { ma: '均线交叉', rsi: 'RSI 动量', momentum: '20日动量', auto: '自动选择' };
+    return isZh ? (current.name_zh || map[name] || name) : name;
+  };
+
+  const paramRows = (current.params || []).map((p: any) => `
+    <div class="strategy-param">
+      <span>${escapeHtml(p.label || '')}</span>
+      <strong>${escapeHtml(String(p.value ?? ''))}</strong>
+    </div>
+  `).join('');
+
+  const rankingRows = strategies.map((s: any) => {
+    const basePct = Math.round(((s.base_score || 0) / maxScore) * 100);
+    const finalPct = Math.round(((s.final_score || 0) / maxScore) * 100);
+    const adj = s.llm_adjustment || 0;
+    const isCurrent = s.name === current.name;
+    return `
+      <div class="strategy-row ${isCurrent ? 'current' : ''}">
+        <span class="strategy-name">${escapeHtml(strategyNameZh(s.name || ''))}${isCurrent ? ` <em>${isZh ? '当前' : 'current'}</em>` : ''}</span>
+        <div class="strategy-bar-track">
+          <div class="strategy-bar-fill" style="width:${finalPct}%"></div>
+          ${adj !== 0 ? `<div class="strategy-bar-adjustment" style="left:${Math.min(basePct, finalPct)}%;width:${Math.abs(finalPct - basePct)}%"></div>` : ''}
+        </div>
+        <span class="strategy-score">${escapeHtml(String(s.final_score || 0))}</span>
+      </div>
+      <div class="strategy-meta">${isZh ? '基础分' : 'Base'}: ${s.base_score || 0}${adj !== 0 ? ` · ${isZh ? 'LLM调整' : 'LLM'}: ${adj > 0 ? '+' : ''}${adj}` : ''}</div>
+    `;
+  }).join('');
+
   return `
-    <section class="advanced-room-panel">
-      ${_renderHero(artifact)}
-      <div class="room-visual">
-        <div class="room-visual-title">Strategy Ranking</div>
-        <div class="strategy-ranking-list">
-          ${strategies.map((s: any) => {
-            const basePct = Math.round(((s.base_score || 0) / maxScore) * 100);
-            const finalPct = Math.round(((s.final_score || 0) / maxScore) * 100);
-            const adj = s.llm_adjustment || 0;
-            return `
-              <div class="strategy-row">
-                <span class="strategy-name">${escapeHtml(s.name || '')}</span>
-                <div class="strategy-bar-track">
-                  <div class="strategy-bar-fill" style="width:${finalPct}%"></div>
-                  ${adj !== 0 ? `<div class="strategy-bar-adjustment" style="left:${Math.min(basePct, finalPct)}%;width:${Math.abs(finalPct - basePct)}%"></div>` : ''}
-                </div>
-                <span class="strategy-score">${escapeHtml(String(s.final_score || 0))}</span>
-              </div>
-              <div class="strategy-meta">Base: ${s.base_score || 0}${adj !== 0 ? ` · LLM: ${adj > 0 ? '+' : ''}${adj}` : ''}</div>
-            `;
-          }).join('')}
+    <section class="strategy-lab-room">
+      <!-- Current Strategy Card -->
+      <div class="strategy-current-card">
+        <div class="strategy-current-header">
+          <div>
+            <div class="strategy-current-label">${isZh ? '当前策略' : 'Current Strategy'}</div>
+            <div class="strategy-current-name">${escapeHtml(strategyNameZh(current.name || (isZh ? '未指定' : 'Unspecified')))}</div>
+          </div>
+          <span class="decision-badge ${signalCls}">${escapeHtml(current.signal || 'HOLD')}</span>
+        </div>
+        <div class="strategy-current-body">
+          <div class="strategy-current-score">
+            <span>${isZh ? '策略评分' : 'Strategy Score'}</span>
+            <strong>${escapeHtml(String(current.score ?? '-'))}</strong>
+          </div>
+          <div class="strategy-current-score">
+            <span>${isZh ? '多因子评分' : 'Multi-Factor Score'}</span>
+            <strong>${escapeHtml(String(multiFactorScore ?? '-'))}</strong>
+          </div>
+          <div class="strategy-current-params">
+            ${paramRows || `<div class="strategy-param"><span>${isZh ? '参数' : 'Params'}</span><strong>-</strong></div>`}
+          </div>
+        </div>
+        <div class="strategy-current-reasoning">
+          <div class="strategy-reasoning-title">${isZh ? '信号推理' : 'Signal Reasoning'}</div>
+          <div class="strategy-reasoning-text">${escapeHtml(current.reasoning || (isZh ? '暂无策略推理。' : 'No strategy reasoning available.'))}</div>
         </div>
       </div>
-      ${_renderMetricsGrid(artifact.metrics)}
-      ${_renderInsight(artifact)}
-      ${_renderActionPlan(artifact)}
+
+      <!-- Strategy Ranking -->
+      <div class="strategy-ranking-section">
+        <div class="strategy-section-title">${isZh ? '策略排名对比' : 'Strategy Ranking'}</div>
+        <div class="strategy-ranking-list">
+          ${rankingRows || `<div class="strategy-rank-empty">${isZh ? '暂无策略对比数据' : 'No strategy ranking data'}</div>`}
+        </div>
+      </div>
     </section>
   `;
 }
@@ -2897,84 +3400,518 @@ function renderStrategyRankingPanel(artifact: any): string {
 function renderMemoryPanel(artifact: any): string {
   const visual = artifact.visual?.data ?? {};
   const records = visual.records || [];
+  const knowledge = visual.knowledge_base || [];
+  const rankings = visual.rankings || {};
+  const stats = visual.stats || {};
+  const reflection = visual.reflection || {};
+  const hasRecords = records.length >= 2;
+  const isZh = uiLocale === 'zh';
+
+  const typeBadgeCls = (t: string) => {
+    if (t === 'classic') return 'type-classic';
+    if (t === 'llm') return 'type-llm';
+    if (t === 'rl') return 'type-rl';
+    return 'type-neutral';
+  };
+  const typeLabel = (t: string) => {
+    if (t === 'classic') return '经典';
+    if (t === 'llm') return 'LLM';
+    if (t === 'rl') return 'RL';
+    return t;
+  };
+  const strategyNameZh = (name: string) => {
+    const map: Record<string, string> = { ma: '均线交叉', rsi: 'RSI 动量', momentum: '20日动量', auto: '自动选择' };
+    return isZh ? (map[name] || name) : name;
+  };
+
+  const decisionLabel = (d: string) => {
+    const map: Record<string, string> = { buy: '买入', sell: '卖出', hold: '观望' };
+    return isZh ? (map[(d || '').toLowerCase()] || d) : d;
+  };
+
+  const sourceBadge = (s: string) => {
+    if (s === 'paper') return `<span class="source-badge source-paper">📄 ${isZh ? '文献' : 'Paper'}</span>`;
+    if (s === 'literature') return `<span class="source-badge source-lit">📚 ${isZh ? '论文' : 'Literature'}</span>`;
+    return `<span class="source-badge source-built">${isZh ? '内置' : 'Built-in'}</span>`;
+  };
+
+  const selected = visual.selected_strategy || {};
+  const selectedId = selected.id || '';
+
+  const knowledgeCards = knowledge.map((k: any) => {
+    const isSelected = selectedId && k.id === selectedId;
+    return `
+    <div class="memory-knowledge-card ${k.adopted ? 'adopted' : ''} ${isSelected ? 'recently-tested' : ''}">
+      <div class="memory-knowledge-header">
+        <span class="memory-knowledge-type ${typeBadgeCls(k.type)}">${escapeHtml(typeLabel(k.type))}</span>
+        ${k.adopted ? `<span class="memory-adopted-badge">${isZh ? '已采用' : 'Adopted'}</span>` : ''}
+        ${isSelected ? `<span class="memory-tested-badge">${isZh ? '最近实验' : 'Recently Tested'}</span>` : ''}
+        ${sourceBadge(k.source)}
+      </div>
+      <div class="memory-knowledge-name">${escapeHtml(isZh ? (k.name_zh || k.name) : k.name)}</div>
+      <div class="memory-knowledge-paper">
+        ${k.paper_url ? `<a href="${escapeHtml(k.paper_url)}" target="_blank" rel="noreferrer" class="memory-paper-link">${escapeHtml(k.paper || '')}</a>` : escapeHtml(k.paper || '')}
+      </div>
+      <div class="memory-knowledge-desc">${escapeHtml(isZh ? (k.description || '') : (k.description_en || k.description || ''))}</div>
+      <div class="memory-knowledge-tags">
+        ${(k.tags || []).map((t: string) => `<span class="memory-tag">${escapeHtml(t)}</span>`).join('')}
+      </div>
+    </div>
+  `}).join('');
+
+  const runArchiveRows = records.slice().reverse().map((r: any) => `
+    <tr>
+      <td>${escapeHtml(r.date || '')}</td>
+      <td><strong>${escapeHtml(r.ticker || '')}</strong></td>
+      <td>${escapeHtml(strategyNameZh(r.strategy || ''))}</td>
+      <td><span class="decision-badge ${(r.decision || '').toLowerCase() === 'buy' ? 'buy' : (r.decision || '').toLowerCase() === 'sell' ? 'sell' : 'hold'}">${escapeHtml(decisionLabel(r.decision || ''))}</span></td>
+      <td>${escapeHtml(r.return !== undefined ? String(r.return) : 'N/A')}</td>
+      <td>${escapeHtml(r.sharpe !== undefined ? String(r.sharpe) : 'N/A')}</td>
+    </tr>
+  `).join('');
+
+  const byReturnRows = (rankings.by_return || []).map((r: any, i: number) => `
+    <div class="rank-row">
+      <span class="rank-medal">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i + 1}`}</span>
+      <span class="rank-ticker">${escapeHtml(r.ticker || '')}</span>
+      <span class="rank-strategy">${escapeHtml(strategyNameZh(r.strategy || ''))}</span>
+      <span class="rank-value">${escapeHtml(r.return || 'N/A')}</span>
+    </div>
+  `).join('');
+
+  const bySharpeRows = (rankings.by_sharpe || []).map((r: any, i: number) => `
+    <div class="rank-row">
+      <span class="rank-medal">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i + 1}`}</span>
+      <span class="rank-ticker">${escapeHtml(r.ticker || '')}</span>
+      <span class="rank-strategy">${escapeHtml(strategyNameZh(r.strategy || ''))}</span>
+      <span class="rank-value">${escapeHtml(r.sharpe || 'N/A')}</span>
+    </div>
+  `).join('');
+
+  const recommendationRows = (reflection.recommendations || []).map((rec: any) => {
+    const k = knowledge.find((x: any) => x.id === rec.id) || {};
+    const reason = isZh ? (rec.reason || '') : (rec.reason_en || rec.reason || '');
+    return `
+      <div class="memory-ref-rec">
+        <span class="memory-ref-rec-name">${escapeHtml(isZh ? (k.name_zh || rec.id) : rec.id)}</span>
+        <span class="memory-ref-rec-reason">${escapeHtml(reason)}</span>
+        <span class="memory-ref-rec-paper">${escapeHtml(rec.paper || '')}</span>
+      </div>
+    `;
+  }).join('');
+
+  const reflectionText = isZh ? (reflection.reflection || '') : (reflection.reflection_en || reflection.reflection || '');
+  const reflectionBlock = reflectionText ? `
+    <div class="memory-reflection">
+      <div class="memory-section-title">${isZh ? '历史记忆反思' : 'Historical Reflection'} <span class="memory-section-sub">RAG Reflection</span></div>
+      <div class="memory-reflection-text">${escapeHtml(reflectionText)}</div>
+      ${reflection.paper_refs ? `<div class="memory-ref-refs">${isZh ? '参考论文：' : 'References: '}${(reflection.paper_refs || []).map((p: string) => `<span>${escapeHtml(p)}</span>`).join('')}</div>` : ''}
+      ${recommendationRows ? `<div class="memory-ref-recs"><div class="memory-ref-recs-title">${isZh ? '文献策略推荐' : 'Literature Recommendations'}</div>${recommendationRows}</div>` : ''}
+    </div>
+  ` : '';
+
   return `
-    <section class="advanced-room-panel">
-      ${_renderHero(artifact)}
-      <div class="room-visual">
-        <div class="room-visual-title">Related Records</div>
-        <div class="timeline-list">
-          ${records.map((r: any) => `
-            <div class="timeline-item">
-              <span class="timeline-date">${escapeHtml(r.date || '')}</span>
-              <div class="timeline-body">
-                <strong>${escapeHtml(r.ticker || '')}</strong> · ${escapeHtml(r.strategy || '')} · <span class="timeline-decision ${(r.decision || '').toLowerCase() === 'buy' ? 'positive' : (r.decision || '').toLowerCase() === 'sell' ? 'danger' : 'neutral'}">${escapeHtml(r.decision || '')}</span>
-                ${r.return ? `<span class="timeline-return">${escapeHtml(r.return)}</span>` : ''}
-              </div>
-            </div>
-          `).join('')}
+    <section class="memory-archive-room">
+      <!-- Top stats bar -->
+      <div class="memory-stats-bar">
+        <div class="memory-stat">
+          <span class="memory-stat-label">${isZh ? '运行记录' : 'Run Records'}</span>
+          <span class="memory-stat-value">${stats.total_runs || records.length || 0}</span>
+        </div>
+        <div class="memory-stat">
+          <span class="memory-stat-label">${isZh ? '策略知识' : 'Knowledge'}</span>
+          <span class="memory-stat-value">${knowledge.length}</span>
+        </div>
+        <div class="memory-stat">
+          <span class="memory-stat-label">${isZh ? '最佳收益' : 'Best Return'}</span>
+          <span class="memory-stat-value">${escapeHtml(stats.best_return || 'N/A')}</span>
+        </div>
+        <div class="memory-stat">
+          <span class="memory-stat-label">${isZh ? '最佳夏普' : 'Best Sharpe'}</span>
+          <span class="memory-stat-value">${escapeHtml(stats.best_sharpe || 'N/A')}</span>
         </div>
       </div>
-      ${_renderMetricsGrid(artifact.metrics)}
-      ${_renderInsight(artifact)}
-      ${_renderActionPlan(artifact)}
+
+      ${reflectionBlock}
+
+      <!-- Two-column layout -->
+      <div class="memory-archive-grid">
+        <!-- Left: Knowledge Base -->
+        <div class="memory-knowledge-section">
+          <div class="memory-section-title">${isZh ? '策略知识库' : 'Knowledge Base'} <span class="memory-section-sub">${isZh ? '基于真实论文' : 'Paper-Based'}</span></div>
+          <div class="memory-knowledge-grid">
+            ${knowledgeCards}
+          </div>
+        </div>
+
+        <!-- Right: Run Archive -->
+        <div class="memory-run-section">
+          <div class="memory-section-title">${isZh ? '运行档案' : 'Run Archive'} <span class="memory-section-sub">${isZh ? '历史回测记录' : 'Backtest Records'}</span></div>
+          ${!hasRecords ? `
+            <div class="memory-empty-state">
+              <div class="memory-empty-icon">📂</div>
+              <div class="memory-empty-title">${isZh ? '暂无历史策略记录' : 'No Historical Records'}</div>
+              <div class="memory-empty-desc">${isZh ? '运行分析后将自动积累策略记忆。' : 'Run analysis to accumulate strategy memory.'}</div>
+            </div>
+          ` : `
+            <!-- Rankings -->
+            <div class="memory-rankings">
+              <div class="memory-rank-block">
+                <div class="memory-rank-title">${isZh ? '收益率排名' : 'Return Ranking'}</div>
+                ${byReturnRows || '<div class="memory-rank-empty">暂无数据</div>'}
+              </div>
+              <div class="memory-rank-block">
+                <div class="memory-rank-title">${isZh ? '夏普排名' : 'Sharpe Ranking'}</div>
+                ${bySharpeRows || '<div class="memory-rank-empty">暂无数据</div>'}
+              </div>
+            </div>
+            <!-- Run table -->
+            <div class="memory-run-table-wrap">
+              <table class="memory-run-table">
+                <thead>
+                  <tr>
+                    <th>${isZh ? '日期' : 'Date'}</th>
+                    <th>${isZh ? '标的' : 'Ticker'}</th>
+                    <th>${isZh ? '策略' : 'Strategy'}</th>
+                    <th>${isZh ? '信号' : 'Signal'}</th>
+                    <th>${isZh ? '收益' : 'Return'}</th>
+                    <th>${isZh ? '夏普' : 'Sharpe'}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${runArchiveRows}
+                </tbody>
+              </table>
+            </div>
+          `}
+        </div>
+      </div>
     </section>
   `;
 }
 
+const RISK_ROOM_TEXT: Record<string, { en: string; zh: string }> = {
+  gateTitle: { en: 'Risk Gate', zh: '风险闸门' },
+  riskScore: { en: 'Risk Score', zh: '风险分数' },
+  positionLimit: { en: 'Position Limit', zh: '仓位上限' },
+  maxAllowed: { en: 'Max allowed position', zh: '风险允许仓位' },
+  factorBreakdown: { en: 'Risk Source Breakdown', zh: '风险来源拆解' },
+  current: { en: 'Current', zh: '当前值' },
+  threshold: { en: 'Threshold', zh: '阈值' },
+  effect: { en: 'Effect', zh: '影响' },
+  reviewConditions: { en: 'Review Conditions', zh: '复检条件' },
+  decisionImpact: { en: 'Decision Impact', zh: '决策影响' },
+  nextCheck: { en: 'Next Check', zh: '下一步复检' },
+  monitor: { en: 'Monitor', zh: '监控重点' },
+  noData: { en: 'No data', zh: '暂无数据' },
+  pass: { en: 'Pass', zh: '通过' },
+  warn: { en: 'Watch', zh: '警戒' },
+  blocked: { en: 'Blocked', zh: '阻断' },
+  wait: { en: 'Waiting', zh: '等待' },
+  normal: { en: 'Normal', zh: '正常' },
+  limitPosition: { en: 'Limit final position', zh: '限制最终仓位' },
+  limitAggressiveBuy: { en: 'Limit aggressive entries', zh: '限制激进买入' },
+  increaseReview: { en: 'Increase review frequency', zh: '提高复检频率' },
+};
+
+const RISK_VALUE_TRANSLATIONS: Record<string, { en: string; zh: string }> = {
+  low: { en: 'Low', zh: '低' },
+  medium: { en: 'Medium', zh: '中' },
+  high: { en: 'High', zh: '高' },
+  active: { en: 'Active', zh: '生效' },
+  inactive: { en: 'Inactive', zh: '未触发' },
+  pass: RISK_ROOM_TEXT.pass,
+  warn: RISK_ROOM_TEXT.warn,
+  blocked: RISK_ROOM_TEXT.blocked,
+  wait: RISK_ROOM_TEXT.wait,
+  '最大回撤': { en: 'Max Drawdown', zh: '最大回撤' },
+  '波动率分位': { en: 'Volatility Percentile', zh: '波动率分位' },
+  '仓位上限': RISK_ROOM_TEXT.positionLimit,
+  '正常': RISK_ROOM_TEXT.normal,
+  '限制仓位': { en: 'Position Limited', zh: '限制仓位' },
+  '限制最终仓位': RISK_ROOM_TEXT.limitPosition,
+  '提高复检频率': RISK_ROOM_TEXT.increaseReview,
+};
+
+function riskText(key: keyof typeof RISK_ROOM_TEXT): string {
+  return RISK_ROOM_TEXT[key][uiLocale];
+}
+
+function riskValue(value: unknown): string {
+  const text = String(value ?? '');
+  return RISK_VALUE_TRANSLATIONS[text]?.[uiLocale] ?? text;
+}
+
+function riskSentence(value: unknown): string {
+  let text = String(value ?? '');
+  if (uiLocale === 'zh') {
+    return text
+      .replace(/\bRisk Score\b/g, '风险分数')
+      .replace(/\bMax Drawdown\b/g, '最大回撤')
+      .replace(/\bVolatility Percentile\b/g, '波动率分位');
+  }
+  const replacements: Array<[RegExp, string]> = [
+    [/风险分数由最大回撤、波动率分位数和市场状态共同决定。/g, 'Risk score is jointly determined by maximum drawdown, volatility percentile, and market regime.'],
+    [/风险门控限制激进买入，并降低建议仓位。/g, 'The risk gate limits aggressive entries and lowers the suggested position.'],
+    [/风险水平较低，允许正常仓位操作。/g, 'Risk level is low enough to allow normal position sizing.'],
+    [/等待风险分数下降到 35 以下。/g, 'Wait until the risk score falls below 35.'],
+    [/风险可控，继续监控。/g, 'Risk is controlled; continue monitoring.'],
+    [/风险分数 < 35/g, 'Risk Score < 35'],
+    [/最大回撤 < 15%/g, 'Max Drawdown < 15%'],
+    [/波动率分位回落/g, 'Volatility Percentile cooling'],
+  ];
+  for (const [pattern, replacement] of replacements) {
+    text = text.replace(pattern, replacement);
+  }
+  return text;
+}
+
+function riskTone(status: string): string {
+  if (status === 'blocked' || status === 'danger') return 'danger';
+  if (status === 'warn' || status === 'warning' || status === 'wait' || status === 'limited') return 'warning';
+  if (status === 'pass' || status === 'positive') return 'positive';
+  return 'neutral';
+}
+
 function renderRiskGaugePanel(artifact: any): string {
   const visual = artifact.visual?.data ?? {};
-  const score = visual.risk_score || 0;
+  const score = Number(visual.risk_score ?? 0);
   const level = visual.risk_level || 'medium';
+  const gateStatus = visual.gate_status || (score >= 70 ? 'blocked' : score >= 40 ? 'limited' : 'pass');
+  const gateLevel = visual.gate_level || riskTone(gateStatus);
+  const gateLabel = uiLocale === 'zh'
+    ? (visual.gate_label_zh || (gateStatus === 'blocked' ? '禁止进场' : gateStatus === 'limited' ? '限制仓位' : '可放行'))
+    : (visual.gate_label_en || (gateStatus === 'blocked' ? 'Entry Blocked' : gateStatus === 'limited' ? 'Position Limited' : 'Cleared'));
+  const positionLimit = visual.position_limit_pct ?? 0;
   const sources = visual.sources || [];
+  const reviewConditions = visual.review_conditions || [];
+  const formatValue = (value: any, unit = '') => value === undefined || value === null || value === ''
+    ? riskText('noData')
+    : `${escapeHtml(String(value))}${unit ? escapeHtml(unit) : ''}`;
   return `
-    <section class="advanced-room-panel">
-      ${_renderHero(artifact)}
+    <section class="advanced-room-panel risk-gate-room">
       <div class="room-visual">
-        <div class="room-visual-title">Risk Gauge · ${escapeHtml(String(score))}/100 · ${escapeHtml(level)}</div>
+        <div class="room-visual-title">${escapeHtml(riskText('gateTitle'))}</div>
+        <div class="decision-hero">
+          <span class="decision-badge ${escapeHtml(riskTone(gateLevel))}" style="font-size:16px;padding:6px 18px;">${escapeHtml(gateLabel)}</span>
+          <div class="decision-kv-row"><span class="decision-kv-label">${escapeHtml(riskText('riskScore'))}</span><span class="decision-kv-value">${escapeHtml(String(score))}/100 · ${escapeHtml(riskValue(level))}</span></div>
+          <div class="decision-kv-row"><span class="decision-kv-label">${escapeHtml(riskText('positionLimit'))}</span><span class="decision-kv-value">${escapeHtml(String(positionLimit))}%</span></div>
+        </div>
         <div class="risk-gauge-bar">
           <div class="risk-gauge-track">
             <div class="risk-gauge-fill ${score >= 70 ? 'danger' : score >= 40 ? 'warning' : 'neutral'}" style="width:${Math.min(100, score)}%"></div>
           </div>
           <div class="risk-gauge-labels"><span>0</span><span>35</span><span>70</span><span>100</span></div>
         </div>
+      </div>
+
+      <div class="chart-analysis-grid">
+        <div class="chart-analysis-card">
+          <div class="chart-card-title">${escapeHtml(riskText('maxAllowed'))}</div>
+          <div class="chart-card-body">
+            <div class="chart-metric-row">
+              <span>${escapeHtml(riskText('positionLimit'))}</span>
+              <strong>${escapeHtml(String(positionLimit))}%</strong>
+            </div>
+            <div class="chart-card-reasoning">${escapeHtml(riskSentence(artifact.impact_on_decision || ''))}</div>
+          </div>
+        </div>
+
+        <div class="chart-analysis-card">
+          <div class="chart-card-title">${escapeHtml(riskText('reviewConditions'))}</div>
+          <div class="chart-card-body">
+            ${reviewConditions.length ? reviewConditions.map((c: any) => `
+              <div class="chart-metric-row">
+                <span>${escapeHtml(uiLocale === 'zh' ? (c.label_zh || c.label || '') : (c.label || c.label_zh || ''))}</span>
+                <span class="decision-badge ${escapeHtml(riskTone(c.status || 'wait'))}">${escapeHtml(riskValue(c.status || 'wait'))}</span>
+              </div>
+            `).join('') : `<div class="chart-card-reasoning">${escapeHtml(riskText('noData'))}</div>`}
+          </div>
+        </div>
+      </div>
+
+      <div class="dashboard-section">
+        <div class="dashboard-section-title">${escapeHtml(riskText('factorBreakdown'))}</div>
         <div class="risk-sources">
           ${sources.map((s: any) => `
             <div class="risk-source-row">
-              <span class="risk-source-label">${escapeHtml(s.label || '')}</span>
-              <span class="risk-source-value">${escapeHtml(String(s.value || ''))}${escapeHtml(s.unit || '')}</span>
-              <span class="risk-source-impact ${s.impact === 'high' ? 'danger' : s.impact === 'medium' ? 'warning' : 'neutral'}">${escapeHtml(s.impact || '')}</span>
+              <span class="risk-source-label">${escapeHtml(uiLocale === 'zh' ? (s.label_zh || riskValue(s.label)) : (s.label || riskValue(s.label_zh)))}</span>
+              <span class="risk-source-value">${formatValue(s.value, s.unit)}</span>
+              <span class="risk-source-value">${escapeHtml(s.threshold || '')}</span>
+              <span class="risk-source-impact ${escapeHtml(riskTone(s.status || s.impact || 'neutral'))}">${escapeHtml(riskValue(s.impact || s.status || 'normal'))}</span>
             </div>
-          `).join('')}
+          `).join('') || `<div class="room-visual-placeholder">${escapeHtml(riskText('noData'))}</div>`}
         </div>
       </div>
-      ${_renderMetricsGrid(artifact.metrics)}
-      ${_renderInsight(artifact)}
-      ${_renderActionPlan(artifact)}
+
+      ${artifact.insight ? `<div class="room-insight">${escapeHtml(riskSentence(artifact.insight))}</div>` : ''}
+      <div class="room-action-plan">
+        ${artifact.impact_on_decision ? `<div class="room-action-card"><div class="room-action-title">${escapeHtml(riskText('decisionImpact'))}</div><div class="room-action-body">${escapeHtml(riskSentence(artifact.impact_on_decision))}</div></div>` : ''}
+        ${artifact.next_action ? `<div class="room-action-card"><div class="room-action-title">${escapeHtml(riskText('nextCheck'))}</div><div class="room-action-body">${escapeHtml(riskSentence(artifact.next_action))}</div></div>` : ''}
+        ${artifact.monitor_focus?.length ? `<div class="room-action-card"><div class="room-action-title">${escapeHtml(riskText('monitor'))}</div><div class="room-action-body"><ul>${artifact.monitor_focus.map((f: string) => `<li>${escapeHtml(riskSentence(f))}</li>`).join('')}</ul></div></div>` : ''}
+      </div>
     </section>
   `;
+}
+
+const BACKTEST_ROOM_TEXT: Record<string, { en: string; zh: string }> = {
+  validation: { en: 'Validation Result', zh: '验证结论' },
+  pass: { en: 'Pass', zh: '通过' },
+  caution: { en: 'Caution', zh: '谨慎通过' },
+  fail: { en: 'Fail', zh: '不通过' },
+  equityCurve: { en: 'Equity Curve', zh: '收益曲线' },
+  noCurve: { en: 'No real curve data; showing metrics only', zh: '暂无真实曲线数据，仅展示指标摘要' },
+  strategy: { en: 'Strategy', zh: '策略' },
+  benchmark: { en: 'Benchmark', zh: '基准' },
+  keyMetrics: { en: 'Key Backtest Metrics', zh: '关键回测指标' },
+  totalReturn: { en: 'Total Return', zh: '总收益' },
+  sharpe: { en: 'Sharpe Ratio', zh: '夏普比率' },
+  maxDrawdown: { en: 'Max Drawdown', zh: '最大回撤' },
+  winRate: { en: 'Win Rate', zh: '胜率' },
+  trades: { en: 'Trades', zh: '交易次数' },
+  riskHandoff: { en: 'Risk Handoff', zh: '风险交接' },
+  retestPlan: { en: 'Retest Plan', zh: '复测建议' },
+  decisionImpact: { en: 'Decision Impact', zh: '决策影响' },
+  nextAction: { en: 'Next Action', zh: '下一步' },
+  monitor: { en: 'Monitor', zh: '监控重点' },
+  noData: { en: 'No data', zh: '暂无数据' },
+  todo: { en: 'To do', zh: '待复测' },
+  warn: { en: 'Watch', zh: '警戒' },
+};
+
+function backtestText(key: keyof typeof BACKTEST_ROOM_TEXT): string {
+  return BACKTEST_ROOM_TEXT[key][uiLocale];
+}
+
+function backtestStatus(status: string): string {
+  if (status === 'pass') return backtestText('pass');
+  if (status === 'caution') return backtestText('caution');
+  if (status === 'fail') return backtestText('fail');
+  if (status === 'warn') return backtestText('warn');
+  if (status === 'todo') return backtestText('todo');
+  return status;
+}
+
+function backtestTone(status: string): string {
+  if (status === 'pass') return 'positive';
+  if (status === 'fail') return 'danger';
+  if (status === 'caution' || status === 'warn' || status === 'todo') return 'warning';
+  return 'neutral';
+}
+
+function backtestSentence(value: unknown): string {
+  let text = String(value ?? '');
+  if (uiLocale === 'zh') {
+    return text
+      .replace(/\bSharpe\b/g, '夏普')
+      .replace(/\bMax Drawdown\b/g, '最大回撤')
+      .replace(/\bWin Rate\b/g, '胜率');
+  }
+  const insight = text.match(/^回测总收益\s+([^，]+)，夏普\s+([^，]+)，最大回撤\s+([^。]+)。(.+)$/);
+  if (insight) {
+    const [, ret, sharpe, drawdown, tail] = insight;
+    const tailEn = tail.includes('表现良好')
+      ? 'Performance is strong.'
+      : tail.includes('收益为正')
+        ? 'Return is positive, but Sharpe is modest.'
+        : 'Return is negative; treat the strategy cautiously.';
+    return `Backtest total return is ${ret}; Sharpe is ${sharpe}; max drawdown is ${drawdown}. ${tailEn}`;
+  }
+  const replacements: Array<[RegExp, string]> = [
+    [/回测收益为正，但 Sharpe 一般且最大回撤较大，因此只能形成有限正向支持。/g, 'Backtest return is positive, but Sharpe is modest and drawdown is elevated, so support is limited.'],
+    [/回测表现良好，支持当前策略方向。/g, 'Backtest performance supports the current strategy direction.'],
+    [/回测收益为负，不支持当前策略方向。/g, 'Backtest return is negative and does not support the current strategy direction.'],
+    [/优化风险控制后重新回测。/g, 'Improve risk controls, then rerun the backtest.'],
+    [/继续监控策略表现。/g, 'Continue monitoring strategy performance.'],
+    [/夏普 > 1\.0/g, 'Sharpe > 1.0'],
+    [/最大回撤 < 15%/g, 'Max Drawdown < 15%'],
+    [/胜率稳定性/g, 'Win Rate stability'],
+  ];
+  for (const [pattern, replacement] of replacements) {
+    text = text.replace(pattern, replacement);
+  }
+  return text;
 }
 
 function renderBacktestCurvePanel(artifact: any): string {
   const visual = artifact.visual?.data ?? {};
   const strategyCurve = visual.strategy_curve || [];
   const benchmarkCurve = visual.benchmark_curve || [];
+  const validation = visual.validation || {};
+  const riskHandoff = visual.risk_handoff || [];
+  const retestPlan = visual.retest_plan || [];
   const len = Math.max(strategyCurve.length, benchmarkCurve.length);
+  const status = validation.status || 'caution';
+  const statusLabel = uiLocale === 'zh'
+    ? (validation.status_zh || backtestStatus(status))
+    : (validation.status_en || backtestStatus(status));
+  const metricValue = (value: any, unit = '') => value === undefined || value === null || value === ''
+    ? backtestText('noData')
+    : `${value}${unit}`;
   return `
-    <section class="advanced-room-panel">
-      ${_renderHero(artifact)}
+    <section class="advanced-room-panel backtest-validation-room">
       <div class="room-visual">
-        <div class="room-visual-title">Equity Curve</div>
+        <div class="room-visual-title">${escapeHtml(backtestText('validation'))}</div>
+        <div class="decision-hero">
+          <span class="decision-badge ${escapeHtml(backtestTone(status))}" style="font-size:16px;padding:6px 18px;">${escapeHtml(statusLabel)}</span>
+          <div class="decision-kv-row"><span class="decision-kv-label">${escapeHtml(backtestText('totalReturn'))}</span><span class="decision-kv-value">${escapeHtml(metricValue(validation.total_return, '%'))}</span></div>
+          <div class="decision-kv-row"><span class="decision-kv-label">${escapeHtml(backtestText('sharpe'))}</span><span class="decision-kv-value">${escapeHtml(metricValue(validation.sharpe))}</span></div>
+          <div class="decision-kv-row"><span class="decision-kv-label">${escapeHtml(backtestText('maxDrawdown'))}</span><span class="decision-kv-value">${escapeHtml(metricValue(validation.max_drawdown, '%'))}</span></div>
+        </div>
+      </div>
+
+      <div class="room-visual">
+        <div class="room-visual-title">${escapeHtml(backtestText('equityCurve'))}</div>
         ${len > 1
           ? `<svg class="mini-chart" viewBox="0 0 ${len - 1} 100" preserveAspectRatio="none">
               ${benchmarkCurve.length > 1 ? `<polyline fill="none" stroke="rgba(148,163,184,.5)" stroke-width="1" points="${benchmarkCurve.map((v: number, i: number) => `${i},${100 - (v - 1) * 50}`).join(' ')}"/>` : ''}
               <polyline fill="none" stroke="currentColor" stroke-width="1.5" points="${strategyCurve.map((v: number, i: number) => `${i},${100 - (v - 1) * 50}`).join(' ')}"/>
             </svg>`
-          : '<div class="room-visual-placeholder">Curve data unavailable</div>'}
-        <div class="curve-legend"><span class="legend-strategy">Strategy</span><span class="legend-benchmark">Benchmark</span></div>
+          : `<div class="room-visual-placeholder">${escapeHtml(backtestText('noCurve'))}</div>`}
+        <div class="curve-legend"><span class="legend-strategy">${escapeHtml(backtestText('strategy'))}</span><span class="legend-benchmark">${escapeHtml(backtestText('benchmark'))}</span></div>
       </div>
-      ${_renderMetricsGrid(artifact.metrics)}
-      ${_renderInsight(artifact)}
-      ${_renderActionPlan(artifact)}
+
+      <div class="chart-analysis-grid">
+        <div class="chart-analysis-card">
+          <div class="chart-card-title">${escapeHtml(backtestText('keyMetrics'))}</div>
+          <div class="chart-card-body">
+            <div class="chart-metric-row"><span>${escapeHtml(backtestText('totalReturn'))}</span><strong>${escapeHtml(metricValue(validation.total_return, '%'))}</strong></div>
+            <div class="chart-metric-row"><span>${escapeHtml(backtestText('sharpe'))}</span><strong>${escapeHtml(metricValue(validation.sharpe))}</strong></div>
+            <div class="chart-metric-row"><span>${escapeHtml(backtestText('maxDrawdown'))}</span><strong>${escapeHtml(metricValue(validation.max_drawdown, '%'))}</strong></div>
+            <div class="chart-metric-row"><span>${escapeHtml(backtestText('winRate'))}</span><strong>${escapeHtml(metricValue(validation.win_rate, '%'))}</strong></div>
+            <div class="chart-metric-row"><span>${escapeHtml(backtestText('trades'))}</span><strong>${escapeHtml(metricValue(validation.trades))}</strong></div>
+          </div>
+        </div>
+        <div class="chart-analysis-card">
+          <div class="chart-card-title">${escapeHtml(backtestText('riskHandoff'))}</div>
+          <div class="chart-card-body">
+            ${riskHandoff.length ? riskHandoff.map((item: any) => `
+              <div class="chart-metric-row">
+                <span>${escapeHtml(uiLocale === 'zh' ? (item.label_zh || item.label || '') : (item.label || item.label_zh || ''))}</span>
+                <span class="decision-badge ${escapeHtml(backtestTone(item.status || 'warn'))}">${escapeHtml(metricValue(item.value, item.unit || ''))}</span>
+              </div>
+            `).join('') : `<div class="chart-card-reasoning">${escapeHtml(backtestText('noData'))}</div>`}
+          </div>
+        </div>
+        <div class="chart-analysis-card">
+          <div class="chart-card-title">${escapeHtml(backtestText('retestPlan'))}</div>
+          <div class="chart-card-body">
+            ${retestPlan.length ? retestPlan.map((item: any) => `
+              <div class="chart-metric-row">
+                <span>${escapeHtml(uiLocale === 'zh' ? (item.label_zh || item.label || '') : (item.label || item.label_zh || ''))}</span>
+                <span class="decision-badge ${escapeHtml(backtestTone(item.status || 'todo'))}">${escapeHtml(backtestStatus(item.status || 'todo'))}</span>
+              </div>
+            `).join('') : `<div class="chart-card-reasoning">${escapeHtml(backtestText('noData'))}</div>`}
+          </div>
+        </div>
+      </div>
+
+      ${artifact.insight ? `<div class="room-insight">${escapeHtml(backtestSentence(artifact.insight))}</div>` : ''}
+      <div class="room-action-plan">
+        ${artifact.impact_on_decision ? `<div class="room-action-card"><div class="room-action-title">${escapeHtml(backtestText('decisionImpact'))}</div><div class="room-action-body">${escapeHtml(backtestSentence(artifact.impact_on_decision))}</div></div>` : ''}
+        ${artifact.next_action ? `<div class="room-action-card"><div class="room-action-title">${escapeHtml(backtestText('nextAction'))}</div><div class="room-action-body">${escapeHtml(backtestSentence(artifact.next_action))}</div></div>` : ''}
+        ${artifact.monitor_focus?.length ? `<div class="room-action-card"><div class="room-action-title">${escapeHtml(backtestText('monitor'))}</div><div class="room-action-body"><ul>${artifact.monitor_focus.map((f: string) => `<li>${escapeHtml(backtestSentence(f))}</li>`).join('')}</ul></div></div>` : ''}
+      </div>
     </section>
   `;
 }
@@ -2987,6 +3924,9 @@ function renderDecisionDashboard(artifact: any): string {
   const triggers = details.trigger_conditions ?? [];
   const plan = details.next_plan ?? [];
   const conflicts = details.vote_conflicts ?? artifact.visual?.data?.vote_conflicts ?? [];
+  const inputSummary = details.input_summary ?? artifact.visual?.data?.input_summary ?? {};
+  const finalStrategy = details.final_strategy ?? artifact.visual?.data?.final_strategy ?? {};
+  const modeReason = details.mode_reason ?? artifact.visual?.data?.mode_reason ?? {};
 
   const decision = (panel.decision || 'hold').toLowerCase();
   const decisionMode = panel.decision_mode || '';
@@ -2995,7 +3935,51 @@ function renderDecisionDashboard(artifact: any): string {
   const positionPct = panel.position_pct ?? 35;
 
   const decisionBadgeCls = decision === 'buy' ? 'positive' : decision === 'sell' ? 'danger' : 'neutral';
-  const decisionTitle = decision.toUpperCase() + (decisionMode ? ' · ' + decisionMode.replace(/_/g, ' ') : '');
+  const modeLabelObj: Record<string, { en: string; zh: string }> = {
+    proceed: { en: 'Proceed', zh: '执行' },
+    proceed_with_caution: { en: 'Caution', zh: '谨慎' },
+    wait_for_confirmation: { en: 'Wait', zh: '等待确认' },
+    risk_off: { en: 'Risk Off', zh: '风险规避' },
+    watchlist: { en: 'Watch', zh: '观察' },
+  };
+  const modeDisplay = roomLocalized(modeLabelObj[decisionMode] ?? { en: decisionMode.replace(/_/g, ' '), zh: decisionMode.replace(/_/g, ' ') });
+  const decisionLabelText = localizeChartValue(decision.toUpperCase());
+  const decisionTitle = decisionLabelText + (modeDisplay ? ' · ' + modeDisplay : '');
+
+  const inputRows = Object.entries(inputSummary).map(([key, item]: [string, any]) => {
+    const roomLabelText = roomLocalized(item.room_label ?? item.room ?? key);
+    let valueText = '';
+    if (key === 'strategy') {
+      const sName = uiLocale === 'zh' ? (item.strategy_zh || item.strategy || '') : (item.strategy || '');
+      valueText = `${sName} · ${localizeChartValue((item.signal || 'HOLD').toUpperCase())} · ${chartText('score')} ${item.score ?? 50}`;
+    } else if (key === 'risk') {
+      const gate = roomLocalized(item.gate_label ?? { en: item.gate_status, zh: item.gate_status });
+      valueText = `${gate} · ${chartText('position')} ${item.position_limit_pct ?? 0}% · ${chartText('riskScore')} ${item.risk_score ?? 0}`;
+    } else if (key === 'backtest') {
+      const validation = roomLocalized(item.validation_label ?? { en: item.validation, zh: item.validation });
+      valueText = `${validation} · ${chartText('totalReturn')} ${item.total_return_pct ?? 0}% · ${chartText('sharpe')} ${item.sharpe ?? 0}`;
+    } else if (key === 'market') {
+      const sentiment = uiLocale === 'zh' ? (item.news_sentiment_zh || item.news_sentiment || 'N/A') : (item.news_sentiment || 'N/A');
+      valueText = `${item.ticker || ''} · ${chartText('news')} ${sentiment} · ${chartText('score')} ${item.news_score ?? 50}`;
+    } else if (key === 'indicator') {
+      const trend = roomLocalized(item.trend ?? { en: item.trend, zh: item.trend });
+      const macdSignal = uiLocale === 'zh' ? (item.macd_signal_zh || item.macd_signal || '') : (item.macd_signal || '');
+      valueText = `${trend} · RSI ${roomLocalized(item.rsi_state ?? { en: item.rsi_state, zh: item.rsi_state })} · ${chartText('macdSignal')} ${macdSignal} · ${chartText('return20d')} ${item.return_20d_pct ?? 0}%`;
+    } else {
+      valueText = String(item.value ?? item.status ?? JSON.stringify(item));
+    }
+    return { room: roomLabelText, value: valueText };
+  });
+
+  const priorityLabel = (p: string) => {
+    const map: Record<string, { en: string; zh: string }> = {
+      high: { en: 'High', zh: '高' },
+      medium: { en: 'Medium', zh: '中' },
+      low: { en: 'Low', zh: '低' },
+    };
+    return roomLocalized(map[p] ?? { en: p, zh: p });
+  };
+  const triggerStatusLabel = (s: string) => s === 'met' ? chartText('triggerStatusMet') : chartText('triggerStatusNotMet');
 
   return `
     <section class="advanced-room-panel">
@@ -3003,21 +3987,58 @@ function renderDecisionDashboard(artifact: any): string {
       <div class="room-visual">
         <div class="decision-hero">
           <span class="decision-badge ${decisionBadgeCls}" style="font-size:16px;padding:6px 18px;">${escapeHtml(decisionTitle)}</span>
-          <div class="decision-kv-row"><span class="decision-kv-label">Score</span><span class="decision-kv-value">${escapeHtml(String(decisionScore))}/100</span></div>
-          <div class="decision-kv-row"><span class="decision-kv-label">Confidence</span><span class="decision-kv-value">${escapeHtml(String(Math.round(confidence * 100)))}%</span></div>
-          <div class="decision-kv-row"><span class="decision-kv-label">Position</span><span class="decision-kv-value">${escapeHtml(String(positionPct))}%</span></div>
+          <div class="decision-kv-row"><span class="decision-kv-label">${escapeHtml(chartText('score'))}</span><span class="decision-kv-value">${escapeHtml(String(decisionScore))}/100</span></div>
+          <div class="decision-kv-row"><span class="decision-kv-label">${escapeHtml(chartText('confidence'))}</span><span class="decision-kv-value">${escapeHtml(String(Math.round(confidence * 100)))}%</span></div>
+          <div class="decision-kv-row"><span class="decision-kv-label">${escapeHtml(chartText('position'))}</span><span class="decision-kv-value">${escapeHtml(String(positionPct))}%</span></div>
         </div>
+        ${Object.keys(inputSummary).length > 0 ? `
+          <div class="dashboard-section">
+            <div class="dashboard-section-title">${escapeHtml(chartText('inputSummary'))}</div>
+            <div class="input-summary-list">
+              ${inputRows.map((row: any) => `
+                <div class="input-summary-row">
+                  <span class="input-summary-room">${escapeHtml(row.room)}</span>
+                  <span class="input-summary-value">${escapeHtml(row.value)}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        ` : ''}
+        ${finalStrategy.name ? `
+          <div class="dashboard-section">
+            <div class="dashboard-section-title">${escapeHtml(chartText('finalStrategy'))}</div>
+            <div class="final-strategy-row">
+              <span class="final-strategy-name">${escapeHtml(uiLocale === 'zh' ? (finalStrategy.name_zh || finalStrategy.name || '') : finalStrategy.name)}</span>
+              <span class="final-strategy-signal ${(finalStrategy.signal || '').toLowerCase() === 'buy' ? 'positive' : (finalStrategy.signal || '').toLowerCase() === 'sell' ? 'danger' : 'neutral'}">${escapeHtml(localizeChartValue((finalStrategy.signal || 'HOLD').toUpperCase()))}</span>
+              <span class="final-strategy-score">${escapeHtml(chartText('score'))} ${escapeHtml(String(finalStrategy.score ?? 50))}</span>
+            </div>
+          </div>
+        ` : ''}
+        ${modeReason.en || modeReason.zh ? `
+          <div class="dashboard-section">
+            <div class="dashboard-section-title">${escapeHtml(chartText('modeReason'))}</div>
+            <div class="mode-reason-body">${escapeHtml(roomLocalized(modeReason))}</div>
+          </div>
+        ` : ''}
         ${votes.length > 0 ? `
           <div class="dashboard-section">
-            <div class="dashboard-section-title">Agent Votes</div>
+            <div class="dashboard-section-title">${escapeHtml(chartText('agentVotes'))}</div>
             <div class="vote-table">
               ${votes.map((v: any) => {
                 const voteCls = v.vote === 'buy' ? 'positive' : v.vote === 'sell' ? 'danger' : 'neutral';
+                const agentNameMap: Record<string, { en: string; zh: string }> = {
+                  Indicator: { en: 'Indicator', zh: '指标 Agent' },
+                  News: { en: 'News', zh: '新闻 Agent' },
+                  Risk: { en: 'Risk', zh: '风险 Agent' },
+                  Backtest: { en: 'Backtest', zh: '回测 Agent' },
+                  Critic: { en: 'Critic', zh: 'Critic' },
+                };
+                const agentName = roomLocalized(agentNameMap[v.agent] ?? { en: v.agent, zh: v.agent });
                 return `
                   <div class="vote-row">
-                    <span class="vote-agent">${escapeHtml(v.agent)}</span>
+                    <span class="vote-agent">${escapeHtml(agentName)}</span>
                     <span class="vote-bar-track"><span class="vote-bar-fill ${voteCls}" style="width:${Math.min(100, v.score || 0)}%"></span></span>
-                    <span class="vote-score ${voteCls}">${escapeHtml(String(v.score))}%</span>
+                    <span class="vote-score ${voteCls}">${escapeHtml(localizeChartValue((v.vote || 'HOLD').toUpperCase()))} ${escapeHtml(String(v.score))}%</span>
                   </div>
                 `;
               }).join('')}
@@ -3026,7 +4047,7 @@ function renderDecisionDashboard(artifact: any): string {
         ` : ''}
         ${conflicts.length > 0 ? `
           <div class="dashboard-section">
-            <div class="dashboard-section-title">Conflict Resolution</div>
+            <div class="dashboard-section-title">${escapeHtml(chartText('conflictResolution'))}</div>
             <div class="conflict-list">
               ${conflicts.map((c: any) => `<div class="conflict-row"><span class="conflict-name">${escapeHtml(c.conflict || '')}</span><span class="conflict-resolution">→ ${escapeHtml(c.resolution || '')}</span></div>`).join('')}
             </div>
@@ -3034,22 +4055,22 @@ function renderDecisionDashboard(artifact: any): string {
         ` : ''}
         ${whyNot.reasons && whyNot.reasons.length > 0 ? `
           <div class="dashboard-section">
-            <div class="dashboard-section-title">${escapeHtml(whyNot.title || 'Why not?')}</div>
+            <div class="dashboard-section-title">${escapeHtml(roomLocalized(whyNot.title || { en: 'Why not?', zh: '为什么不？' }))}</div>
             <ul class="dashboard-list">
-              ${whyNot.reasons.map((r: string) => `<li>${escapeHtml(r)}</li>`).join('')}
+              ${whyNot.reasons.map((r: any) => `<li>${escapeHtml(roomLocalized(r))}</li>`).join('')}
             </ul>
           </div>
         ` : ''}
         ${triggers.length > 0 ? `
           <div class="dashboard-section">
-            <div class="dashboard-section-title">Trigger Conditions</div>
+            <div class="dashboard-section-title">${escapeHtml(chartText('triggerConditions'))}</div>
             <div class="trigger-table">
               ${triggers.map((t: any) => `
                 <div class="trigger-row">
-                  <span class="trigger-condition">${escapeHtml(t.condition || '')}</span>
+                  <span class="trigger-condition">${escapeHtml(uiLocale === 'zh' ? (t.condition_zh || t.condition || '') : (t.condition || ''))}</span>
                   <span class="trigger-current">${escapeHtml(String(t.current_value ?? ''))}</span>
                   <span class="trigger-target">→ ${escapeHtml(String(t.target_value ?? ''))}</span>
-                  <span class="trigger-status ${t.status === 'met' ? 'positive' : 'warning'}">${escapeHtml(t.status || '')}</span>
+                  <span class="trigger-status ${t.status === 'met' ? 'positive' : 'warning'}">${escapeHtml(triggerStatusLabel(t.status || ''))}</span>
                 </div>
               `).join('')}
             </div>
@@ -3057,9 +4078,9 @@ function renderDecisionDashboard(artifact: any): string {
         ` : ''}
         ${plan.length > 0 ? `
           <div class="dashboard-section">
-            <div class="dashboard-section-title">Next Plan</div>
+            <div class="dashboard-section-title">${escapeHtml(chartText('nextPlan'))}</div>
             <ul class="dashboard-list">
-              ${plan.map((p: any) => `<li>${escapeHtml(p.action || '')}${p.priority ? ` <span class="schedule-priority" data-priority="${escapeHtml(p.priority)}">${escapeHtml(p.priority)}</span>` : ''}</li>`).join('')}
+              ${plan.map((p: any) => `<li>${escapeHtml(uiLocale === 'zh' ? (p.action_zh || p.action || '') : (p.action || ''))}${p.priority ? ` <span class="schedule-priority" data-priority="${escapeHtml(p.priority)}">${escapeHtml(priorityLabel(p.priority))}</span>` : ''}</li>`).join('')}
             </ul>
           </div>
         ` : ''}
@@ -3078,18 +4099,26 @@ function renderExecutionTimelinePanel(artifact: any): string {
     <section class="advanced-room-panel">
       ${_renderHero(artifact)}
       <div class="room-visual">
-        <div class="room-visual-title">Execution Timeline</div>
+        <div class="room-visual-title">${escapeHtml(logText('executionTimeline'))}</div>
+        ${events.length === 0 ? `<div class="timeline-empty">${escapeHtml(logText('noEvents'))}</div>` : `
         <div class="timeline-list">
-          ${events.map((e: any) => `
-            <div class="timeline-item">
+          ${events.map((e: any) => {
+            const stage = logStageLabel(e.stage || '');
+            const message = roomLocalized(e.message);
+            const level = e.level || 'info';
+            const tone = logLevelTone(level);
+            return `
+            <div class="timeline-item" data-level="${escapeHtml(level)}">
               <span class="timeline-time">${escapeHtml(e.time || '')}</span>
               <div class="timeline-body">
-                <span class="timeline-stage">${escapeHtml(e.stage || '')}</span>
-                <span class="timeline-message">${escapeHtml(e.message || '')}</span>
+                <span class="timeline-stage" data-tone="${escapeHtml(tone)}">${escapeHtml(stage)}</span>
+                <span class="timeline-message">${escapeHtml(message)}</span>
               </div>
+              <span class="timeline-pill ${level === 'info' ? 'hidden' : ''}" data-tone="${escapeHtml(tone)}">${escapeHtml(level.toUpperCase())}</span>
             </div>
-          `).join('')}
+          `;}).join('')}
         </div>
+        `}
       </div>
       ${_renderMetricsGrid(artifact.metrics)}
       ${_renderInsight(artifact)}
@@ -3098,22 +4127,207 @@ function renderExecutionTimelinePanel(artifact: any): string {
   `;
 }
 
+const AGENT_ROOM_TEXT: Record<string, { en: string; zh: string }> = {
+  agentStatus: { en: 'Agent Status', zh: '运行状态' },
+  role: { en: 'Role', zh: '职责' },
+  task: { en: 'Task', zh: '当前任务' },
+  input: { en: 'Input', zh: '输入' },
+  output: { en: 'Output', zh: '输出' },
+  latency: { en: 'Latency', zh: '耗时' },
+  health: { en: 'Health', zh: '健康' },
+  lastSeen: { en: 'Last seen', zh: '最近活跃' },
+  activeAgents: { en: 'Active agents', zh: '活跃 Agent' },
+  totalLatency: { en: 'Total latency', zh: '总耗时' },
+  healthyCount: { en: 'Healthy', zh: '健康' },
+  errorCount: { en: 'Errors', zh: '错误数' },
+  noAgents: { en: 'No agents reporting', zh: '暂无 Agent 状态' },
+};
+
+const AGENT_STATUS_LABELS: Record<string, { en: string; zh: string }> = {
+  done: { en: 'Done', zh: '完成' },
+  running: { en: 'Running', zh: '运行中' },
+  pending: { en: 'Pending', zh: '等待中' },
+  error: { en: 'Error', zh: '错误' },
+};
+
+const AGENT_NAME_LABELS: Record<string, { en: string; zh: string }> = {
+  data: { en: 'Data Agent', zh: '数据 Agent' },
+  indicator: { en: 'Indicator Agent', zh: '指标 Agent' },
+  news: { en: 'News Agent', zh: '新闻 Agent' },
+  risk: { en: 'Risk Agent', zh: '风险 Agent' },
+  decision: { en: 'Decision Agent', zh: '决策 Agent' },
+};
+
+const AGENT_ROLE_LABELS: Record<string, { en: string; zh: string }> = {
+  data: { en: 'Market data', zh: '市场数据' },
+  indicator: { en: 'Technical indicators', zh: '技术指标' },
+  news: { en: 'News sentiment', zh: '新闻情绪' },
+  risk: { en: 'Risk control', zh: '风险控制' },
+  decision: { en: 'Decision making', zh: '决策生成' },
+};
+
+const AGENT_HEALTH_LABELS: Record<string, { en: string; zh: string }> = {
+  healthy: { en: 'Healthy', zh: '健康' },
+  degraded: { en: 'Degraded', zh: '降级' },
+  error: { en: 'Error', zh: '异常' },
+};
+
+function agentText(key: keyof typeof AGENT_ROOM_TEXT): string {
+  return AGENT_ROOM_TEXT[key][uiLocale];
+}
+
+function agentStatusLabel(status: string): string {
+  return AGENT_STATUS_LABELS[status]?.[uiLocale] ?? status;
+}
+
+function agentStatusTone(status: string): string {
+  if (status === 'running') return 'active';
+  if (status === 'error') return 'danger';
+  if (status === 'pending') return 'warm';
+  return 'positive';
+}
+
+function agentHealthTone(health: string): string {
+  if (health === 'healthy') return 'positive';
+  if (health === 'degraded') return 'warning';
+  if (health === 'error') return 'danger';
+  return 'neutral';
+}
+
+function agentNameLabel(nameKey: string, fallback = ''): string {
+  return AGENT_NAME_LABELS[nameKey]?.[uiLocale] ?? fallback;
+}
+
+function agentRoleLabel(roleKey: string): string {
+  return AGENT_ROLE_LABELS[roleKey]?.[uiLocale] ?? roleKey;
+}
+
+function agentHealthLabel(health: string): string {
+  return AGENT_HEALTH_LABELS[health]?.[uiLocale] ?? health;
+}
+
+const LOG_ROOM_TEXT: Record<string, { en: string; zh: string }> = {
+  executionTimeline: { en: 'Execution Timeline', zh: '执行时间轴' },
+  stage: { en: 'Stage', zh: '阶段' },
+  noEvents: { en: 'No execution events recorded', zh: '暂无执行事件' },
+};
+
+const LOG_STAGE_LABELS: Record<string, { en: string; zh: string }> = {
+  start: { en: 'Start', zh: '开始' },
+  data: { en: 'Data', zh: '数据' },
+  indicator: { en: 'Indicator', zh: '指标' },
+  news: { en: 'News', zh: '新闻' },
+  risk: { en: 'Risk', zh: '风险' },
+  backtest: { en: 'Backtest', zh: '回测' },
+  decision: { en: 'Decision', zh: '决策' },
+  report: { en: 'Report', zh: '报告' },
+};
+
+const LOG_LEVEL_TONES: Record<string, string> = {
+  info: 'neutral',
+  success: 'positive',
+  warning: 'warm',
+  error: 'danger',
+};
+
+function logText(key: keyof typeof LOG_ROOM_TEXT): string {
+  return LOG_ROOM_TEXT[key][uiLocale];
+}
+
+function logStageLabel(stage: string): string {
+  return LOG_STAGE_LABELS[stage]?.[uiLocale] ?? stage;
+}
+
+function logLevelTone(level: string): string {
+  return LOG_LEVEL_TONES[level] ?? 'neutral';
+}
+
 function renderAgentMonitorPanel(artifact: any): string {
   const visual = artifact.visual?.data ?? {};
   const agents = visual.agents || [];
+  if (agents.length === 0) {
+    return `
+      <section class="advanced-room-panel">
+        ${_renderHero(artifact)}
+        <div class="room-visual">
+          <div class="agent-empty">${escapeHtml(agentText('noAgents'))}</div>
+        </div>
+        ${_renderMetricsGrid(artifact.metrics)}
+        ${_renderInsight(artifact)}
+        ${_renderActionPlan(artifact)}
+      </section>
+    `;
+  }
+
+  const totalLatency = agents.reduce((sum: number, a: any) => sum + (a.latency_ms ?? 0), 0);
+
   return `
     <section class="advanced-room-panel">
       ${_renderHero(artifact)}
       <div class="room-visual">
         <div class="agent-status-grid">
-          ${agents.map((a: any) => `
-            <div class="agent-status-card ${a.status || 'done'}">
-              <div class="agent-status-name">${escapeHtml(a.name || '')}</div>
-              <div class="agent-status-badge ${a.status || 'done'}">${escapeHtml(a.status || 'done')}</div>
-              <div class="agent-status-latency">${a.latency_ms ?? '?'}ms</div>
-              <div class="agent-status-summary">${escapeHtml(a.summary || '')}</div>
-            </div>
-          `).join('')}
+          ${agents.map((a: any) => {
+            const status = a.status || 'done';
+            const health = a.health || 'healthy';
+            const name = agentNameLabel(a.name_key, a.name || '');
+            const role = agentRoleLabel(a.role_key || a.name_key || '');
+            const task = roomLocalized(a.task ?? '');
+            const input = roomLocalized(a.input ?? '');
+            const output = roomLocalized(a.output ?? '');
+            const summary = roomLocalized(a.summary ?? '');
+            const latency = a.latency_ms ?? 0;
+            const progress = Math.max(0, Math.min(100, a.progress_pct ?? 100));
+            const lastSeen = a.last_seen ? clockOf(a.last_seen) : '--:--';
+            const errorCount = a.error_count ?? 0;
+            return `
+              <div class="agent-status-card ${agentStatusTone(status)}">
+                <div class="agent-status-header">
+                  <div class="agent-status-name">
+                    <span class="agent-status-role">${escapeHtml(role)}</span>
+                    <strong>${escapeHtml(name)}</strong>
+                  </div>
+                  <div class="agent-status-badges">
+                    <span class="agent-status-badge ${agentStatusTone(status)}">${escapeHtml(agentStatusLabel(status))}</span>
+                    <span class="agent-status-health ${agentHealthTone(health)}">${escapeHtml(agentHealthLabel(health))}</span>
+                    ${errorCount > 0 ? `<span class="agent-status-errors">${errorCount}</span>` : ''}
+                  </div>
+                </div>
+                ${progress < 100 ? `
+                  <div class="agent-progress-track">
+                    <div class="agent-progress-fill" style="width:${progress}%"></div>
+                    <span>${progress}%</span>
+                  </div>
+                ` : ''}
+                <div class="agent-status-summary">${escapeHtml(summary)}</div>
+                <div class="agent-status-meta">
+                  <div class="agent-status-meta-row">
+                    <span>${escapeHtml(agentText('task'))}</span>
+                    <strong>${escapeHtml(task)}</strong>
+                  </div>
+                  <div class="agent-status-meta-row">
+                    <span>${escapeHtml(agentText('input'))}</span>
+                    <strong>${escapeHtml(input)}</strong>
+                  </div>
+                  <div class="agent-status-meta-row">
+                    <span>${escapeHtml(agentText('output'))}</span>
+                    <strong>${escapeHtml(output)}</strong>
+                  </div>
+                  <div class="agent-status-meta-row">
+                    <span>${escapeHtml(agentText('latency'))}</span>
+                    <strong>${latency}ms</strong>
+                  </div>
+                  <div class="agent-status-meta-row">
+                    <span>${escapeHtml(agentText('lastSeen'))}</span>
+                    <strong>${escapeHtml(lastSeen)}</strong>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+        <div class="agent-total-latency">
+          <span>${escapeHtml(agentText('totalLatency'))}</span>
+          <strong>${totalLatency}ms</strong>
         </div>
       </div>
       ${_renderMetricsGrid(artifact.metrics)}
@@ -3125,31 +4339,69 @@ function renderAgentMonitorPanel(artifact: any): string {
 
 function renderReportSummaryPanel(artifact: any): string {
   const visual = artifact.visual?.data ?? {};
+  const details = artifact.details ?? {};
   const data = visual;
+  const llmStatus = data.llm_status ?? details.llm_status ?? 'pending';
+  const llmNote = data.llm_note ?? details.llm_note ?? {};
+
+  const finalDecision = data.final_decision ?? details.final_decision ?? 'HOLD';
+  const decisionCls = finalDecision.toLowerCase() === 'buy' ? 'positive' : finalDecision.toLowerCase() === 'sell' ? 'danger' : 'neutral';
+
+  const executiveSummary = roomLocalized(data.executive_summary ?? artifact.insight ?? '');
+  const suggestedAction = roomLocalized(data.suggested_action ?? details.suggested_action ?? artifact.next_action ?? '');
+  const keyDrivers = (data.key_drivers ?? details.key_drivers ?? []).map((d: any) => roomLocalized(d));
+  const keyRisks = (data.key_risks ?? details.key_risks ?? []).map((r: any) => roomLocalized(r));
+  const references = data.references ?? details.references ?? [];
+
+  const statusBanner = llmStatus === 'pending'
+    ? `<div class="llm-status-banner pending">${escapeHtml(chartText('aiGenerating'))}</div>`
+    : `<div class="llm-status-banner ${llmStatus}">${escapeHtml(roomLocalized(llmNote))}</div>`;
+
   return `
     <section class="advanced-room-panel">
       ${_renderHero(artifact)}
+      ${statusBanner}
       <div class="room-visual">
         <div class="report-summary-grid">
           <div class="report-summary-card">
-            <div class="report-summary-label">Final Decision</div>
-            <div class="report-summary-value ${(data.final_decision || '').toLowerCase() === 'buy' ? 'positive' : (data.final_decision || '').toLowerCase() === 'sell' ? 'danger' : 'neutral'}">${escapeHtml(data.final_decision || 'HOLD')}</div>
+            <div class="report-summary-label">${escapeHtml(chartText('decision'))}</div>
+            <div class="report-summary-value ${decisionCls}">${escapeHtml(localizeChartValue(finalDecision.toUpperCase()))}</div>
           </div>
           <div class="report-summary-card">
-            <div class="report-summary-label">Suggested Action</div>
-            <div class="report-summary-value">${escapeHtml(data.suggested_action || '')}</div>
+            <div class="report-summary-label">${escapeHtml(chartText('suggestedAction'))}</div>
+            <div class="report-summary-value">${escapeHtml(suggestedAction)}</div>
           </div>
         </div>
-        ${data.key_drivers && data.key_drivers.length > 0 ? `
+        ${executiveSummary ? `
           <div class="dashboard-section">
-            <div class="dashboard-section-title">Key Drivers</div>
-            <ul class="dashboard-list">${data.key_drivers.map((d: string) => `<li>${escapeHtml(d)}</li>`).join('')}</ul>
+            <div class="dashboard-section-title">${escapeHtml(chartText('executiveSummary'))}</div>
+            <div class="mode-reason-body">${escapeHtml(executiveSummary)}</div>
           </div>
         ` : ''}
-        ${data.key_risks && data.key_risks.length > 0 ? `
+        ${keyDrivers.length > 0 ? `
           <div class="dashboard-section">
-            <div class="dashboard-section-title">Key Risks</div>
-            <ul class="dashboard-list">${data.key_risks.map((r: string) => `<li>${escapeHtml(r)}</li>`).join('')}</ul>
+            <div class="dashboard-section-title">${escapeHtml(chartText('keyDrivers'))}</div>
+            <ul class="dashboard-list">${keyDrivers.map((d: string) => `<li>${escapeHtml(d)}</li>`).join('')}</ul>
+          </div>
+        ` : ''}
+        ${keyRisks.length > 0 ? `
+          <div class="dashboard-section">
+            <div class="dashboard-section-title">${escapeHtml(chartText('keyRisks'))}</div>
+            <ul class="dashboard-list">${keyRisks.map((r: string) => `<li>${escapeHtml(r)}</li>`).join('')}</ul>
+          </div>
+        ` : ''}
+        ${references.length > 0 ? `
+          <div class="dashboard-section">
+            <div class="dashboard-section-title">${escapeHtml(chartText('references'))}</div>
+            <div class="reference-list">
+              ${references.map((ref: any) => `
+                <div class="reference-row">
+                  <div class="reference-paper">${escapeHtml(ref.paper || '')}</div>
+                  <div class="reference-why">${escapeHtml(roomLocalized({en: ref.why_en, zh: ref.why_zh}) || '')}</div>
+                  ${ref.paper_url ? `<a class="reference-link" href="${escapeHtml(ref.paper_url)}" target="_blank" rel="noopener">${escapeHtml(uiLocale === 'zh' ? '查看论文' : 'View paper')}</a>` : ''}
+                </div>
+              `).join('')}
+            </div>
           </div>
         ` : ''}
       </div>
@@ -3160,17 +4412,67 @@ function renderReportSummaryPanel(artifact: any): string {
   `;
 }
 
+const IDLE_ROOM_TEXT: Record<string, { en: string; zh: string }> = {
+  systemStatus: { en: 'System Status', zh: '系统状态' },
+  lastTask: { en: 'Last Task', zh: '最近任务' },
+  nextReady: { en: 'Ready for next task', zh: '等待下一次任务' },
+  processing: { en: 'Processing', zh: '处理中' },
+  tasksCompleted: { en: 'Tasks completed', zh: '已完成任务' },
+  lastRun: { en: 'Last run', zh: '最近运行' },
+};
+
+const IDLE_STATUS_LABELS: Record<string, { en: string; zh: string }> = {
+  idle: { en: 'Idle', zh: '待命' },
+  ready: { en: 'Ready', zh: '就绪' },
+  processing: { en: 'Processing', zh: '处理中' },
+};
+
+const IDLE_STATUS_TONES: Record<string, string> = {
+  idle: 'positive',
+  ready: 'positive',
+  processing: 'warm',
+};
+
+function idleText(key: keyof typeof IDLE_ROOM_TEXT): string {
+  return IDLE_ROOM_TEXT[key][uiLocale];
+}
+
+function idleStatusLabel(status: string): string {
+  return IDLE_STATUS_LABELS[status]?.[uiLocale] ?? status;
+}
+
+function idleStatusTone(status: string): string {
+  return IDLE_STATUS_TONES[status] ?? 'neutral';
+}
+
 function renderIdleSummaryPanel(artifact: any): string {
   const visual = artifact.visual?.data ?? {};
   const data = visual;
+  const status = data.system_status || 'idle';
+  const isReady = data.next_ready === true;
+  const tone = idleStatusTone(isReady ? 'ready' : status);
+  const statusLabel = idleStatusLabel(isReady ? 'ready' : status);
+  const readyMessage = roomLocalized(
+    data.ready_message ||
+      (isReady
+        ? { en: 'System ready for next task', zh: '系统已就绪，等待下一次任务' }
+        : { en: 'System busy', zh: '系统忙碌中' })
+  );
+  const lastDecision = uiLocale === 'zh' ? (data.last_decision_zh || data.last_decision || '') : (data.last_decision || '');
+  const lastRun = data.last_run_at || '';
+  const tasksCompleted = data.tasks_completed ?? '';
   return `
     <section class="advanced-room-panel">
       ${_renderHero(artifact)}
       <div class="room-visual">
-        <div class="idle-status-card">
-          <div class="idle-status-icon">${data.next_ready ? '◉' : '○'}</div>
-          <div class="idle-status-text">${data.next_ready ? 'System Ready' : 'Processing'}</div>
-          <div class="idle-last-task">Last: <strong>${escapeHtml(data.last_asset || '')}</strong> · ${escapeHtml(data.last_decision || '')}</div>
+        <div class="room-visual-title">${escapeHtml(idleText('systemStatus'))}</div>
+        <div class="idle-status-card" data-tone="${escapeHtml(tone)}">
+          <div class="idle-status-icon">${isReady ? '◉' : '○'}</div>
+          <div class="idle-status-text">${escapeHtml(statusLabel)}</div>
+          <div class="idle-status-message">${escapeHtml(readyMessage)}</div>
+          <div class="idle-last-task">${escapeHtml(idleText('lastTask'))}: <strong>${escapeHtml(data.last_asset || '')}</strong> · ${escapeHtml(lastDecision)}</div>
+          ${lastRun ? `<div class="idle-meta">${escapeHtml(idleText('lastRun'))}: ${escapeHtml(lastRun)}</div>` : ''}
+          ${tasksCompleted !== '' ? `<div class="idle-meta">${escapeHtml(idleText('tasksCompleted'))}: ${escapeHtml(String(tasksCompleted))}</div>` : ''}
         </div>
       </div>
       ${_renderMetricsGrid(artifact.metrics)}
@@ -3235,8 +4537,14 @@ function renderRoomModal(): void {
     return;
   }
 
+  const roomModalBackdrop = document.getElementById('room-modal-backdrop');
+  if (roomModalBackdrop) {
+    roomModalBackdrop.classList.add('hidden');
+  }
+
   const resource = getSelectedResource();
   if (!resource) {
+    assetModal.removeAttribute('data-room-id');
     assetModalTitle.textContent = 'Loading';
     assetModalTitle.style.color = 'rgba(244, 255, 247, 0.94)';
     assetModalSub.textContent = 'Waiting for OpenClaw snapshot…';
@@ -3259,10 +4567,20 @@ function renderRoomModal(): void {
     return;
   }
 
+  assetModal.dataset.roomId = resource.id;
+  const isGateway = resource.id === 'gateway';
+  const isMemory = resource.id === 'memory';
+  const isSkills = resource.id === 'skills';
+  const isImages = resource.id === 'images';
+  const isAlarm = resource.id === 'alarm';
+  const isDocument = resource.id === 'document';
+  const roomArtifact = getRoomArtifact(resource.id);
+  const hasAdvancedArtifact = Boolean(roomArtifact?.panel_type);
   const resourceItems = resource.items ?? [];
   const detailReady = hasLoadedResourceDetail(resource.id) || resource.itemCount === 0;
   const detailError = resourceDetailErrorsById.get(resource.id) ?? '';
   const kindGroups = detailReady ? kindGroupsOf(resource.id, resourceItems) : [];
+  let filterNotes: string[] = [];
   if (!detailReady && !resourceDetailRequestsById.has(resource.id)) {
     void ensureResourceDetail(resource.id)
       .then(() => {
@@ -3277,55 +4595,130 @@ function renderRoomModal(): void {
       });
   }
 
-  assetModalTitle.textContent = resource.label;
-  assetModalTitle.style.color = PARTITION_CSS_COLORS[resource.id] ?? 'rgba(244, 255, 247, 0.94)';
-  const defaults = modalDefaultsForResource(resource.id);
-  const filterNotes = [
-    modalKindFilter !== 'all' ? (uiLocale === 'zh' ? `分类 ${kindMenuLabelForResource(resource.id, modalKindFilter)}` : `kind ${modalKindFilter}`) : '',
-    modalSearchQuery.trim() ? (uiLocale === 'zh' ? `搜索 “${modalSearchQuery.trim()}”` : `search “${modalSearchQuery.trim()}”`) : '',
-    modalViewMode !== defaults.viewMode ? (uiLocale === 'zh' ? `${modalViewMode === 'grid' ? '网格' : '列表'}视图` : `${modalViewMode} view`) : '',
-    modalSortMode !== defaults.sortMode ? (uiLocale === 'zh' ? `排序 ${modalSortMode}` : `sort ${modalSortMode}`) : ''
-  ].filter(Boolean);
-  assetModalSub.textContent = `${resource.itemCount} items · ${humanizeTelemetryText(resource.summary)}${filterNotes.length ? ` · ${filterNotes.join(' · ')}` : ''} · ${clockOf(resource.lastAccessAt)}`;
-  if (assetModalContext) {
-    assetModalContext.innerHTML = renderResourceContext(resource, detailReady ? resourceItems[0] ?? null : null);
-  }
-  if (assetModalSummary) {
-    assetModalSummary.classList.toggle('sticky', resourceUsesStickySummary(resource.id));
-    assetModalSummary.dataset.hasSelection = modalKindFilter !== 'all' ? 'true' : 'false';
-    assetModalSummary.innerHTML = detailReady ? resourceSummaryEntries(resource).map((entry) => `
-      <button
-        class="modal-summary-chip"
-        type="button"
-        data-summary-kind="${escapeHtml(entry.id)}"
-        data-selected="${entry.id === modalKindFilter ? 'true' : 'false'}"
-        style="--chip-color:${escapeHtml(entry.color)};"
-      >
-        <strong>${escapeHtml(entry.value)}</strong>
-        <span>${escapeHtml(entry.label)}</span>
-      </button>
-    `).join('') : '';
-  }
-  if (assetModalKind) {
-    assetModalKind.hidden = resourceUsesExternalKindMenu(resource.id);
-    assetModalKind.innerHTML = [
-      `<option value="all">${escapeHtml(uiText('allKinds', uiLocale))} (${resourceItems.length})</option>`,
-      ...kindGroups.map((entry) => `<option value="${escapeHtml(entry.id)}">${escapeHtml(entry.label)}</option>`)
-    ].join('');
-    assetModalKind.value = modalKindFilter;
-    assetModalKind.disabled = resourceUsesExternalKindMenu(resource.id);
-  }
-  if (assetModalSort) {
-    assetModalSort.value = modalSortMode;
-  }
-  if (assetModalView) {
-    assetModalView.textContent = modalViewMode === 'list' ? uiText('grid', uiLocale) : uiText('list', uiLocale);
-  }
-  if (assetModalSearch) {
-    if (assetModalSearch.value !== modalSearchQuery) {
-      assetModalSearch.value = modalSearchQuery;
+  if (isGateway) {
+    assetModalTitle.textContent = resourceLabel('gateway', uiLocale);
+    assetModalTitle.style.color = PARTITION_CSS_COLORS['gateway'] ?? 'rgba(244, 255, 247, 0.94)';
+    assetModalSub.textContent = uiLocale === 'zh' ? '市场输入体检台' : 'Market Input Check';
+    if (assetModalContext) { assetModalContext.innerHTML = ''; assetModalContext.style.display = 'none'; }
+    if (assetModalSummary) { assetModalSummary.innerHTML = ''; assetModalSummary.style.display = 'none'; }
+    if (assetModalKind) assetModalKind.style.display = 'none';
+    if (assetModalSort) assetModalSort.style.display = 'none';
+    if (assetModalView) assetModalView.style.display = 'none';
+    if (assetModalSearch) assetModalSearch.style.display = 'none';
+    if (assetModalFeedback) assetModalFeedback.style.display = 'none';
+  } else if (isMemory) {
+    assetModalTitle.textContent = resourceLabel('memory', uiLocale);
+    assetModalTitle.style.color = PARTITION_CSS_COLORS['memory'] ?? 'rgba(244, 255, 247, 0.94)';
+    assetModalSub.textContent = uiLocale === 'zh' ? '策略档案中心' : 'Strategy Memory Archive';
+    if (assetModalContext) { assetModalContext.innerHTML = ''; assetModalContext.style.display = 'none'; }
+    if (assetModalSummary) { assetModalSummary.innerHTML = ''; assetModalSummary.style.display = 'none'; }
+    if (assetModalKind) assetModalKind.style.display = 'none';
+    if (assetModalSort) assetModalSort.style.display = 'none';
+    if (assetModalView) assetModalView.style.display = 'none';
+    if (assetModalSearch) assetModalSearch.style.display = 'none';
+    if (assetModalFeedback) assetModalFeedback.style.display = 'none';
+  } else if (isSkills) {
+    assetModalTitle.textContent = resourceLabel('skills', uiLocale);
+    assetModalTitle.style.color = PARTITION_CSS_COLORS['skills'] ?? 'rgba(244, 255, 247, 0.94)';
+    assetModalSub.textContent = uiLocale === 'zh' ? '策略实验与信号分析' : 'Strategy Lab & Signal Analysis';
+    if (assetModalContext) { assetModalContext.innerHTML = ''; assetModalContext.style.display = 'none'; }
+    if (assetModalSummary) { assetModalSummary.innerHTML = ''; assetModalSummary.style.display = 'none'; }
+    if (assetModalKind) assetModalKind.style.display = 'none';
+    if (assetModalSort) assetModalSort.style.display = 'none';
+    if (assetModalView) assetModalView.style.display = 'none';
+    if (assetModalSearch) assetModalSearch.style.display = 'none';
+    if (assetModalFeedback) assetModalFeedback.style.display = 'none';
+  } else if (isImages) {
+    assetModalTitle.textContent = resourceLabel('images', uiLocale);
+    assetModalTitle.style.color = PARTITION_CSS_COLORS['images'] ?? 'rgba(244, 255, 247, 0.94)';
+    assetModalSub.textContent = uiLocale === 'zh' ? '图表分析与可视化摘要' : 'Chart Analysis & Visual Summary';
+    if (assetModalContext) { assetModalContext.innerHTML = ''; assetModalContext.style.display = 'none'; }
+    if (assetModalSummary) { assetModalSummary.innerHTML = ''; assetModalSummary.style.display = 'none'; }
+    if (assetModalKind) assetModalKind.style.display = 'none';
+    if (assetModalSort) assetModalSort.style.display = 'none';
+    if (assetModalView) assetModalView.style.display = 'none';
+    if (assetModalSearch) assetModalSearch.style.display = 'none';
+    if (assetModalFeedback) assetModalFeedback.style.display = 'none';
+  } else if (isAlarm) {
+    assetModalTitle.textContent = resourceLabel('alarm', uiLocale);
+    assetModalTitle.style.color = PARTITION_CSS_COLORS['alarm'] ?? 'rgba(244, 255, 247, 0.94)';
+    assetModalSub.textContent = uiLocale === 'zh' ? '风险门控与仓位约束' : 'Risk Gate & Position Constraint';
+    if (assetModalContext) { assetModalContext.innerHTML = ''; assetModalContext.style.display = 'none'; }
+    if (assetModalSummary) { assetModalSummary.innerHTML = ''; assetModalSummary.style.display = 'none'; }
+    if (assetModalKind) assetModalKind.style.display = 'none';
+    if (assetModalSort) assetModalSort.style.display = 'none';
+    if (assetModalView) assetModalView.style.display = 'none';
+    if (assetModalSearch) assetModalSearch.style.display = 'none';
+    if (assetModalFeedback) assetModalFeedback.style.display = 'none';
+  } else if (isDocument) {
+    assetModalTitle.textContent = resourceLabel('document', uiLocale);
+    assetModalTitle.style.color = PARTITION_CSS_COLORS['document'] ?? 'rgba(244, 255, 247, 0.94)';
+    assetModalSub.textContent = uiLocale === 'zh' ? 'AI 报告与最终分析' : 'AI Report & Final Analysis';
+    if (assetModalContext) { assetModalContext.innerHTML = ''; assetModalContext.style.display = 'none'; }
+    if (assetModalSummary) { assetModalSummary.innerHTML = ''; assetModalSummary.style.display = 'none'; }
+    if (assetModalKind) assetModalKind.style.display = 'none';
+    if (assetModalSort) assetModalSort.style.display = 'none';
+    if (assetModalView) assetModalView.style.display = 'none';
+    if (assetModalSearch) assetModalSearch.style.display = 'none';
+    if (assetModalFeedback) assetModalFeedback.style.display = 'none';
+  } else {
+    assetModalTitle.textContent = resource.label;
+    assetModalTitle.style.color = PARTITION_CSS_COLORS[resource.id] ?? 'rgba(244, 255, 247, 0.94)';
+    const defaults = modalDefaultsForResource(resource.id);
+    filterNotes = [
+      modalKindFilter !== 'all' ? (uiLocale === 'zh' ? `分类 ${kindMenuLabelForResource(resource.id, modalKindFilter)}` : `kind ${modalKindFilter}`) : '',
+      modalSearchQuery.trim() ? (uiLocale === 'zh' ? `搜索 “${modalSearchQuery.trim()}”` : `search “${modalSearchQuery.trim()}”`) : '',
+      modalViewMode !== defaults.viewMode ? (uiLocale === 'zh' ? `${modalViewMode === 'grid' ? '网格' : '列表'}视图` : `${modalViewMode} view`) : '',
+      modalSortMode !== defaults.sortMode ? (uiLocale === 'zh' ? `排序 ${modalSortMode}` : `sort ${modalSortMode}`) : ''
+    ].filter(Boolean);
+    assetModalSub.textContent = `${resource.itemCount} items · ${humanizeTelemetryText(resource.summary)}${filterNotes.length ? ` · ${filterNotes.join(' · ')}` : ''} · ${clockOf(resource.lastAccessAt)}`;
+    if (assetModalContext) {
+      assetModalContext.style.display = '';
+      assetModalContext.innerHTML = renderResourceContext(resource, detailReady ? resourceItems[0] ?? null : null);
     }
-    assetModalSearch.placeholder = searchPlaceholderForResource(resource.id);
+    if (assetModalSummary) {
+      assetModalSummary.style.display = '';
+      assetModalSummary.classList.toggle('sticky', resourceUsesStickySummary(resource.id));
+      assetModalSummary.dataset.hasSelection = modalKindFilter !== 'all' ? 'true' : 'false';
+      assetModalSummary.innerHTML = detailReady ? resourceSummaryEntries(resource).map((entry) => `
+        <button
+          class=”modal-summary-chip”
+          type=”button”
+          data-summary-kind=”${escapeHtml(entry.id)}”
+          data-selected=”${entry.id === modalKindFilter ? 'true' : 'false'}”
+          style=”--chip-color:${escapeHtml(entry.color)};”
+        >
+          <strong>${escapeHtml(entry.value)}</strong>
+          <span>${escapeHtml(entry.label)}</span>
+        </button>
+      `).join('') : '';
+    }
+    if (assetModalKind) {
+      assetModalKind.style.display = '';
+      assetModalKind.hidden = resourceUsesExternalKindMenu(resource.id);
+      assetModalKind.innerHTML = [
+        `<option value=”all”>${escapeHtml(uiText('allKinds', uiLocale))} (${resourceItems.length})</option>`,
+        ...kindGroups.map((entry) => `<option value=”${escapeHtml(entry.id)}”>${escapeHtml(entry.label)}</option>`)
+      ].join('');
+      assetModalKind.value = modalKindFilter;
+      assetModalKind.disabled = resourceUsesExternalKindMenu(resource.id);
+    }
+    if (assetModalSort) {
+      assetModalSort.style.display = '';
+      assetModalSort.value = modalSortMode;
+    }
+    if (assetModalView) {
+      assetModalView.style.display = '';
+      assetModalView.textContent = modalViewMode === 'list' ? uiText('grid', uiLocale) : uiText('list', uiLocale);
+    }
+    if (assetModalSearch) {
+      assetModalSearch.style.display = '';
+      if (assetModalSearch.value !== modalSearchQuery) {
+        assetModalSearch.value = modalSearchQuery;
+      }
+      assetModalSearch.placeholder = searchPlaceholderForResource(resource.id);
+    }
+    if (assetModalFeedback) assetModalFeedback.style.display = '';
   }
   if (!detailReady) {
     assetModalItems.classList.toggle('grid', false);
@@ -3350,13 +4743,14 @@ function renderRoomModal(): void {
   const showingLabel = filteredItems.length > items.length
     ? (uiLocale === 'zh' ? `显示 ${items.length} / ${filteredItems.length}` : `showing ${items.length} of ${filteredItems.length}`)
     : (uiLocale === 'zh' ? `显示 ${items.length}` : `showing ${items.length}`);
-  assetModalSub.textContent = `${resource.itemCount} ${uiLocale === 'zh' ? '项' : 'items'} · ${showingLabel} · ${humanizeTelemetryText(resource.summary)}${filterNotes.length ? ` · ${filterNotes.join(' · ')}` : ''} · ${clockOf(resource.lastAccessAt)}`;
+  if (!isGateway && !isMemory && !isSkills && !isImages && !isAlarm && !isDocument && !hasAdvancedArtifact) {
+    assetModalSub.textContent = `${resource.itemCount} ${uiLocale === 'zh' ? '项' : 'items'} · ${showingLabel} · ${humanizeTelemetryText(resource.summary)}${filterNotes.length ? ` · ${filterNotes.join(' · ')}` : ''} · ${clockOf(resource.lastAccessAt)}`;
+  }
 
   // Advanced room panel rendering (artifact-first dashboard)
-  const artifact = getRoomArtifact(resource.id);
-  if (artifact && artifact.panel_type) {
+  if (roomArtifact && roomArtifact.panel_type) {
     assetModalItems.classList.toggle('grid', false);
-    assetModalItems.innerHTML = renderAdvancedRoomPanel(artifact);
+    assetModalItems.innerHTML = renderAdvancedRoomPanel(roomArtifact);
     assetModal.classList.remove('hidden');
     assetModal.setAttribute('aria-hidden', 'false');
     return;
@@ -3684,10 +5078,7 @@ resourceMenu?.addEventListener('click', (event) => {
     return;
   }
 
-  if (openTradingRoomModal(resourceId)) {
-    return;
-  }
-  openResourceModal(resourceId);
+  openResourceModal(resourceId, resourceId === 'gateway' ? { forceModal: true } : undefined);
 });
 
 hudActivityItems?.addEventListener('click', async (event) => {
@@ -3982,3 +5373,4 @@ window.setInterval(() => {
 
 // Expose advanced room panel renderer for the inline room-modal script
 (window as typeof window & { renderAdvancedRoomPanel?: typeof renderAdvancedRoomPanel }).renderAdvancedRoomPanel = renderAdvancedRoomPanel;
+(window as typeof window & { openTradingResourceModal?: typeof openResourceModal }).openTradingResourceModal = openResourceModal;

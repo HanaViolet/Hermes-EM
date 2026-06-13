@@ -6,7 +6,6 @@ inside run_trading_agent() itself.
 from __future__ import annotations
 import sys
 import json as _json
-import math
 import threading
 from datetime import datetime, timezone
 from pathlib import Path
@@ -21,152 +20,11 @@ for _p in (str(_PROJECT_ROOT), str(_TRADING_AGENT_DIR), str(_THIS_FILE.parent)):
 
 # In-memory store for completed task results
 _results: dict[str, dict] = {}
-_active_task: dict | None = None
-_cancelled_task_ids: set[str] = set()
 _lock = threading.Lock()
 
 # History file
 _HISTORY_PATH = Path(__file__).resolve().parent / "trading_history.json"
-_RESULTS_PATH = Path(__file__).resolve().parent / "trading_results.json"
 _MAX_HISTORY = 20
-_MAX_RESULTS = 50
-
-
-def _now_iso() -> str:
-    return datetime.now(timezone.utc).isoformat(timespec="seconds")
-
-
-def _safe_float(value):
-    try:
-        if value is None:
-            return None
-        num = float(value)
-        return num if math.isfinite(num) else None
-    except Exception:
-        return None
-
-
-def _safe_int(value):
-    try:
-        if value is None:
-            return None
-        return int(value)
-    except Exception:
-        return None
-
-
-def _compact_curve(value, limit: int = 1200) -> list[float]:
-    if value is None:
-        return []
-    try:
-        if hasattr(value, "tolist"):
-            value = value.tolist()
-        values = [_safe_float(v) for v in value]
-    except Exception:
-        return []
-
-    values = [v for v in values if v is not None]
-    if len(values) <= limit:
-        return values
-
-    step = max(1, math.ceil(len(values) / limit))
-    return values[::step][:limit]
-
-
-def _safe_backtest_summary(backtest: dict) -> dict:
-    """Return a compact, JSON-safe backtest payload for API responses."""
-    if not isinstance(backtest, dict):
-        return {}
-
-    summary = {}
-    float_keys = [
-        "total_return",
-        "benchmark_total_return",
-        "annual_return",
-        "annual_volatility",
-        "sharpe_ratio",
-        "max_drawdown",
-        "benchmark_max_drawdown",
-        "win_rate",
-    ]
-    for key in float_keys:
-        summary[key] = _safe_float(backtest.get(key))
-
-    trades = backtest.get("trades", backtest.get("number_of_trades"))
-    summary["trades"] = _safe_int(trades)
-    summary["number_of_trades"] = summary["trades"]
-
-    equity_curve = backtest.get("equity_curve")
-    benchmark_curve = backtest.get("benchmark_curve")
-    frame = backtest.get("data")
-    if equity_curve is None and hasattr(frame, "__getitem__"):
-        try:
-            equity_curve = frame["strategy_curve"]
-        except Exception:
-            pass
-    if benchmark_curve is None and hasattr(frame, "__getitem__"):
-        try:
-            benchmark_curve = frame["benchmark_curve"]
-        except Exception:
-            pass
-
-    summary["equity_curve"] = _compact_curve(equity_curve)
-    summary["benchmark_curve"] = _compact_curve(benchmark_curve)
-    return summary
-
-
-def _compact_result(result: dict) -> dict:
-    return {
-        "ticker": result.get("ticker"),
-        "strategy": result.get("strategy"),
-        "decision": result.get("decision", {}),
-        "backtest": _safe_backtest_summary(result.get("backtest_result", {})),
-        "report": result.get("report", ""),
-    }
-
-
-def _load_results_raw() -> dict:
-    try:
-        if _RESULTS_PATH.exists():
-            payload = _json.loads(_RESULTS_PATH.read_text(encoding="utf-8"))
-            return payload if isinstance(payload, dict) else {}
-    except Exception:
-        pass
-    return {}
-
-
-def _save_results_raw(results: dict) -> None:
-    try:
-        while len(results) > _MAX_RESULTS:
-            results.pop(next(iter(results)))
-        _RESULTS_PATH.write_text(_json.dumps(results, ensure_ascii=False, indent=2), encoding="utf-8")
-    except Exception:
-        pass
-
-
-def _store_result(task_id: str, entry: dict) -> None:
-    with _lock:
-        _results[task_id] = entry
-    persisted = _load_results_raw()
-    persisted[task_id] = entry
-    _save_results_raw(persisted)
-
-
-def _is_cancelled(task_id: str) -> bool:
-    with _lock:
-        return task_id in _cancelled_task_ids
-
-
-def _forget_cancelled(task_id: str) -> None:
-    with _lock:
-        _cancelled_task_ids.discard(task_id)
-
-
-def _clear_active_task(task_id: str) -> None:
-    global _active_task
-    with _lock:
-        if _active_task and _active_task.get("task_id") == task_id:
-            _active_task = None
 
 
 def _run_agent_in_background(task: dict, task_id: str) -> None:
@@ -241,107 +99,56 @@ def _run_agent_in_background(task: dict, task_id: str) -> None:
             except Exception:
                 pass
 
-        if _is_cancelled(task_id):
-            entry = {
-                "ok": False,
-                "cancelled": True,
-                "task_id": task_id,
-                "task": task,
-                "completed_at": _now_iso(),
-                "message": "Task was reset before completion.",
-            }
-            _store_result(task_id, entry)
-            _forget_cancelled(task_id)
-            reset_telemetry(None)
-            return
+        decision = result.get("decision", {})
+        backtest = result.get("backtest_result", {})
+        report_md = result.get("report", "")
 
         entry = {
             "ok": True,
             "task_id": task_id,
             "task": task,
-            "completed_at": _now_iso(),
-            "result": _compact_result(result),
+            "completed_at": str(datetime.now(timezone.utc))[:19],
+            "result": {
+                "ticker": result.get("ticker"),
+                "strategy": result.get("strategy"),
+                "decision": decision,
+                "backtest": backtest,
+                "report": report_md,
+            },
         }
-        _store_result(task_id, entry)
+        with _lock:
+            _results[task_id] = entry
         _save_history(entry)
 
     except Exception as exc:
         import traceback as _tb
         _err = Path(__file__).resolve().parent / "runner_error_latest.log"
-        trace = _tb.format_exc()
-        _err.write_text(f"ERROR: {exc}\n\n{trace}", encoding="utf-8")
-        cancelled = _is_cancelled(task_id)
-        _store_result(task_id, {
-            "ok": False,
-            "cancelled": cancelled,
-            "task_id": task_id,
-            "task": task,
-            "completed_at": _now_iso(),
-            "error": "Task cancelled." if cancelled else str(exc),
-        })
-        if cancelled:
-            _forget_cancelled(task_id)
-    finally:
-        _clear_active_task(task_id)
+        _err.write_text(f"ERROR: {exc}\n\n{_tb.format_exc()}", encoding="utf-8")
+        with _lock:
+            _results[task_id] = {
+                "ok": False,
+                "task": task,
+                "error": str(exc),
+                "traceback": _tb.format_exc(),
+            }
 
 
 def start_task(task: dict) -> str:
     """Launch a trading task in a background daemon thread."""
     import uuid
     task_id = uuid.uuid4().hex[:12]
-    global _active_task
-    with _lock:
-        if _active_task is not None:
-            running = _active_task.get("task", {})
-            raise RuntimeError(f"A task is already running ({running.get('ticker')} {running.get('strategy')}).")
-        _active_task = {
-            "task_id": task_id,
-            "task": dict(task),
-            "started_at": _now_iso(),
-        }
-
     thread = threading.Thread(
         target=_run_agent_in_background,
         args=(task, task_id),
         daemon=True,
     )
-    try:
-        thread.start()
-    except Exception:
-        _clear_active_task(task_id)
-        raise
+    thread.start()
     return task_id
 
 
 def get_result(task_id: str) -> dict | None:
     with _lock:
-        result = _results.get(task_id)
-    if result is not None:
-        return result
-
-    persisted = _load_results_raw()
-    result = persisted.get(task_id)
-    if result is not None:
-        with _lock:
-            _results[task_id] = result
-    return result
-
-
-def get_task_state() -> dict | None:
-    with _lock:
-        return dict(_active_task) if _active_task else None
-
-
-def cancel_active_task() -> dict | None:
-    """Mark the current task as cancelled and release the runner for a fresh task."""
-    global _active_task
-    with _lock:
-        if _active_task is None:
-            return None
-        task_state = dict(_active_task)
-        _cancelled_task_ids.add(task_state["task_id"])
-        _active_task = None
-        return task_state
+        return _results.get(task_id)
 
 
 def _save_history(entry: dict):

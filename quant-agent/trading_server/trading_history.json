@@ -1,21 +1,105 @@
 [
   {
-    "task_id": "e1e7c10c777a",
+    "task_id": "fe0497d995a5",
     "ticker": "SPY",
     "strategy": "auto",
-    "completed_at": "2026-06-09T14:00:20+00:00"
+    "completed_at": "2026-06-13 11:01:52"
   },
   {
-    "task_id": "e46ded029792",
-    "ticker": "SPY",
-    "strategy": "ma",
-    "completed_at": "2026-06-09T13:56:43+00:00"
-  },
-  {
-    "task_id": "4a7ec549b4df",
+    "task_id": "5e1256dd1847",
     "ticker": "SPY",
     "strategy": "auto",
-    "completed_at": "2026-06-09T13:49:11+00:00"
+    "completed_at": "2026-06-13 10:56:35"
+  },
+  {
+    "task_id": "ab0a88daddd9",
+    "ticker": "SPY",
+    "strategy": "auto",
+    "completed_at": "2026-06-13 10:32:29"
+  },
+  {
+    "task_id": "f3c11d65f69b",
+    "ticker": "SPY",
+    "strategy": "auto",
+    "completed_at": "2026-06-13 10:27:23"
+  },
+  {
+    "task_id": "5f8fe9592d47",
+    "ticker": "SPY",
+    "strategy": "auto",
+    "completed_at": "2026-06-13 10:21:45"
+  },
+  {
+    "task_id": "7a95991fcfcf",
+    "ticker": "SPY",
+    "strategy": "auto",
+    "completed_at": "2026-06-13 10:13:23"
+  },
+  {
+    "task_id": "094a8b5671d5",
+    "ticker": "SPY",
+    "strategy": "auto",
+    "completed_at": "2026-06-13 09:33:51"
+  },
+  {
+    "task_id": "b50e36d22e18",
+    "ticker": "SPY",
+    "strategy": "auto",
+    "completed_at": "2026-06-13 06:58:33"
+  },
+  {
+    "task_id": "c7538dec0b62",
+    "ticker": "SPY",
+    "strategy": "auto",
+    "completed_at": "2026-06-12 14:55:16"
+  },
+  {
+    "task_id": "876144c5aa38",
+    "ticker": "SPY",
+    "strategy": "auto",
+    "completed_at": "2026-06-12 14:48:40"
+  },
+  {
+    "task_id": "b007cb9a59ca",
+    "ticker": "SPY",
+    "strategy": "auto",
+    "completed_at": "2026-06-12 14:23:30"
+  },
+  {
+    "task_id": "e7dd560b569e",
+    "ticker": "SPY",
+    "strategy": "auto",
+    "completed_at": "2026-06-12 14:16:36"
+  },
+  {
+    "task_id": "def2a1f8e182",
+    "ticker": "SPY",
+    "strategy": "auto",
+    "completed_at": "2026-06-12 14:08:54"
+  },
+  {
+    "task_id": "a09582e653b4",
+    "ticker": "SPY",
+    "strategy": "auto",
+    "completed_at": "2026-06-12 14:05:42"
+  },
+  {
+    "task_id": "65c5ba93fad2",
+    "ticker": "SPY",
+    "strategy": "auto",
+    "completed_at": "2026-06-12 14:00:28"
+  },
+  {
+    "task_id": "403daf9cffde",
+    "ticker": "SPY",
+    "strategy": "auto",
+    "completed_at": "2026-06-12 12:47:33"
+  },
+  {
+    "task_id": "d9202541d53c",
+    "ticker": "SPY",
+    "strategy": "auto",
+    "completed_at": "2026-06-10 10:55:52"
   },
   {
     "task_id": "549105aae5d0",
@@ -34,41 +118,5 @@
     "ticker": "AAPL",
     "strategy": "ma",
     "completed_at": "2026-06-05 01:34:22"
-  },
-  {
-    "task_id": "4775a274b5ad",
-    "ticker": "AAPL",
-    "strategy": "auto",
-    "completed_at": "2026-06-05 01:30:54"
-  },
-  {
-    "task_id": "05ce4290a3cd",
-    "ticker": "TSLA",
-    "strategy": "ma",
-    "completed_at": "2026-06-05 01:28:15"
-  },
-  {
-    "task_id": "75dd06235dc5",
-    "ticker": "SPY",
-    "strategy": "auto",
-    "completed_at": "2026-06-05 01:21:43"
-  },
-  {
-    "task_id": "20c5504d0ecc",
-    "ticker": "QQQ",
-    "strategy": "ma",
-    "completed_at": "2026-06-05 01:18:42"
-  },
-  {
-    "task_id": "fd2d7657a52a",
-    "ticker": "QQQ",
-    "strategy": "ma",
-    "completed_at": "2026-06-05 00:52:21"
-  },
-  {
-    "task_id": "1780657ca935",
-    "ticker": "SPY",
-    "strategy": "ma",
-    "completed_at": "2026-06-05 00:51:10"
   }
 ]

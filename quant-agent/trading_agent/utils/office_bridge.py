@@ -36,6 +36,7 @@ _telemetry_state: dict = {
     "updated_at": None,
     "visited_rooms": [],
     "strategy_compare": [],
+    "stage_timestamps": [],
 }
 
 # Trading stage → ClawLibrary room / LobsterStateId
@@ -403,6 +404,7 @@ def reset_telemetry(task: dict | None = None) -> None:
     _telemetry_state["metrics"] = {}
     _telemetry_state["visited_rooms"] = []
     _telemetry_state["strategy_compare"] = []
+    _telemetry_state["stage_timestamps"] = []
     _telemetry_state["room_artifacts"] = _init_all_artifacts()
     _telemetry_state["updated_at"] = datetime.now(timezone.utc).isoformat()
     _persist_telemetry()
@@ -426,6 +428,7 @@ def update_workflow(
     if global_status:
         _telemetry_state["global_status"] = global_status
     if current_stage:
+        prev_stage = _telemetry_state.get("current_stage")
         _telemetry_state["current_stage"] = current_stage
         # Track which room this stage maps to
         room = STAGE_TO_ROOM.get(current_stage)
@@ -435,6 +438,13 @@ def update_workflow(
             # Mark room as active in artifacts
             zh_name = ROOM_LABELS.get(room, {}).get("zh", room)
             set_room_active(room, f"Processing: {zh_name}")
+        # Record real stage transition timestamps for execution timeline
+        if current_stage != prev_stage:
+            _telemetry_state.setdefault("stage_timestamps", []).append({
+                "stage": current_stage,
+                "room": room,
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+            })
     if progress is not None:
         _telemetry_state["progress"] = progress
     if result_summary:

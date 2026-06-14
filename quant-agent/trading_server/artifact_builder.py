@@ -60,11 +60,105 @@ def _load_trading_history():
     return []
 
 
-def _build_agent_statuses(now_ts, ticker, rows_val, rsi_val, macd_val, news_score, news_sentiment, risk_score, dec_str):
+def _stage_latency_map(stage_timestamps):
+    """Build {stage: {'time': str, 'latency_ms': int}} from real transition timestamps."""
+    if not stage_timestamps:
+        return {}
+    from datetime import datetime, timezone
+    parsed = []
+    for entry in stage_timestamps:
+        if not isinstance(entry, dict):
+            continue
+        ts = entry.get("timestamp")
+        if not ts:
+            continue
+        try:
+            # Handle ISO strings with or without timezone
+            if ts.endswith("Z"):
+                ts = ts[:-1] + "+00:00"
+            dt = datetime.fromisoformat(ts)
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=timezone.utc)
+            parsed.append((entry.get("stage"), dt))
+        except Exception:
+            continue
+    if not parsed:
+        return {}
+    out = {}
+    for i, (stage, dt) in enumerate(parsed):
+        if i + 1 < len(parsed):
+            latency_ms = max(1, int((parsed[i + 1][1] - dt).total_seconds() * 1000))
+        else:
+            latency_ms = max(1, int((datetime.now(timezone.utc) - dt).total_seconds() * 1000))
+        out[stage] = {"time": dt.strftime("%H:%M:%S"), "latency_ms": latency_ms}
+    return out
+
+
+def _build_exec_events(now_ts, ticker, rows_val, rsi_val, macd_val, news_score, news_sentiment, risk_score,
+                       gate_status, gate_label_en, gate_label_zh, backtest, dec_str, decision_zh, position_pct,
+                       stage_timestamps=None):
+    """Build execution timeline events with real timestamps when available."""
+    bt_return = round((backtest.get("total_return") or 0) * 100, 1)
+    bt_sharpe = round(backtest.get("sharpe_ratio", 0), 2)
+    bt_maxdd = round(abs(backtest.get("max_drawdown", 0)) * 100, 1)
+    _news_score_num = news_score if news_score is not None else 50
+    _sentiment_en = str(news_sentiment) if news_sentiment != "N/A" else "neutral"
+    _sentiment_zh_map = {"positive": "正面", "negative": "负面", "neutral": "中性"}
+    _sentiment_zh = _sentiment_zh_map.get(_sentiment_en, _sentiment_en)
+    _decision_en = dec_str.upper()
+    _position_pct = round(position_pct * 100)
+
+    latency_map = _stage_latency_map(stage_timestamps)
+
+    # Ordered event descriptors with their corresponding stage key
+    event_specs = [
+        ("start", "info", f"Analysis started for {ticker}", f"开始分析 {ticker}"),
+        ("data", "success", f"Loaded {rows_val or '?'} bars for {ticker}", f"已加载 {ticker} 的 {rows_val or '?'} 根 K 线"),
+        ("indicator", "info", f"RSI {_v(rsi_val, '.1f')}, MACD {_v(macd_val, '.3f')}", f"RSI {_v(rsi_val, '.1f')}，MACD {_v(macd_val, '.3f')}"),
+        ("news", "info", f"News sentiment {_sentiment_en} (score {_news_score_num})", f"新闻情绪 {_sentiment_zh}（分数 {_news_score_num}）"),
+        ("risk", "warning" if gate_status != "pass" else "success", f"Risk gate {gate_label_en} (score {risk_score})", f"风险闸门 {gate_label_zh}（分数 {risk_score}）"),
+        ("backtest", "success" if bt_return > 0 else "warning", f"Backtest return {bt_return}%, Sharpe {bt_sharpe}, Max DD {bt_maxdd}%", f"回测收益 {bt_return}%，夏普 {bt_sharpe}，最大回撤 {bt_maxdd}%"),
+        ("decision", "success" if _decision_en == "BUY" else "warning" if _decision_en == "SELL" else "info", f"Final decision: {_decision_en} at {_position_pct}% position", f"最终决策：{decision_zh}，仓位 {_position_pct}%"),
+        ("report", "success", "Report generated and agents returned to idle", "报告已生成，Agent 返回待命"),
+    ]
+
+    # Stage key mapping for timestamp lookup
+    stage_key_map = {
+        "start": "loading_data",
+        "data": "loading_data",
+        "indicator": "calculating_indicators",
+        "news": "analyzing_news",
+        "risk": "checking_risk",
+        "backtest": "running_backtest",
+        "decision": "making_decision",
+        "report": "writing_report",
+    }
+
+    base_time = datetime.strptime(now_ts[:19], "%Y-%m-%d %H:%M:%S") if len(now_ts) >= 19 else datetime.now()
+    events = []
+    for i, (stage, level, msg_en, msg_zh) in enumerate(event_specs):
+        mapped_stage = stage_key_map.get(stage)
+        info = latency_map.get(mapped_stage, {}) if mapped_stage else {}
+        if info.get("time"):
+            time_str = info["time"]
+        else:
+            # Fallback: realistic staggered timestamps
+            time_str = (base_time.fromtimestamp(base_time.timestamp() + i)).strftime("%H:%M:%S")
+        events.append({
+            "time": time_str,
+            "stage": stage,
+            "level": level,
+            "message": {"en": msg_en, "zh": msg_zh},
+        })
+    return events
+
+
+def _build_agent_statuses(now_ts, ticker, rows_val, rsi_val, macd_val, news_score, news_sentiment, risk_score, dec_str, stage_timestamps=None):
     """Build richer agent status cards for the Agent Monitor room.
 
     Each agent exposes role, task, input/output, health and progress so the
-    frontend can render a meaningful monitoring dashboard.
+    frontend can render a meaningful monitoring dashboard. Latency is computed
+    from real stage transition timestamps when available.
     """
     rows = rows_val if rows_val is not None else "?"
     rsi = _v(rsi_val, ".1f") if rsi_val is not None else "N/A"
@@ -72,77 +166,64 @@ def _build_agent_statuses(now_ts, ticker, rows_val, rsi_val, macd_val, news_scor
     sentiment = news_sentiment if news_sentiment else "neutral"
     decision = dec_str.upper() if dec_str else "HOLD"
 
+    latency_map = _stage_latency_map(stage_timestamps)
+
+    def _agent(role, stage, default_latency, task_en, task_zh, input_en, input_zh, output_en, output_zh, summary_en, summary_zh):
+        info = latency_map.get(stage, {})
+        latency = info.get("latency_ms", default_latency)
+        time_str = info.get("time", now_ts[11:])
+        healthy = stage in latency_map
+        return {
+            "name_key": role,
+            "role_key": role,
+            "status": "done" if healthy else "idle",
+            "latency_ms": latency,
+            "task": {"en": task_en, "zh": task_zh},
+            "input": {"en": input_en, "zh": input_zh},
+            "output": {"en": output_en, "zh": output_zh},
+            "summary": {"en": summary_en, "zh": summary_zh},
+            "progress_pct": 100 if healthy else 0,
+            "health": "healthy" if healthy else "degraded",
+            "error_count": 0,
+            "last_seen": time_str,
+        }
+
     return [
-        {
-            "name_key": "data",
-            "role_key": "data",
-            "status": "done",
-            "latency_ms": 120,
-            "task": {"en": "Load market data", "zh": "加载市场数据"},
-            "input": {"en": f"{ticker} OHLCV", "zh": f"{ticker} 行情数据"},
-            "output": {"en": f"{rows} daily bars", "zh": f"{rows} 条日线数据"},
-            "summary": {"en": f"{rows} bars loaded", "zh": f"已加载 {rows} 条数据"},
-            "progress_pct": 100,
-            "health": "healthy",
-            "error_count": 0,
-            "last_seen": now_ts,
-        },
-        {
-            "name_key": "indicator",
-            "role_key": "indicator",
-            "status": "done",
-            "latency_ms": 80,
-            "task": {"en": "Compute technical indicators", "zh": "计算技术指标"},
-            "input": {"en": "Price & volume series", "zh": "价格与成交量序列"},
-            "output": {"en": f"RSI {rsi}, MACD {macd}", "zh": f"RSI {rsi}, MACD {macd}"},
-            "summary": {"en": f"RSI {rsi}, MACD {macd}", "zh": f"RSI {rsi}, MACD {macd}"},
-            "progress_pct": 100,
-            "health": "healthy",
-            "error_count": 0,
-            "last_seen": now_ts,
-        },
-        {
-            "name_key": "news",
-            "role_key": "news",
-            "status": "done",
-            "latency_ms": 1200,
-            "task": {"en": "Fetch and score news", "zh": "获取并评分新闻"},
-            "input": {"en": f"{ticker} news feed", "zh": f"{ticker} 新闻流"},
-            "output": {"en": f"Sentiment {sentiment}, score {news_score}", "zh": f"情绪 {sentiment}，评分 {news_score}"},
-            "summary": {"en": f"News score {news_score}", "zh": f"新闻评分 {news_score}"},
-            "progress_pct": 100,
-            "health": "healthy",
-            "error_count": 0,
-            "last_seen": now_ts,
-        },
-        {
-            "name_key": "risk",
-            "role_key": "risk",
-            "status": "done",
-            "latency_ms": 60,
-            "task": {"en": "Evaluate risk constraints", "zh": "评估风险约束"},
-            "input": {"en": "Returns & drawdown series", "zh": "收益与回撤序列"},
-            "output": {"en": f"Risk score {risk_score}/100", "zh": f"风险分数 {risk_score}/100"},
-            "summary": {"en": f"Risk {risk_score}/100", "zh": f"风险 {risk_score}/100"},
-            "progress_pct": 100,
-            "health": "healthy",
-            "error_count": 0,
-            "last_seen": now_ts,
-        },
-        {
-            "name_key": "decision",
-            "role_key": "decision",
-            "status": "done",
-            "latency_ms": 80,
-            "task": {"en": "Aggregate signals into decision", "zh": "汇总信号生成决策"},
-            "input": {"en": "Strategy + risk + backtest + news", "zh": "策略 + 风险 + 回测 + 新闻"},
-            "output": {"en": f"Final decision {decision}", "zh": f"最终决策 {decision}"},
-            "summary": {"en": decision, "zh": decision},
-            "progress_pct": 100,
-            "health": "healthy",
-            "error_count": 0,
-            "last_seen": now_ts,
-        },
+        _agent(
+            "data", "loading_data", 120,
+            "Load market data", "加载市场数据",
+            f"{ticker} OHLCV", f"{ticker} 行情数据",
+            f"{rows} daily bars", f"{rows} 条日线数据",
+            f"{rows} bars loaded", f"已加载 {rows} 条数据",
+        ),
+        _agent(
+            "indicator", "calculating_indicators", 80,
+            "Compute technical indicators", "计算技术指标",
+            "Price & volume series", "价格与成交量序列",
+            f"RSI {rsi}, MACD {macd}", f"RSI {rsi}, MACD {macd}",
+            f"RSI {rsi}, MACD {macd}", f"RSI {rsi}, MACD {macd}",
+        ),
+        _agent(
+            "news", "analyzing_news", 1200,
+            "Fetch and score news", "获取并评分新闻",
+            f"{ticker} news feed", f"{ticker} 新闻流",
+            f"Sentiment {sentiment}, score {news_score}", f"情绪 {sentiment}，评分 {news_score}",
+            f"News score {news_score}", f"新闻评分 {news_score}",
+        ),
+        _agent(
+            "risk", "checking_risk", 60,
+            "Evaluate risk constraints", "评估风险约束",
+            "Returns & drawdown series", "收益与回撤序列",
+            f"Risk score {risk_score}/100", f"风险分数 {risk_score}/100",
+            f"Risk {risk_score}/100", f"风险 {risk_score}/100",
+        ),
+        _agent(
+            "decision", "making_decision", 80,
+            "Aggregate signals into decision", "汇总信号生成决策",
+            "Strategy + risk + backtest + news", "策略 + 风险 + 回测 + 新闻",
+            f"Final decision {decision}", f"最终决策 {decision}",
+            decision, decision,
+        ),
     ]
 
 
@@ -1192,6 +1273,37 @@ def _build_document_artifact(
         ],
     }
 
+    # Traceability: link report back to the rooms that produced its inputs
+    traceability = {
+        "decision_room": "schedule",
+        "backtest_room": "task_queues",
+        "risk_room": "alarm",
+        "strategy_room": "skills",
+        "decision_ref": {
+            "decision": dec_upper,
+            "confidence": decision_panel.get("confidence", 0.62),
+            "position_pct": decision_panel.get("position_pct", 0),
+            "mode": decision_panel.get("decision_mode", "proceed"),
+        },
+        "backtest_ref": {
+            "total_return_pct": total_return_pct,
+            "sharpe": sharpe,
+            "max_drawdown_pct": max_dd_pct,
+            "validation": validation_en,
+        },
+        "risk_ref": {
+            "risk_score": risk_score,
+            "gate_status": risk_gate_en,
+            "position_limit_pct": position_limit_pct,
+        },
+        "strategy_ref": {
+            "name": strategy_name,
+            "name_zh": strategy_name_zh,
+            "signal": signal,
+            "score": score,
+        },
+    }
+
     llm_note = {
         "zh": "AI 报告正在后台生成，当前显示规则模板。",
         "en": "AI report is being generated in the background; showing rule-based template.",
@@ -1245,8 +1357,41 @@ def _build_document_artifact(
             # Fail silently: frontend keeps showing fallback
             pass
 
+    def _set_llm_timeout() -> None:
+        """If LLM is still pending after 30s, mark as timeout and show fallback note."""
+        try:
+            path = os.path.abspath(TELEMETRY_PATH)
+            if not os.path.exists(path):
+                return
+            with open(path, "r", encoding="utf-8") as f:
+                snap = json.load(f)
+            artifacts = snap.get("trading", {}).get("room_artifacts", {})
+            if "document" not in artifacts:
+                return
+            doc = artifacts["document"]
+            if doc.get("visual", {}).get("data", {}).get("llm_status") != "pending":
+                return
+            timeout_note = {
+                "zh": "AI 报告生成超时，当前显示规则模板。",
+                "en": "AI report generation timed out; showing rule-based template.",
+            }
+            doc["visual"]["data"]["llm_status"] = "timeout"
+            doc["visual"]["data"]["llm_note"] = timeout_note
+            doc["details"]["llm_status"] = "timeout"
+            doc["details"]["llm_note"] = timeout_note
+            doc["monitor_focus"] = [
+                {"en": "AI report timed out — review rule-based summary", "zh": "AI 报告超时，请查看规则模板摘要"},
+            ]
+            doc["updated_at"] = str(datetime.now())[:19]
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(snap, f, ensure_ascii=False, indent=2)
+        except Exception:
+            pass
+
     def _fetch_llm_report() -> None:
         """Background fetch: call shared LLM client and update telemetry."""
+        timer = threading.Timer(30.0, _set_llm_timeout)
+        timer.start()
         try:
             # Ensure trading_agent is importable from background thread
             agent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "trading_agent"))
@@ -1289,6 +1434,8 @@ def _build_document_artifact(
             _update_telemetry_with_llm(llm_result)
         except Exception:
             pass
+        finally:
+            timer.cancel()
 
     # Spawn background thread so the main pipeline is not blocked
     threading.Thread(target=_fetch_llm_report, daemon=True).start()
@@ -1328,6 +1475,7 @@ def _build_document_artifact(
                 "references": fallback_report["references"],
                 "llm_status": "pending",
                 "llm_note": llm_note,
+                "traceability": traceability,
             }
         },
         "details": {
@@ -1342,7 +1490,9 @@ def _build_document_artifact(
             "references": fallback_report["references"],
             "llm_status": "pending",
             "llm_note": llm_note,
+            "traceability": traceability,
         },
+        "traceability": traceability,
         "updated_at": now_ts,
     }
 
@@ -1481,7 +1631,7 @@ def _build_mcp_artifact(now_ts, rsi_val, macd_val, ma20_val, ma60_val, vol_20d, 
     }
 
 
-def _build_images_artifact(now_ts, ticker, indicator, backtest, decision, current_strategy_detail):
+def _build_images_artifact(now_ts, ticker, indicator, backtest, decision, current_strategy_detail, price_series=None):
     """Build the Chart Analysis Room (images) artifact from real indicator/backtest data."""
     rsi_val = indicator.get("rsi")
     macd_val = indicator.get("macd")
@@ -1580,13 +1730,33 @@ def _build_images_artifact(now_ts, ticker, indicator, backtest, decision, curren
         _metric_number("交易次数", trades if trades else "暂无数据", ""),
     ]
 
-    # Visual summary for the chart room (no full series = no fake chart)
+    # Use real price series if provided, otherwise keep summary-only mode
+    if price_series and price_series.get("close"):
+        dates = price_series.get("dates", [])
+        close_series = price_series.get("close", [])
+        ma20_series = price_series.get("ma20", [])
+        ma60_series = price_series.get("ma60", [])
+        date_range = f"{dates[0]} ~ {dates[-1]}" if dates else ""
+        has_price_data = True
+    else:
+        dates = []
+        close_series = []
+        ma20_series = []
+        ma60_series = []
+        date_range = ""
+        has_price_data = False
+
+    # Visual summary for the chart room
     visual = {
         "kind": "chart_dashboard",
         "data": {
             "ticker": ticker,
             "rows": rows_val,
-            "has_price_data": close_val is not None,
+            "has_price_data": has_price_data,
+            "dates": dates,
+            "close": close_series,
+            "ma20": ma20_series,
+            "ma60": ma60_series,
             "price_summary": {
                 "latest_close": close_val,
                 "ma20": ma20_val,
@@ -1617,8 +1787,8 @@ def _build_images_artifact(now_ts, ticker, indicator, backtest, decision, curren
                 "win_rate": win_rate,
                 "trades": trades,
             },
-            "sparkline": [],
-            "date_range": "",
+            "sparkline": close_series,
+            "date_range": date_range,
         }
     }
 
@@ -1897,36 +2067,25 @@ def build_room_artifacts(task: dict, result: dict) -> dict[str, dict]:
     news_sentiment = news.get("news_sentiment", "N/A") if isinstance(news, dict) else "N/A"
     news_confidence = news.get("news_confidence") if isinstance(news, dict) else None
 
+    stage_timestamps = result.get("stage_timestamps", [])
+    price_series = result.get("price_series", None)
+
     # ── Build agent status data ──
     agent_statuses = result.get("agent_statuses", [])
     if not agent_statuses:
         agent_statuses = _build_agent_statuses(
-            now_ts, ticker, rows_val, rsi_val, macd_val, news_score, news_sentiment, risk_score, dec_str
+            now_ts, ticker, rows_val, rsi_val, macd_val, news_score, news_sentiment, risk_score, dec_str,
+            stage_timestamps=stage_timestamps,
         )
 
     # ── Build execution events ──
     exec_events = result.get("execution_events", [])
     if not exec_events:
-        bt_return = round((backtest.get("total_return") or 0) * 100, 1)
-        bt_sharpe = round(backtest.get("sharpe_ratio", 0), 2)
-        bt_maxdd = round(abs(backtest.get("max_drawdown", 0)) * 100, 1)
-        _news_score_num = news_score if news_score is not None else 50
-        _sentiment_en = str(news_sentiment) if news_sentiment != "N/A" else "neutral"
-        _sentiment_zh_map = {"positive": "正面", "negative": "负面", "neutral": "中性"}
-        _sentiment_zh = _sentiment_zh_map.get(_sentiment_en, _sentiment_en)
-        _decision_en = dec_str.upper()
-        _position_pct = round(position_pct * 100)
-        _event_time = now_ts[11:]
-        exec_events = [
-            {"time": _event_time, "stage": "start", "level": "info", "message": {"en": f"Analysis started for {ticker}", "zh": f"开始分析 {ticker}"}},
-            {"time": _event_time, "stage": "data", "level": "success", "message": {"en": f"Loaded {rows_val or '?'} bars for {ticker}", "zh": f"已加载 {ticker} 的 {rows_val or '?'} 根 K 线"}},
-            {"time": _event_time, "stage": "indicator", "level": "info", "message": {"en": f"RSI {_v(rsi_val, '.1f')}, MACD {_v(macd_val, '.3f')}", "zh": f"RSI {_v(rsi_val, '.1f')}，MACD {_v(macd_val, '.3f')}"}},
-            {"time": _event_time, "stage": "news", "level": "info", "message": {"en": f"News sentiment {_sentiment_en} (score {_news_score_num})", "zh": f"新闻情绪 {_sentiment_zh}（分数 {_news_score_num}）"}},
-            {"time": _event_time, "stage": "risk", "level": "warning" if gate_status != "pass" else "success", "message": {"en": f"Risk gate {gate_label_en} (score {risk_score})", "zh": f"风险闸门 {gate_label_zh}（分数 {risk_score}）"}},
-            {"time": _event_time, "stage": "backtest", "level": "success" if bt_return > 0 else "warning", "message": {"en": f"Backtest return {bt_return}%, Sharpe {bt_sharpe}, Max DD {bt_maxdd}%", "zh": f"回测收益 {bt_return}%，夏普 {bt_sharpe}，最大回撤 {bt_maxdd}%"}},
-            {"time": _event_time, "stage": "decision", "level": "success" if _decision_en == "BUY" else "warning" if _decision_en == "SELL" else "info", "message": {"en": f"Final decision: {_decision_en} at {_position_pct}% position", "zh": f"最终决策：{decision_zh}，仓位 {_position_pct}%"}},
-            {"time": _event_time, "stage": "report", "level": "success", "message": {"en": "Report generated and agents returned to idle", "zh": "报告已生成，Agent 返回待命"}},
-        ]
+        exec_events = _build_exec_events(
+            now_ts, ticker, rows_val, rsi_val, macd_val, news_score, news_sentiment, risk_score,
+            gate_status, gate_label_en, gate_label_zh, backtest, dec_str, decision_zh, position_pct,
+            stage_timestamps=stage_timestamps,
+        )
 
     data_source = "Yahoo Finance / Stooq"
     date_range = f"{task.get('start_date', '?')} ~ {task.get('end_date', '?')}"
@@ -2000,7 +2159,7 @@ def build_room_artifacts(task: dict, result: dict) -> dict[str, dict]:
         ),
 
         "images": _build_images_artifact(
-            now_ts, ticker, indicator, backtest, decision, current_strategy_detail
+            now_ts, ticker, indicator, backtest, decision, current_strategy_detail, price_series=price_series
         ),
 
         "skills": {

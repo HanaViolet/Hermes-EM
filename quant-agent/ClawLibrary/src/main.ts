@@ -29,6 +29,29 @@ const MENU_RESOURCE_IDS: ResourcePartitionId[] = [
   'log',          // 11. Execution Logs
   'schedule'      // 12. Decision Desk
 ];
+
+// Pipeline order used for breadcrumb navigation (excluding idle break_room)
+const PIPELINE_ORDER: ResourcePartitionId[] = [
+  'gateway', 'mcp', 'skills', 'alarm', 'task_queues',
+  'document', 'agent', 'images', 'memory', 'log', 'schedule'
+];
+
+// Upstream / downstream relationships between rooms
+const ROOM_LINKS: Record<ResourcePartitionId, { upstream: ResourcePartitionId[]; downstream: ResourcePartitionId[] }> = {
+  gateway: { upstream: [], downstream: ['mcp', 'skills'] },
+  mcp: { upstream: ['gateway'], downstream: ['skills', 'alarm'] },
+  skills: { upstream: ['gateway', 'mcp'], downstream: ['alarm', 'task_queues'] },
+  alarm: { upstream: ['skills', 'mcp'], downstream: ['task_queues', 'schedule'] },
+  task_queues: { upstream: ['skills', 'alarm'], downstream: ['schedule', 'document'] },
+  schedule: { upstream: ['task_queues', 'alarm'], downstream: ['document', 'log'] },
+  document: { upstream: ['schedule'], downstream: [] },
+  agent: { upstream: [], downstream: [] },
+  images: { upstream: ['gateway'], downstream: ['schedule'] },
+  memory: { upstream: ['skills'], downstream: ['schedule'] },
+  log: { upstream: ['schedule'], downstream: [] },
+  break_room: { upstream: [], downstream: ['gateway'] },
+};
+
 const MERGED_RESOURCE_IDS = new Set<ResourcePartitionId>([]);
 const EXTERNAL_KIND_MENU_RESOURCE_IDS = new Set<ResourcePartitionId>([]);
 const RESOURCE_UI_ALIAS: Partial<Record<ResourcePartitionId, ResourcePartitionId>> = {};
@@ -2797,6 +2820,110 @@ function _renderActionPlan(artifact: any): string {
   `;
 }
 
+function _metricValue(artifact: any, label: string): any {
+  const m = (artifact?.metrics || []).find((x: any) => x.label === label || x.label_zh === label);
+  return m?.value;
+}
+
+function _renderUpstreamContext(): string {
+  const gateway = getRoomArtifact('gateway');
+  const mcp = getRoomArtifact('mcp');
+  const skills = getRoomArtifact('skills');
+  const alarm = getRoomArtifact('alarm');
+  const backtest = getRoomArtifact('task_queues');
+
+  const rows: { room: ResourcePartitionId; label: string; value: string }[] = [];
+  if (gateway) {
+    rows.push({ room: 'gateway', label: uiLocale === 'zh' ? '最新收盘' : 'Latest Close', value: String(_metricValue(gateway, '最新收盘') ?? _metricValue(gateway, 'Latest Close') ?? '-') });
+  }
+  if (mcp) {
+    rows.push({ room: 'mcp', label: 'RSI / MACD', value: `${_metricValue(mcp, 'RSI') ?? '-'} / ${_metricValue(mcp, 'MACD') ?? '-'}` });
+  }
+  if (skills) {
+    rows.push({ room: 'skills', label: uiLocale === 'zh' ? '策略信号' : 'Strategy Signal', value: String(_metricValue(skills, '信号') ?? _metricValue(skills, 'Signal') ?? '-') });
+  }
+  if (alarm) {
+    rows.push({ room: 'alarm', label: uiLocale === 'zh' ? '风险门' : 'Risk Gate', value: `${_metricValue(alarm, '风险分数') ?? _metricValue(alarm, 'Risk Score') ?? '-'} · ${String(_metricValue(alarm, '仓位上限') ?? _metricValue(alarm, 'Position Limit') ?? '-')}%` });
+  }
+  if (backtest) {
+    rows.push({ room: 'task_queues', label: uiLocale === 'zh' ? '回测验证' : 'Backtest', value: `${_metricValue(backtest, '总收益') ?? _metricValue(backtest, 'Total Return') ?? '-'}% · Sharpe ${_metricValue(backtest, '夏普比率') ?? _metricValue(backtest, 'Sharpe') ?? '-'}` });
+  }
+  if (rows.length === 0) return '';
+  return `
+    <div class="dashboard-section">
+      <div class="dashboard-section-title">${escapeHtml(uiLocale === 'zh' ? '上游上下文' : 'Upstream Context')}</div>
+      <div class="upstream-context-grid">
+        ${rows.map((r) => `
+          <div class="upstream-context-cell" data-room-link="${r.room}">
+            <span class="upstream-context-room">${escapeHtml(resourceLabel(r.room, uiLocale))}</span>
+            <span class="upstream-context-label">${escapeHtml(r.label)}</span>
+            <span class="upstream-context-value">${escapeHtml(r.value)}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function _roomStatusFor(resourceId: ResourcePartitionId): string {
+  const res = lastSnapshot?.resources?.find((r) => r.id === resourceId);
+  return res?.status ?? 'idle';
+}
+
+function _renderRoomLinkPill(resourceId: ResourcePartitionId): string {
+  const status = _roomStatusFor(resourceId);
+  const color = PARTITION_CSS_COLORS[resourceId] ?? 'rgba(244,255,247,0.7)';
+  const done = status === 'done' || status === 'warning' || status === 'alert';
+  const active = status === 'active';
+  const check = done ? ' ✓' : '';
+  return `
+    <button
+      class="room-link-pill ${active ? 'active' : ''} ${done ? 'done' : ''}"
+      type="button"
+      data-room-link="${resourceId}"
+      style="--room-color: ${color}"
+    >
+      ${escapeHtml(resourceLabel(resourceId, uiLocale))}${check}
+    </button>
+  `;
+}
+
+function _renderPipelineBreadcrumb(currentRoomId: ResourcePartitionId): string {
+  const pills = PIPELINE_ORDER.map((id) => {
+    const status = _roomStatusFor(id);
+    const isCurrent = id === currentRoomId;
+    const done = status === 'done' || status === 'warning' || status === 'alert';
+    const active = status === 'active' || isCurrent;
+    const color = PARTITION_CSS_COLORS[id] ?? 'rgba(244,255,247,0.7)';
+    const check = done && !isCurrent ? '✓ ' : '';
+    return `
+      <button
+        class="pipeline-pill ${isCurrent ? 'current' : ''} ${active ? 'active' : ''} ${done ? 'done' : ''}"
+        type="button"
+        data-room-link="${id}"
+        style="--room-color: ${color}"
+        title="${escapeHtml(resourceLabel(id, uiLocale))}"
+      >
+        ${check}${escapeHtml(resourceLabel(id, uiLocale))}
+      </button>
+    `;
+  }).join('');
+  return `<div class="pipeline-breadcrumb">${pills}</div>`;
+}
+
+function _renderRoomLinks(currentRoomId: ResourcePartitionId): string {
+  const links = ROOM_LINKS[currentRoomId];
+  if (!links) return '';
+  const upstream = links.upstream.map(_renderRoomLinkPill).join('');
+  const downstream = links.downstream.map(_renderRoomLinkPill).join('');
+  return `
+    <div class="room-links-bar">
+      ${upstream ? `<div class="room-links-section"><span class="room-links-label">${escapeHtml(uiLocale === 'zh' ? '上游输入' : 'Upstream Inputs')}</span>${upstream}</div>` : ''}
+      ${downstream ? `<div class="room-links-section"><span class="room-links-label">${escapeHtml(uiLocale === 'zh' ? '下游输出' : 'Downstream Outputs')}</span>${downstream}</div>` : ''}
+    </div>
+  `;
+}
+
 function renderMarketCommandRoomPanel(artifact: any): string {
   return renderMarketDataIntakePanel(artifact);
 }
@@ -2853,6 +2980,12 @@ function renderMarketDataIntakePanel(artifact: any): string {
     { label: '最新收盘', value: hasLatestClose ? latestClose.toFixed(2) : '暂无数据', status: hasLatestClose ? 'pass' : 'missing' },
     { label: '覆盖率', value: Number.isFinite(coverage) ? `${coverage.toFixed(0)}%` : '暂无数据', status: coverage >= 95 ? 'pass' : 'warn' }
   ];
+  const handoffRoomMap: Record<string, ResourcePartitionId> = {
+    '指标实验室': 'mcp',
+    '策略实验室': 'skills',
+    '回测实验室': 'task_queues',
+    '风险/决策室': 'alarm',
+  };
   const handoffRooms = [
     { room: '指标实验室', input: 'OHLCV + Close Series', status: isReady ? 'pass' : 'missing' },
     { room: '策略实验室', input: '行情样本 + 指标信号', status: isReady ? 'pass' : 'missing' },
@@ -2962,7 +3095,7 @@ function renderMarketDataIntakePanel(artifact: any): string {
           <div class="market-intake-title">下游交接板</div>
           <div class="market-handoff-list">
             ${handoffRooms.map((gate) => `
-              <div class="market-handoff-row ${escapeHtml(tone(gate.status))}">
+              <div class="market-handoff-row ${escapeHtml(tone(gate.status))}" data-room-link="${escapeHtml(handoffRoomMap[gate.room] ?? '')}">
                 <div><strong>${escapeHtml(gate.room)}</strong><span>${escapeHtml(gate.input)}</span></div>
                 <em>${escapeHtml(badge(gate.status))}</em>
               </div>
@@ -2990,16 +3123,25 @@ function renderChartPanel(artifact: any): string {
   let chartSvg = '';
   if (hasChart) {
     const len = visual.dates.length;
-    const closePts = visual.close.map((v: number, i: number) => `${i},${100 - v}`).join(' ');
-    const ma20Pts = visual.ma20 ? visual.ma20.map((v: number, i: number) => `${i},${100 - v}`).join(' ') : '';
-    const ma60Pts = visual.ma60 ? visual.ma60.map((v: number, i: number) => `${i},${100 - v}`).join(' ') : '';
+    const allValues = [
+      ...visual.close,
+      ...(visual.ma20 || []).filter((v: any) => v !== null && v !== undefined),
+      ...(visual.ma60 || []).filter((v: any) => v !== null && v !== undefined),
+    ].map((v: any) => Number(v)).filter((v: number) => Number.isFinite(v));
+    const min = allValues.length ? Math.min(...allValues) : 0;
+    const max = allValues.length ? Math.max(...allValues) : 100;
+    const range = max - min || 1;
+    const y = (v: number) => 100 - ((Number(v) - min) / range) * 100;
+    const closePts = visual.close.map((v: number, i: number) => `${i},${y(v)}`).join(' ');
+    const ma20Pts = visual.ma20 ? visual.ma20.map((v: number, i: number) => (v === null || v === undefined ? null : `${i},${y(v)}`)).filter(Boolean).join(' ') : '';
+    const ma60Pts = visual.ma60 ? visual.ma60.map((v: number, i: number) => (v === null || v === undefined ? null : `${i},${y(v)}`)).filter(Boolean).join(' ') : '';
 
     chartSvg = '<div class="room-chart-legend">' +
       `<span class="legend-close">${escapeHtml(chartText('close'))}</span>` +
       '<span class="legend-ma20">MA20</span>' +
       '<span class="legend-ma60">MA60</span>' +
       '</div>';
-    chartSvg += `<svg class="mini-chart" viewBox="0 0 ${len} 100" preserveAspectRatio="none">`;
+    chartSvg += `<svg class="mini-chart" viewBox="0 0 ${len - 1} 100" preserveAspectRatio="none">`;
     chartSvg += `<polyline fill="none" stroke="#81a8ff" stroke-width="1.2" points="${closePts}"/>`;
     if (ma20Pts) {
       chartSvg += `<polyline fill="none" stroke="#7ce6c7" stroke-width="1" stroke-dasharray="3,2" points="${ma20Pts}"/>`;
@@ -3839,6 +3981,14 @@ function renderDecisionDashboard(artifact: any): string {
   const decisionLabelText = localizeChartValue(decision.toUpperCase());
   const decisionTitle = decisionLabelText + (modeDisplay ? ' · ' + modeDisplay : '');
 
+  const inputSummaryRoomMap: Record<string, ResourcePartitionId> = {
+    strategy: 'skills',
+    risk: 'alarm',
+    backtest: 'task_queues',
+    market: 'gateway',
+    indicator: 'mcp',
+  };
+
   const inputRows = Object.entries(inputSummary).map(([key, item]: [string, any]) => {
     const roomLabelText = roomLocalized(item.room_label ?? item.room ?? key);
     let valueText = '';
@@ -3861,7 +4011,7 @@ function renderDecisionDashboard(artifact: any): string {
     } else {
       valueText = String(item.value ?? item.status ?? JSON.stringify(item));
     }
-    return { room: roomLabelText, value: valueText };
+    return { room: roomLabelText, value: valueText, roomId: inputSummaryRoomMap[key] };
   });
 
   const priorityLabel = (p: string) => {
@@ -3877,6 +4027,7 @@ function renderDecisionDashboard(artifact: any): string {
   return `
     <section class="advanced-room-panel">
       ${_renderHero(artifact)}
+      ${_renderUpstreamContext()}
       <div class="room-visual">
         <div class="decision-hero">
           <span class="decision-badge ${decisionBadgeCls}" style="font-size:16px;padding:6px 18px;">${escapeHtml(decisionTitle)}</span>
@@ -3889,8 +4040,8 @@ function renderDecisionDashboard(artifact: any): string {
             <div class="dashboard-section-title">${escapeHtml(chartText('inputSummary'))}</div>
             <div class="input-summary-list">
               ${inputRows.map((row: any) => `
-                <div class="input-summary-row">
-                  <span class="input-summary-room">${escapeHtml(row.room)}</span>
+                <div class="input-summary-row" ${row.roomId ? `data-room-link="${escapeHtml(row.roomId)}"` : ''}>
+                  <span class="input-summary-room" ${row.roomId ? 'data-room-link-trigger' : ''}>${escapeHtml(row.room)}</span>
                   <span class="input-summary-value">${escapeHtml(row.value)}</span>
                 </div>
               `).join('')}
@@ -4172,6 +4323,14 @@ function renderAgentMonitorPanel(artifact: any): string {
             const progress = Math.max(0, Math.min(100, a.progress_pct ?? 100));
             const lastSeen = a.last_seen ? clockOf(a.last_seen) : '--:--';
             const errorCount = a.error_count ?? 0;
+            const agentRoomMap: Record<string, ResourcePartitionId> = {
+              data: 'gateway',
+              indicator: 'mcp',
+              news: 'gateway',
+              risk: 'alarm',
+              decision: 'schedule',
+            };
+            const detailRoom = agentRoomMap[a.name_key || a.role_key || ''];
             return `
               <div class="agent-status-card ${agentStatusTone(status)}">
                 <div class="agent-status-header">
@@ -4213,6 +4372,11 @@ function renderAgentMonitorPanel(artifact: any): string {
                     <span>${escapeHtml(agentText('lastSeen'))}</span>
                     <strong>${escapeHtml(lastSeen)}</strong>
                   </div>
+                </div>
+                <div class="agent-status-actions">
+                  ${detailRoom ? `<button class="agent-action-btn" type="button" data-room-link="${detailRoom}">${escapeHtml(uiLocale === 'zh' ? '查看详情' : 'View Details')}</button>` : ''}
+                  <button class="agent-action-btn" type="button" data-room-link="log">${escapeHtml(uiLocale === 'zh' ? '查看日志' : 'View Logs')}</button>
+                  <button class="agent-action-btn" type="button" data-toast="${escapeHtml(uiLocale === 'zh' ? '已请求重启 Agent' : 'Agent restart requested')}">${escapeHtml(uiLocale === 'zh' ? '重启' : 'Restart')}</button>
                 </div>
               </div>
             `;
@@ -4297,11 +4461,66 @@ function renderReportSummaryPanel(artifact: any): string {
             </div>
           </div>
         ` : ''}
+        ${renderReportTraceability(artifact.traceability || details.traceability || visual.traceability)}
       </div>
       ${_renderMetricsGrid(artifact.metrics)}
       ${_renderInsight(artifact)}
       ${_renderActionPlan(artifact)}
     </section>
+  `;
+}
+
+function renderReportTraceability(traceability: any): string {
+  if (!traceability) return '';
+  const cards: { room: ResourcePartitionId; title: string; value: string; level?: string }[] = [];
+  const decision = traceability.decision_ref || {};
+  if (decision.decision) {
+    cards.push({
+      room: (traceability.decision_room as ResourcePartitionId) || 'schedule',
+      title: uiLocale === 'zh' ? '最终决策' : 'Decision',
+      value: decision.decision.toUpperCase(),
+      level: decision.decision.toLowerCase() === 'buy' ? 'positive' : decision.decision.toLowerCase() === 'sell' ? 'danger' : 'neutral',
+    });
+  }
+  const backtest = traceability.backtest_ref || {};
+  if (backtest.total_return_pct !== undefined) {
+    cards.push({
+      room: (traceability.backtest_room as ResourcePartitionId) || 'task_queues',
+      title: uiLocale === 'zh' ? '回测验证' : 'Backtest',
+      value: `${backtest.validation || ''} · ${backtest.total_return_pct}% · Sharpe ${backtest.sharpe ?? 0}`,
+    });
+  }
+  const risk = traceability.risk_ref || {};
+  if (risk.risk_score !== undefined) {
+    cards.push({
+      room: (traceability.risk_room as ResourcePartitionId) || 'alarm',
+      title: uiLocale === 'zh' ? '风险门控' : 'Risk Gate',
+      value: `${risk.gate_status || ''} · ${risk.risk_score} · ${risk.position_limit_pct ?? 0}%`,
+    });
+  }
+  const strategy = traceability.strategy_ref || {};
+  if (strategy.name || strategy.signal) {
+    cards.push({
+      room: (traceability.strategy_room as ResourcePartitionId) || 'skills',
+      title: uiLocale === 'zh' ? '策略信号' : 'Strategy',
+      value: `${strategy.name || ''} · ${strategy.signal || ''}`,
+      level: (strategy.signal || '').toLowerCase() === 'buy' ? 'positive' : (strategy.signal || '').toLowerCase() === 'sell' ? 'danger' : 'neutral',
+    });
+  }
+  if (cards.length === 0) return '';
+  return `
+    <div class="dashboard-section">
+      <div class="dashboard-section-title">${escapeHtml(uiLocale === 'zh' ? '来源追溯' : 'Traceability')}</div>
+      <div class="traceability-grid">
+        ${cards.map((c) => `
+          <div class="traceability-card ${c.level || ''}" data-room-link="${c.room}">
+            <div class="traceability-title">${escapeHtml(c.title)}</div>
+            <div class="traceability-value">${escapeHtml(c.value)}</div>
+            <div class="traceability-room">${escapeHtml(resourceLabel(c.room, uiLocale))} →</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
   `;
 }
 
@@ -4366,6 +4585,11 @@ function renderIdleSummaryPanel(artifact: any): string {
           <div class="idle-last-task">${escapeHtml(idleText('lastTask'))}: <strong>${escapeHtml(data.last_asset || '')}</strong> · ${escapeHtml(lastDecision)}</div>
           ${lastRun ? `<div class="idle-meta">${escapeHtml(idleText('lastRun'))}: ${escapeHtml(lastRun)}</div>` : ''}
           ${tasksCompleted !== '' ? `<div class="idle-meta">${escapeHtml(idleText('tasksCompleted'))}: ${escapeHtml(String(tasksCompleted))}</div>` : ''}
+          <div class="idle-actions">
+            <button class="agent-action-btn" type="button" data-room-link="schedule">${escapeHtml(uiLocale === 'zh' ? '查看决策台' : 'View Decision Desk')}</button>
+            <button class="agent-action-btn" type="button" data-room-link="document">${escapeHtml(uiLocale === 'zh' ? '查看报告' : 'View Report')}</button>
+            <button class="agent-action-btn" type="button" data-room-link="gateway">${escapeHtml(uiLocale === 'zh' ? '新建任务' : 'New Task')}</button>
+          </div>
         </div>
       </div>
       ${_renderMetricsGrid(artifact.metrics)}
@@ -4387,36 +4611,55 @@ function renderGenericRoomPanel(artifact: any): string {
 }
 
 function renderAdvancedRoomPanel(artifact: any): string {
-  switch (artifact.panel_type) {
-    case 'data_health':
-      return renderDataHealthPanel(artifact);
-    case 'chart_panel':
-      return renderChartPanel(artifact);
-    case 'indicator_dashboard':
-      return renderIndicatorDashboard(artifact);
-    case 'news_evidence':
-      return renderNewsEvidencePanel(artifact);
-    case 'strategy_ranking':
-      return renderStrategyRankingPanel(artifact);
-    case 'memory_panel':
-      return renderMemoryPanel(artifact);
-    case 'risk_gauge':
-      return renderRiskGaugePanel(artifact);
-    case 'backtest_curve':
-      return renderBacktestCurvePanel(artifact);
-    case 'decision_dashboard':
-      return renderDecisionDashboard(artifact);
-    case 'execution_timeline':
-      return renderExecutionTimelinePanel(artifact);
-    case 'agent_monitor':
-      return renderAgentMonitorPanel(artifact);
-    case 'report_summary':
-      return renderReportSummaryPanel(artifact);
-    case 'idle_summary':
-      return renderIdleSummaryPanel(artifact);
-    default:
-      return renderGenericRoomPanel(artifact);
-  }
+  const roomId = artifact.room_id as ResourcePartitionId;
+  const panelHtml = (() => {
+    switch (artifact.panel_type) {
+      case 'data_health':
+        return renderDataHealthPanel(artifact);
+      case 'chart_panel':
+        return renderChartPanel(artifact);
+      case 'indicator_dashboard':
+        return renderIndicatorDashboard(artifact);
+      case 'news_evidence':
+        return renderNewsEvidencePanel(artifact);
+      case 'strategy_ranking':
+        return renderStrategyRankingPanel(artifact);
+      case 'memory_panel':
+        return renderMemoryPanel(artifact);
+      case 'risk_gauge':
+        return renderRiskGaugePanel(artifact);
+      case 'backtest_curve':
+        return renderBacktestCurvePanel(artifact);
+      case 'decision_dashboard':
+        return renderDecisionDashboard(artifact);
+      case 'execution_timeline':
+        return renderExecutionTimelinePanel(artifact);
+      case 'agent_monitor':
+        return renderAgentMonitorPanel(artifact);
+      case 'report_summary':
+        return renderReportSummaryPanel(artifact);
+      case 'idle_summary':
+        return renderIdleSummaryPanel(artifact);
+      default:
+        return renderGenericRoomPanel(artifact);
+    }
+  })();
+  return `
+    ${_renderPipelineBreadcrumb(roomId)}
+    ${panelHtml}
+    ${_renderRoomLinks(roomId)}
+  `;
+}
+
+function showToast(message: string, duration = 2000) {
+  const existing = document.getElementById('claw-toast');
+  if (existing) existing.remove();
+  const toast = document.createElement('div');
+  toast.id = 'claw-toast';
+  toast.textContent = message;
+  toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);padding:10px 18px;border-radius:8px;background:rgba(15,23,30,0.92);color:rgba(244,255,247,0.95);font-size:13px;z-index:10000;box-shadow:0 4px 20px rgba(0,0,0,0.35);border:1px solid rgba(148,163,184,0.25);';
+  document.body.appendChild(toast);
+  window.setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity .3s'; window.setTimeout(() => toast.remove(), 300); }, duration);
 }
 
 function renderRoomModal(): void {
@@ -5145,6 +5388,22 @@ assetModalItems?.addEventListener('click', async (event) => {
       meta: previewButton.dataset.previewMeta ?? '',
       updatedAt: null
     });
+    return;
+  }
+
+  const roomLink = target.closest('[data-room-link]');
+  if (roomLink instanceof HTMLElement) {
+    const resourceId = roomLink.dataset.roomLink as ResourcePartitionId | undefined;
+    if (resourceId) {
+      openResourceModal(resourceId, { forceModal: true });
+    }
+    return;
+  }
+
+  const toastBtn = target.closest('[data-toast]');
+  if (toastBtn instanceof HTMLElement) {
+    const msg = toastBtn.dataset.toast || '';
+    if (msg) showToast(msg);
     return;
   }
 });

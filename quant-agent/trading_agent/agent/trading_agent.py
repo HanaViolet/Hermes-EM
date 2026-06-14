@@ -167,6 +167,19 @@ def run_trading_agent(
                         indicator_result[col] = round(v, 6)
                 except Exception: pass
         indicator_result["rows"] = len(data)
+
+        # Extract compact price series for the chart room (JSON-serializable)
+        try:
+            _chart_df = data.tail(60)
+            price_series = {
+                "dates": [str(d)[:10] for d in _chart_df["date"].tolist()],
+                "close": [round(float(v), 4) for v in _chart_df["close"].tolist()],
+                "ma20": [round(float(v), 4) if not _math.isnan(float(v)) else None for v in _chart_df["ma20"].tolist()],
+                "ma60": [round(float(v), 4) if not _math.isnan(float(v)) else None for v in _chart_df["ma60"].tolist()],
+            }
+        except Exception:
+            price_series = {"dates": [], "close": [], "ma20": [], "ma60": []}
+
         update_workflow(current_stage="calculating_indicators", progress=30, summary=f"Indicators: RSI={indicator_result.get('rsi','?')}, MACD={indicator_result.get('macd','?')}", details=indicator_result)
 
         # ── Stage 3: Regime Detection ──
@@ -377,6 +390,8 @@ def run_trading_agent(
             "memory_result": memory_result,
             "explanation": explanation,
             "agent_analysis": agent_analysis,
+            "stage_timestamps": _telemetry_state.get("stage_timestamps", []),
+            "price_series": price_series,
         }
 
         # Build advanced room artifacts and persist directly via office_bridge

@@ -5569,6 +5569,180 @@
       .idle-last-task { margin-top: 12px; font-size: 12px; color: #94a3b8; }
       .idle-meta { margin-top: 4px; font-size: 11px; color: #64748b; }
 
+      /* Pipeline breadcrumb and cross-room links */
+      .pipeline-breadcrumb {
+        display: flex;
+        gap: 6px;
+        padding: 10px 12px 0;
+        overflow-x: auto;
+        flex-wrap: wrap;
+      }
+      .pipeline-pill {
+        flex: 0 0 auto;
+        padding: 4px 10px;
+        border-radius: 12px;
+        border: 1px solid rgba(148, 163, 184, 0.25);
+        background: rgba(15, 23, 30, 0.6);
+        color: rgba(226, 232, 240, 0.75);
+        font-size: 11px;
+        cursor: pointer;
+        transition: all .15s ease;
+      }
+      .pipeline-pill:hover {
+        border-color: var(--room-color, rgba(148, 163, 184, 0.5));
+        color: rgba(244, 255, 247, 0.95);
+      }
+      .pipeline-pill.current {
+        border-color: var(--room-color, #7ce6c7);
+        color: var(--room-color, #7ce6c7);
+        box-shadow: 0 0 8px var(--room-color, rgba(124, 230, 199, 0.35));
+        font-weight: 700;
+      }
+      .pipeline-pill.active {
+        color: rgba(244, 255, 247, 0.95);
+      }
+      .pipeline-pill.done {
+        border-color: rgba(124, 230, 199, 0.45);
+        color: rgba(124, 230, 199, 0.9);
+      }
+      .room-links-bar {
+        display: flex;
+        gap: 12px;
+        padding: 14px 16px 16px;
+        flex-wrap: wrap;
+      }
+      .room-links-section {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px;
+      }
+      .room-links-label {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: rgba(148, 163, 184, 0.7);
+        margin-right: 4px;
+      }
+      .room-link-pill {
+        padding: 3px 9px;
+        border-radius: 10px;
+        border: 1px solid rgba(148, 163, 184, 0.25);
+        background: rgba(15, 23, 30, 0.5);
+        color: rgba(226, 232, 240, 0.8);
+        font-size: 11px;
+        cursor: pointer;
+        transition: all .15s ease;
+      }
+      .room-link-pill:hover {
+        border-color: var(--room-color, rgba(148, 163, 184, 0.5));
+        color: var(--room-color, #7ce6c7);
+      }
+      .room-link-pill.active {
+        border-color: var(--room-color, #7ce6c7);
+        color: var(--room-color, #7ce6c7);
+      }
+      .room-link-pill.done {
+        border-color: rgba(124, 230, 199, 0.4);
+        color: rgba(124, 230, 199, 0.85);
+      }
+      [data-room-link] {
+        cursor: pointer;
+      }
+      .market-handoff-row[data-room-link]:hover {
+        border-color: var(--room-color, rgba(148, 163, 184, 0.5));
+      }
+      .input-summary-row[data-room-link]:hover .input-summary-room {
+        color: var(--room-color, #7ce6c7);
+        text-decoration: underline;
+      }
+      .agent-status-actions,
+      .idle-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
+        flex-wrap: wrap;
+      }
+      .agent-action-btn {
+        padding: 5px 10px;
+        border-radius: 6px;
+        border: 1px solid rgba(148, 163, 184, 0.25);
+        background: rgba(15, 23, 30, 0.5);
+        color: rgba(226, 232, 240, 0.85);
+        font-size: 11px;
+        cursor: pointer;
+        transition: all .15s ease;
+      }
+      .agent-action-btn:hover {
+        border-color: rgba(124, 230, 199, 0.5);
+        color: rgba(124, 230, 199, 0.95);
+      }
+      .traceability-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 10px;
+      }
+      .traceability-card {
+        border: 1px solid rgba(84, 108, 128, 0.25);
+        background: rgba(5, 12, 18, 0.46);
+        border-radius: 8px;
+        padding: 10px;
+        transition: all .15s ease;
+      }
+      .traceability-card:hover {
+        border-color: var(--room-color, rgba(148, 163, 184, 0.5));
+      }
+      .traceability-card.positive { border-color: rgba(124, 230, 199, 0.35); }
+      .traceability-card.danger { border-color: rgba(255, 111, 97, 0.35); }
+      .traceability-title {
+        font-size: 10px;
+        text-transform: uppercase;
+        color: rgba(148, 163, 184, 0.7);
+        margin-bottom: 4px;
+      }
+      .traceability-value {
+        font-size: 13px;
+        font-weight: 700;
+        color: rgba(239, 247, 243, 0.95);
+        margin-bottom: 6px;
+      }
+      .traceability-room {
+        font-size: 10px;
+        color: rgba(124, 230, 199, 0.8);
+        text-align: right;
+      }
+      .upstream-context-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 8px;
+        padding: 0 16px 10px;
+      }
+      .upstream-context-cell {
+        border: 1px solid rgba(84, 108, 128, 0.22);
+        background: rgba(5, 12, 18, 0.4);
+        border-radius: 7px;
+        padding: 8px 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        transition: all .15s ease;
+      }
+      .upstream-context-cell:hover {
+        border-color: var(--room-color, rgba(148, 163, 184, 0.5));
+      }
+      .upstream-context-room {
+        font-size: 10px;
+        color: rgba(148, 163, 184, 0.7);
+      }
+      .upstream-context-label {
+        font-size: 10px;
+        color: rgba(148, 163, 184, 0.6);
+      }
+      .upstream-context-value {
+        font-size: 13px;
+        font-weight: 700;
+        color: rgba(239, 247, 243, 0.95);
+      }
     </style>
   </head>
   <body>

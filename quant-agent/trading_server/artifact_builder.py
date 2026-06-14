@@ -79,6 +79,8 @@ def _stage_latency_map(stage_timestamps):
             dt = datetime.fromisoformat(ts)
             if dt.tzinfo is None:
                 dt = dt.replace(tzinfo=timezone.utc)
+            # Convert to local system time for display consistency
+            dt = dt.astimezone()
             parsed.append((entry.get("stage"), dt))
         except Exception:
             continue
@@ -89,7 +91,7 @@ def _stage_latency_map(stage_timestamps):
         if i + 1 < len(parsed):
             latency_ms = max(1, int((parsed[i + 1][1] - dt).total_seconds() * 1000))
         else:
-            latency_ms = max(1, int((datetime.now(timezone.utc) - dt).total_seconds() * 1000))
+            latency_ms = max(1, int((datetime.now(timezone.utc).astimezone() - dt).total_seconds() * 1000))
         out[stage] = {"time": dt.strftime("%H:%M:%S"), "latency_ms": latency_ms}
     return out
 

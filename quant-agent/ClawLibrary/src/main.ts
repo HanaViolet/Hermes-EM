@@ -117,10 +117,8 @@ const assetModalContext = document.getElementById('asset-modal-context');
 const assetModalSummary = document.getElementById('asset-modal-summary');
 const assetModalItems = document.getElementById('asset-modal-items');
 const assetModalClose = document.getElementById('asset-modal-close');
-const assetModalCopyContext = document.getElementById('asset-modal-copy-context') as HTMLButtonElement | null;
 const assetModalSort = document.getElementById('asset-modal-sort') as HTMLSelectElement | null;
 const assetModalKind = document.getElementById('asset-modal-kind') as HTMLSelectElement | null;
-const assetModalView = document.getElementById('asset-modal-view') as HTMLButtonElement | null;
 const assetModalSearch = document.getElementById('asset-modal-search') as HTMLInputElement | null;
 const previewModal = document.getElementById('preview-modal');
 const previewModalTitle = document.getElementById('preview-modal-title');
@@ -132,10 +130,8 @@ const previewModalFolder = document.getElementById('preview-modal-folder') as HT
 const debugOverlay = document.getElementById('debug-overlay');
 
 type ModalSortMode = 'priority' | 'date-desc' | 'date-asc' | 'size-desc' | 'size-asc';
-type ModalViewMode = 'list' | 'grid';
 type ResourceModalPreference = {
   sortMode: ModalSortMode;
-  viewMode: ModalViewMode;
 };
 type PreviewKind = 'image' | 'markdown' | 'json' | 'text';
 type PreviewReadMode = 'full' | 'head' | 'tail';
@@ -206,7 +202,6 @@ let categoryMenuVisible = false;
 let categoryMenuResourceId: ResourcePartitionId | null = null;
 let sceneEventsBound = false;
 let modalSortMode: ModalSortMode = 'priority';
-let modalViewMode: ModalViewMode = 'list';
 let modalKindFilter = 'all';
 let modalSearchQuery = '';
 let modalPrefsByResource: Partial<Record<ResourcePartitionId, ResourceModalPreference>> = {};
@@ -746,18 +741,15 @@ function getSelectedResource() {
 
 function modalDefaultsForResource(resourceId: ResourcePartitionId): {
   sortMode: ModalSortMode;
-  viewMode: ModalViewMode;
 } {
   if (resourceId === 'images') {
     return {
-      sortMode: 'date-desc',
-      viewMode: 'list'
+      sortMode: 'date-desc'
     };
   }
 
   return {
-    sortMode: 'date-desc',
-    viewMode: 'list'
+    sortMode: 'date-desc'
   };
 }
 
@@ -1685,16 +1677,6 @@ function setModalFeedback(message: string, tone: 'info' | 'error' = 'info'): voi
   }, 2200);
 }
 
-function recentEventsForResource(resourceId: ResourcePartitionId, limit = 3) {
-  const targetIds = resourceId === 'gateway'
-    ? new Set<ResourcePartitionId>(['gateway', 'task_queues'])
-    : new Set<ResourcePartitionId>([resourceId]);
-  return (lastSnapshot?.recentEvents ?? [])
-    ?.filter((event) => targetIds.has(event.resourceId))
-    .sort((left, right) => new Date(right.occurredAt).getTime() - new Date(left.occurredAt).getTime())
-    .slice(0, limit);
-}
-
 function renderResourceContext(
   resource: OpenClawSnapshot['resources'][number],
   _topItem: OpenClawResourceItem | null
@@ -1716,63 +1698,6 @@ function renderResourceContext(
     contextCard('Signal', humanizeTelemetryText(resource.detail)),
     contextCard('Focus', focusText)
   ].join('');
-}
-
-function contextSummaryForResource(
-  resource: OpenClawSnapshot['resources'][number],
-  topItem: OpenClawResourceItem | null,
-  options: {
-    displayedCount: number;
-    filteredCount: number;
-    totalCount: number;
-    visibleItems: OpenClawResourceItem[];
-    kindFilter: string;
-    searchQuery: string;
-    sortMode: ModalSortMode;
-    viewMode: ModalViewMode;
-  }
-): string {
-  const focus = lastSnapshot?.focus;
-  const focusText = focus && uiResourceId(focus.resourceId) === resource.id
-    ? `${focus.reason} · ${humanizeTelemetryText(focus.detail)}`
-    : (uiLocale === 'zh' ? '当前不是焦点资源' : 'Not current focus');
-  const recentEvents = recentEventsForResource(resource.id, 3);
-  const lines = [
-    `${resource.label}`,
-    `Status: ${statusLabelOf(resource.status)}`,
-    `Items: ${resource.itemCount}`,
-    `Showing: ${options.displayedCount} of ${options.filteredCount} filtered (${options.totalCount} total loaded)`,
-    `Summary: ${humanizeTelemetryText(resource.summary)}`,
-    `Signal: ${humanizeTelemetryText(resource.detail)}`,
-    `Source: ${resource.source}`,
-    `Focus: ${focusText}`,
-    `Last access: ${dateTimeOf(resource.lastAccessAt)}`,
-    `Sort: ${options.sortMode}`,
-    `View: ${options.viewMode}`,
-    `Kind filter: ${options.kindFilter === 'all' ? 'all' : options.kindFilter}`,
-    `Search: ${options.searchQuery.trim() || 'none'}`
-  ];
-
-  if (topItem) {
-    lines.push(`Top item: ${humanizeTelemetryText(topItem.title)}`);
-    lines.push(`Top path: ${topItem.path}`);
-  }
-
-  if (recentEvents.length > 0) {
-    lines.push('Recent events:');
-    for (const event of recentEvents) {
-      lines.push(`- ${resourceLabel(uiResourceId(event.resourceId), uiLocale)} · ${humanizeTelemetryText(event.detail)} · ${dateTimeOf(event.occurredAt)}`);
-    }
-  }
-
-  if (options.visibleItems.length > 0) {
-    lines.push('Visible items:');
-    for (const item of options.visibleItems.slice(0, 5)) {
-      lines.push(`- ${humanizeTelemetryText(item.title)} · ${item.path}`);
-    }
-  }
-
-  return lines.join('\n');
 }
 
 function controlLabelFor(resourceId: ResourcePartitionId): string {
@@ -2172,12 +2097,6 @@ function applyLocaleToChrome(): void {
     toggleLocaleButton.textContent = uiLocale === 'zh' ? '中 / EN' : 'EN / 中';
   }
   applyDebugPanelVisibility();
-  if (assetModalCopyContext) {
-    assetModalCopyContext.textContent = uiText('copyContext', uiLocale);
-  }
-  if (assetModalView) {
-    assetModalView.textContent = modalViewMode === 'list' ? uiText('grid', uiLocale) : uiText('list', uiLocale);
-  }
   if (cycleThemeButton) {
     cycleThemeButton.hidden = !appConfig.ui.showThemeToggle;
   }
@@ -2232,30 +2151,6 @@ function searchPlaceholderForResource(resourceId: ResourcePartitionId): string {
   if (resourceId === 'mcp') return 'Search code repo, project, README…';
   if (resourceId === 'break_room') return 'Search health, maintenance, upgrade…';
   return 'Search items…';
-}
-
-async function copySelectedResourceContext(): Promise<void> {
-  const resource = getSelectedResource();
-  if (!resource) {
-    return;
-  }
-  const filteredItems = sortItems(filterItems(resource.id, resource.items ?? []));
-  const items = filteredItems.slice(0, 48);
-  try {
-    await navigator.clipboard.writeText(contextSummaryForResource(resource, items[0] ?? null, {
-      displayedCount: items.length,
-      filteredCount: filteredItems.length,
-      totalCount: resource.items?.length ?? 0,
-      visibleItems: items,
-      kindFilter: modalKindFilter,
-      searchQuery: modalSearchQuery,
-      sortMode: modalSortMode,
-      viewMode: modalViewMode
-    }));
-    setModalFeedback(`Copied context · ${resource.label}`);
-  } catch (error) {
-    setModalFeedback(`Copy context failed · ${error instanceof Error ? error.message : String(error)}`, 'error');
-  }
 }
 
 function syncResourceControls(): void {
@@ -2329,7 +2224,6 @@ function applyModalDefaultsForResource(resourceId: ResourcePartitionId): void {
   const defaults = modalDefaultsForResource(resourceId);
   const saved = modalPrefsByResource[resourceId];
   modalSortMode = saved?.sortMode ?? defaults.sortMode;
-  modalViewMode = saved?.viewMode ?? defaults.viewMode;
   if (assetModalSort) {
     assetModalSort.value = modalSortMode;
   }
@@ -2340,8 +2234,7 @@ function rememberModalPreferenceForSelectedResource(): void {
     return;
   }
   modalPrefsByResource[selectedResourceId] = {
-    sortMode: modalSortMode,
-    viewMode: modalViewMode
+    sortMode: modalSortMode
   };
   saveModalPrefs();
 }
@@ -4603,7 +4496,6 @@ function renderRoomModal(): void {
     if (assetModalSummary) { assetModalSummary.innerHTML = ''; assetModalSummary.style.display = 'none'; }
     if (assetModalKind) assetModalKind.style.display = 'none';
     if (assetModalSort) assetModalSort.style.display = 'none';
-    if (assetModalView) assetModalView.style.display = 'none';
     if (assetModalSearch) assetModalSearch.style.display = 'none';
     if (assetModalFeedback) assetModalFeedback.style.display = 'none';
   } else if (isMemory) {
@@ -4614,7 +4506,6 @@ function renderRoomModal(): void {
     if (assetModalSummary) { assetModalSummary.innerHTML = ''; assetModalSummary.style.display = 'none'; }
     if (assetModalKind) assetModalKind.style.display = 'none';
     if (assetModalSort) assetModalSort.style.display = 'none';
-    if (assetModalView) assetModalView.style.display = 'none';
     if (assetModalSearch) assetModalSearch.style.display = 'none';
     if (assetModalFeedback) assetModalFeedback.style.display = 'none';
   } else if (isSkills) {
@@ -4625,7 +4516,6 @@ function renderRoomModal(): void {
     if (assetModalSummary) { assetModalSummary.innerHTML = ''; assetModalSummary.style.display = 'none'; }
     if (assetModalKind) assetModalKind.style.display = 'none';
     if (assetModalSort) assetModalSort.style.display = 'none';
-    if (assetModalView) assetModalView.style.display = 'none';
     if (assetModalSearch) assetModalSearch.style.display = 'none';
     if (assetModalFeedback) assetModalFeedback.style.display = 'none';
   } else if (isImages) {
@@ -4636,7 +4526,6 @@ function renderRoomModal(): void {
     if (assetModalSummary) { assetModalSummary.innerHTML = ''; assetModalSummary.style.display = 'none'; }
     if (assetModalKind) assetModalKind.style.display = 'none';
     if (assetModalSort) assetModalSort.style.display = 'none';
-    if (assetModalView) assetModalView.style.display = 'none';
     if (assetModalSearch) assetModalSearch.style.display = 'none';
     if (assetModalFeedback) assetModalFeedback.style.display = 'none';
   } else if (isAlarm) {
@@ -4647,7 +4536,6 @@ function renderRoomModal(): void {
     if (assetModalSummary) { assetModalSummary.innerHTML = ''; assetModalSummary.style.display = 'none'; }
     if (assetModalKind) assetModalKind.style.display = 'none';
     if (assetModalSort) assetModalSort.style.display = 'none';
-    if (assetModalView) assetModalView.style.display = 'none';
     if (assetModalSearch) assetModalSearch.style.display = 'none';
     if (assetModalFeedback) assetModalFeedback.style.display = 'none';
   } else if (isDocument) {
@@ -4658,7 +4546,6 @@ function renderRoomModal(): void {
     if (assetModalSummary) { assetModalSummary.innerHTML = ''; assetModalSummary.style.display = 'none'; }
     if (assetModalKind) assetModalKind.style.display = 'none';
     if (assetModalSort) assetModalSort.style.display = 'none';
-    if (assetModalView) assetModalView.style.display = 'none';
     if (assetModalSearch) assetModalSearch.style.display = 'none';
     if (assetModalFeedback) assetModalFeedback.style.display = 'none';
   } else {
@@ -4668,7 +4555,6 @@ function renderRoomModal(): void {
     filterNotes = [
       modalKindFilter !== 'all' ? (uiLocale === 'zh' ? `分类 ${kindMenuLabelForResource(resource.id, modalKindFilter)}` : `kind ${modalKindFilter}`) : '',
       modalSearchQuery.trim() ? (uiLocale === 'zh' ? `搜索 “${modalSearchQuery.trim()}”` : `search “${modalSearchQuery.trim()}”`) : '',
-      modalViewMode !== defaults.viewMode ? (uiLocale === 'zh' ? `${modalViewMode === 'grid' ? '网格' : '列表'}视图` : `${modalViewMode} view`) : '',
       modalSortMode !== defaults.sortMode ? (uiLocale === 'zh' ? `排序 ${modalSortMode}` : `sort ${modalSortMode}`) : ''
     ].filter(Boolean);
     assetModalSub.textContent = `${resource.itemCount} items · ${humanizeTelemetryText(resource.summary)}${filterNotes.length ? ` · ${filterNotes.join(' · ')}` : ''} · ${clockOf(resource.lastAccessAt)}`;
@@ -4706,10 +4592,6 @@ function renderRoomModal(): void {
     if (assetModalSort) {
       assetModalSort.style.display = '';
       assetModalSort.value = modalSortMode;
-    }
-    if (assetModalView) {
-      assetModalView.style.display = '';
-      assetModalView.textContent = modalViewMode === 'list' ? uiText('grid', uiLocale) : uiText('list', uiLocale);
     }
     if (assetModalSearch) {
       assetModalSearch.style.display = '';
@@ -4756,7 +4638,7 @@ function renderRoomModal(): void {
     return;
   }
 
-  assetModalItems.classList.toggle('grid', modalViewMode === 'grid');
+  assetModalItems.classList.toggle('grid', false);
   assetModalItems.innerHTML = items.length
     ? items.map((entry, index) => {
         const displayTitle = humanizeTelemetryText(entry.title);
@@ -5123,14 +5005,6 @@ assetModalSort?.addEventListener('change', () => {
   rememberModalPreferenceForSelectedResource();
   renderRoomModal();
 });
-assetModalCopyContext?.addEventListener('click', async () => {
-  await copySelectedResourceContext();
-});
-assetModalView?.addEventListener('click', () => {
-  modalViewMode = modalViewMode === 'list' ? 'grid' : 'list';
-  rememberModalPreferenceForSelectedResource();
-  renderRoomModal();
-});
 assetModalSearch?.addEventListener('input', () => {
   modalSearchQuery = assetModalSearch.value;
   renderRoomModal();
@@ -5301,19 +5175,6 @@ window.addEventListener('keydown', (event) => {
   }
   if (event.key === 'Escape' && categoryMenuVisible) {
     closeCategoryMenu();
-    return;
-  }
-
-  if (modalVisible && event.key === '/') {
-    event.preventDefault();
-    assetModalSearch?.focus();
-    assetModalSearch?.select();
-    return;
-  }
-
-  if (modalVisible && event.key === 'C' && event.shiftKey) {
-    event.preventDefault();
-    void copySelectedResourceContext();
     return;
   }
 

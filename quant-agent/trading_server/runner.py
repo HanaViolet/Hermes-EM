@@ -52,10 +52,16 @@ def _run_agent_in_background(task: dict, task_id: str) -> None:
         # Build room_artifacts and write to telemetry
         try:
             from trading_server.artifact_builder import build_room_artifacts
+            from trading_agent.utils.office_bridge import ROOM_LABELS
             _all = build_room_artifacts(task, result)
             _path = _PROJECT_ROOT / "ClawLibrary" / "src" / "data" / "trading-telemetry.json"
             import os
             import time
+
+            def _text(value):
+                if isinstance(value, dict):
+                    return value.get("en") or value.get("zh") or str(value)
+                return str(value) if value is not None else ""
 
             # Ensure parent dir exists
             _path.parent.mkdir(parents=True, exist_ok=True)
@@ -67,12 +73,45 @@ def _run_agent_in_background(task: dict, task_id: str) -> None:
                 _snap = {"mode": "live", "generatedAt": str(datetime.now(timezone.utc)), "resources": [], "recentEvents": [], "focus": {"resourceId": "break_room", "detail": "", "reason": "Ready"}, "trading": {}}
 
             _snap.setdefault("trading", {})["room_artifacts"] = _all
-            for _r in _snap.setdefault("resources", []):
-                a = _all.get(_r["id"])
-                if a:
-                    _r["items"] = [{"id": a["room_id"]+"-"+str(i), "title": m["label"]+": "+str(m["value"]), "meta": m.get("display","metric"), "excerpt": a.get("insight","")} for i,m in enumerate(a.get("metrics",[]))]
-                    _r["itemCount"] = len(_r["items"])
-                    _r["status"] = a["status"]
+
+            # Rebuild resources list so the frontend always has a complete 12-room snapshot
+            _resources = _snap.setdefault("resources", [])
+            _existing = {r["id"]: r for r in _resources if isinstance(r, dict) and r.get("id")}
+            _resources[:] = []
+            for room_id, labels in ROOM_LABELS.items():
+                a = _all.get(room_id, {})
+                existing = _existing.get(room_id, {})
+                metrics = a.get("metrics", [])
+                items = []
+                for i, m in enumerate(metrics):
+                    if not isinstance(m, dict):
+                        continue
+                    label = m.get("label_zh") or m.get("label", "?")
+                    value = m.get("value", "")
+                    unit = m.get("unit", "")
+                    items.append({
+                        "id": f"{room_id}-{i}",
+                        "title": f"{label}: {value}{unit}",
+                        "meta": m.get("display", "metric"),
+                        "excerpt": _text(a.get("insight", existing.get("detail", ""))),
+                    })
+                label = labels.get("en", room_id)
+                _resources.append({
+                    "id": room_id,
+                    "title": label,
+                    "label": label,
+                    "status": a.get("status", existing.get("status", "idle")),
+                    "items": items,
+                    "itemCount": len(items),
+                    "summary": _text(a.get("summary", existing.get("summary", ""))),
+                    "detail": _text(a.get("insight", existing.get("detail", ""))),
+                    "source": "trading-agent",
+                    "lastAccessAt": a.get("updated_at", existing.get("lastAccessAt", str(datetime.now(timezone.utc)))),
+                    "stats": [
+                        {"label": "en", "value": labels.get("en", ""), "tone": "neutral"},
+                        {"label": "zh", "value": labels.get("zh", ""), "tone": "neutral"},
+                    ],
+                })
 
             _payload = _json.dumps(_snap, ensure_ascii=False, indent=2)
             _tmp = _path.with_suffix(".tmp")

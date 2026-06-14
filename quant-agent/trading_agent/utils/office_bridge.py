@@ -48,7 +48,7 @@ STAGE_TO_ROOM: dict[str, str] = {
     "running_backtest": "task_queues",
     "writing_report": "document",
     "detecting_regime": "skills",
-    "analyzing_news": "images",
+    "analyzing_news": "gateway",
     "using_memory": "memory",
     "making_decision": "schedule",
     "explaining_decision": "schedule",
@@ -165,12 +165,42 @@ def _build_snapshot() -> dict:
     summary = raw_summary if isinstance(raw_summary, dict) else {}
 
     # Build room-specific artifact data
+    artifacts = _telemetry_state.get("room_artifacts") or _init_all_artifacts()
+    updated_at = _telemetry_state.get("updated_at") or datetime.now(timezone.utc).isoformat()
+
+    def _text(value):
+        if isinstance(value, dict):
+            return value.get("en") or value.get("zh") or str(value)
+        return str(value) if value is not None else ""
+
     def _room_items(room_id):
+        art = artifacts.get(room_id) if isinstance(artifacts, dict) else None
         items = []
-        if room_id == "gateway":  # Market Data Room
+        if room_id == "images" and art:
+            # Chart Room: use real chart/indicator metrics from the artifact
+            for i, m in enumerate(art.get("metrics", [])):
+                if not isinstance(m, dict):
+                    continue
+                label = m.get("label_zh") or m.get("label", "?")
+                value = m.get("value", "")
+                unit = m.get("unit", "")
+                items.append({
+                    "id": f"img-{i}",
+                    "title": f"{label}: {value}{unit}",
+                    "meta": m.get("display", "metric"),
+                    "excerpt": _text(art.get("insight", "")),
+                })
+            return items
+        elif room_id == "gateway":  # Market Data Room
+            art_gateway = artifacts.get("gateway") if isinstance(artifacts, dict) else None
+            gw_data = art_gateway.get("market_data", {}) if art_gateway else {}
+            rows = gw_data.get("rows") if gw_data.get("rows") is not None else len(_telemetry_state.get("logs", []))
             items.append({"id":"gw-1","title":"Data Source: Yahoo Finance","meta":"info","excerpt":"OHLCV daily data"})
-            rows = len(_telemetry_state.get("logs", []))
             items.append({"id":"gw-2","title":"Rows loaded: " + str(rows),"meta":"metric","excerpt":"Loaded " + str(rows) + " rows for " + ticker})
+            if gw_data.get("latest_close") is not None:
+                items.append({"id":"gw-3","title":"Latest Close: " + str(gw_data["latest_close"]),"meta":"metric","excerpt":"Most recent closing price"})
+            if gw_data.get("coverage_pct") is not None:
+                items.append({"id":"gw-4","title":"Coverage: " + str(gw_data["coverage_pct"])+"%","meta":"metric","excerpt":"Data coverage percentage"})
         elif room_id == "mcp":  # Indicator Lab
             if isinstance(metrics, dict):
                 for k, v in metrics.items():
@@ -215,11 +245,18 @@ def _build_snapshot() -> dict:
                 items.append({"id":"sc-4","title":f"Revised: {init_dec.upper()} → {dec.upper()}","meta":"info","excerpt":"Decision was revised after critic review"})
             items.append({"id":"sc-5","title":f"Score: {summary.get('decision_score','?')}","meta":"metric","excerpt":"Weighted decision score"})
             items.append({"id":"sc-6","title":f"Position: {int(summary.get('position_pct',0.35)*100)}%","meta":"metric","excerpt":"Suggested position size"})
-
-        elif room_id == "images":  # News Room V1.5
-            items.append({"id":"nw-1","title":f"News Score: {summary.get('news_score','?')}","meta":"metric","excerpt":"Overall news sentiment score"})
-            items.append({"id":"nw-2","title":f"Sentiment: {summary.get('news_sentiment','neutral')}","meta":"metric","excerpt":"News sentiment classification"})
-
+        elif room_id == "memory":
+            art_memory = artifacts.get("memory") if isinstance(artifacts, dict) else None
+            if art_memory:
+                for i, m in enumerate(art_memory.get("metrics", [])):
+                    if not isinstance(m, dict):
+                        continue
+                    label = m.get("label_zh") or m.get("label", "?")
+                    value = m.get("value", "")
+                    unit = m.get("unit", "")
+                    items.append({"id": f"mem-{i}", "title": f"{label}: {value}{unit}", "meta": m.get("display", "metric"), "excerpt": _text(art_memory.get("insight", ""))})
+            if not items:
+                items.append({"id":"mem-0","title":"Strategy memory: ready","meta":"info","excerpt":"Historical strategy performance records"})
         elif room_id == "break_room":
             if status == "done":
                 items.append({"id":"br-1","title":"Last: " + ticker,"meta":"info","excerpt":"Completed analysis for " + ticker})
@@ -230,9 +267,12 @@ def _build_snapshot() -> dict:
     visited = _telemetry_state.get("visited_rooms", [])
     for room_id, labels in ROOM_LABELS.items():
         items = _room_items(room_id)
+        art = artifacts.get(room_id) if isinstance(artifacts, dict) else None
         # Room status: active=currently working, done=completed, idle=not visited
         if room_id == focus_room and status != "done" and status != "error":
             status_val = "active"
+        elif art and art.get("status") in ("done", "warning"):
+            status_val = art.get("status")
         elif room_id in visited:
             status_val = "done"
         elif status == "done" and room_id == "break_room":
@@ -241,22 +281,28 @@ def _build_snapshot() -> dict:
             status_val = "alert"
         else:
             status_val = "idle"
+        label = labels.get("en", room_id)
         resources.append({
             "id": room_id,
-            "title": labels.get("en", room_id),
+            "title": label,
+            "label": label,
             "status": status_val,
             "items": items,
             "itemCount": len(items),
+            "summary": _text(art.get("summary", "")) if art else "",
+            "detail": _text(art.get("insight", "")) if art else "",
+            "source": "trading-agent",
+            "lastAccessAt": art.get("updated_at") if art else updated_at,
             "stats": [
                 {"label": "en", "value": labels.get("en", ""), "tone": "neutral"},
                 {"label": "zh", "value": labels.get("zh", ""), "tone": "neutral"},
             ],
         })
 
-    # Build recent events from logs
+    # Build recent events from logs (frontend expects occurredAt)
     events = []
-    for i, line in enumerate(_telemetry_state.get("logs", [])[-12:]):
-        events.append({"resourceId": focus_room, "type": "access", "detail": str(line), "timestamp": _telemetry_state.get("updated_at", "")})
+    for line in _telemetry_state.get("logs", [])[-12:]:
+        events.append({"resourceId": focus_room, "type": "access", "detail": str(line), "occurredAt": updated_at})
 
     # Focus detail
     focus_detail = ""

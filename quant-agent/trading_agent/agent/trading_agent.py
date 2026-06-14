@@ -15,6 +15,7 @@ from trading_agent.utils.office_bridge import update_workflow, ROOM_LABELS, _tel
 
 import math as _math
 import json as _json
+from datetime import datetime
 
 
 def _load_history_for_memory() -> list:

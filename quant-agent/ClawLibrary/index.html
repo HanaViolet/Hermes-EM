@@ -1227,6 +1227,30 @@
           linear-gradient(180deg, rgba(9, 23, 21, 0.96), rgba(8, 20, 19, 0.78) 72%, rgba(8, 20, 19, 0));
       }
 
+      /* Clean floating header for every room modal: hide title/sub, search/tools, shortcuts, generic context/summary */
+      .asset-modal .asset-modal-head {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 3;
+        display: block;
+        padding: 0;
+        border: 0;
+        background: transparent;
+      }
+      .asset-modal .asset-modal-head-top,
+      .asset-modal .asset-modal-actions {
+        display: block;
+      }
+      .asset-modal .asset-modal-head-main,
+      .asset-modal .asset-modal-tools,
+      .asset-modal .asset-modal-shortcuts,
+      .asset-modal #asset-modal-sub,
+      .asset-modal .asset-modal-context,
+      .asset-modal .asset-modal-summary {
+        display: none !important;
+      }
+
       .modal-summary-chip {
         display: grid;
         gap: 1px;
@@ -3614,8 +3638,6 @@
       .asset-modal[data-room-id="gateway"] .asset-modal-context,
       .asset-modal[data-room-id="gateway"] .asset-modal-summary,
       .asset-modal[data-room-id="gateway"] .asset-modal-head-main,
-      .asset-modal[data-room-id="gateway"] #asset-modal-copy-context,
-      .asset-modal[data-room-id="gateway"] #asset-modal-view,
       .asset-modal[data-room-id="gateway"] .asset-modal-shortcuts,
       .asset-modal[data-room-id="gateway"] #asset-modal-sub {
         display: none !important;
@@ -3680,8 +3702,6 @@
       .asset-modal[data-room-id="skills"] .asset-modal-context,
       .asset-modal[data-room-id="skills"] .asset-modal-summary,
       .asset-modal[data-room-id="skills"] .asset-modal-head-main,
-      .asset-modal[data-room-id="skills"] #asset-modal-copy-context,
-      .asset-modal[data-room-id="skills"] #asset-modal-view,
       .asset-modal[data-room-id="skills"] .asset-modal-shortcuts,
       .asset-modal[data-room-id="skills"] #asset-modal-sub {
         display: none !important;
@@ -3736,8 +3756,6 @@
       .asset-modal[data-room-id="memory"] .asset-modal-context,
       .asset-modal[data-room-id="memory"] .asset-modal-summary,
       .asset-modal[data-room-id="memory"] .asset-modal-head-main,
-      .asset-modal[data-room-id="memory"] #asset-modal-copy-context,
-      .asset-modal[data-room-id="memory"] #asset-modal-view,
       .asset-modal[data-room-id="memory"] .asset-modal-shortcuts,
       .asset-modal[data-room-id="memory"] #asset-modal-sub {
         display: none !important;
@@ -5771,9 +5789,7 @@
               <div class="asset-modal-feedback" id="asset-modal-feedback"></div>
             </div>
             <div class="asset-modal-actions">
-              <button id="asset-modal-copy-context" type="button">Copy Context</button>
-              <button id="asset-modal-view" type="button">Grid</button>
-              <div class="asset-modal-shortcuts" id="asset-modal-shortcuts">Shortcuts · / Search · ⇧C Copy Context · Esc Close</div>
+              <div class="asset-modal-shortcuts" id="asset-modal-shortcuts">Shortcuts · Esc Close</div>
               <button id="asset-modal-close" class="asset-modal-close" type="button" title="Close (ESC)">✕</button>
             </div>
           </div>

@@ -30,12 +30,6 @@ const MENU_RESOURCE_IDS: ResourcePartitionId[] = [
   'schedule'      // 12. Decision Desk
 ];
 
-// Pipeline order used for breadcrumb navigation (excluding idle break_room)
-const PIPELINE_ORDER: ResourcePartitionId[] = [
-  'gateway', 'mcp', 'skills', 'alarm', 'task_queues',
-  'document', 'agent', 'images', 'memory', 'log', 'schedule'
-];
-
 // Upstream / downstream relationships between rooms
 const ROOM_LINKS: Record<ResourcePartitionId, { upstream: ResourcePartitionId[]; downstream: ResourcePartitionId[] }> = {
   gateway: { upstream: [], downstream: ['mcp', 'skills'] },
@@ -2888,29 +2882,6 @@ function _renderRoomLinkPill(resourceId: ResourcePartitionId): string {
   `;
 }
 
-function _renderPipelineBreadcrumb(currentRoomId: ResourcePartitionId): string {
-  const pills = PIPELINE_ORDER.map((id) => {
-    const status = _roomStatusFor(id);
-    const isCurrent = id === currentRoomId;
-    const done = status === 'done' || status === 'warning' || status === 'alert';
-    const active = status === 'active' || isCurrent;
-    const color = PARTITION_CSS_COLORS[id] ?? 'rgba(244,255,247,0.7)';
-    const check = done && !isCurrent ? '✓ ' : '';
-    return `
-      <button
-        class="pipeline-pill ${isCurrent ? 'current' : ''} ${active ? 'active' : ''} ${done ? 'done' : ''}"
-        type="button"
-        data-room-link="${id}"
-        style="--room-color: ${color}"
-        title="${escapeHtml(resourceLabel(id, uiLocale))}"
-      >
-        ${check}${escapeHtml(resourceLabel(id, uiLocale))}
-      </button>
-    `;
-  }).join('');
-  return `<div class="pipeline-breadcrumb">${pills}</div>`;
-}
-
 function _renderRoomLinks(currentRoomId: ResourcePartitionId): string {
   const links = ROOM_LINKS[currentRoomId];
   if (!links) return '';
@@ -4645,7 +4616,6 @@ function renderAdvancedRoomPanel(artifact: any): string {
     }
   })();
   return `
-    ${_renderPipelineBreadcrumb(roomId)}
     ${panelHtml}
     ${_renderRoomLinks(roomId)}
   `;

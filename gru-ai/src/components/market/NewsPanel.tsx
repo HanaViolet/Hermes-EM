@@ -1,5 +1,5 @@
 import { Newspaper, TrendingDown, TrendingUp } from 'lucide-react';
-import { useMarketStore } from '@/stores/marketStore';
+import { useCommandSymbol } from '@/hooks/useCommandSymbol';
 import { useSimulationStore } from '@/stores/simulation-store';
 import type { MarketEvent } from '@/types/market';
 import { eventTone } from './marketTheme';
@@ -22,7 +22,7 @@ function eventLabel(type: MarketEvent['type']): string {
 export default function NewsPanel({ events }: { events: MarketEvent[] }) {
   const connected = useSimulationStore((s) => s.connected);
   const sendCommand = useSimulationStore((s) => s.sendCommand);
-  const activeSymbol = useMarketStore((s) => s.activeSymbol);
+  const commandSymbol = useCommandSymbol();
   const news = events.filter(isNews).slice(0, 5);
 
   return (
@@ -38,7 +38,7 @@ export default function NewsPanel({ events }: { events: MarketEvent[] }) {
             disabled={!connected}
             className="h-7 px-2 inline-flex items-center gap-1 font-mono text-[11px] disabled:opacity-40"
             style={{ color: TERMINAL.red, border: `1px solid ${TERMINAL.borderSoft}`, backgroundColor: TERMINAL.panelSoft }}
-            onClick={() => sendCommand({ command: 'inject_news', newsImpact: 0.55, symbol: activeSymbol ?? undefined })}
+            onClick={() => sendCommand({ command: 'inject_news', newsImpact: 0.55, symbol: commandSymbol })}
           >
             <TrendingUp className="h-3 w-3" />
             利好
@@ -48,7 +48,7 @@ export default function NewsPanel({ events }: { events: MarketEvent[] }) {
             disabled={!connected}
             className="h-7 px-2 inline-flex items-center gap-1 font-mono text-[11px] disabled:opacity-40"
             style={{ color: TERMINAL.green, border: `1px solid ${TERMINAL.borderSoft}`, backgroundColor: TERMINAL.panelSoft }}
-            onClick={() => sendCommand({ command: 'inject_news', newsImpact: -0.55, symbol: activeSymbol ?? undefined })}
+            onClick={() => sendCommand({ command: 'inject_news', newsImpact: -0.55, symbol: commandSymbol })}
           >
             <TrendingDown className="h-3 w-3" />
             利空

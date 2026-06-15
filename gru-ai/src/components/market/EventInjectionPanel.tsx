@@ -1,5 +1,6 @@
-import { AlertTriangle, BadgePlus, Ban, CircleDollarSign, LifeBuoy, Megaphone, Radio, Shield, TrendingDown, TrendingUp } from 'lucide-react';
-import { useMarketStore } from '@/stores/marketStore';
+import { useState } from 'react';
+import { AlertTriangle, BadgePlus, Ban, Check, CircleDollarSign, LifeBuoy, Megaphone, Radio, Shield, TrendingDown, TrendingUp } from 'lucide-react';
+import { useCommandSymbol } from '@/hooks/useCommandSymbol';
 import { useSimulationStore } from '@/stores/simulation-store';
 import type { ManualEventType } from '@/types/market';
 import { TERMINAL, terminalPanel } from './marketTerminal';
@@ -19,7 +20,14 @@ const EVENTS: Array<{ type: ManualEventType; label: string; tone: string; icon: 
 export default function EventInjectionPanel() {
   const connected = useSimulationStore((s) => s.connected);
   const sendCommand = useSimulationStore((s) => s.sendCommand);
-  const activeSymbol = useMarketStore((s) => s.activeSymbol);
+  const commandSymbol = useCommandSymbol();
+  const [lastInjected, setLastInjected] = useState<string | null>(null);
+
+  function inject(event: typeof EVENTS[number]) {
+    sendCommand({ command: 'inject_event', eventType: event.type, symbol: commandSymbol });
+    setLastInjected(event.label);
+    window.setTimeout(() => setLastInjected((current) => (current === event.label ? null : current)), 1500);
+  }
 
   return (
     <section className="p-3 space-y-3" style={terminalPanel}>
@@ -34,21 +42,22 @@ export default function EventInjectionPanel() {
       <div className="grid grid-cols-2 gap-1.5">
         {EVENTS.map((event) => {
           const Icon = event.icon;
+          const injected = lastInjected === event.label;
           return (
             <button
               key={event.type}
               type="button"
-              disabled={!connected}
-              onClick={() => sendCommand({ command: 'inject_event', eventType: event.type, symbol: activeSymbol ?? undefined })}
+              disabled={!connected || injected}
+              onClick={() => inject(event)}
               className="h-8 px-2 inline-flex items-center justify-center gap-1.5 text-[11px] font-mono disabled:opacity-40"
               style={{
-                color: event.tone,
-                backgroundColor: TERMINAL.panelSoft,
+                color: injected ? TERMINAL.darkText : event.tone,
+                backgroundColor: injected ? TERMINAL.blue : TERMINAL.panelSoft,
                 border: `1px solid ${TERMINAL.borderSoft}`,
               }}
             >
-              <Icon className="h-3.5 w-3.5" />
-              {event.label}
+              {injected ? <Check className="h-3.5 w-3.5" /> : <Icon className="h-3.5 w-3.5" />}
+              {injected ? '已注入' : event.label}
             </button>
           );
         })}

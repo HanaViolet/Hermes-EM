@@ -1,7 +1,7 @@
 import { Download, Play, RefreshCcw, Settings2, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import type React from 'react';
-import { useMarketStore } from '@/stores/marketStore';
+import { useCommandSymbol } from '@/hooks/useCommandSymbol';
 import { useNewsStore } from '@/stores/newsStore';
 import { useSimulationStore } from '@/stores/simulation-store';
 import { TERMINAL, terminalPanel } from '@/components/market/marketTerminal';
@@ -12,14 +12,14 @@ const EVENT_TYPES = ['earnings_revision', 'large_order', 'volume_breakout', 'mar
 export default function NewsEngineControlPanel() {
   const connected = useSimulationStore((s) => s.connected);
   const sendCommand = useSimulationStore((s) => s.sendCommand);
-  const activeSymbol = useMarketStore((s) => s.activeSymbol);
+  const commandSymbol = useCommandSymbol();
   const newsUpdate = useNewsStore((s) => s.newsUpdate);
   const config = newsUpdate?.config;
   const [sourceType, setSourceType] = useState('financial_media');
   const [eventType, setEventType] = useState('earnings_revision');
 
   function updateConfig(patch: Record<string, unknown>) {
-    sendCommand({ command: 'update_news_config', symbol: activeSymbol ?? undefined, newsConfig: patch });
+    sendCommand({ command: 'update_news_config', symbol: commandSymbol, newsConfig: patch });
   }
 
   function exportNews() {
@@ -27,7 +27,7 @@ export default function NewsEngineControlPanel() {
     const url = URL.createObjectURL(new Blob([payload], { type: 'application/json' }));
     const link = document.createElement('a');
     link.href = url;
-    link.download = `${activeSymbol ?? 'simulation'}-synthetic-news.json`;
+    link.download = `${commandSymbol ?? 'simulation'}-synthetic-news.json`;
     link.click();
     URL.revokeObjectURL(url);
   }
@@ -105,7 +105,7 @@ export default function NewsEngineControlPanel() {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-        <Button testId="news-generate" disabled={!connected} onClick={() => sendCommand({ command: 'generate_news', symbol: activeSymbol ?? undefined, newsRequest: { source_type: sourceType, event_type: eventType, target_asset: activeSymbol ?? undefined } })}>
+        <Button testId="news-generate" disabled={!connected} onClick={() => sendCommand({ command: 'generate_news', symbol: commandSymbol, newsRequest: { source_type: sourceType, event_type: eventType, target_asset: commandSymbol } })}>
           <Play className="h-3.5 w-3.5" />
           生成
         </Button>
@@ -113,7 +113,7 @@ export default function NewsEngineControlPanel() {
           <RefreshCcw className="h-3.5 w-3.5" />
           换 seed
         </Button>
-        <Button testId="news-clear" disabled={!connected} onClick={() => sendCommand({ command: 'clear_news', symbol: activeSymbol ?? undefined })}>
+        <Button testId="news-clear" disabled={!connected} onClick={() => sendCommand({ command: 'clear_news', symbol: commandSymbol })}>
           <Trash2 className="h-3.5 w-3.5" />
           清空
         </Button>

@@ -305,13 +305,20 @@ export class SimulationEngine extends EventEmitter {
         break;
       case 'inject_news':
         this.forcedNewsImpact = typeof command.newsImpact === 'number' ? command.newsImpact : 0.35;
-        if (!this.clock.getStatus().running) void this.step();
+        if (!this.clock.getStatus().running) {
+          void this.step();
+        } else {
+          this.emit('state', this.getState());
+        }
         break;
       case 'set_scenario':
         if (command.scenarioId) this.reset(this.scenarioLoader.get(command.scenarioId));
         break;
       case 'inject_event':
-        if (command.eventType) this.injectManualEvent(command.eventType);
+        if (command.eventType) {
+          this.injectManualEvent(command.eventType);
+          this.emit('state', this.getState());
+        }
         if (!this.clock.getStatus().running) void this.step();
         break;
       case 'external_action':
@@ -322,9 +329,13 @@ export class SimulationEngine extends EventEmitter {
         this.trainingEpisode += 1;
         this.reset(command.scenarioId ? this.scenarioLoader.get(command.scenarioId) : this.currentScenario);
         break;
-      case 'generate_news':
-        this.generateSyntheticNews(command.newsRequest as ManualNewsRequest | undefined);
+      case 'generate_news': {
+        const record = this.generateSyntheticNews(command.newsRequest as ManualNewsRequest | undefined);
+        if (!record) {
+          this.emit('error', { message: '生成新闻失败：无可用模板或一致性检查未通过，请尝试切换事件类型/来源或调整 seed。' });
+        }
         break;
+      }
       case 'update_news_config':
         this.updateNewsConfig(command.newsConfig ?? {});
         break;

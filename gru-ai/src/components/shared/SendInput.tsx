@@ -22,12 +22,13 @@ interface SendInputProps {
 }
 
 export default function SendInput({ paneId, terminalApp }: SendInputProps) {
-  const supportsInput = terminalApp === 'tmux' || terminalApp === 'iterm2';
-  if (!supportsInput) return null;
   const [expanded, setExpanded] = useState(false);
   const [inputValue, setInputValue] = useState('');
   const [dialogOpen, setDialogOpen] = useState(false);
   const [sending, setSending] = useState(false);
+
+  const supportsInput = terminalApp === 'tmux' || terminalApp === 'iterm2';
+  if (!supportsInput) return null;
 
   async function handleConfirmSend() {
     if (!inputValue.trim() || sending) return;

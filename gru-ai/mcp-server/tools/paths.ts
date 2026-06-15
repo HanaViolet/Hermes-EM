@@ -6,6 +6,15 @@ interface ConductorConfig {
   projects: Array<{ name: string; path: string; contextPath?: string }>;
 }
 
+function isValidConductorConfig(value: unknown): value is ConductorConfig {
+  if (!value || typeof value !== 'object') return false;
+  const config = value as Record<string, unknown>;
+  if (!Array.isArray(config.projects)) return false;
+  const first = config.projects[0];
+  if (!first || typeof first !== 'object') return false;
+  return typeof (first as Record<string, unknown>).path === 'string';
+}
+
 let resolvedProjectPath: string | null = null;
 
 /**
@@ -25,15 +34,19 @@ export function getProjectPath(): string {
   // 2. Read from ~/.conductor/config.json
   const configPath = path.join(os.homedir(), '.conductor', 'config.json');
   if (fs.existsSync(configPath)) {
-    const raw = fs.readFileSync(configPath, 'utf-8');
-    const config = JSON.parse(raw) as ConductorConfig;
-    if (config.projects.length > 0) {
-      const p = config.projects[0]!.path;
-      const resolved = p.startsWith('~/') ? path.join(os.homedir(), p.slice(2)) : p;
-      if (fs.existsSync(resolved)) {
-        resolvedProjectPath = resolved;
-        return resolvedProjectPath;
+    try {
+      const raw = fs.readFileSync(configPath, 'utf-8');
+      const parsed = JSON.parse(raw);
+      if (isValidConductorConfig(parsed)) {
+        const p = parsed.projects[0].path;
+        const resolved = p.startsWith('~/') ? path.join(os.homedir(), p.slice(2)) : p;
+        if (fs.existsSync(resolved)) {
+          resolvedProjectPath = resolved;
+          return resolvedProjectPath;
+        }
       }
+    } catch {
+      // Fall through to error below if config is missing or malformed
     }
   }
 

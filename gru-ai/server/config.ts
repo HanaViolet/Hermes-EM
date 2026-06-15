@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import type { ConductorConfig, ProjectConfig } from './types.js';
+import type { LLMConfig } from './llm/LLMClient.js';
 
 const CONFIG_DIR = path.join(os.homedir(), '.conductor');
 const CONFIG_PATH = path.join(CONFIG_DIR, 'config.json');
@@ -147,12 +148,52 @@ function defaultConfig(): ConductorConfig {
   };
 }
 
+function envLlmConfig(): Partial<LLMConfig> | undefined {
+  const pick = <T, >(value: T | undefined): T | undefined => value;
+  const baseUrl = pick(process.env.LLM_BASE_URL);
+  const apiKey = pick(process.env.LLM_API_KEY);
+  const model = pick(process.env.LLM_MODEL);
+  const maxTokens = process.env.LLM_MAX_TOKENS ? Number(process.env.LLM_MAX_TOKENS) : undefined;
+  const temperature = process.env.LLM_TEMPERATURE ? Number(process.env.LLM_TEMPERATURE) : undefined;
+  const timeoutMs = process.env.LLM_TIMEOUT_MS ? Number(process.env.LLM_TIMEOUT_MS) : undefined;
+  const maxRetries = process.env.LLM_MAX_RETRIES ? Number(process.env.LLM_MAX_RETRIES) : undefined;
+  if (
+    baseUrl === undefined &&
+    apiKey === undefined &&
+    model === undefined &&
+    maxTokens === undefined &&
+    temperature === undefined &&
+    timeoutMs === undefined &&
+    maxRetries === undefined
+  ) {
+    return undefined;
+  }
+  return {
+    ...(baseUrl !== undefined && { baseUrl }),
+    ...(apiKey !== undefined && { apiKey }),
+    ...(model !== undefined && { model }),
+    ...(maxTokens !== undefined && { maxTokens }),
+    ...(temperature !== undefined && { temperature }),
+    ...(timeoutMs !== undefined && { timeoutMs }),
+    ...(maxRetries !== undefined && { maxRetries }),
+  };
+}
+
+function mergeLlmConfig(fileConfig: LLMConfig | undefined, envConfig: Partial<LLMConfig> | undefined): LLMConfig | undefined {
+  if (!fileConfig && !envConfig) return undefined;
+  return {
+    ...fileConfig,
+    ...envConfig,
+  };
+}
+
 export function loadConfig(): ConductorConfig {
   try {
     let configProjects: ProjectConfig[] = [];
     let claudeHome = '~/.claude';
     let serverPort = 4444;
     let notifications = { macOS: true, browser: true };
+    let llm: ConductorConfig['llm'] = undefined;
 
     // process.env.PORT takes precedence over config.json and default
     const envPort = process.env.PORT;
@@ -179,6 +220,7 @@ export function loadConfig(): ConductorConfig {
         macOS: parsed.notifications?.macOS ?? notifications.macOS,
         browser: parsed.notifications?.browser ?? notifications.browser,
       };
+      llm = parsed.llm;
     } else {
       // Create default config file
       fs.mkdirSync(CONFIG_DIR, { recursive: true });
@@ -231,6 +273,7 @@ export function loadConfig(): ConductorConfig {
       claudeHome: resolvedClaudeHome,
       server: { port: serverPort },
       notifications,
+      llm: mergeLlmConfig(llm, envLlmConfig()),
     };
 
     return config;

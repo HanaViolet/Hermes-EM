@@ -115,6 +115,13 @@ export interface AgentActiveNews {
   sentiment_delta: number;
 }
 
+export interface AgentMessage {
+  from: string;
+  to?: string;
+  content: string;
+  tick: number;
+}
+
 export interface AgentState {
   id: string;
   type: AgentType;
@@ -137,6 +144,9 @@ export interface AgentState {
   currentStrategy?: string;
   activeNews?: AgentActiveNews[];
   lastNewsReaction?: AgentActiveNews;
+  inbox: AgentMessage[];
+  outbox: AgentMessage[];
+  lastSay?: AgentMessage;
 }
 
 export interface OrderBookLevel {
@@ -297,6 +307,11 @@ export interface MarketState {
   priceSeries: Array<{ tick: number; time: string; price: number }>;
   volumeSeries: Array<{ tick: number; time: string; volume: number; turnover: number }>;
   lastUpdated: string;
+  overview?: AgentUpdateMessage['overview'];
+  groups?: AgentGroupSummary[];
+  topProfitAgents?: AgentSnapshot[];
+  topLossAgents?: AgentSnapshot[];
+  behaviorEvents?: AgentBehaviorEvent[];
 }
 
 export interface NewStockConfig {

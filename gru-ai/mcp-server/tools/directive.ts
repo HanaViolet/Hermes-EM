@@ -18,6 +18,11 @@ function isSkipped(content: string | null | undefined): boolean {
   return SKIP_MARKERS.some(marker => content.includes(marker));
 }
 
+function shellEscape(value: string): string {
+  if (/^[a-zA-Z0-9_\-./]+$/.test(value)) return value;
+  return `'${value.replace(/'/g, `'\\''`)}'`;
+}
+
 /**
  * List available directives from .context/directives/*.json.
  */
@@ -135,7 +140,7 @@ export function launchDirective(directiveName: string): string {
     ?.replace('# ', '') ?? directiveName;
 
   // Build the launch command
-  const command = `cd ${projectPath} && claude -p "/directive ${directiveName}"`;
+  const command = `cd ${shellEscape(projectPath)} && claude -p "/directive ${shellEscape(directiveName)}"`;
 
   const lines: string[] = [];
   lines.push(`## Ready to Launch: ${title}`);

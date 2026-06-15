@@ -17,7 +17,7 @@ export class TrainingQuantAgent extends BaseInvestorAgent {
     this.queuedAction = action;
   }
 
-  decide(market: MarketState, _environment: MarketEnvironmentSnapshot): AgentDecision {
+  async decide(market: MarketState, _environment: MarketEnvironmentSnapshot): Promise<AgentDecision> {
     const tick = market.status.tick;
     if (this.state.openOrderIds.length > 0) return this.hold(tick, '训练量化 Agent 等待订单回报');
 

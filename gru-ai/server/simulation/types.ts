@@ -121,6 +121,13 @@ export interface AgentActiveNews {
   sentiment_delta: number;
 }
 
+export interface AgentMessage {
+  from: string;
+  to?: string;
+  content: string;
+  tick: number;
+}
+
 export interface AgentState {
   id: string;
   type: AgentType;
@@ -130,6 +137,7 @@ export interface AgentState {
   availablePosition: number;
   todayBought: number;
   avgCost: number;
+  initialWealth: number;
   pnl: number;
   sentiment: number;
   riskAppetite: number;
@@ -143,6 +151,9 @@ export interface AgentState {
   currentStrategy?: string;
   activeNews?: AgentActiveNews[];
   lastNewsReaction?: AgentActiveNews;
+  inbox: AgentMessage[];
+  outbox: AgentMessage[];
+  lastSay?: AgentMessage;
 }
 
 export interface OrderBookLevel {

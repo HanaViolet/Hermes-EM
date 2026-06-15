@@ -19,28 +19,15 @@
 
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
+import path from 'node:path';
 
-import type {
-  SpawnAdapter,
-  SpawnConfig,
-  SpawnHandle,
-  SpawnMode,
+import {
+  buildAugmentedPath,
+  type SpawnAdapter,
+  type SpawnConfig,
+  type SpawnHandle,
+  type SpawnMode,
 } from './spawn-adapter.js';
-
-// ---------------------------------------------------------------------------
-// Default PATH augmentation
-// ---------------------------------------------------------------------------
-
-/**
- * Sensible PATH prefix ensuring common binary locations are available.
- * Aider is typically installed via pip/pipx, so we also include common
- * Python binary locations.
- */
-const DEFAULT_PATH_PREFIX = [
-  '/usr/local/bin',
-  '/usr/bin',
-  '/bin',
-].join(':');
 
 // ---------------------------------------------------------------------------
 // Implementation
@@ -137,7 +124,32 @@ export class AiderSpawnAdapter implements SpawnAdapter {
    */
   private buildEnv(config: SpawnConfig): NodeJS.ProcessEnv {
     const currentPath = process.env['PATH'] ?? '';
-    const augmentedPath = `${DEFAULT_PATH_PREFIX}:${currentPath}`;
+    const pythonPrefixes =
+      process.platform === 'win32'
+        ? [
+            path.join(
+              process.env['USERPROFILE'] ?? 'C:\\Users',
+              'AppData',
+              'Local',
+              'Programs',
+              'Python',
+              'Python313',
+              'Scripts',
+            ),
+            path.join(
+              process.env['USERPROFILE'] ?? 'C:\\Users',
+              'AppData',
+              'Roaming',
+              'Python',
+              'Python313',
+              'Scripts',
+            ),
+          ]
+        : [
+            path.join(process.env['HOME'] ?? '', '.local', 'bin'),
+            '/opt/homebrew/bin',
+          ];
+    const augmentedPath = buildAugmentedPath(currentPath, pythonPrefixes);
 
     return {
       ...process.env,

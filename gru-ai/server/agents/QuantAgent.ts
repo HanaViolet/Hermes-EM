@@ -10,13 +10,13 @@ export class QuantAgent extends BaseInvestorAgent {
     super({ ...seed, type: 'quant' });
   }
 
-  decide(market: MarketState, environment: MarketEnvironmentSnapshot): AgentDecision {
+  async decide(market: MarketState, environment: MarketEnvironmentSnapshot): Promise<AgentDecision> {
     const tick = market.status.tick;
     if (this.state.openOrderIds.length > 0) return this.hold(tick, '量化等待盘口回报');
 
     const price = market.stock.currentPrice;
     const mean = market.stock.previousClose + environment.lastNewsImpact * 0.8;
-    const deviation = (price - mean) / mean;
+    const deviation = (price - mean) / Math.max(Number.EPSILON, Math.abs(mean));
     const canBuyLots = Math.floor(this.state.cash / (price * 100));
     const canSellLots = Math.floor(this.state.availablePosition / 100);
 

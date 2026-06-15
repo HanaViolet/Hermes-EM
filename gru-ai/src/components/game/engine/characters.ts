@@ -22,8 +22,8 @@ import {
 } from '../constants'
 // Personality idle sprites removed — were hand-drawn templates that looked bad next to PNG characters.
 // Stubs return null/default so the personality timer logic still works but never overrides the sprite.
-const getPersonalityIdleFrame = (_p: number, _d: number, _f: number) => null
-const getPersonalityFrameCount = (_p: number) => PERSONALITY_FRAME_COUNT
+const getPersonalityIdleFrame = () => null
+const getPersonalityFrameCount = () => PERSONALITY_FRAME_COUNT
 
 import type { IdleTier } from '../pixel-types'
 

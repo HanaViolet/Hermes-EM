@@ -238,6 +238,12 @@ export class SimulationManager extends EventEmitter {
         this.emit('news', payload);
       }
     });
+
+    engine.on('error', (payload: { message: string }) => {
+      if (symbol === this.activeSymbol) {
+        this.emit('error', payload);
+      }
+    });
   }
 
   private emitActiveSnapshot(): void {

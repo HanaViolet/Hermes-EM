@@ -53,9 +53,11 @@ export default function BookshelfPanel() {
 
   // Fetch content when a lesson is selected
   const fetchContent = useCallback((lesson: LessonEntry) => {
-    setLoading(true);
-    setContent(null);
-    setFetchError(false);
+    queueMicrotask(() => {
+      setLoading(true);
+      setContent(null);
+      setFetchError(false);
+    });
 
     fetch(`${API_BASE}/api/state/artifact-content?path=${encodeURIComponent(lesson.filePath)}`)
       .then((r) => (r.ok ? r.text() : Promise.reject(new Error('Failed to load'))))
@@ -65,13 +67,16 @@ export default function BookshelfPanel() {
   }, []);
 
   useEffect(() => {
-    if (!selectedLesson) {
-      setContent(null);
-      setFetchError(false);
-      return;
-    }
+    if (!selectedLesson) return;
     fetchContent(selectedLesson);
   }, [selectedLesson, fetchContent]);
+
+  // Clear loaded content when no lesson is selected.
+  if (!selectedLesson && (content !== null || fetchError || loading)) {
+    setContent(null);
+    setFetchError(false);
+    setLoading(false);
+  }
 
   const handleBack = useCallback(() => {
     setSelectedLesson(null);

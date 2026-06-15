@@ -312,7 +312,7 @@ describe('createSessionWatcher', () => {
 // ===========================================================================
 
 describe('createMetadataWatcher', () => {
-  it('returns a ClaudeWatcher instance (not null)', () => {
+  it('returns null because Claude Code metadata is covered by the session watcher', () => {
     const claudeHome = path.join(tmpDir, 'meta-watcher-test');
     fs.mkdirSync(claudeHome, { recursive: true });
 
@@ -320,9 +320,7 @@ describe('createMetadataWatcher', () => {
     const agg = stubAggregator();
     const watcher = adapter.createMetadataWatcher(agg);
 
-    assert.ok(watcher !== null, 'Claude Code should always return a metadata watcher');
-    assert.equal(typeof watcher!.start, 'function');
-    assert.equal(typeof watcher!.stop, 'function');
+    assert.equal(watcher, null, 'Claude Code does not use a separate metadata watcher');
   });
 });
 

@@ -1,8 +1,9 @@
-import { Activity, Brain, ClipboardList, MousePointerClick, Search, Send, Workflow } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { Activity, Brain, ClipboardList, MessageCircle, MousePointerClick, Search, Send, Workflow } from 'lucide-react';
+import { useMemo, useState } from 'react';
 import type React from 'react';
 import type { AgentBehaviorEvent, AgentGroupSummary, AgentSnapshot, AgentType } from '@/types/market';
-import PixelCharacterPreview, { pixelCharacterName, type PixelCharacterPose } from '@/components/game/PixelCharacterPreview';
+import PixelCharacterPreview, { type PixelCharacterPose } from '@/components/game/PixelCharacterPreview';
+import { pixelCharacterName } from '@/components/game/sprites/pixelCharacters';
 import { AGENT_COLORS, agentCharacterPalette } from '@/components/market/marketTheme';
 import { formatLargeNumber, TERMINAL, terminalPanel } from '@/components/market/marketTerminal';
 import { PARCHMENT, PIXEL_CARD_RAISED } from '@/components/game/panels/panelUtils';
@@ -191,17 +192,14 @@ function FlowStep({
 }
 
 export default function AgentGroupCards({ groups, agents = [], behaviorEvents = [] }: AgentGroupCardsProps) {
-  const [selectedType, setSelectedType] = useState<AgentType | null>(groups[0]?.type ?? null);
+  const [userSelectedType, setUserSelectedType] = useState<AgentType | null>(null);
 
-  useEffect(() => {
-    if (!groups.length) {
-      setSelectedType(null);
-      return;
+  const selectedType = useMemo(() => {
+    if (userSelectedType && groups.some((group) => group.type === userSelectedType)) {
+      return userSelectedType;
     }
-    if (!selectedType || !groups.some((group) => group.type === selectedType)) {
-      setSelectedType(groups[0].type);
-    }
-  }, [groups, selectedType]);
+    return groups[0]?.type ?? null;
+  }, [groups, userSelectedType]);
 
   const selectedGroup = useMemo(
     () => groups.find((group) => group.type === selectedType) ?? groups[0] ?? null,
@@ -242,7 +240,7 @@ export default function AgentGroupCards({ groups, agents = [], behaviorEvents = 
             <button
               key={group.type}
               type="button"
-              onClick={() => setSelectedType(group.type)}
+              onClick={() => setUserSelectedType(group.type)}
               className="relative min-h-[214px] overflow-hidden p-3 pb-12 text-left font-mono transition focus:outline-none"
               style={{
                 ...PIXEL_CARD_RAISED,
@@ -268,8 +266,17 @@ export default function AgentGroupCards({ groups, agents = [], behaviorEvents = 
               <div className="relative z-10 flex items-start justify-between gap-3">
                 <div className="min-w-0">
                   <h3 className="text-sm font-bold truncate" style={{ color: TERMINAL.text }}>{group.label}</h3>
-                  <div className="mt-1 inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px]" style={{ color: '#FFF7DF', backgroundColor: color, border: '1px solid #3D2B1F' }}>
-                    {group.sentimentEmoji} {group.sentimentLabel}
+                  <div className="mt-1 flex items-center gap-1">
+                    <div className="inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px]" style={{ color: '#FFF7DF', backgroundColor: color, border: '1px solid #3D2B1F' }}>
+                      {group.sentimentEmoji} {group.sentimentLabel}
+                    </div>
+                    {group.strategyParams?.llm === true && (
+                      <div
+                        className="inline-flex items-center px-1.5 py-0.5 text-[10px] font-bold border"
+                        style={{ color: '#FFF7DF', backgroundColor: TERMINAL.purple, borderColor: '#5B21B6' }}
+                        title="该群体由 LLM 驱动"
+                      >LLM</div>
+                    )}
                   </div>
                 </div>
                 <AgentCharacterBackplate group={group} index={index} selected={selected} />
@@ -357,6 +364,15 @@ export default function AgentGroupCards({ groups, agents = [], behaviorEvents = 
                 detail={`平均收益 ${(selectedGroup.averageReturn * 100).toFixed(2)}%，未完成订单 ${selectedAgent?.openOrderIds.length ?? 0} 个。`}
                 color={selectedGroup.netFlow >= 0 ? TERMINAL.red : TERMINAL.green}
               />
+              {selectedAgent?.lastSay && (
+                <FlowStep
+                  icon={<MessageCircle className="h-3.5 w-3.5" />}
+                  label="5. 群体喊话"
+                  value={`T${selectedAgent.lastSay.tick}`}
+                  detail={`“${selectedAgent.lastSay.content}”`}
+                  color={TERMINAL.purple}
+                />
+              )}
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-2">

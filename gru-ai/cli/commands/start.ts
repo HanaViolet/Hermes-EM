@@ -36,6 +36,11 @@ function isInitialized(projectPath: string): boolean {
   );
 }
 
+function isValidPort(value: string): boolean {
+  const portNum = Number(value);
+  return Number.isInteger(portNum) && portNum > 0 && portNum <= 65535;
+}
+
 export async function runStart(flags: Record<string, string | boolean>): Promise<void> {
   if (flags['help']) {
     printStartHelp();
@@ -64,7 +69,13 @@ export async function runStart(flags: Record<string, string | boolean>): Promise
     process.exit(1);
   }
 
-  const port = typeof flags['port'] === 'string' ? flags['port'] : '4444';
+  const rawPort = typeof flags['port'] === 'string' ? flags['port'] : '4444';
+  if (!isValidPort(rawPort)) {
+    console.error(c.red(`\n  Error: Invalid port "${rawPort}".`));
+    console.error(c.dim('  Port must be an integer between 1 and 65535.\n'));
+    process.exit(1);
+  }
+  const port = rawPort;
 
   console.log(`\n  ${c.bold('gruai')} ${c.dim('-- Dashboard Server')}`);
   console.log(`  ${c.dim('Port:')} ${c.cyan(port)}`);

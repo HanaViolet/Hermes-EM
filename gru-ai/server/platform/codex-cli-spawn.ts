@@ -16,32 +16,18 @@ import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 
-// TODO: compilePersonality is a synchronous file-system operation that reads
-// from .claude/agents/{agentId}.md. If the agent file is missing, this will
-// throw. Consider wrapping in try/catch with a descriptive error message.
 import { compilePersonality } from '../../scripts/personality-compiler.js';
 
-import type {
-  SpawnAdapter,
-  SpawnConfig,
-  SpawnHandle,
-  SpawnMode,
+import {
+  buildAugmentedPath,
+  type SpawnAdapter,
+  type SpawnConfig,
+  type SpawnHandle,
+  type SpawnMode,
 } from './spawn-adapter.js';
 
-// ---------------------------------------------------------------------------
-// Default PATH augmentation
-// ---------------------------------------------------------------------------
-
-/**
- * Sensible PATH prefix ensuring common binary locations are available.
- * Codex CLI may be installed via npm global or in `~/.local/bin`.
- * Without this, detached processes may fail to find it.
- */
-const DEFAULT_PATH_PREFIX = [
-  '/usr/local/bin',
-  '/usr/bin',
-  '/bin',
-].join(':');
+/** Guards against concurrent codex.md writes to the same working directory. */
+const activePersonalityWrites = new Set<string>();
 
 // ---------------------------------------------------------------------------
 // Implementation
@@ -100,15 +86,28 @@ export class CodexCLISpawnAdapter implements SpawnAdapter {
    * Codex reads codex.md (analogous to AGENTS.md or system prompts) from
    * the current working directory. We use the personality compiler to
    * translate the Claude Code agent definition into Codex-compatible format.
+   *
+   * Writes are serialized per working directory and committed via a temporary
+   * file + atomic rename so concurrent spawns never leave a partially-written
+   * codex.md.
    */
-  // TODO: writePersonality overwrites any existing codex.md in the working
-  // directory without backup. If multiple concurrent spawns target the same
-  // cwd with different agentIds, they will race on this file. Consider using
-  // a temp directory or unique filename to avoid conflicts.
   private writePersonality(agentId: string, cwd: string): void {
-    const content = compilePersonality(agentId, 'codex');
-    const codexMdPath = path.join(cwd, 'codex.md');
-    fs.writeFileSync(codexMdPath, content, 'utf-8');
+    if (activePersonalityWrites.has(cwd)) {
+      throw new Error(
+        `Concurrent codex.md write detected for ${cwd}. Spawns targeting the same working directory must be serialized.`,
+      );
+    }
+
+    activePersonalityWrites.add(cwd);
+    try {
+      const content = compilePersonality(agentId, 'codex');
+      const codexMdPath = path.join(cwd, 'codex.md');
+      const tmpPath = `${codexMdPath}.tmp`;
+      fs.writeFileSync(tmpPath, content, 'utf-8');
+      fs.renameSync(tmpPath, codexMdPath);
+    } finally {
+      activePersonalityWrites.delete(cwd);
+    }
   }
 
   /**
@@ -149,7 +148,7 @@ export class CodexCLISpawnAdapter implements SpawnAdapter {
    */
   private buildEnv(config: SpawnConfig): NodeJS.ProcessEnv {
     const currentPath = process.env['PATH'] ?? '';
-    const augmentedPath = `${DEFAULT_PATH_PREFIX}:${currentPath}`;
+    const augmentedPath = buildAugmentedPath(currentPath);
 
     return {
       ...process.env,

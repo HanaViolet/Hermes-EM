@@ -3,6 +3,7 @@ import MarketHeader from '@/components/market/MarketHeader';
 import MarketTabs, { type MarketTab } from '@/components/market/MarketTabs';
 import SimulationControls from '@/components/market/SimulationControls';
 import { PARCHMENT, PIXEL_CARD } from '@/components/game/panels/panelUtils';
+import { useMarketStore } from '@/stores/marketStore';
 import { useSimulationStore } from '@/stores/simulation-store';
 import AgentSandbox from './AgentSandbox';
 import MarketOverview from './MarketOverview';
@@ -10,7 +11,7 @@ import MarketOverview from './MarketOverview';
 export default function MarketSimulation() {
   const [activeTab, setActiveTab] = useState<MarketTab>('overview');
   const connected = useSimulationStore((s) => s.connected);
-  const marketState = useSimulationStore((s) => s.marketState);
+  const marketState = useMarketStore((s) => s.marketState);
   const status = useSimulationStore((s) => s.status);
   const error = useSimulationStore((s) => s.error);
   const stock = marketState?.stock ?? null;

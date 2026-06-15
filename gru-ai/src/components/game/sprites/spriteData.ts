@@ -11,7 +11,6 @@ const _ = '' // transparent
 const PLACEHOLDER_1x1: SpriteData = [['#808080']]
 const PLACEHOLDER_2x1: SpriteData = [new Array(32).fill('#808080')]
 const PLACEHOLDER_1x2: SpriteData = Array.from({ length: 32 }, () => ['#808080'])
-const PLACEHOLDER_2x2: SpriteData = Array.from({ length: 32 }, () => new Array(32).fill('#808080'))
 
 export const DESK_SQUARE_SPRITE: SpriteData = PLACEHOLDER_2x1
 export const BOOKSHELF_SPRITE: SpriteData = PLACEHOLDER_1x2

@@ -10,12 +10,12 @@ export class HotMoneyAgent extends BaseInvestorAgent {
     super({ ...seed, type: 'hot_money' });
   }
 
-  decide(market: MarketState, environment: MarketEnvironmentSnapshot): AgentDecision {
+  async decide(market: MarketState, environment: MarketEnvironmentSnapshot): Promise<AgentDecision> {
     const tick = market.status.tick;
     if (this.state.openOrderIds.length > 0) return this.hold(tick, '等待游资委托反馈');
 
     const price = market.stock.currentPrice;
-    const nearLimitUp = market.stock.upperLimit - price <= 1.2;
+    const nearLimitUp = (market.stock.upperLimit - price) / Math.max(Number.EPSILON, price) <= 0.05;
     const strongTape = environment.marketSentiment > 0.18 || market.metrics.orderBookImbalance > 0.2 || nearLimitUp;
     const canBuyLots = Math.floor(this.state.cash / (price * 100));
     const canSellLots = Math.floor(this.state.availablePosition / 100);

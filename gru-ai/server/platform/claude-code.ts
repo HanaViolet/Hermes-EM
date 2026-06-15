@@ -101,7 +101,7 @@ export class ClaudeCodeAdapter implements PlatformAdapter {
     if (fromPrompt) return fromPrompt;
 
     // 4. Fallback: cross-reference parent session for subagent_type
-    const subagentsIdx = filePath.indexOf('/subagents/');
+    const subagentsIdx = filePath.search(/[\\\\/]subagents[\\\\/]/);
     if (subagentsIdx !== -1) {
       const parentDir = filePath.slice(0, subagentsIdx);
       const parentSessionId = path.basename(parentDir);

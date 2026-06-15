@@ -1,5 +1,6 @@
 import { Download, Gauge, Pause, Play, RotateCcw, StepForward } from 'lucide-react';
 import type { ReactNode } from 'react';
+import { useCommandSymbol } from '@/hooks/useCommandSymbol';
 import { useMarketStore } from '@/stores/marketStore';
 import { useSimulationStore } from '@/stores/simulation-store';
 import type { SimulationStatus } from '@/types/market';
@@ -45,10 +46,9 @@ function ControlButton({
 export default function SimulationControlPanel({ connected, status }: { connected: boolean; status: SimulationStatus | null }) {
   const sendCommand = useSimulationStore((s) => s.sendCommand);
   const marketState = useMarketStore((s) => s.marketState);
-  const activeSymbol = useMarketStore((s) => s.activeSymbol);
+  const commandSymbol = useCommandSymbol();
   const running = status?.running ?? false;
   const speed = status?.speed ?? 1;
-  const commandSymbol = activeSymbol ?? marketState?.stock.symbol;
 
   function exportData() {
     if (!marketState) return;

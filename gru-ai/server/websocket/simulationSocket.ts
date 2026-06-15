@@ -75,7 +75,8 @@ function parseCommand(raw: unknown): SimulationCommand | null {
 function agentSnapshot(agent: MarketState['agents'][number], price: number): AgentSnapshot {
   const marketValue = agent.position * price;
   const totalWealth = agent.cash + marketValue;
-  const returnRate = (totalWealth - 1_000_000) / 1_000_000;
+  const initialWealth = Math.max(1, agent.initialWealth);
+  const returnRate = (totalWealth - initialWealth) / initialWealth;
   const view = sentimentView(agent.sentiment);
   return {
     ...agent,
@@ -257,5 +258,9 @@ export function attachSimulationSocket(wss: WebSocketServer, manager: Simulation
 
   manager.on('stock_list', (payload: { activeSymbol: string; stocks: SimulatedStockSummary[] }) => {
     broadcast(wss, { version: 1, type: 'stock_list', payload });
+  });
+
+  manager.on('error', (payload: { message: string }) => {
+    broadcast(wss, { version: 1, type: 'simulation_error', payload });
   });
 }

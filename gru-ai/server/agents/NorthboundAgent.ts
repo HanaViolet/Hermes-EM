@@ -10,7 +10,7 @@ export class NorthboundAgent extends BaseInvestorAgent {
     super({ ...seed, type: 'northbound' });
   }
 
-  decide(market: MarketState, environment: MarketEnvironmentSnapshot): AgentDecision {
+  async decide(market: MarketState, environment: MarketEnvironmentSnapshot): Promise<AgentDecision> {
     const tick = market.status.tick;
     if (this.state.openOrderIds.length > 0) return this.hold(tick, '北向资金订单排队');
     if (tick % 5 !== 0) return this.hold(tick, '北向低频观察');

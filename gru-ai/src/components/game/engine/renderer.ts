@@ -1,7 +1,7 @@
 import { TileType, TILE_SIZE, CharacterState, FurnitureActivityType, Direction } from '../pixel-types'
 import type { TileType as TileTypeVal, FurnitureInstance, Character, SpriteData, Seat, FloorColor } from '../pixel-types'
 import { getCachedSprite, getOutlineSprite } from '../sprites/spriteCache'
-import { getCharacterSprites, BUBBLE_PERMISSION_SPRITE, BUBBLE_WAITING_SPRITE, BUBBLE_CHAT_SPRITE } from '../sprites/spriteData'
+import { getCharacterSprites, BUBBLE_PERMISSION_SPRITE, BUBBLE_WAITING_SPRITE } from '../sprites/spriteData'
 import { getCharacterSprite } from './characters'
 import { renderMatrixEffect } from './matrixEffect'
 import { getColorizedFloorSprite, hasFloorSprites, WALL_COLOR } from '../floorTiles'
@@ -45,7 +45,6 @@ import {
   NAME_LABEL_VERTICAL_OFFSET_PX,
   NAME_LABEL_SITTING_OFFSET_PX,
   IDENTITY_PLATE_PAD_X,
-  IDENTITY_PLATE_PAD_Y,
   IDENTITY_PLATE_BG_ALPHA,
   IDENTITY_PLATE_HEIGHT,
   IDENTITY_PLATE_CORNER_RADIUS,
@@ -939,7 +938,6 @@ export function renderIdentityPlates(
 
   // Pre-zoom constants (use pillZoom for sizing, zoom for positioning)
   const padX = Math.floor(IDENTITY_PLATE_PAD_X * pillZoom)
-  const padY = Math.floor(IDENTITY_PLATE_PAD_Y * pillZoom)
   const scaledH = Math.floor(IDENTITY_PLATE_HEIGHT * pillZoom)
   const dotRadius = Math.floor(STATUS_DOT_RADIUS * pillZoom)
   const dotGap = Math.floor(STATUS_DOT_GAP * pillZoom)

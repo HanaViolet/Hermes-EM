@@ -11,8 +11,17 @@ function Stat({ label, value, color }: { label: string; value: string; color?: s
   );
 }
 
-export default function AgentOverviewPanel({ agentUpdate, stock }: { agentUpdate: AgentUpdateMessage | null; stock?: StockState | null }) {
-  const overview = agentUpdate?.overview;
+export default function AgentOverviewPanel({
+  overview,
+  tick,
+  simulationTime,
+  stock,
+}: {
+  overview?: AgentUpdateMessage['overview'];
+  tick?: number;
+  simulationTime?: string;
+  stock?: StockState | null;
+}) {
   const sentiment = overview?.averageSentiment ?? 0;
 
   return (
@@ -28,8 +37,8 @@ export default function AgentOverviewPanel({ agentUpdate, stock }: { agentUpdate
           </p>
         </div>
         <div className="text-right text-xs" style={{ color: TERMINAL.textDim }}>
-          <div>T{agentUpdate?.tick ?? 0}</div>
-          <div>{agentUpdate?.simulationTime ?? '--'}</div>
+          <div>T{tick ?? 0}</div>
+          <div>{simulationTime ?? '--'}</div>
         </div>
       </div>
 

@@ -59,15 +59,12 @@ export default function AgentTicker({ agentStatuses, agentSessionInfos }: AgentT
       });
     }
     return result;
-  }, [agentStatuses, agentSessionInfos]);
+  }, [agentStatuses, agentSessionInfos, AGENT_COLOR_MAP]);
 
   // Cycle through entries
   const [index, setIndex] = useState(0);
   useEffect(() => {
-    if (entries.length <= 1) {
-      setIndex(0);
-      return;
-    }
+    if (entries.length <= 1) return;
     const id = setInterval(() => {
       setIndex((prev) => (prev + 1) % entries.length);
     }, 3000);

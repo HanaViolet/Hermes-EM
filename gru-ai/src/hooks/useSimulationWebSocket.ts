@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import { WS_URL } from '@/lib/api';
-import { useAgentStore } from '@/stores/agentStore';
 import { useMarketStore } from '@/stores/marketStore';
 import { useNewsStore } from '@/stores/newsStore';
 import { useScenarioStore } from '@/stores/scenarioStore';
@@ -22,8 +21,8 @@ export function useSimulationWebSocket() {
   const setCommandSender = useSimulationStore((s) => s.setCommandSender);
   const setMarketState = useMarketStore((s) => s.setMarketState);
   const setStockList = useMarketStore((s) => s.setStockList);
-  const setMarketUpdate = useMarketStore((s) => s.setMarketUpdate);
-  const setAgentUpdate = useAgentStore((s) => s.setAgentUpdate);
+  const mergeMarketUpdate = useMarketStore((s) => s.mergeMarketUpdate);
+  const mergeAgentUpdate = useMarketStore((s) => s.mergeAgentUpdate);
   const setNewsUpdate = useNewsStore((s) => s.setNewsUpdate);
   const setScenarioUpdate = useScenarioStore((s) => s.setScenarioUpdate);
   const setTrainingUpdate = useTrainingStore((s) => s.setTrainingUpdate);
@@ -76,10 +75,10 @@ export function useSimulationWebSocket() {
               setError(message.payload.message);
               break;
             case 'market_update':
-              setMarketUpdate(message.payload);
+              mergeMarketUpdate(message.payload);
               break;
             case 'agent_update':
-              setAgentUpdate(message.payload);
+              mergeAgentUpdate(message.payload);
               break;
             case 'scenario_update':
               setScenarioUpdate(message.payload);
@@ -124,5 +123,5 @@ export function useSimulationWebSocket() {
         wsRef.current = null;
       }
     };
-  }, [setConnected, setSimulationMarketState, setStatus, setError, setCommandSender, setMarketState, setStockList, setMarketUpdate, setAgentUpdate, setNewsUpdate, setScenarioUpdate, setTrainingUpdate]);
+  }, [setConnected, setSimulationMarketState, setStatus, setError, setCommandSender, setMarketState, setStockList, mergeMarketUpdate, mergeAgentUpdate, setNewsUpdate, setScenarioUpdate, setTrainingUpdate]);
 }

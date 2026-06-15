@@ -3,7 +3,6 @@
 // ---------------------------------------------------------------------------
 
 import type { SpriteData } from './pixel-types'
-import type { CharacterAppearance } from '@/stores/agent-registry-store'
 import { setFloorSprites } from './floorTiles'
 import { setCharacterTemplates } from './sprites/spriteData'
 import { createPixelCharacterTemplates } from './sprites/pixelCharacters'
@@ -87,14 +86,14 @@ export async function loadFloorAssets(src = '/assets/office/atlas.png'): Promise
 
     setFloorSprites(sprites)
     console.log(`✓ Loaded ${sprites.length} floor tile patterns from atlas`)
-  } catch (e) {
+  } catch {
     console.warn('Floor atlas not found. Using fallback rendering.')
   }
 }
 
 // ── Character Sprites (local market preset library) ──
 
-export function loadCharacterAssets(_appearances: CharacterAppearance[]): void {
+export function loadCharacterAssets(): void {
   const characters = createPixelCharacterTemplates()
   setCharacterTemplates(characters)
   console.log(`✓ Loaded ${characters.length} local market pixel character presets`)
@@ -117,11 +116,11 @@ export function onTilesetReady(cb: () => void): void {
   onTilesetReadyCallbacks.push(cb)
 }
 
-export function loadAllAssets(appearances: CharacterAppearance[]): void {
+export function loadAllAssets(): void {
   if (loaded) return
   loaded = true
   loadFloorAssets()
-  loadCharacterAssets(appearances)
+  loadCharacterAssets()
   loadTilesetCache().then(() => {
     tilesetReady = true
     for (const cb of onTilesetReadyCallbacks) cb()

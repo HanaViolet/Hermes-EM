@@ -26,14 +26,16 @@ export default function NewsDetailPanel() {
 
   useEffect(() => {
     if (!selectedNewsId || latestRecord) {
-      setFetchedRecord(null);
-      setLoadingDetail(false);
+      queueMicrotask(() => {
+        setFetchedRecord(null);
+        setLoadingDetail(false);
+      });
       return;
     }
 
     const controller = new AbortController();
     const query = activeSymbol ? `?symbol=${encodeURIComponent(activeSymbol)}` : '';
-    setLoadingDetail(true);
+    queueMicrotask(() => setLoadingDetail(true));
 
     fetch(`${API_BASE}/api/news/${encodeURIComponent(selectedNewsId)}${query}`, { signal: controller.signal })
       .then((response) => (response.ok ? response.json() : null))

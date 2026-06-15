@@ -97,11 +97,9 @@ export default function GameHeader({ onPanelRequest, gameContainerRef, activePan
 
   // Fullscreen state + feature detection (iOS Safari lacks fullscreen API)
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [canFullscreen, setCanFullscreen] = useState(false);
-
-  useEffect(() => {
-    setCanFullscreen(typeof document.fullscreenEnabled !== 'undefined' && document.fullscreenEnabled);
-  }, []);
+  const [canFullscreen] = useState(
+    () => typeof document !== 'undefined' && !!document.fullscreenEnabled,
+  );
 
   useEffect(() => {
     const onChange = () => setIsFullscreen(!!document.fullscreenElement);

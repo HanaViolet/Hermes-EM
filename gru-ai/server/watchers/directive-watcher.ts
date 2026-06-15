@@ -250,6 +250,7 @@ export class DirectiveWatcher {
 
       // Find all active directives, pick the most recently updated
       const activeRawStatuses = new Set(['in_progress', 'awaiting_completion', 'active', 'reopened']);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let best: { dirId: string; directive: any; updatedAt: string } | null = null;
 
       for (const dirId of dirIds) {
@@ -402,7 +403,6 @@ export class DirectiveWatcher {
     }
 
     const completedCount = projects.filter(p => p.status === 'completed').length;
-    const executeOutput = directive.pipeline?.execute?.output;
     const currentStep = directive.current_step ?? '';
 
     // Determine current phase from pipeline state (named step IDs)
@@ -497,12 +497,23 @@ export class DirectiveWatcher {
     return this.readJson(filePath);
   }
 
+  private isMissingFileError(err: unknown): boolean {
+    return (
+      typeof err === 'object' &&
+      err !== null &&
+      'code' in err &&
+      (err as { code: string }).code === 'ENOENT'
+    );
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private readJson(filePath: string): any | null {
     try {
       const raw = fs.readFileSync(filePath, 'utf-8');
       return JSON.parse(raw);
-    } catch {
+    } catch (err) {
+      if (this.isMissingFileError(err)) return null;
+      console.error(`[directive-watcher] Failed to read/parse ${filePath}:`, err);
       return null;
     }
   }
@@ -510,7 +521,9 @@ export class DirectiveWatcher {
   private readTextFile(filePath: string): string | undefined {
     try {
       return fs.readFileSync(filePath, 'utf-8');
-    } catch {
+    } catch (err) {
+      if (this.isMissingFileError(err)) return undefined;
+      console.error(`[directive-watcher] Failed to read ${filePath}:`, err);
       return undefined;
     }
   }
@@ -525,7 +538,9 @@ export class DirectiveWatcher {
           return false;
         }
       });
-    } catch {
+    } catch (err) {
+      if (this.isMissingFileError(err)) return [];
+      console.error(`[directive-watcher] Failed to list directories in ${dirPath}:`, err);
       return [];
     }
   }
@@ -561,8 +576,10 @@ export class DirectiveWatcher {
         this.lastStateHash = hash;
         this.readAndUpdate();
       }
-    } catch {
-      // Poll failure is non-critical
+    } catch (err) {
+      if (!this.isMissingFileError(err)) {
+        console.error(`[directive-watcher] Poll fallback failed:`, err);
+      }
     }
   }
 

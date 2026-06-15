@@ -2,9 +2,9 @@
 // StatusPanel -- System vitals, active directives, velocity, session health
 // ---------------------------------------------------------------------------
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
-  Activity, Wifi, WifiOff, Users, Zap, TrendingUp, BarChart3, Clock,
+  Activity, Wifi, WifiOff, Users, Zap, TrendingUp, Clock,
   FolderOpen, ChevronDown, ChevronRight, CheckCircle2, Circle, XCircle,
   SkipForward, AlertTriangle, Loader2,
 } from 'lucide-react';
@@ -625,21 +625,6 @@ function SessionHealthSection({
 }) {
   const [expanded, setExpanded] = useState(false);
 
-  if (total === 0) {
-    return (
-      <div className="space-y-1.5">
-        <SectionHeader icon={<Activity className="h-3 w-3" />} count={0}>
-          Session Health
-        </SectionHeader>
-        <div className="text-center py-3 font-mono" style={PIXEL_CARD}>
-          <p className="text-[11px]" style={{ color: PARCHMENT.textDim }}>
-            No active sessions
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   // Group non-subagent sessions by status for the expanded view
   const sessionsByStatus = useMemo(() => {
     const nonSub = sessions.filter((s) => !s.isSubagent);
@@ -655,6 +640,21 @@ function SessionHealthSection({
     }
     return groups;
   }, [sessions]);
+
+  if (total === 0) {
+    return (
+      <div className="space-y-1.5">
+        <SectionHeader icon={<Activity className="h-3 w-3" />} count={0}>
+          Session Health
+        </SectionHeader>
+        <div className="text-center py-3 font-mono" style={PIXEL_CARD}>
+          <p className="text-[11px]" style={{ color: PARCHMENT.textDim }}>
+            No active sessions
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   const Chevron = expanded ? ChevronDown : ChevronRight;
 
@@ -785,6 +785,12 @@ export default function StatusPanel() {
   const activeDirectives = useDashboardStore((s) => s.activeDirectives);
   const directiveHistory = useDashboardStore((s) => s.directiveHistory);
 
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 60_000);
+    return () => clearInterval(id);
+  }, []);
+
   // -- Section 1: System vitals --
   const activeSessions = useMemo(
     () => sessions.filter((s) => s.status === 'working' || s.status.startsWith('waiting')).length,
@@ -798,7 +804,7 @@ export default function StatusPanel() {
 
   // -- Section 3: Velocity --
   const { recentCompleted, sevenDayCount } = useMemo(() => {
-    const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+    const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
     const completed = directiveHistory
       .filter((d) => d.status === 'completed')
       .sort((a, b) => new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime());
@@ -811,7 +817,7 @@ export default function StatusPanel() {
       recentCompleted: completed.slice(0, 5),
       sevenDayCount: sevenDay.length,
     };
-  }, [directiveHistory]);
+  }, [directiveHistory, now]);
 
   // -- Section 4: Session health (non-subagent only) --
   const { segments, totalNonSubagent } = useMemo(() => {

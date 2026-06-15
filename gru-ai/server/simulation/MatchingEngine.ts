@@ -34,6 +34,8 @@ export class MatchingEngine {
       buy.status = buy.remainingQuantity === 0 ? 'filled' : 'partially_filled';
       sell.status = sell.remainingQuantity === 0 ? 'filled' : 'partially_filled';
 
+      book.markDirty();
+
       trades.push({
         id: randomUUID(),
         buyOrderId: buy.id,
@@ -49,8 +51,6 @@ export class MatchingEngine {
         timestamp: new Date().toISOString(),
         aggressorSide: aggressorSide(buy, sell),
       });
-
-      book.compact();
     }
 
     return trades;
@@ -71,6 +71,8 @@ export class MatchingEngine {
       buy.status = buy.remainingQuantity === 0 ? 'filled' : 'partially_filled';
       sell.status = sell.remainingQuantity === 0 ? 'filled' : 'partially_filled';
 
+      book.markDirty();
+
       trades.push({
         id: randomUUID(),
         buyOrderId: buy.id,
@@ -86,8 +88,6 @@ export class MatchingEngine {
         timestamp: new Date().toISOString(),
         aggressorSide: aggressorSide(buy, sell),
       });
-
-      book.compact();
     }
 
     return trades;

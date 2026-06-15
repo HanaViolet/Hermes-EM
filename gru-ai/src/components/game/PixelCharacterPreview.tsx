@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import type { SpriteData } from './pixel-types';
-import { createPixelCharacterTemplates, PIXEL_CHARACTER_PRESETS } from './sprites/pixelCharacters';
+import { createPixelCharacterTemplates, pixelCharacterName } from './sprites/pixelCharacters';
 
 const CHARACTER_TEMPLATES = createPixelCharacterTemplates();
 
@@ -34,10 +34,6 @@ function getFrame(palette: number, pose: PixelCharacterPose, frame: number): Spr
   if (pose === 'typing') return template.down[3 + (frame % 2)];
   if (pose === 'reading') return template.down[5 + (frame % 2)];
   return template.down[1];
-}
-
-export function pixelCharacterName(palette: number): string {
-  return PIXEL_CHARACTER_PRESETS[palette % PIXEL_CHARACTER_PRESETS.length]?.label ?? 'Pixel Agent';
 }
 
 export default function PixelCharacterPreview({

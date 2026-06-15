@@ -138,7 +138,7 @@ export class MarketState {
   setAgents(agents: AgentState[]): void {
     this.agents = agents.map((agent) => ({
       ...agent,
-      pnl: round2(agent.cash + agent.position * this.stock.currentPrice - 1_000_000),
+      pnl: round2(agent.cash + agent.position * this.stock.currentPrice - agent.initialWealth),
     }));
     this.recalculateMetrics();
   }
@@ -216,20 +216,17 @@ export class MarketState {
       })),
       orderBook: {
         ...this.orderBook,
-        bids: this.orderBook.bids.map((level) => ({ ...level })),
-        asks: this.orderBook.asks.map((level) => ({ ...level })),
+        bids: this.orderBook.bids.slice(),
+        asks: this.orderBook.asks.slice(),
       },
-      recentTrades: this.recentTrades.map((trade) => ({ ...trade })),
+      recentTrades: this.recentTrades.slice(),
       metrics: {
         ...this.metrics,
         capitalFlowByAgent: { ...this.metrics.capitalFlowByAgent },
       },
-      events: this.events.map((event) => ({
-        ...event,
-        affectedAgentTypes: [...event.affectedAgentTypes],
-      })),
-      priceSeries: this.priceSeries.map((point) => ({ ...point })),
-      volumeSeries: this.volumeSeries.map((point) => ({ ...point })),
+      events: this.events.slice(),
+      priceSeries: this.priceSeries.slice(),
+      volumeSeries: this.volumeSeries.slice(),
       lastUpdated: new Date().toISOString(),
     };
   }

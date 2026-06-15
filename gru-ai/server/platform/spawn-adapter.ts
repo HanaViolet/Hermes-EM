@@ -108,6 +108,40 @@ export interface SpawnHandle {
 }
 
 // ---------------------------------------------------------------------------
+// PATH augmentation helper
+// ---------------------------------------------------------------------------
+
+import path from 'node:path';
+
+/**
+ * Build an augmented PATH string that prefixes common binary directories.
+ *
+ * Uses the platform-specific PATH delimiter so the same helper works on
+ * Windows, macOS, and Linux.
+ */
+export function buildAugmentedPath(
+  currentPath: string,
+  extraPrefixes: string[] = [],
+): string {
+  const base =
+    process.platform === 'win32'
+      ? [
+          path.join(
+            process.env['USERPROFILE'] ?? 'C:\\Users',
+            'AppData',
+            'Roaming',
+            'npm',
+          ),
+          'C:\\Program Files\\nodejs',
+          'C:\\Program Files (x86)\\nodejs',
+        ]
+      : ['/usr/local/bin', '/usr/bin', '/bin'];
+
+  const prefix = [...base, ...extraPrefixes].join(path.delimiter);
+  return prefix ? `${prefix}${path.delimiter}${currentPath}` : currentPath;
+}
+
+// ---------------------------------------------------------------------------
 // SpawnAdapter interface
 // ---------------------------------------------------------------------------
 

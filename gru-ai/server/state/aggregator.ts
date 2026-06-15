@@ -1,6 +1,5 @@
 import { EventEmitter } from 'node:events';
 import fs from 'node:fs';
-import path from 'node:path';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { parseAllTasks } from '../parsers/task-parser.js';
@@ -31,7 +30,7 @@ import type {
   HookEvent,
   WsMessageType,
 } from '../types.js';
-import type { FullWorkState, WorkItemFilter, WorkItem, FeatureRecord, BacklogRecord } from './work-item-types.js';
+import type { FullWorkState, WorkItemFilter, WorkItem } from './work-item-types.js';
 import { consumerRoot } from '../paths.js';
 
 const execFileAsync = promisify(execFile);

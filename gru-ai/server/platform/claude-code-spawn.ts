@@ -15,27 +15,13 @@
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 
-import type {
-  SpawnAdapter,
-  SpawnConfig,
-  SpawnHandle,
-  SpawnMode,
+import {
+  buildAugmentedPath,
+  type SpawnAdapter,
+  type SpawnConfig,
+  type SpawnHandle,
+  type SpawnMode,
 } from './spawn-adapter.js';
-
-// ---------------------------------------------------------------------------
-// Default PATH augmentation
-// ---------------------------------------------------------------------------
-
-/**
- * Sensible PATH prefix ensuring common binary locations are available.
- * Claude Code CLI (`claude`) is typically installed via npm global or in
- * `~/.local/bin`. Without this, detached processes may fail to find it.
- */
-const DEFAULT_PATH_PREFIX = [
-  '/usr/local/bin',
-  '/usr/bin',
-  '/bin',
-].join(':');
 
 // ---------------------------------------------------------------------------
 // Implementation
@@ -119,7 +105,7 @@ export class ClaudeCodeSpawnAdapter implements SpawnAdapter {
    */
   private buildEnv(config: SpawnConfig): NodeJS.ProcessEnv {
     const currentPath = process.env['PATH'] ?? '';
-    const augmentedPath = `${DEFAULT_PATH_PREFIX}:${currentPath}`;
+    const augmentedPath = buildAugmentedPath(currentPath);
 
     return {
       ...process.env,

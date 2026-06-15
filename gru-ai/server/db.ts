@@ -18,25 +18,34 @@ export function getDb(): Database.Database {
   db.pragma('journal_mode = WAL');
   db.pragma('synchronous = NORMAL');
 
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS events (
-      id TEXT PRIMARY KEY,
-      type TEXT NOT NULL,
-      session_id TEXT NOT NULL,
-      timestamp TEXT NOT NULL,
-      message TEXT NOT NULL DEFAULT '',
-      project TEXT,
-      metadata_json TEXT
-    )
-  `);
+  // Initialize schema inside a transaction so partial failures roll back cleanly.
+  const initSchema = db.transaction(() => {
+    db!.exec(`
+      CREATE TABLE IF NOT EXISTS events (
+        id TEXT PRIMARY KEY,
+        type TEXT NOT NULL,
+        session_id TEXT NOT NULL,
+        timestamp TEXT NOT NULL,
+        message TEXT NOT NULL DEFAULT '',
+        project TEXT,
+        metadata_json TEXT
+      )
+    `);
 
-  // Index for querying by session and time
-  db.exec(`
-    CREATE INDEX IF NOT EXISTS idx_events_session ON events(session_id);
-  `);
-  db.exec(`
-    CREATE INDEX IF NOT EXISTS idx_events_timestamp ON events(timestamp DESC);
-  `);
+    // Index for querying by session and time
+    db!.exec(`
+      CREATE INDEX IF NOT EXISTS idx_events_session ON events(session_id);
+    `);
+    db!.exec(`
+      CREATE INDEX IF NOT EXISTS idx_events_timestamp ON events(timestamp DESC);
+    `);
+  });
+
+  try {
+    initSchema();
+  } catch (err) {
+    throw new Error(`Failed to initialize database schema at ${DB_PATH}`, { cause: err });
+  }
 
   console.log(`[db] SQLite database initialized at ${DB_PATH}`);
   return db;

@@ -10,6 +10,20 @@ function byAskPriority(a: Order, b: Order): number {
   return a.createdAtTick - b.createdAtTick || a.createdAt.localeCompare(b.createdAt);
 }
 
+function findInsertIndex(orders: Order[], order: Order, compare: (a: Order, b: Order) => number): number {
+  let lo = 0;
+  let hi = orders.length;
+  while (lo < hi) {
+    const mid = (lo + hi) >>> 1;
+    if (compare(orders[mid], order) <= 0) {
+      lo = mid + 1;
+    } else {
+      hi = mid;
+    }
+  }
+  return lo;
+}
+
 function toLevels(orders: Order[], depth: number): OrderBookLevel[] {
   const grouped = new Map<number, { quantity: number; orderCount: number }>();
   for (const order of orders) {
@@ -28,16 +42,20 @@ export class LimitOrderBook {
   private buyOrders: Order[] = [];
   private sellOrders: Order[] = [];
   private lastUpdatedTick = 0;
+  private dirty = false;
+  private cachedSnapshot: OrderBookSnapshot | null = null;
+  private cachedDepth = 0;
 
   addOrder(order: Order): void {
     if (order.side === 'buy') {
-      this.buyOrders.push(order);
-      this.buyOrders.sort(byBidPriority);
+      const idx = findInsertIndex(this.buyOrders, order, byBidPriority);
+      this.buyOrders.splice(idx, 0, order);
     } else {
-      this.sellOrders.push(order);
-      this.sellOrders.sort(byAskPriority);
+      const idx = findInsertIndex(this.sellOrders, order, byAskPriority);
+      this.sellOrders.splice(idx, 0, order);
     }
     this.lastUpdatedTick = order.createdAtTick;
+    this.invalidateSnapshot();
   }
 
   cancelOrder(orderId: string, reason = 'cancelled'): Order | null {
@@ -46,13 +64,21 @@ export class LimitOrderBook {
     order.status = 'cancelled';
     order.cancelReason = reason;
     order.remainingQuantity = 0;
+    this.markDirty();
     this.compact();
     return order;
   }
 
   expireOrders(currentTick: number, maxAgeTicks: number, reason = '订单超时撤销'): Order[] {
     const expired: Order[] = [];
-    for (const order of [...this.buyOrders, ...this.sellOrders]) {
+    for (const order of this.buyOrders) {
+      if (currentTick - order.createdAtTick < maxAgeTicks) continue;
+      order.status = 'cancelled';
+      order.cancelReason = reason;
+      expired.push({ ...order });
+      order.remainingQuantity = 0;
+    }
+    for (const order of this.sellOrders) {
       if (currentTick - order.createdAtTick < maxAgeTicks) continue;
       order.status = 'cancelled';
       order.cancelReason = reason;
@@ -61,6 +87,7 @@ export class LimitOrderBook {
     }
     if (expired.length > 0) {
       this.lastUpdatedTick = currentTick;
+      this.markDirty();
       this.compact();
     }
     return expired;
@@ -83,12 +110,15 @@ export class LimitOrderBook {
   }
 
   snapshot(depth = 5): OrderBookSnapshot {
+    if (this.cachedSnapshot && this.cachedDepth === depth) {
+      return this.cachedSnapshot;
+    }
     this.compact();
     const bids = toLevels(this.buyOrders, depth);
     const asks = toLevels(this.sellOrders, depth);
     const bestBid = bids[0]?.price;
     const bestAsk = asks[0]?.price;
-    return {
+    this.cachedSnapshot = {
       bids,
       asks,
       bestBid,
@@ -97,17 +127,29 @@ export class LimitOrderBook {
       depth,
       lastUpdatedTick: this.lastUpdatedTick,
     };
+    this.cachedDepth = depth;
+    return this.cachedSnapshot;
   }
 
   reset(): void {
     this.buyOrders = [];
     this.sellOrders = [];
     this.lastUpdatedTick = 0;
+    this.dirty = false;
+    this.invalidateSnapshot();
   }
 
   compact(): void {
+    if (!this.dirty) return;
     this.buyOrders = this.buyOrders.filter((order) => order.remainingQuantity > 0 && order.status !== 'cancelled' && order.status !== 'filled');
     this.sellOrders = this.sellOrders.filter((order) => order.remainingQuantity > 0 && order.status !== 'cancelled' && order.status !== 'filled');
+    this.dirty = false;
+  }
+
+  /** Mark the book as needing compaction and invalidate any cached snapshot. */
+  markDirty(): void {
+    this.dirty = true;
+    this.invalidateSnapshot();
   }
 
   hasOpenOrder(orderId: string): boolean {
@@ -115,8 +157,13 @@ export class LimitOrderBook {
   }
 
   private findOrder(orderId: string): Order | null {
+    this.compact();
     return this.buyOrders.find((order) => order.id === orderId)
       ?? this.sellOrders.find((order) => order.id === orderId)
       ?? null;
+  }
+
+  private invalidateSnapshot(): void {
+    this.cachedSnapshot = null;
   }
 }

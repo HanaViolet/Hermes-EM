@@ -122,9 +122,11 @@ function Stat({ label, value, tone }: { label: string; value: string; tone?: str
 export default function PriceChartPanel({ marketState }: { marketState: MarketState | null }) {
   const [followLatest, setFollowLatest] = useState(true);
   const scrollRef = useRef<HTMLDivElement | null>(null);
-  const priceSeries = marketState?.priceSeries ?? [];
-  const volumeSeries = marketState?.volumeSeries ?? [];
-  const candles = useMemo(() => buildCandles(priceSeries, volumeSeries), [priceSeries, volumeSeries]);
+  const candles = useMemo(() => {
+    const priceSeries = marketState?.priceSeries ?? [];
+    const volumeSeries = marketState?.volumeSeries ?? [];
+    return buildCandles(priceSeries, volumeSeries);
+  }, [marketState?.priceSeries, marketState?.volumeSeries]);
   const current = marketState?.stock.currentPrice ?? 0;
   const previousClose = marketState?.stock.previousClose ?? current;
   const change = marketState?.stock.change ?? 0;

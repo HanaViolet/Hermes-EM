@@ -10,7 +10,7 @@ export class NationalTeamAgent extends BaseInvestorAgent {
     super({ ...seed, type: 'national_team' });
   }
 
-  decide(market: MarketState, environment: MarketEnvironmentSnapshot): AgentDecision {
+  async decide(market: MarketState, environment: MarketEnvironmentSnapshot): Promise<AgentDecision> {
     const tick = market.status.tick;
     if (this.state.openOrderIds.length > 0) return this.hold(tick, '护盘委托等待中');
 

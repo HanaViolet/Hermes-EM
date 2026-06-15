@@ -5,8 +5,6 @@ import { FurnitureActivityType } from '../pixel-types'
 // Each status has an array of animation frames.
 // '' = transparent pixel.
 
-const _ = '' // transparent
-
 // ── Helper: expand row strings to SpriteData ───────────────────
 // Each char in the row string maps to a color via the palette.
 function expand(
@@ -113,89 +111,6 @@ const coffeeFrame1 = expand([
 ], coffeePalette)
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// ERROR — Warning triangle (4 aggressive flash frames)
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-const errorPaletteBright = {
-  R: '#ef4444', // bright red outline
-  Y: '#eab308', // yellow fill
-  B: '#111111', // black exclamation
-  W: '#fef08a', // warm interior highlight
-}
-
-const errorPaletteFlash = {
-  R: '#fecaca', // near-white red (washed)
-  Y: '#fef9c3', // near-white yellow
-  B: '#7f1d1d', // dark red exclamation (still visible)
-  W: '#FFFFFF', // white
-}
-
-const errorPaletteDim = {
-  R: '#b91c1c', // dim red
-  Y: '#a16207', // dim yellow
-  B: '#111111', // black exclamation
-  W: '#ca8a04', // dim interior
-}
-
-const errorTemplate = [
-  '...RR...',
-  '...RR...',
-  '..RBBR..',
-  '..RWBR..',
-  '.RWWBWR.',
-  '.RWWWWR.',
-  'RRWBWRRR',
-  'RRRRRRRR',
-]
-
-// Frame 0: BRIGHT — full red + yellow (attention!)
-const errorFrame0 = expand(errorTemplate, errorPaletteBright)
-
-// Frame 1: FLASH — near-white overexposure (strobe effect)
-const errorFrame1 = expand(errorTemplate, errorPaletteFlash)
-
-// Frame 2: BRIGHT — back to full red (rapid cycle)
-const errorFrame2 = expand(errorTemplate, errorPaletteBright)
-
-// Frame 3: DIM — darker pass before restarting (makes the brights pop more)
-const errorFrame3 = expand(errorTemplate, errorPaletteDim)
-
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-// WAITING — Hourglass (2 tip frames, sand flowing)
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-const hourglassPalette = {
-  Y: '#eab308', // frame (yellow/gold)
-  S: '#fde68a', // sand (light yellow)
-  G: '#d4d4d8', // glass (light gray, transparent feel)
-  D: '#a16207', // dark accent
-}
-
-// Frame 0: sand in top half, narrow stream through center
-const hourglassFrame0 = expand([
-  '.YYYYYY.',
-  '.YGSSGY.',
-  '..GSSG..',
-  '...YY...',
-  '...YY...',
-  '..GGGG..',
-  '.YGSSPY.',
-  '.YYYYYY.',
-], { ...hourglassPalette, P: '#fde68a' }) // P = sand pile at bottom
-
-// Frame 1: sand shifted to bottom, top emptier
-const hourglassFrame1 = expand([
-  '.YYYYYY.',
-  '.YGGPGY.',
-  '..GGGG..',
-  '...YY...',
-  '...YY...',
-  '..GSSG..',
-  '.YGSSGY.',
-  '.YYYYYY.',
-], { ...hourglassPalette, P: '#fde68a' }) // P = single falling grain
-
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // OFFLINE — Grey X (1 static frame)
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -222,6 +137,7 @@ const offlineFrame0 = expand([
 export const STATUS_ICON_SPRITES: Record<string, SpriteData[]> = {
   working: [gearFrame0, gearFrame1, gearFrame2, gearFrame3],
   idle: [coffeeFrame0, coffeeFrame1],
+  offline: [offlineFrame0],
 }
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

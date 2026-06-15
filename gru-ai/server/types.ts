@@ -1,3 +1,5 @@
+import type { LLMConfig } from './llm/LLMClient.js';
+
 export interface TeamTask {
   id: string;
   subject: string;
@@ -151,6 +153,7 @@ export interface ConductorConfig {
     port: number;
   };
   notifications: NotificationConfig;
+  llm?: LLMConfig;
 }
 
 export interface SendInputRequest {

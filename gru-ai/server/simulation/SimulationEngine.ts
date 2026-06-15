@@ -1,6 +1,7 @@
 import { EventEmitter } from 'node:events';
 import { randomUUID } from 'node:crypto';
 import { HotMoneyAgent } from '../agents/HotMoneyAgent.js';
+import { LLMAgent } from '../agents/LLMAgent.js';
 import { MutualFundAgent } from '../agents/MutualFundAgent.js';
 import { NationalTeamAgent } from '../agents/NationalTeamAgent.js';
 import { NewsEventAgent } from '../agents/NewsEventAgent.js';
@@ -9,6 +10,8 @@ import { QuantAgent } from '../agents/QuantAgent.js';
 import { RetailAgent } from '../agents/RetailAgent.js';
 import { TrainingQuantAgent } from '../agents/TrainingQuantAgent.js';
 import type { BaseInvestorAgent } from '../agents/BaseInvestorAgent.js';
+import { LLMClient } from '../llm/LLMClient.js';
+import { loadConfig } from '../config.js';
 import { SyntheticFinancialNewsEngine } from '../news/SyntheticFinancialNewsEngine.js';
 import type { ManualNewsRequest, NewsEngineConfig, NewsEventTemplate, SyntheticNewsRecord, SyntheticNewsUpdate } from '../news/types.js';
 import { SimulationStore } from '../storage/simulationStore.js';
@@ -18,9 +21,10 @@ import { MarketEnvironment } from './MarketEnvironment.js';
 import { MarketState } from './MarketState.js';
 import { MatchingEngine } from './MatchingEngine.js';
 import { OrderGenerator } from './OrderGenerator.js';
-import { ScenarioLoader, scenarioSummary } from './scenarios/ScenarioLoader.js';
+import { ScenarioLoader } from './scenarios/ScenarioLoader.js';
 import { SimulationClock } from './SimulationClock.js';
 import type {
+  AgentMessage,
   AgentScenarioConfig,
   AgentState,
   AgentType,
@@ -81,19 +85,54 @@ function strategyName(type: AgentType): string {
   }
 }
 
-function createAgents(scenario: MarketScenario): BaseInvestorAgent[] {
+const LLM_AGENT_TYPES: AgentType[] = ['quant', 'hot_money', 'mutual_fund'];
+
+function createAgent(seed: ReturnType<typeof seedFromConfig> & { llmClient?: LLMClient }): BaseInvestorAgent {
+  if (seed.llmClient && LLM_AGENT_TYPES.includes(seed.type)) {
+    return new LLMAgent({
+      ...seed,
+      strategyParams: { ...seed.strategyParams, llm: true },
+    });
+  }
+  switch (seed.type) {
+    case 'retail':
+      return new RetailAgent(seed);
+    case 'hot_money':
+      return new HotMoneyAgent(seed);
+    case 'mutual_fund':
+      return new MutualFundAgent(seed);
+    case 'quant':
+      return new QuantAgent(seed);
+    case 'northbound':
+      return new NorthboundAgent(seed);
+    case 'national_team':
+      return new NationalTeamAgent(seed);
+    case 'training_quant':
+      return new TrainingQuantAgent(seed);
+    default:
+      return new RetailAgent(seed);
+  }
+}
+
+function createAgents(scenario: MarketScenario, llmClient?: LLMClient): BaseInvestorAgent[] {
+  const seed = (id: string, type: AgentType, name: string, config: AgentScenarioConfig, sentiment?: number) => {
+    const base = seedFromConfig(id, type, name, config);
+    if (sentiment !== undefined) base.sentiment = sentiment;
+    return { ...base, llmClient };
+  };
+
   const agents: BaseInvestorAgent[] = [
-    new RetailAgent(seedFromConfig('retail-1', 'retail', '散户群体代表A', scenario.agents.retail)),
-    new RetailAgent({ ...seedFromConfig('retail-2', 'retail', '散户群体代表B', scenario.agents.retail), sentiment: scenario.environment.marketSentiment - 0.18 }),
-    new HotMoneyAgent(seedFromConfig('hot-money-1', 'hot_money', '游资打板席位', scenario.agents.hotMoney)),
-    new MutualFundAgent(seedFromConfig('mutual-fund-1', 'mutual_fund', '公募稳健组合', scenario.agents.mutualFund)),
-    new QuantAgent(seedFromConfig('quant-1', 'quant', '内置量化Alpha', scenario.agents.quant)),
-    new NorthboundAgent(seedFromConfig('northbound-1', 'northbound', '北向长线资金', scenario.agents.northbound)),
-    new NationalTeamAgent(seedFromConfig('national-team-1', 'national_team', '国家队稳定账户', scenario.agents.nationalTeam)),
+    createAgent(seed('retail-1', 'retail', '散户群体代表A', scenario.agents.retail)),
+    createAgent(seed('retail-2', 'retail', '散户群体代表B', scenario.agents.retail, scenario.environment.marketSentiment - 0.18)),
+    createAgent(seed('hot-money-1', 'hot_money', '游资打板席位', scenario.agents.hotMoney)),
+    createAgent(seed('mutual-fund-1', 'mutual_fund', '公募稳健组合', scenario.agents.mutualFund)),
+    createAgent(seed('quant-1', 'quant', '内置量化Alpha', scenario.agents.quant)),
+    createAgent(seed('northbound-1', 'northbound', '北向长线资金', scenario.agents.northbound)),
+    createAgent(seed('national-team-1', 'national_team', '国家队稳定账户', scenario.agents.nationalTeam)),
   ];
 
   if (scenario.agents.trainingQuantAgent) {
-    agents.push(new TrainingQuantAgent(seedFromConfig('training-quant-1', 'training_quant', '训练量化Agent', scenario.agents.trainingQuantAgent)));
+    agents.push(createAgent(seed('training-quant-1', 'training_quant', '训练量化Agent', scenario.agents.trainingQuantAgent)));
   }
 
   return agents;
@@ -172,7 +211,9 @@ export class SimulationEngine extends EventEmitter {
   private readonly store = new SimulationStore();
   private readonly newsAgent = new NewsEventAgent();
   private readonly syntheticNewsEngine = new SyntheticFinancialNewsEngine();
-  private agents: BaseInvestorAgent[] = createAgents(this.currentScenario);
+  private readonly llmClient: LLMClient | undefined;
+  private pendingMessages: AgentMessage[] = [];
+  private agents: BaseInvestorAgent[] = [];
   private forcedNewsImpact: number | undefined;
   private readonly triggeredNewsIds = new Set<string>();
   private triggeredNews: ScenarioNewsEvent[] = [];
@@ -184,10 +225,13 @@ export class SimulationEngine extends EventEmitter {
 
   constructor(initialScenario?: MarketScenario) {
     super();
+    const config = loadConfig();
+    this.llmClient = config.llm?.apiKey ? new LLMClient(config.llm) : undefined;
     if (initialScenario) {
       this.currentScenario = initialScenario;
-      this.agents = createAgents(this.currentScenario);
     }
+    this.agents = createAgents(this.currentScenario, this.llmClient);
+    this.previousTrainingWealth = this.trainingAgentInitialWealth();
     this.environment.applyScenario(this.currentScenario);
     this.marketState.reset(this.currentScenario);
     this.clock.on('tick', (context: TickContext) => this.runTick(context));
@@ -214,13 +258,14 @@ export class SimulationEngine extends EventEmitter {
     this.orderBook.reset();
     this.store.clear();
     this.currentScenario = scenario;
-    this.agents = createAgents(this.currentScenario);
+    this.agents = createAgents(this.currentScenario, this.llmClient);
     this.triggeredNewsIds.clear();
     this.triggeredNews = [];
+    this.pendingMessages = [];
     this.trainingStep = 0;
     this.lastReward = 0;
     this.cumulativeReward = 0;
-    this.previousTrainingWealth = this.trainingAgentWealth();
+    this.previousTrainingWealth = this.trainingAgentInitialWealth();
     this.syntheticNewsEngine.clear();
     this.publishInitialState();
     this.emit('scenario', this.getScenarioUpdate());
@@ -229,8 +274,8 @@ export class SimulationEngine extends EventEmitter {
     this.emit('state', this.getState());
   }
 
-  step(): void {
-    this.clock.step();
+  async step(): Promise<void> {
+    await this.clock.step();
   }
 
   setSpeed(speed: number): void {
@@ -253,25 +298,25 @@ export class SimulationEngine extends EventEmitter {
         this.reset();
         break;
       case 'step':
-        this.step();
+        void this.step();
         break;
       case 'set_speed':
         if (typeof command.speed === 'number') this.setSpeed(command.speed);
         break;
       case 'inject_news':
         this.forcedNewsImpact = typeof command.newsImpact === 'number' ? command.newsImpact : 0.35;
-        if (!this.clock.getStatus().running) this.step();
+        if (!this.clock.getStatus().running) void this.step();
         break;
       case 'set_scenario':
         if (command.scenarioId) this.reset(this.scenarioLoader.get(command.scenarioId));
         break;
       case 'inject_event':
         if (command.eventType) this.injectManualEvent(command.eventType);
-        if (!this.clock.getStatus().running) this.step();
+        if (!this.clock.getStatus().running) void this.step();
         break;
       case 'external_action':
         if (command.action) this.queueTrainingAction(command.action);
-        if (!this.clock.getStatus().running) this.step();
+        if (!this.clock.getStatus().running) void this.step();
         break;
       case 'training_reset':
         this.trainingEpisode += 1;
@@ -286,6 +331,8 @@ export class SimulationEngine extends EventEmitter {
       case 'clear_news':
         this.clearNews();
         break;
+      default:
+        this.emit('error', { message: `Unknown simulation command: ${(command as SimulationCommand).command}` });
     }
   }
 
@@ -321,7 +368,7 @@ export class SimulationEngine extends EventEmitter {
         position: trainingAgent?.position ?? 0,
         totalWealth,
         pnl: trainingAgent?.pnl ?? 0,
-        returnRate: Number(((totalWealth - 1_000_000) / 1_000_000).toFixed(4)),
+        returnRate: Number(((totalWealth - this.trainingAgentInitialWealth()) / Math.max(1, this.trainingAgentInitialWealth())).toFixed(4)),
         lastAction: trainingAgent?.lastAction ?? 'hold',
       },
       observation,
@@ -431,7 +478,7 @@ export class SimulationEngine extends EventEmitter {
     this.removeAllListeners();
   }
 
-  private runTick(context: TickContext): void {
+  private async runTick(context: TickContext): Promise<void> {
     this.marketState.setStatus(this.clock.getStatus());
     const agentStates = this.getMutableAgentStateMap();
     this.expireStaleOrders(context, agentStates);
@@ -446,7 +493,6 @@ export class SimulationEngine extends EventEmitter {
       this.applyMarketEvent(generatedNews);
     }
 
-    this.syntheticNewsEngine.updateDecayAndFeedback(context.tick, this.marketState.snapshot());
     const syntheticRecord = this.syntheticNewsEngine.maybeGenerate(this.marketState.snapshot(), Array.from(agentStates.values()));
     if (syntheticRecord) {
       this.applyMarketEvent(this.syntheticNewsEngine.toMarketEvent(syntheticRecord), false);
@@ -458,13 +504,19 @@ export class SimulationEngine extends EventEmitter {
     const environment = this.environment.getSnapshot();
 
     if (!environment.halted) {
-      for (const agent of this.agents) {
-        const state = agent.mutableState();
-        state.status = 'thinking';
-        agent.applyNewsEffects(this.syntheticNewsEngine.getActiveNewsForAgent(state.id, context.tick));
-        const decision = agent.decide(beforeState, environment);
-        state.lastDecision = decision;
+      this.distributeMessages();
+      const decisions = await Promise.all(
+        this.agents.map(async (agent) => {
+          const state = agent.mutableState();
+          state.status = 'thinking';
+          agent.applyNewsEffects(this.syntheticNewsEngine.getActiveNewsForAgent(state.id, context.tick));
+          const decision = await agent.decide(beforeState, environment);
+          state.lastDecision = decision;
+          return { agent, state, decision };
+        }),
+      );
 
+      for (const { state, decision } of decisions) {
         if (decision.action === 'cancel' && decision.cancelOrderId) {
           const cancelled = this.orderBook.cancelOrder(decision.cancelOrderId, '训练接口撤单');
           if (cancelled) state.openOrderIds = state.openOrderIds.filter((id) => id !== decision.cancelOrderId);
@@ -487,6 +539,8 @@ export class SimulationEngine extends EventEmitter {
         state.openOrderIds.push(validation.order.id);
         state.status = 'waiting';
       }
+
+      this.collectMessages();
     } else {
       this.marketState.appendEvent({
         id: randomUUID(),
@@ -509,7 +563,6 @@ export class SimulationEngine extends EventEmitter {
     this.marketState.setOrderBook(this.orderBook.snapshot());
     this.marketState.setAgents(Array.from(agentStates.values()));
     this.marketState.applyTrades(trades, context.virtualTime);
-    this.marketState.setAgents(Array.from(agentStates.values()));
     this.environment.updateFromState(this.marketState.snapshot(), trades);
     this.marketState.setEnvironment(this.environment.getSnapshot());
     this.syntheticNewsEngine.updateDecayAndFeedback(context.tick, this.marketState.snapshot());
@@ -527,6 +580,24 @@ export class SimulationEngine extends EventEmitter {
     this.emit('scenario', this.getScenarioUpdate());
     this.emit('training', this.getTrainingUpdate());
     this.emit('news', this.getNewsUpdate());
+  }
+
+  private distributeMessages(): void {
+    for (const agent of this.agents) {
+      const state = agent.mutableState();
+      state.inbox = this.pendingMessages.filter((message) => !message.to || message.to === state.id);
+      state.outbox = [];
+    }
+  }
+
+  private collectMessages(): void {
+    const messages: AgentMessage[] = [];
+    for (const agent of this.agents) {
+      const state = agent.mutableState();
+      messages.push(...state.outbox);
+      state.outbox = [];
+    }
+    this.pendingMessages = messages;
   }
 
   private publishInitialState(): void {
@@ -615,6 +686,11 @@ export class SimulationEngine extends EventEmitter {
 
   private trainingAgentState(): AgentState | undefined {
     return this.getState().agents.find((agent) => agent.type === 'training_quant');
+  }
+
+  private trainingAgentInitialWealth(): number {
+    const agent = this.agents.find((item): item is TrainingQuantAgent => item instanceof TrainingQuantAgent);
+    return agent ? agent.getState().initialWealth : 1_000_000;
   }
 
   private trainingAgentWealth(): number {

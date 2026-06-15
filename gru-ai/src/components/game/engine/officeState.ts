@@ -1,4 +1,4 @@
-import { TILE_SIZE, MATRIX_EFFECT_DURATION, CharacterState, Direction, FurnitureActivityType } from '../pixel-types'
+import { TILE_SIZE, MATRIX_EFFECT_DURATION, CharacterState, Direction } from '../pixel-types'
 import {
   HUE_SHIFT_MIN_DEG,
   HUE_SHIFT_RANGE_DEG,
@@ -797,7 +797,6 @@ export class OfficeState {
    * method called when the debounce timer expires (or on immediate application).
    */
   private applyAgentStatus(ch: Character, status: AgentStatus): void {
-    const previousStatus = ch.agentStatus
     ch.agentStatus = status
     ch.hasError = false
 

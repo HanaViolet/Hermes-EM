@@ -82,20 +82,32 @@ function usePipelineState(steps: PipelineStep[]) {
 // ---------------------------------------------------------------------------
 
 function useElapsed(iso: string | undefined): string {
-  const [, tick] = useState(0);
+  const format = useCallback((ms: number): string => {
+    if (ms < 0) return '';
+    const mins = Math.floor(ms / 60000);
+    if (mins < 1) return '<1m';
+    if (mins < 60) return `${mins}m`;
+    const hrs = Math.floor(mins / 60);
+    return `${hrs}h${mins % 60}m`;
+  }, []);
+
+  const [elapsed, setElapsed] = useState(() =>
+    iso ? format(Date.now() - new Date(iso).getTime()) : '',
+  );
+
+  if (!iso && elapsed !== '') {
+    setElapsed('');
+  }
+
   useEffect(() => {
     if (!iso) return;
-    const id = setInterval(() => tick((n) => n + 1), 60_000);
+    const id = setInterval(() => {
+      setElapsed(format(Date.now() - new Date(iso).getTime()));
+    }, 60_000);
     return () => clearInterval(id);
-  }, [iso]);
-  if (!iso) return '';
-  const ms = Date.now() - new Date(iso).getTime();
-  if (ms < 0) return '';
-  const mins = Math.floor(ms / 60000);
-  if (mins < 1) return '<1m';
-  if (mins < 60) return `${mins}m`;
-  const hrs = Math.floor(mins / 60);
-  return `${hrs}h${mins % 60}m`;
+  }, [iso, format]);
+
+  return elapsed;
 }
 
 // ---------------------------------------------------------------------------
@@ -126,7 +138,9 @@ function useStepFlash(steps: PipelineStep[]): Set<string> {
     prevRef.current = next;
 
     if (newFlash.size > 0) {
-      setFlashing(newFlash);
+      queueMicrotask(() => {
+        setFlashing(newFlash);
+      });
       const timer = setTimeout(() => setFlashing(new Set()), 800);
       return () => clearTimeout(timer);
     }

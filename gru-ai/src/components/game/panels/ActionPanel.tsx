@@ -4,7 +4,7 @@
 
 import { useMemo, useCallback, useState, useEffect } from 'react';
 import {
-  AlertTriangle, XCircle, Clock, ExternalLink, Loader2,
+  AlertTriangle, XCircle, ExternalLink, Loader2,
   ChevronDown, ChevronRight, CheckCircle2, Crosshair,
   FolderKanban, SkipForward, Circle, History, Terminal,
   Check, Play, ArrowLeft, Lightbulb, Map as MapIcon,
@@ -80,27 +80,36 @@ function weightFg(weight: string | undefined): string {
 // ---------------------------------------------------------------------------
 
 function useElapsedTime(startedAt: string | undefined): string {
-  const [elapsed, setElapsed] = useState('');
+  const format = useCallback((ms: number): string => {
+    if (ms < 0) return '';
+    const mins = Math.floor(ms / 60000);
+    const secs = Math.floor((ms % 60000) / 1000);
+    if (mins >= 60) {
+      const hrs = Math.floor(mins / 60);
+      return `${hrs}h ${mins % 60}m`;
+    } else if (mins > 0) {
+      return `${mins}m ${secs}s`;
+    }
+    return `${secs}s`;
+  }, []);
+
+  const [elapsed, setElapsed] = useState(() =>
+    startedAt ? format(Date.now() - new Date(startedAt).getTime()) : '',
+  );
+
+  // Clear elapsed display when there is no start time.
+  if (!startedAt && elapsed !== '') {
+    setElapsed('');
+  }
+
   useEffect(() => {
-    if (!startedAt) { setElapsed(''); return; }
-    const update = () => {
-      const ms = Date.now() - new Date(startedAt).getTime();
-      if (ms < 0) { setElapsed(''); return; }
-      const mins = Math.floor(ms / 60000);
-      const secs = Math.floor((ms % 60000) / 1000);
-      if (mins >= 60) {
-        const hrs = Math.floor(mins / 60);
-        setElapsed(`${hrs}h ${mins % 60}m`);
-      } else if (mins > 0) {
-        setElapsed(`${mins}m ${secs}s`);
-      } else {
-        setElapsed(`${secs}s`);
-      }
-    };
-    update();
-    const id = setInterval(update, 1000);
+    if (!startedAt) return;
+    const id = setInterval(() => {
+      setElapsed(format(Date.now() - new Date(startedAt).getTime()));
+    }, 1000);
     return () => clearInterval(id);
-  }, [startedAt]);
+  }, [startedAt, format]);
+
   return elapsed;
 }
 
@@ -601,22 +610,6 @@ function DirectiveCard({
 // ---------------------------------------------------------------------------
 // PipelineStepRow — native parchment-styled step with all artifact info
 // ---------------------------------------------------------------------------
-
-function StepStatusIcon({ status }: { status: PipelineStep['status'] }) {
-  const size = 'h-3 w-3 shrink-0';
-  switch (status) {
-    case 'completed':
-      return <Check className={`${size} text-green-700`} strokeWidth={3} />;
-    case 'active':
-      return <Play className={`${size} text-blue-700`} />;
-    case 'failed':
-      return <XCircle className={`${size} text-red-600`} />;
-    case 'skipped':
-      return <SkipForward className={cn(size)} style={{ color: PARCHMENT.textDim, opacity: 0.5 }} />;
-    default:
-      return <Circle className={cn(size)} style={{ color: PARCHMENT.textDim, opacity: 0.4 }} />;
-  }
-}
 
 function PipelineStepList({ steps }: { steps: PipelineStep[] }) {
   const completedCount = steps.filter((s) => s.status === 'completed').length;

@@ -35,6 +35,7 @@ export const useSimulationStore = create<SimulationStore>((set) => ({
       set({ error: 'Simulation socket is not connected' });
       return;
     }
+    set({ error: null });
     commandSender(command);
   },
 }));

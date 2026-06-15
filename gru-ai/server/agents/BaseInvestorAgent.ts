@@ -20,6 +20,7 @@ export abstract class BaseInvestorAgent {
   protected readonly state: AgentState;
 
   constructor(seed: InvestorSeed) {
+    const avgCost = seed.avgCost ?? (seed.position > 0 ? 100 : 0);
     this.state = {
       id: seed.id,
       type: seed.type ?? 'retail',
@@ -28,7 +29,8 @@ export abstract class BaseInvestorAgent {
       position: seed.position,
       availablePosition: seed.position,
       todayBought: 0,
-      avgCost: seed.avgCost ?? (seed.position > 0 ? 100 : 0),
+      avgCost,
+      initialWealth: seed.cash + seed.position * avgCost,
       pnl: 0,
       sentiment: seed.sentiment,
       riskAppetite: seed.riskAppetite,
@@ -36,6 +38,8 @@ export abstract class BaseInvestorAgent {
       lastAction: 'hold',
       capitalFlow: 0,
       openOrderIds: [],
+      inbox: [],
+      outbox: [],
       groupSize: seed.groupSize,
       strategyParams: seed.strategyParams,
       currentStrategy: seed.currentStrategy,
@@ -127,5 +131,5 @@ export abstract class BaseInvestorAgent {
     return decision;
   }
 
-  abstract decide(market: MarketState, environment: MarketEnvironmentSnapshot): AgentDecision;
+  abstract decide(market: MarketState, environment: MarketEnvironmentSnapshot): AgentDecision | Promise<AgentDecision>;
 }

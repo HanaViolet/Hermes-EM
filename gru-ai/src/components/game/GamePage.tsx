@@ -7,7 +7,6 @@ import CanvasOffice, { type ClickedItem } from './CanvasOffice';
 import SidePanel from './SidePanel';
 import AgentTicker from './AgentTicker';
 import type { TileType } from './types';
-import type { Session } from '@/stores/types';
 import { getZoneAt } from './engine/roomZones';
 import { useOfficeAgents } from './useOfficeAgents';
 import { useAgentRegistryStore } from '@/stores/agent-registry-store';
@@ -91,15 +90,15 @@ const FURNITURE_TAB_MAP: Partial<Record<TileType, HudPanel>> = {
 const MOBILE_BREAKPOINT = 768;
 
 function useIsMobile(): boolean {
-  const [isMobile, setIsMobile] = useState(
-    () => typeof window !== 'undefined' && window.innerWidth < MOBILE_BREAKPOINT,
-  );
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`).matches;
+  });
 
   useEffect(() => {
     const mq = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
     const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
     mq.addEventListener('change', onChange);
-    setIsMobile(mq.matches);
     return () => mq.removeEventListener('change', onChange);
   }, []);
 
@@ -120,14 +119,6 @@ function toAgentStatus(sessionStatus: string): AgentStatus {
       return 'idle';
   }
 }
-
-// ---------------------------------------------------------------------------
-// Pixel-art overlay styles
-// ---------------------------------------------------------------------------
-
-const PIXEL_BORDER_STYLE = {
-  boxShadow: 'inset -2px -2px 0 0 #8B6914, inset 2px 2px 0 0 #F5ECD7',
-} as const;
 
 // ---------------------------------------------------------------------------
 // GamePage
@@ -169,7 +160,7 @@ export default function GamePage() {
       }
     }
     return map;
-  }, [sessions]);
+  }, [sessions, KNOWN_AGENTS]);
 
   // Build agent → task title map from directive pipeline (authoritative source)
   const directiveTaskNames = useMemo<Record<string, string>>(() => {
@@ -208,7 +199,7 @@ export default function GamePage() {
       }
     }
     return map;
-  }, [activeDirectives]);
+  }, [activeDirectives, KNOWN_AGENTS]);
 
   // Derive per-agent session context info (prefer working session's activity)
   const agentSessionInfos = useMemo<Record<string, SessionInfo>>(() => {
@@ -245,7 +236,7 @@ export default function GamePage() {
       if (directiveTaskNames[name]) map[name].taskName = directiveTaskNames[name];
     }
     return map;
-  }, [sessions, sessionActivities, directiveTaskNames]);
+  }, [sessions, sessionActivities, directiveTaskNames, KNOWN_AGENTS]);
 
   // Derive per-agent busy flag
   const agentBusyMap = useMemo<Record<string, boolean>>(() => {
@@ -263,7 +254,7 @@ export default function GamePage() {
       map[name] = (counts[name] ?? 0) > 1;
     }
     return map;
-  }, [sessions]);
+  }, [sessions, KNOWN_AGENTS]);
 
   const { agentInteractions, subagentsByParent } = useMemo(() => {
     const pairs: Array<[string, string, InteractionType]> = [];
@@ -403,7 +394,7 @@ export default function GamePage() {
     }
 
     return { agentInteractions: pairs, subagentsByParent: byParent };
-  }, [activeDirectives, sessions]);
+  }, [activeDirectives, sessions, KNOWN_AGENTS]);
 
   // Derive review interactions from directive state
   // Maps reviewer → builder for "walk to builder's desk" behavior
@@ -433,7 +424,7 @@ export default function GamePage() {
       }
     }
     return map;
-  }, [activeDirectives]);
+  }, [activeDirectives, KNOWN_AGENTS]);
 
   // Close timer ref — delays clearing `selected` so the panel content stays
   // visible during the 200ms collapse transition on mobile.

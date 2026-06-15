@@ -15,7 +15,7 @@ export class RetailAgent extends BaseInvestorAgent {
     this.state.type = 'retail';
   }
 
-  decide(market: MarketState, environment: MarketEnvironmentSnapshot): AgentDecision {
+  async decide(market: MarketState, environment: MarketEnvironmentSnapshot): Promise<AgentDecision> {
     const tick = market.status.tick;
 
     if (this.state.openOrderIds.length > 0) {

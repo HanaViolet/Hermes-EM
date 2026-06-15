@@ -6,7 +6,6 @@ const TRANSPARENT = ''
 const OUTLINE = '#171717'
 const EYE = '#111111'
 const EYE_BLUE = '#5f7888'
-const SHADOW = '#2f2f2f'
 const PAPER = '#dfd3a8'
 
 type DirectionName = 'down' | 'up' | 'right'
@@ -366,6 +365,10 @@ export type PixelCharacterPresetId = (typeof PIXEL_CHARACTER_PRESETS)[number]['i
 
 export const PIXEL_CHARACTER_PRESET_IDS = PIXEL_CHARACTER_PRESETS.map((preset) => preset.id)
 
+export function pixelCharacterName(palette: number): string {
+  return PIXEL_CHARACTER_PRESETS[palette % PIXEL_CHARACTER_PRESETS.length]?.label ?? 'Pixel Agent'
+}
+
 function emptySprite(): SpriteData {
   return Array.from({ length: TILE }, () => Array.from({ length: TILE }, () => TRANSPARENT))
 }
@@ -507,7 +510,7 @@ function drawFace(sprite: SpriteData, preset: PixelCharacterPreset, dir: Directi
   rect(sprite, 15, 15, 3, 1, shade(preset.skinShade, 0.76))
 }
 
-function drawHair(sprite: SpriteData, preset: PixelCharacterPreset, dir: DirectionName): void {
+function drawHair(sprite: SpriteData, preset: PixelCharacterPreset): void {
   const h = preset.hair
   const h2 = preset.hair2 ?? shade(h, 1.18)
 
@@ -649,7 +652,7 @@ function drawHead(sprite: SpriteData, preset: PixelCharacterPreset, dir: Directi
   }
 
   drawSpecialHead(sprite, preset, dir)
-  drawHair(sprite, preset, dir)
+  drawHair(sprite, preset)
   drawFace(sprite, preset, dir)
 }
 

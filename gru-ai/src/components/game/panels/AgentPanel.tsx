@@ -94,7 +94,7 @@ export default function AgentPanel({ agentName, agentStatuses }: AgentPanelProps
       s.status === 'paused';
 
     // Prefer primary sessions; fall back to subagent sessions if no active primaries
-    let activePrimary = primary.filter(isActive);
+    const activePrimary = primary.filter(isActive);
     let active = activePrimary.length > 0
       ? activePrimary
       : subagent.filter(isActive).slice(0, 3); // cap subagent display

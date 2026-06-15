@@ -230,7 +230,7 @@ describe('State machine transitions', () => {
   });
 
   it('7. ASSISTANT_TEXT with pendingInputTool sets state=needs_input', () => {
-    const state = bootstrapEntries('t7.jsonl', [
+    bootstrapEntries('t7.jsonl', [
       userPrompt('Do something'),
       assistantToolUse('AskUserQuestion', { question: 'Which file?' }),
       toolResult('user answer'),

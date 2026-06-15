@@ -19,7 +19,8 @@ function phaseForTick(tick: number): TradingPhase {
 }
 
 export class SimulationClock extends EventEmitter {
-  private timer: ReturnType<typeof setInterval> | null = null;
+  private timer: ReturnType<typeof setTimeout> | null = null;
+  private runningTick: Promise<void> | null = null;
   private tick = 0;
   private speed = 1;
   private running = false;
@@ -39,7 +40,7 @@ export class SimulationClock extends EventEmitter {
     if (!this.running) return;
     this.running = false;
     this.pausedAt = new Date().toISOString();
-    if (this.timer) clearInterval(this.timer);
+    if (this.timer) clearTimeout(this.timer);
     this.timer = null;
     this.emit('status', this.getStatus());
   }
@@ -52,10 +53,16 @@ export class SimulationClock extends EventEmitter {
     this.emit('status', this.getStatus());
   }
 
-  step(): TickContext {
+  async step(): Promise<TickContext> {
+    if (this.runningTick) await this.runningTick;
     this.tick += 1;
     const context = this.getTickContext();
-    this.emit('tick', context);
+    this.runningTick = this.runTickHandlers(context);
+    try {
+      await this.runningTick;
+    } finally {
+      this.runningTick = null;
+    }
     this.emit('status', this.getStatus());
     return context;
   }
@@ -86,15 +93,28 @@ export class SimulationClock extends EventEmitter {
     };
   }
 
+  private async runTickHandlers(context: TickContext): Promise<void> {
+    const listeners = this.listeners('tick') as Array<(ctx: TickContext) => void | Promise<void>>;
+    for (const fn of listeners) {
+      await fn(context);
+    }
+  }
+
   destroy(): void {
-    if (this.timer) clearInterval(this.timer);
+    if (this.timer) clearTimeout(this.timer);
     this.timer = null;
     this.removeAllListeners();
   }
 
   private schedule(): void {
-    if (this.timer) clearInterval(this.timer);
+    if (this.timer) clearTimeout(this.timer);
+    if (this.runningTick) return;
     const interval = Math.max(50, BASE_INTERVAL_MS / this.speed);
-    this.timer = setInterval(() => this.step(), interval);
+    this.timer = setTimeout(async () => {
+      this.timer = null;
+      if (!this.running || this.runningTick) return;
+      await this.step();
+      if (this.running) this.schedule();
+    }, interval);
   }
 }

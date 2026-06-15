@@ -373,11 +373,30 @@ function handleStateConductor(res: http.ServerResponse): void {
   res.end(JSON.stringify(ws.conductor));
 }
 
+function isPathInside(resolvedPath: string, projectPath: string): boolean {
+  const projectResolved = path.resolve(projectPath);
+  const relative = path.relative(projectResolved, resolvedPath);
+  if (relative.startsWith('..') || path.isAbsolute(relative)) return false;
+  // Windows/macOS case-insensitive filesystem guard
+  if (process.platform === 'win32' || process.platform === 'darwin') {
+    return resolvedPath.toLowerCase().startsWith(projectResolved.toLowerCase() + path.sep)
+      || resolvedPath.toLowerCase() === projectResolved.toLowerCase();
+  }
+  return true;
+}
+
 function handleArtifactContent(url: URL, res: http.ServerResponse): void {
   const filePath = url.searchParams.get('path') ?? '';
   if (!filePath) {
     res.writeHead(400, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ error: 'Missing path parameter' }));
+    return;
+  }
+
+  // Reject absolute paths and traversal attempts before resolving
+  if (path.isAbsolute(filePath) || filePath.includes('..')) {
+    res.writeHead(400, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Invalid path parameter' }));
     return;
   }
 
@@ -390,7 +409,7 @@ function handleArtifactContent(url: URL, res: http.ServerResponse): void {
     for (const fullPath of candidates) {
       const resolved = path.resolve(fullPath);
       // Security: ensure the resolved path is within the project
-      if (!resolved.startsWith(path.resolve(project.path))) continue;
+      if (!isPathInside(resolved, project.path)) continue;
       try {
         const content = fs.readFileSync(resolved, 'utf-8');
         res.writeHead(200, { 'Content-Type': 'text/markdown' });

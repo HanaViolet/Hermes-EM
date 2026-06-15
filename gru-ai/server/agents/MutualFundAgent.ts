@@ -10,7 +10,7 @@ export class MutualFundAgent extends BaseInvestorAgent {
     super({ ...seed, type: 'mutual_fund' });
   }
 
-  decide(market: MarketState, environment: MarketEnvironmentSnapshot): AgentDecision {
+  async decide(market: MarketState, environment: MarketEnvironmentSnapshot): Promise<AgentDecision> {
     const tick = market.status.tick;
     if (this.state.openOrderIds.length > 0) return this.hold(tick, '机构分批订单等待中');
     if (tick % 4 !== 0) return this.hold(tick, '公募低频调仓');

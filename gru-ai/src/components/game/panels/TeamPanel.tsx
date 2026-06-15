@@ -582,7 +582,7 @@ export default function TeamPanel({ agentStatuses, onSelectAgent }: TeamPanelPro
                       <QuickActions
                         paneId={info.paneId}
                         sessionStatus={info.sessionStatus!}
-                        terminalApp={info.terminalApp as any}
+                        terminalApp={info.terminalApp ?? undefined}
                       />
                     </div>
                   )}

@@ -21,27 +21,13 @@
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 
-import type {
-  SpawnAdapter,
-  SpawnConfig,
-  SpawnHandle,
-  SpawnMode,
+import {
+  buildAugmentedPath,
+  type SpawnAdapter,
+  type SpawnConfig,
+  type SpawnHandle,
+  type SpawnMode,
 } from './spawn-adapter.js';
-
-// ---------------------------------------------------------------------------
-// Default PATH augmentation
-// ---------------------------------------------------------------------------
-
-/**
- * Sensible PATH prefix ensuring common binary locations are available.
- * Gemini CLI is typically installed via npm (`npm i -g @anthropic-ai/gemini-cli`
- * or `npm i -g @anthropic-ai/gemini`). The binary is `gemini`.
- */
-const DEFAULT_PATH_PREFIX = [
-  '/usr/local/bin',
-  '/usr/bin',
-  '/bin',
-].join(':');
 
 // ---------------------------------------------------------------------------
 // Implementation
@@ -136,7 +122,7 @@ export class GeminiCLISpawnAdapter implements SpawnAdapter {
    */
   private buildEnv(config: SpawnConfig): NodeJS.ProcessEnv {
     const currentPath = process.env['PATH'] ?? '';
-    const augmentedPath = `${DEFAULT_PATH_PREFIX}:${currentPath}`;
+    const augmentedPath = buildAugmentedPath(currentPath);
 
     return {
       ...process.env,

@@ -21,11 +21,23 @@ export default function AgentDetailPanel({ agent }: { agent: AgentSnapshot | nul
   }
 
   const color = AGENT_COLORS[agent.type] ?? TERMINAL.blue;
+  const isLLM = agent.strategyParams?.llm === true;
   return (
     <section className="p-3 space-y-3" style={terminalPanel}>
       <div className="flex items-center justify-between gap-2 font-mono">
         <div className="min-w-0">
-          <h2 className="text-sm font-semibold truncate" style={{ color: TERMINAL.text }}>{agent.name}</h2>
+          <div className="flex items-center gap-2">
+            <h2 className="text-sm font-semibold truncate" style={{ color: TERMINAL.text }}>{agent.name}</h2>
+            {isLLM && (
+              <span
+                className="shrink-0 px-1.5 py-0.5 text-[10px] font-bold border"
+                style={{ color: '#FFF7DF', backgroundColor: TERMINAL.purple, borderColor: '#5B21B6' }}
+                title="该 Agent 由 LLM 驱动"
+              >
+                LLM
+              </span>
+            )}
+          </div>
           <p className="mt-1 text-[11px]" style={{ color }}>
             {AGENT_LABELS[agent.type]} · {agent.sentimentEmoji} {agent.sentimentLabel}
           </p>
@@ -50,6 +62,31 @@ export default function AgentDetailPanel({ agent }: { agent: AgentSnapshot | nul
         <div className="text-[10px]" style={{ color: TERMINAL.textDim }}>最近决策</div>
         <div className="mt-1 text-xs leading-snug" style={{ color: TERMINAL.text }}>
           {agent.lastDecision?.reason ?? '暂无决策'}
+        </div>
+      </div>
+
+      {agent.lastSay && (
+        <div className="p-2 font-mono" style={{ backgroundColor: TERMINAL.panelSoft, border: `1px solid ${TERMINAL.borderSoft}` }}>
+          <div className="text-[10px]" style={{ color: TERMINAL.textDim }}>发出的消息</div>
+          <div className="mt-1 text-xs leading-snug" style={{ color: TERMINAL.text }}>
+            “{agent.lastSay.content}”
+          </div>
+        </div>
+      )}
+
+      <div className="p-2 font-mono" style={{ backgroundColor: TERMINAL.panelSoft, border: `1px solid ${TERMINAL.borderSoft}` }}>
+        <div className="text-[10px]" style={{ color: TERMINAL.textDim }}>收到的消息</div>
+        <div className="mt-1 space-y-1 max-h-32 overflow-auto pr-1">
+          {agent.inbox.length === 0 ? (
+            <div className="text-xs" style={{ color: TERMINAL.textDim }}>暂无消息</div>
+          ) : (
+            agent.inbox.map((message, index) => (
+              <div key={index} className="text-xs leading-snug">
+                <span style={{ color: TERMINAL.textDim }}>{message.from}: </span>
+                <span style={{ color: TERMINAL.text }}>“{message.content}”</span>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </section>

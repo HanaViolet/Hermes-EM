@@ -123,7 +123,9 @@ export default function CanvasOffice({
   const rafRef = useRef(0)
   const lastTimeRef = useRef(0)
   const propsRef = useRef({ onAgentClick, onItemClick, agentStatuses, agentSessionInfos, agentBusyMap, agentInteractions, subagentsByParent, reviewInteractions, selectedAgentName })
-  propsRef.current = { onAgentClick, onItemClick, agentStatuses, agentSessionInfos, agentBusyMap, agentInteractions, subagentsByParent, reviewInteractions, selectedAgentName }
+  useEffect(() => {
+    propsRef.current = { onAgentClick, onItemClick, agentStatuses, agentSessionInfos, agentBusyMap, agentInteractions, subagentsByParent, reviewInteractions, selectedAgentName }
+  }, [onAgentClick, onItemClick, agentStatuses, agentSessionInfos, agentBusyMap, agentInteractions, subagentsByParent, reviewInteractions, selectedAgentName])
 
   // Zoom state: fitZoom is the baseline (fit map width to container), zoom is current
   // Initial value: estimate from window width so the first frame isn't over-zoomed
@@ -132,18 +134,16 @@ export default function CanvasOffice({
   )
   const [zoom, setZoom] = useState(fitZoom)
   const zoomRef = useRef(zoom)
-  zoomRef.current = zoom
+  useEffect(() => { zoomRef.current = zoom }, [zoom])
+
+  // Tracks whether the user has manually zoomed (wheel or pinch). When false,
+  // the zoom follows fitZoom as the container resizes.
+  const hasZoomedRef = useRef(false)
+
+  // Map dimensions used for render sizing. Updated when OfficeState is created or resized.
+  const [mapSize, setMapSize] = useState({ cols: OFFICE_LAYOUT.cols, rows: OFFICE_LAYOUT.rows })
 
   const [tooltip, setTooltip] = useState<TooltipState | null>(null)
-  const [assetsReady, setAssetsReady] = useState(false)
-
-  // Get map dimensions from state, falling back to static layout
-  const getMapDims = useCallback(() => {
-    const state = stateRef.current
-    const cols = state ? (state.tileMap[0]?.length ?? OFFICE_LAYOUT.cols) : OFFICE_LAYOUT.cols
-    const rows = state ? state.tileMap.length : OFFICE_LAYOUT.rows
-    return { cols, rows }
-  }, [])
 
   // Initialize office state + add agents + load assets
   useEffect(() => {
@@ -166,16 +166,14 @@ export default function CanvasOffice({
       state.cameraFollowId = CEO_ID
     }
     stateRef.current = state
-    ;(window as any).__officeState = state
+    queueMicrotask(() => {
+      setMapSize({ cols: state.tileMap[0]?.length ?? OFFICE_LAYOUT.cols, rows: state.tileMap.length })
+    })
+    ;(window as unknown as Record<string, unknown>).__officeState = state
     // Build appearances array indexed by palette for runtime compositing
-    const appearances = agents
-      .filter((a) => a.appearance)
-      .sort((a, b) => a.palette - b.palette)
-      .map((a) => a.appearance!)
-    loadAllAssets(appearances)
+    loadAllAssets()
     onTilesetReady(() => {
       state.rebuildFurnitureInstances()
-      setAssetsReady(true)
     })
   }, [agents, CEO_ID])
 
@@ -234,7 +232,7 @@ export default function CanvasOffice({
     if (typeof state.setSubagentsByParent === 'function') {
       state.setSubagentsByParent(idMap)
     }
-  }, [subagentsByParent])
+  }, [subagentsByParent, AGENT_NAME_TO_ID])
 
   // Sync review interactions (reviewer walks to builder's desk)
   useEffect(() => {
@@ -254,7 +252,7 @@ export default function CanvasOffice({
     if (typeof state.setReviewPairs === 'function') {
       state.setReviewPairs(idPairs)
     }
-  }, [reviewInteractions])
+  }, [reviewInteractions, AGENT_NAME_TO_ID])
 
   // Sync selected agent
   useEffect(() => {
@@ -266,7 +264,7 @@ export default function CanvasOffice({
     } else {
       state.selectedAgentId = null
     }
-  }, [selectedAgentName])
+  }, [selectedAgentName, agents])
 
   // WASD/Arrow keyboard input on window — held-key tracking for continuous movement
   useEffect(() => {
@@ -302,7 +300,7 @@ export default function CanvasOffice({
         }
         const targetCol = ceo.tileCol + dc
         const targetRow = ceo.tileRow + dr
-        let moved = state.walkToTile(CEO_ID!, targetCol, targetRow)
+        const moved = state.walkToTile(CEO_ID!, targetCol, targetRow)
         // If blocked (e.g. surrounded by desk furniture), stand up then retry
         if (!moved && state.standUpFromSeat(CEO_ID!)) {
           // After teleport, try walking in the pressed direction from the new position
@@ -365,28 +363,20 @@ export default function CanvasOffice({
       const state = stateRef.current
       if (state) {
         const cols = state.tileMap[0]?.length ?? 1
+        const rows = state.tileMap.length
         const newFitZoom = w / (cols * TILE_SIZE)
         setFitZoom(newFitZoom)
-        // If user hasn't manually zoomed yet, track fitZoom
-        // We detect "hasn't zoomed" by checking if current zoom equals old fitZoom
-        setZoom((prevZoom) => {
-          // On first load or if zoom was tracking fitZoom, update to new fitZoom
-          const oldFitZoom = fitZoomRef.current
-          if (Math.abs(prevZoom - oldFitZoom) < 0.01) {
-            return newFitZoom
-          }
-          return prevZoom
-        })
+        setMapSize({ cols, rows })
+        // If the user hasn't manually zoomed, keep the zoom pinned to fitZoom.
+        if (!hasZoomedRef.current) {
+          setZoom(newFitZoom)
+        }
       }
     })
 
     observer.observe(parent)
     return () => observer.disconnect()
   }, [])
-
-  // Keep a ref of fitZoom for the resize observer closure
-  const fitZoomRef = useRef(fitZoom)
-  fitZoomRef.current = fitZoom
 
   // Wheel zoom handler
   useEffect(() => {
@@ -401,17 +391,16 @@ export default function CanvasOffice({
       e.preventDefault()
 
       const delta = e.deltaY > 0 ? -ZOOM_STEP : ZOOM_STEP
-      setZoom((prev) => {
-        return clampZoom(prev + delta * prev, fitZoomRef.current)
-      })
+      hasZoomedRef.current = true
+      setZoom((prev) => clampZoom(prev + delta * prev, fitZoom))
     }
 
     parent.addEventListener('wheel', onWheel, { passive: false })
     return () => parent.removeEventListener('wheel', onWheel)
-  }, [])
+  }, [fitZoom])
 
   // Compute canvas pixel dimensions from zoom and map size
-  const { cols, rows } = getMapDims()
+  const { cols, rows } = mapSize
   const canvasLogicalW = cols * TILE_SIZE * zoom
   const canvasLogicalH = rows * TILE_SIZE * zoom
 
@@ -624,7 +613,7 @@ export default function CanvasOffice({
       cancelAnimationFrame(rafRef.current)
       clearInterval(bgTimer)
     }
-  }, [agents])
+  }, [CEO_ID, AGENT_ID_TO_COLOR, AGENT_ID_TO_NAME, AGENT_NAME_TO_ID, agents])
 
   // Initial scroll-to-CEO on mount so the player character is visible
   useEffect(() => {
@@ -644,7 +633,7 @@ export default function CanvasOffice({
       scrollParent.scrollTop = ceoScreenY - scrollParent.clientHeight / 2
     })
     return () => cancelAnimationFrame(timer)
-  }, [])
+  }, [CEO_ID])
 
   // Convert screen coords to world coords (offsets are 0 since canvas = map)
   const screenToWorld = useCallback((screenX: number, screenY: number) => {
@@ -742,10 +731,10 @@ export default function CanvasOffice({
 
   // Keep processClick in a ref for touch handler closure
   const processClickRef = useRef(processClick)
-  processClickRef.current = processClick
+  useEffect(() => { processClickRef.current = processClick }, [processClick])
 
   // Mouse handlers (no drag/pan -- click and hover only)
-  const handleMouseDown = useCallback((_e: React.MouseEvent<HTMLCanvasElement>) => {
+  const handleMouseDown = useCallback(() => {
     // no-op: click is handled on mouseUp
   }, [])
 
@@ -795,7 +784,7 @@ export default function CanvasOffice({
         setTooltip(null)
       }
     },
-    [screenToWorld],
+    [screenToWorld, AGENT_ID_TO_NAME],
   )
 
   const handleMouseUp = useCallback(
@@ -911,7 +900,8 @@ export default function CanvasOffice({
         if (pinchStartDist === 0) return // safety
 
         const scale = currentDist / pinchStartDist
-        const newZoom = clampZoom(pinchStartZoom * scale, fitZoomRef.current)
+        hasZoomedRef.current = true
+        const newZoom = clampZoom(pinchStartZoom * scale, fitZoom)
 
         // Adjust scroll so the pinch midpoint stays stationary on screen.
         // The midpoint in world coords = pinchMidCanvas / pinchStartZoom.
@@ -990,7 +980,7 @@ export default function CanvasOffice({
       }
     }
 
-    function onTouchCancel(_e: TouchEvent) {
+    function onTouchCancel() {
       gesture = 'undecided'
     }
 
@@ -1007,7 +997,7 @@ export default function CanvasOffice({
       canvas.removeEventListener('touchend', onTouchEnd)
       canvas.removeEventListener('touchcancel', onTouchCancel)
     }
-  }, [])
+  }, [fitZoom])
 
   return (
     <div

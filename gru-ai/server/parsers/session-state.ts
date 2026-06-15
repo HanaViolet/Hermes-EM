@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import type { SessionActivity } from '../types.js';
-import { projectLabel, projectDirFromPath, extractInitialPrompt, extractLatestPrompt, cleanPromptText, isSystemContent, resolveAgentFromSetting } from './session-scanner.js';
+import { projectLabel, extractInitialPrompt, extractLatestPrompt, cleanPromptText, isSystemContent, resolveAgentFromSetting } from './session-scanner.js';
 import type { LastEntryType } from './session-scanner.js';
 
 /**

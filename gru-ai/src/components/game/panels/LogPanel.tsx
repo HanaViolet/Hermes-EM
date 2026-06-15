@@ -712,22 +712,22 @@ export default function LogPanel() {
 
   // Activity diffing
   const prevActivitiesRef = useRef<Record<string, SessionActivity>>({});
-  const activityBufferRef = useRef<FeedEvent[]>([]);
+  const [activityBuffer, setActivityBuffer] = useState<FeedEvent[]>([]);
   const activityLastEmitRef = useRef<Record<string, number>>({});
   const activityDedupeRef = useRef<Set<string>>(new Set());
 
   // Connection tracking
   const prevConnectedRef = useRef<boolean | null>(null);
-  const connectionBufferRef = useRef<FeedEvent[]>([]);
+  const [connectionBuffer, setConnectionBuffer] = useState<FeedEvent[]>([]);
 
   // Subagent tracking
   const knownSubagentIdsRef = useRef<Set<string>>(new Set());
   const prevSubagentStatusesRef = useRef<Record<string, string>>({});
-  const subagentBufferRef = useRef<FeedEvent[]>([]);
+  const [subagentBuffer, setSubagentBuffer] = useState<FeedEvent[]>([]);
 
   // Task tracking
   const prevTaskStatusesRef = useRef<Record<string, string>>({});
-  const taskBufferRef = useRef<FeedEvent[]>([]);
+  const [taskBuffer, setTaskBuffer] = useState<FeedEvent[]>([]);
 
   // -- Effect: diff sessionActivities snapshot --
   useEffect(() => {
@@ -775,24 +775,24 @@ export default function LogPanel() {
       if (modelShort) meta.push({ label: 'Model', value: modelShort });
       if (session?.feature) meta.push({ label: 'Feature', value: session.feature });
 
-      activityBufferRef.current.push({
-        id: `act-${sessionId}-${now}`,
-        timestamp: activity.lastSeen || new Date().toISOString(),
-        icon: <Zap className="h-3 w-3" />,
-        iconColor: '#3B82F6',
-        description,
-        detail: activity.detail ?? undefined,
-        priority: 'low',
-        source: 'activity',
-        meta: meta.length > 0 ? meta : undefined,
+      queueMicrotask(() => {
+        setActivityBuffer((prev) => {
+          const next = [...prev, {
+            id: `act-${sessionId}-${now}`,
+            timestamp: activity.lastSeen || new Date().toISOString(),
+            icon: <Zap className="h-3 w-3" />,
+            iconColor: '#3B82F6',
+            description,
+            detail: activity.detail ?? undefined,
+            priority: 'low' as EventPriority,
+            source: 'activity' as const,
+            meta: meta.length > 0 ? meta : undefined,
+          }];
+          return next.length > ACTIVITY_BUFFER_MAX ? next.slice(-ACTIVITY_BUFFER_MAX) : next;
+        });
       });
 
       activityLastEmitRef.current[sessionId] = now;
-    }
-
-    // Cap buffer
-    if (activityBufferRef.current.length > ACTIVITY_BUFFER_MAX) {
-      activityBufferRef.current = activityBufferRef.current.slice(-ACTIVITY_BUFFER_MAX);
     }
 
     prevActivitiesRef.current = { ...sessionActivities };
@@ -806,16 +806,21 @@ export default function LogPanel() {
     }
 
     if (prevConnectedRef.current !== connected) {
-      connectionBufferRef.current.push({
-        id: `conn-${Date.now()}`,
-        timestamp: new Date().toISOString(),
-        icon: connected
-          ? <Wifi className="h-3 w-3" />
-          : <WifiOff className="h-3 w-3" />,
-        iconColor: connected ? '#22C55E' : '#EF4444',
-        description: connected ? 'Connected to server' : 'Disconnected from server',
-        priority: 'high',
-        source: 'connection',
+      queueMicrotask(() => {
+        setConnectionBuffer((prev) => {
+          const next = [...prev, {
+            id: `conn-${Date.now()}`,
+            timestamp: new Date().toISOString(),
+            icon: connected
+              ? <Wifi className="h-3 w-3" />
+              : <WifiOff className="h-3 w-3" />,
+            iconColor: connected ? '#22C55E' : '#EF4444',
+            description: connected ? 'Connected to server' : 'Disconnected from server',
+            priority: 'high' as EventPriority,
+            source: 'connection' as const,
+          }];
+          return next.length > ACTIVITY_BUFFER_MAX ? next.slice(-ACTIVITY_BUFFER_MAX) : next;
+        });
       });
       prevConnectedRef.current = connected;
     }
@@ -846,10 +851,12 @@ export default function LogPanel() {
       prevSubagentStatusesRef,
     );
     if (newEvents.length > 0) {
-      subagentBufferRef.current.push(...newEvents);
-      if (subagentBufferRef.current.length > ACTIVITY_BUFFER_MAX) {
-        subagentBufferRef.current = subagentBufferRef.current.slice(-ACTIVITY_BUFFER_MAX);
-      }
+      queueMicrotask(() => {
+        setSubagentBuffer((prev) => {
+          const next = [...prev, ...newEvents];
+          return next.length > ACTIVITY_BUFFER_MAX ? next.slice(-ACTIVITY_BUFFER_MAX) : next;
+        });
+      });
     }
   }, [sessions]);
 
@@ -871,6 +878,7 @@ export default function LogPanel() {
     if (!taskSeededRef.current) return;
     const prevStatuses = prevTaskStatusesRef.current;
     const nextStatuses: Record<string, string> = {};
+    const newTaskEvents: FeedEvent[] = [];
 
     for (const [sessionId, tasks] of Object.entries(tasksBySession)) {
       const session = sessions.find((s) => s.id === sessionId);
@@ -892,27 +900,27 @@ export default function LogPanel() {
           if (task.description) meta.push({ label: 'Description', value: task.description });
 
           if (task.status === 'in_progress') {
-            taskBufferRef.current.push({
+            newTaskEvents.push({
               id: `task-prog-${task.id}-${Date.now()}`,
               timestamp: new Date().toISOString(),
               icon: <ClipboardList className="h-3 w-3" />,
               iconColor: '#3B82F6',
               description: `Task started: ${task.subject}`,
               detail: `Owner: ${task.owner || ownerLabel}`,
-              priority: 'medium',
-              source: 'task',
+              priority: 'medium' as EventPriority,
+              source: 'task' as const,
               meta,
             });
           } else if (task.status === 'completed') {
-            taskBufferRef.current.push({
+            newTaskEvents.push({
               id: `task-done-${task.id}-${Date.now()}`,
               timestamp: new Date().toISOString(),
               icon: <CheckCircle2 className="h-3 w-3" />,
               iconColor: '#22C55E',
               description: `Task completed: ${task.subject}`,
               detail: `Owner: ${task.owner || ownerLabel}`,
-              priority: 'high',
-              source: 'task',
+              priority: 'high' as EventPriority,
+              source: 'task' as const,
               meta,
             });
           }
@@ -920,8 +928,13 @@ export default function LogPanel() {
       }
     }
 
-    if (taskBufferRef.current.length > ACTIVITY_BUFFER_MAX) {
-      taskBufferRef.current = taskBufferRef.current.slice(-ACTIVITY_BUFFER_MAX);
+    if (newTaskEvents.length > 0) {
+      queueMicrotask(() => {
+        setTaskBuffer((prev) => {
+          const next = [...prev, ...newTaskEvents];
+          return next.length > ACTIVITY_BUFFER_MAX ? next.slice(-ACTIVITY_BUFFER_MAX) : next;
+        });
+      });
     }
 
     prevTaskStatusesRef.current = nextStatuses;
@@ -934,11 +947,11 @@ export default function LogPanel() {
     const dir = buildDirectiveEvents(activeDirectives, directiveHistory);
     const pipe = buildPipelineEvents(directiveState);
 
-    // Accumulated ref-based events
-    const activityEvts = activityBufferRef.current;
-    const connEvts = connectionBufferRef.current;
-    const subEvts = subagentBufferRef.current;
-    const taskEvts = taskBufferRef.current;
+    // Accumulated state-based events
+    const activityEvts = activityBuffer;
+    const connEvts = connectionBuffer;
+    const subEvts = subagentBuffer;
+    const taskEvts = taskBuffer;
 
     return [
       ...hook, ...sess, ...dir, ...pipe,
@@ -947,7 +960,7 @@ export default function LogPanel() {
       (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
     );
   }, [events, sessions, directiveState, activeDirectives, directiveHistory,
-      sessionActivities, connected, tasksBySession]);
+      activityBuffer, connectionBuffer, subagentBuffer, taskBuffer]);
 
   // Apply filter
   const filteredEvents = useMemo(() => {

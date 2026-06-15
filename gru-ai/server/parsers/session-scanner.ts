@@ -17,7 +17,7 @@ export function projectLabel(dirName: string): string {
  * Inverse of the encoding Claude Code uses: `/Users/foo/bar` → `-Users-foo-bar`
  */
 export function projectDirFromPath(repoPath: string): string {
-  return repoPath.replace(/\//g, '-');
+  return path.normalize(repoPath).replace(/\\/g, '/').replace(/\//g, '-');
 }
 
 function headRead(filepath: string, size = HEAD_SIZE): string | null {

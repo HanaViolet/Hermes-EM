@@ -163,6 +163,8 @@ async function promptPlatform(rl: readline.Interface, flags: Record<string, stri
   if (typeof flags['platform'] === 'string') {
     const valid: Platform[] = ['claude-code', 'aider', 'gemini-cli', 'codex', 'other'];
     if (valid.includes(flags['platform'] as Platform)) return flags['platform'] as Platform;
+    console.error(c.red(`  Invalid platform: ${flags['platform']}. Must be ${valid.join(', ')}.`));
+    process.exit(1);
   }
   // Default to claude-code when --yes is passed
   if (flags['yes']) return 'claude-code';

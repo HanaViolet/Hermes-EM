@@ -75,7 +75,7 @@ export class Notifier extends EventEmitter {
   private getStaleTeamSessionIds(): Set<string> {
     const staleIds = new Set<string>();
     const state = this.aggregator.getState();
-    const teams = (state as any).teams ?? [];
+    const teams = (state as { teams?: Array<{ stale?: boolean; leadSessionId?: string; members?: Array<{ agentId?: string }> }> }).teams ?? [];
 
     for (const team of teams) {
       if (!team.stale) continue;

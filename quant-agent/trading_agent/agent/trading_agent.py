@@ -1,5 +1,5 @@
 from trading_agent.tools.data_tool import get_price_data
-from trading_agent.tools.indicator_tool import add_technical_indicators
+from trading_agent.tools.indicator_tool import add_technical_indicators, compute_multi_factor_score
 from trading_agent.tools.regime_tool import detect_market_regime
 from trading_agent.tools.strategy_tool import generate_signal
 from trading_agent.tools.risk_tool import apply_risk_control
@@ -10,6 +10,7 @@ from trading_agent.tools.memory_tool import compute_memory_score
 from trading_agent.tools.decision_score_tool import compute_decision_score
 from trading_agent.tools.explain_tool import explain_decision
 from trading_agent.tools.report_tool import generate_report
+from trading_agent.tools.learning_tool import load_strategy_experience_adjustments
 from trading_agent.utils.logger import get_logger
 from trading_agent.utils.office_bridge import update_workflow, ROOM_LABELS, _telemetry_state, _persist_telemetry
 
@@ -33,13 +34,25 @@ def _load_history_for_memory() -> list:
 logger = get_logger()
 
 
-def select_best_strategy(data, strategies, transaction_cost=0.001):
+def _indicator_has_data(indicator: dict | None) -> bool:
+    """Return True if indicator dict contains the keys used by the multi-factor scorer."""
+    if not indicator:
+        return False
+    return any(k in indicator for k in ("return_20d", "volatility_20d", "ma20", "ma60"))
+
+
+def select_best_strategy(data, strategies, transaction_cost=0.001, indicator=None):
+    if not strategies:
+        raise ValueError("strategies list must not be empty")
+
     best_strategy = None
     best_signal = None
     best_result = None
     best_score = -999
 
     strategy_scores = []  # Collect all strategy results for comparison
+    experience_adjustments = load_strategy_experience_adjustments(strategies)
+    multi_factor_score = compute_multi_factor_score(indicator) if _indicator_has_data(indicator) else 50.0
 
     for strategy_name in strategies:
         raw_signal = generate_signal(data, strategy_name)
@@ -76,20 +89,34 @@ def select_best_strategy(data, strategies, transaction_cost=0.001):
             raw_score -= 1.0
         normalized_score = max(0, min(100, 50 + raw_score * 20))
 
+        exp_adj = experience_adjustments.get(strategy_name, {})
+        exp_delta = exp_adj.get("delta", 0.0)
+        adjusted_score = max(0, min(100, normalized_score + exp_delta))
+        # Blend multi-factor score to align display and decision
+        blended_score = round(adjusted_score * 0.8 + multi_factor_score * 0.2, 2)
+
         strategy_scores.append({
             "name": strategy_name,
             "raw_score": round(raw_score, 4),
             "score": round(normalized_score, 2),
+            "adjusted_score": round(adjusted_score, 2),
+            "blended_score": blended_score,
+            "multi_factor_score": multi_factor_score,
+            "experience_delta": exp_delta,
+            "experience_reason": exp_adj.get("reason", ""),
             "sharpe": round(result["sharpe_ratio"], 3),
             "return": round(result["total_return"] * 100, 2),
             "trades": result["number_of_trades"],
         })
 
-        if normalized_score > best_score:
-            best_score = normalized_score
+        if blended_score > best_score:
+            best_score = blended_score
             best_strategy = strategy_name
             best_signal = final_signal
             best_result = result
+
+    # Sort so consumers that reference strategy_scores[0] get the best candidate
+    strategy_scores.sort(key=lambda s: s.get("blended_score", 0), reverse=True)
 
     # Push strategy comparison for the Strategy Lab room artifact
     update_workflow(
@@ -202,11 +229,13 @@ def run_trading_agent(
         )
 
         strategy_scores = []
+        experience_adjustments = load_strategy_experience_adjustments(["ma", "rsi", "momentum"])
         if strategy_name == "auto":
             strategy_name, final_signal, result, strategy_scores = select_best_strategy(
                 data=data,
                 strategies=["ma", "rsi", "momentum"],
-                transaction_cost=transaction_cost
+                transaction_cost=transaction_cost,
+                indicator=indicator_result,
             )
         else:
             raw_signal = generate_signal(data, strategy_name)
@@ -232,6 +261,35 @@ def run_trading_agent(
             )
 
             result = run_backtest(data, final_signal, transaction_cost)
+
+            # Compute score, experience adjustment, and multi-factor blend for the selected strategy
+            raw_score = (
+                result["sharpe_ratio"]
+                + result["annual_return"]
+                + result["max_drawdown"]
+                - 0.001 * result["number_of_trades"]
+            )
+            if result["max_drawdown"] < -0.40:
+                raw_score -= 1.0
+            normalized_score = max(0, min(100, 50 + raw_score * 20))
+            exp_adj = experience_adjustments.get(strategy_name, {})
+            exp_delta = exp_adj.get("delta", 0.0)
+            adjusted_score = max(0, min(100, normalized_score + exp_delta))
+            multi_factor_score = compute_multi_factor_score(indicator_result) if _indicator_has_data(indicator_result) else 50.0
+            blended_score = round(adjusted_score * 0.8 + multi_factor_score * 0.2, 2)
+            strategy_scores.append({
+                "name": strategy_name,
+                "raw_score": round(raw_score, 4),
+                "score": round(normalized_score, 2),
+                "adjusted_score": round(adjusted_score, 2),
+                "blended_score": blended_score,
+                "multi_factor_score": multi_factor_score,
+                "experience_delta": exp_delta,
+                "experience_reason": exp_adj.get("reason", ""),
+                "sharpe": round(result["sharpe_ratio"], 3),
+                "return": round(result["total_return"] * 100, 2),
+                "trades": result["number_of_trades"],
+            })
 
         logger.info(f"Backtest done: sharpe={result['sharpe_ratio']:.2f}")
 
@@ -396,6 +454,28 @@ def run_trading_agent(
 
         # Build advanced room artifacts and persist directly via office_bridge
         try:
+            from trading_agent.tools.learning_tool import run_learning_pipeline
+            from trading_server.artifact_builder import STRATEGY_KNOWLEDGE_BASE
+            _task = {"ticker": ticker, "strategy": strategy_name, "start_date": start_date, "end_date": end_date}
+            learning_result = run_learning_pipeline(_task, full_result, STRATEGY_KNOWLEDGE_BASE)
+            full_result["learning"] = learning_result
+            update_workflow(
+                current_stage="learning",
+                progress=95,
+                cat_id="skills_cat",
+                cat_status="running",
+                summary=f"Learning: {learning_result.get('latest_lesson', {}).get('lesson', {}).get('en', 'lesson generated')[:60]}",
+                logs=[f"Generated lesson for {strategy_name}", f"Total lessons: {learning_result.get('total_lessons', 0)}"]
+            )
+        except Exception as _e:
+            import traceback as _tb
+            try:
+                from pathlib import Path
+                Path("trading_server/learning_error.log").write_text(f"[{datetime.now().isoformat()}] learning error: {_e}\n{_tb.format_exc()}", encoding="utf-8")
+            except Exception:
+                pass
+
+        try:
             from trading_server.artifact_builder import build_room_artifacts
             _task = {"ticker": ticker, "strategy": strategy_name, "start_date": start_date, "end_date": end_date}
             _artifacts = build_room_artifacts(_task, full_result)
@@ -408,6 +488,9 @@ def run_trading_agent(
                 Path("trading_server/agent_artifact_error.log").write_text(f"[{datetime.now().isoformat()}] build error: {_e}\n{_tb.format_exc()}", encoding="utf-8")
             except Exception:
                 pass
+
+        # Mark pipeline as truly complete after artifacts + learning are persisted
+        update_workflow(current_stage="completed", progress=100, cat_id="trading_cat", cat_status="done", result_summary=result_summary, logs=["Artifacts and learning persisted"])
 
         return full_result
 

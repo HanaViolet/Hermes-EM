@@ -6,6 +6,8 @@ import json
 import os
 import threading
 
+from trading_agent.tools.indicator_tool import compute_multi_factor_score
+
 
 TELEMETRY_PATH = os.path.join(os.path.dirname(__file__), "..", "ClawLibrary", "src", "data", "trading-telemetry.json")
 
@@ -234,9 +236,13 @@ def _build_current_strategy_detail(strategy_name, strategy_scores, indicator, de
     signal = (decision.get("decision", "hold") if isinstance(decision, dict) else str(decision)).upper()
 
     current_score = None
+    current_adjusted_score = None
+    current_blended_score = None
     for sc in strategy_scores:
         if sc.get("name") == strategy_name:
             current_score = sc.get("score")
+            current_adjusted_score = sc.get("adjusted_score", current_score)
+            current_blended_score = sc.get("blended_score", current_adjusted_score)
             break
 
     params = []
@@ -310,7 +316,8 @@ def _build_current_strategy_detail(strategy_name, strategy_scores, indicator, de
         "name": strategy_name,
         "name_zh": {"ma": "均线交叉", "rsi": "RSI 动量", "momentum": "20日动量", "auto": "自动选择"}.get(strategy_name, strategy_name),
         "signal": signal,
-        "score": current_score if current_score is not None else 50,
+        "score": current_blended_score if current_blended_score is not None else (current_adjusted_score if current_adjusted_score is not None else (current_score if current_score is not None else 50)),
+        "base_score": current_score,
         "params": params,
         "reasoning": reasoning,
         "description": description,
@@ -413,45 +420,6 @@ def _rank_news_items(raw_news, key_events, risk_events, news_score=50, news_conf
     items.sort(key=lambda x: x["final_score"], reverse=True)
     return items
 
-
-def _compute_multi_factor_score(indicator):
-    """Compute a simplified multi-factor score inspired by Carhart (1997).
-
-    Carhart four-factor model: Market, Size (SMB), Value (HML), Momentum (MOM).
-    With single-asset daily data we use observable proxies:
-      - Market premium proxy   : 20-day return vs zero benchmark
-      - Momentum proxy         : sign/magnitude of 20-day return
-      - Risk-adjustment proxy  : inverse of 20-day volatility
-      - Trend proxy            : MA20 vs MA60 cross-over
-    Score is normalized to 0-100, 50 = neutral.
-    """
-    ret_20d = indicator.get("return_20d")
-    vol_20d = indicator.get("volatility_20d")
-    ma20 = indicator.get("ma20")
-    ma60 = indicator.get("ma60")
-
-    # Momentum factor (MOM): annualized-ish, capped
-    mom = 0.0
-    if ret_20d is not None:
-        mom = max(-1, min(1, float(ret_20d) * 12))  # ~ annualized, capped ±100%
-
-    # Market factor: same proxy, milder weight
-    mkt = mom * 0.6
-
-    # Risk-adjustment factor: lower volatility is better
-    risk_adj = 0.0
-    if vol_20d is not None and vol_20d > 0:
-        risk_adj = max(-0.5, min(0.5, 0.15 / float(vol_20d) - 0.6))
-
-    # Trend factor: dual-MA cross-over
-    trend = 0.0
-    if ma20 is not None and ma60 is not None and ma60 != 0:
-        trend = max(-0.5, min(0.5, (float(ma20) - float(ma60)) / float(ma60) * 10))
-
-    # Equal-weighted composite, then map [-2, 2] -> [0, 100]
-    composite = mkt * 0.25 + mom * 0.25 + risk_adj * 0.25 + trend * 0.25
-    score = 50 + composite * 25
-    return round(max(0, min(100, score)), 2)
 
 
 def _reflect_on_history_and_knowledge(history_records, current_strategy, indicator, knowledge_base):
@@ -1916,18 +1884,20 @@ def build_room_artifacts(task: dict, result: dict) -> dict[str, dict]:
     backtest["trades"] = trades
 
     # ── Build strategy visual data ──
-    multi_factor_score = _compute_multi_factor_score(indicator)
+    multi_factor_score = compute_multi_factor_score(indicator)
     strategy_visual_data = []
     for sc in strategy_scores:
         base = sc.get("base_score", sc.get("score", 50))
         llm_adj = sc.get("llm_adjustment", 0)
-        final = sc.get("final_score", base + llm_adj)
-        # Blend multi-factor score as a weighted dimension (20% influence)
-        blended_final = round(final * 0.8 + multi_factor_score * 0.2, 2)
+        exp_adj = sc.get("experience_delta", 0)
+        # Trading agent already blends multi-factor score; use blended_score if present
+        blended_final = sc.get("blended_score", sc.get("adjusted_score", base + llm_adj + exp_adj))
         strategy_visual_data.append({
             "name": sc.get("name", "?"),
             "base_score": base,
             "llm_adjustment": llm_adj,
+            "experience_delta": exp_adj,
+            "experience_reason": sc.get("experience_reason", ""),
             "final_score": blended_final,
             "multi_factor_score": multi_factor_score,
         })
@@ -2071,6 +2041,10 @@ def build_room_artifacts(task: dict, result: dict) -> dict[str, dict]:
 
     stage_timestamps = result.get("stage_timestamps", [])
     price_series = result.get("price_series", None)
+    learning_result = result.get("learning", {}) or {}
+    recent_lessons = learning_result.get("recent_lessons", []) or []
+    experience_cards = learning_result.get("experience_cards", []) or []
+    total_lessons = learning_result.get("total_lessons", 0) or 0
 
     # ── Build agent status data ──
     agent_statuses = result.get("agent_statuses", [])
@@ -2186,7 +2160,9 @@ def build_room_artifacts(task: dict, result: dict) -> dict[str, dict]:
                 _metric_number("策略评分", current_strategy_detail["score"], "pts"),
                 _metric_number("多因子评分", multi_factor_score, "pts"),
                 _metric_badge("策略", {"ma": "均线交叉", "rsi": "RSI 动量", "momentum": "20日动量"}.get(current_strategy_detail["name"], current_strategy_detail["name"]), "neutral"),
-                *[{"label": {"ma": "均线交叉", "rsi": "RSI 动量", "momentum": "20日动量"}.get(sc.get("name", "?"), sc.get("name", "?")), "value": sc.get("score", 0), "display": "strategy_score", "signal": "buy" if sc.get("return", 0) > 5 else "sell" if sc.get("return", 0) < -5 else "hold", "unit": "score"} for sc in strategy_scores],
+                *[{"label": {"ma": "均线交叉", "rsi": "RSI 动量", "momentum": "20日动量"}.get(sc.get("name", "?"), sc.get("name", "?")), "value": sc.get("blended_score", sc.get("adjusted_score", sc.get("score", 0))), "display": "strategy_score", "signal": "buy" if sc.get("return", 0) > 5 else "sell" if sc.get("return", 0) < -5 else "hold", "unit": "score"} for sc in strategy_scores],
+                *([_metric_number("经验条数", total_lessons, label_zh="经验条数")] if total_lessons > 0 else []),
+                *([_metric_number("经验卡", len(experience_cards), label_zh="经验卡")] if len(experience_cards) > 0 else []),
             ],
             "visual": {
                 "kind": "strategy_lab",
@@ -2194,6 +2170,12 @@ def build_room_artifacts(task: dict, result: dict) -> dict[str, dict]:
                     "current_strategy": current_strategy_detail,
                     "strategies": strategy_visual_data,
                     "multi_factor_score": multi_factor_score,
+                    "learning": {
+                        "recent_lessons": recent_lessons,
+                        "experience_cards": experience_cards,
+                        "total_lessons": total_lessons,
+                        "latest_lesson": learning_result.get("latest_lesson"),
+                    },
                 }
             },
             "details": {"input": ["Indicators", "Regime", "Risk"], "output": ["当前策略", "策略排名"], "reasoning": [current_strategy_detail["reasoning"], llm_advice.get("strategy_advice", "")]},
@@ -2440,11 +2422,14 @@ def build_room_artifacts(task: dict, result: dict) -> dict[str, dict]:
                 _metric_number("Knowledge", len(STRATEGY_KNOWLEDGE_BASE), label_zh="策略知识"),
                 _metric_number("Avg Return", _v(avg_return, ".1f"), "%", label_zh="平均收益"),
                 _metric_number("Avg Sharpe", _v(avg_sharpe, ".2f"), label_zh="平均夏普"),
+                *([_metric_number("经验卡", len(experience_cards), label_zh="经验卡")] if len(experience_cards) > 0 else []),
             ],
             "visual": {
                 "kind": "memory_archive",
                 "data": {
                     "records": memory_records,
+                    "experience_cards": experience_cards,
+                    "recent_lessons": recent_lessons,
                     "knowledge_base": STRATEGY_KNOWLEDGE_BASE,
                     "selected_strategy": {
                         "id": {"ma": "ma_crossover", "rsi": "rsi_momentum", "momentum": "momentum_20d"}.get(strategy_name, strategy_name),

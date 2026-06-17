@@ -1,10 +1,14 @@
 """
 LLM Client — OpenAI-compatible API wrapper with graceful fallback.
-Set LLM_ENABLE=1 and LLM_API_KEY to activate.
+Set LLM_ENABLE=1 and LLM_API_KEY in a .env file or environment to activate.
 """
 from __future__ import annotations
 import json as _json, os, requests as _r
 from typing import Any
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def _env_bool(name: str, default: bool = False) -> bool:

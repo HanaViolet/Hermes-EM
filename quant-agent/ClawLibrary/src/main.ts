@@ -3348,6 +3348,8 @@ function renderStrategyRankingPanel(artifact: any): string {
     const basePct = Math.round(((s.base_score || 0) / maxScore) * 100);
     const finalPct = Math.round(((s.final_score || 0) / maxScore) * 100);
     const adj = s.llm_adjustment || 0;
+    const expDelta = s.experience_delta || 0;
+    const expReason = s.experience_reason || '';
     const isCurrent = s.name === current.name;
     return `
       <div class="strategy-row ${isCurrent ? 'current' : ''}">
@@ -3358,7 +3360,7 @@ function renderStrategyRankingPanel(artifact: any): string {
         </div>
         <span class="strategy-score">${escapeHtml(String(s.final_score || 0))}</span>
       </div>
-      <div class="strategy-meta">${isZh ? '基础分' : 'Base'}: ${s.base_score || 0}${adj !== 0 ? ` · ${isZh ? 'LLM调整' : 'LLM'}: ${adj > 0 ? '+' : ''}${adj}` : ''}</div>
+      <div class="strategy-meta">${isZh ? '基础分' : 'Base'}: ${s.base_score || 0}${adj !== 0 ? ` · ${isZh ? 'LLM调整' : 'LLM'}: ${adj > 0 ? '+' : ''}${adj}` : ''}${expDelta !== 0 ? ` · ${isZh ? '经验调整' : 'Exp'}: ${expDelta > 0 ? '+' : ''}${expDelta}${expReason ? ` (${escapeHtml(expReason)})` : ''}` : ''}</div>
     `;
   }).join('');
 
@@ -3399,7 +3401,107 @@ function renderStrategyRankingPanel(artifact: any): string {
           ${rankingRows || `<div class="strategy-rank-empty">${isZh ? '暂无策略对比数据' : 'No strategy ranking data'}</div>`}
         </div>
       </div>
+
+      ${_renderStrategyLearning(visual.learning || {})}
     </section>
+  `;
+}
+
+
+function _renderStrategyLearning(learning: any): string {
+  const isZh = uiLocale === 'zh';
+  const recentLessons = learning.recent_lessons || [];
+  const experienceCards = learning.experience_cards || [];
+  if (!recentLessons.length && !experienceCards.length) return '';
+
+  const strategyNameZh = (name: string) => {
+    const map: Record<string, string> = { ma: '均线交叉', rsi: 'RSI 动量', momentum: '20日动量', auto: '自动选择' };
+    return isZh ? (map[name] || name) : name;
+  };
+
+  const cardHtml = experienceCards.map((card: any) => {
+    const avg = card.avg_metrics || {};
+    return `
+      <div class="strategy-experience-card">
+        <div class="strategy-experience-header">
+          <span class="strategy-experience-strategy">${escapeHtml(strategyNameZh(card.strategy || ''))}</span>
+          <span class="strategy-experience-count">${card.lesson_count || 0} ${isZh ? '条经验' : 'lessons'}</span>
+        </div>
+        <div class="strategy-experience-summary">${escapeHtml(isZh ? (card.summary?.zh || '') : (card.summary?.en || ''))}</div>
+        <div class="strategy-experience-metrics">
+          <span>${isZh ? '平均收益' : 'Avg Return'}: ${avg.avg_return_pct ?? 0}%</span>
+          <span>${isZh ? '平均夏普' : 'Avg Sharpe'}: ${avg.avg_sharpe ?? 0}</span>
+        </div>
+        ${card.paper_refs?.length ? `<div class="strategy-experience-papers">${(card.paper_refs || []).map((ref: string) => `<span class="memory-tag">${escapeHtml(ref)}</span>`).join('')}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+
+  const lessonRows = recentLessons.slice(0, 5).map((l: any) => `
+    <div class="strategy-lesson-row">
+      <span class="strategy-lesson-date">${escapeHtml(l.date || '')}</span>
+      <span class="strategy-lesson-ticker">${escapeHtml(l.ticker || '')}</span>
+      <span class="strategy-lesson-text">${escapeHtml(isZh ? (l.lesson?.zh || '') : (l.lesson?.en || ''))}</span>
+      <span class="strategy-lesson-tags">${(l.tags || []).map((t: string) => `<span class="memory-tag">${escapeHtml(t)}</span>`).join('')}</span>
+    </div>
+  `).join('');
+
+  return `
+    <div class="strategy-learning-section">
+      <div class="strategy-section-title">${isZh ? '学习经验' : 'Learning Experience'}</div>
+      ${experienceCards.length ? `<div class="strategy-experience-grid">${cardHtml}</div>` : ''}
+      ${recentLessons.length ? `<div class="strategy-lesson-list">${lessonRows}</div>` : ''}
+    </div>
+  `;
+}
+
+
+function _renderMemoryExperiences(visual: any): string {
+  const isZh = uiLocale === 'zh';
+  const experienceCards = visual.experience_cards || [];
+  const recentLessons = visual.recent_lessons || [];
+  if (!experienceCards.length && !recentLessons.length) return '';
+
+  const strategyNameZh = (name: string) => {
+    const map: Record<string, string> = { ma: '均线交叉', rsi: 'RSI 动量', momentum: '20日动量', auto: '自动选择' };
+    return isZh ? (map[name] || name) : name;
+  };
+
+  const cardsHtml = experienceCards.map((card: any) => {
+    const avg = card.avg_metrics || {};
+    return `
+      <div class="memory-experience-card">
+        <div class="memory-experience-header">
+          <span class="memory-experience-type type-experience">${isZh ? '经验卡' : 'Experience'}</span>
+          <span class="memory-experience-count">${card.lesson_count || 0} ${isZh ? '次运行' : 'runs'}</span>
+        </div>
+        <div class="memory-experience-name">${escapeHtml(strategyNameZh(card.strategy || ''))}</div>
+        <div class="memory-experience-summary">${escapeHtml(isZh ? (card.summary?.zh || '') : (card.summary?.en || ''))}</div>
+        <div class="memory-experience-findings">
+          ${(card.key_findings || []).map((f: any) => `<div class="memory-experience-finding">${escapeHtml(isZh ? (f.zh || '') : (f.en || ''))}</div>`).join('')}
+        </div>
+        <div class="memory-experience-metrics">
+          <span>${isZh ? '平均收益' : 'Avg Return'}: ${avg.avg_return_pct ?? 0}%</span>
+          <span>${isZh ? '平均夏普' : 'Avg Sharpe'}: ${avg.avg_sharpe ?? 0}</span>
+        </div>
+        ${card.paper_refs?.length ? `<div class="memory-experience-papers">${(card.paper_refs || []).map((ref: string) => `<span class="memory-tag">${escapeHtml(ref)}</span>`).join('')}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+
+  const lessonsHtml = recentLessons.slice(0, 4).map((l: any) => `
+    <div class="memory-experience-finding">
+      <strong>${escapeHtml(l.ticker || '')} · ${escapeHtml(strategyNameZh(l.strategy || ''))}</strong>
+      <span>${escapeHtml(isZh ? (l.lesson?.zh || '') : (l.lesson?.en || ''))}</span>
+    </div>
+  `).join('');
+
+  return `
+    <div class="memory-experience-section">
+      <div class="memory-section-title">${isZh ? '经验卡片' : 'Experience Cards'} <span class="memory-section-sub">${isZh ? '策略学习总结' : 'Strategy Learning'}</span></div>
+      ${experienceCards.length ? `<div class="memory-experience-grid">${cardsHtml}</div>` : ''}
+      ${recentLessons.length && !experienceCards.length ? `<div class="memory-experience-findings">${lessonsHtml}</div>` : ''}
+    </div>
   `;
 }
 
@@ -3592,6 +3694,8 @@ function renderMemoryPanel(artifact: any): string {
           `}
         </div>
       </div>
+
+      ${_renderMemoryExperiences(visual)}
     </section>
   `;
 }

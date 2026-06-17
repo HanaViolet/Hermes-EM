@@ -458,7 +458,7 @@ def update_workflow(
             _telemetry_state["decision"] = s
         # Also store as a log line for intermediate status updates
         # Don't overwrite decision for non-completion summaries
-        _telemetry_state["summary"] = result_summary
+        _telemetry_state["summary"] = summary
     if report:
         _telemetry_state["report"] = report
     if error:

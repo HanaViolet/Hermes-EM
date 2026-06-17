@@ -1,0 +1,1245 @@
+{
+  "lessons": [
+    {
+      "run_id": "QQQ_momentum_20260615225044",
+      "ticker": "QQQ",
+      "strategy": "momentum",
+      "date": "2026-06-15",
+      "timestamp": "2026-06-15T22:50:44.169363",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 94.26,
+        "sharpe_ratio": 0.93,
+        "max_drawdown_pct": 20.98,
+        "win_rate_pct": 37.1,
+        "trades": 81,
+        "risk_score": 49,
+        "risk_level": "medium",
+        "rsi": 44.35068,
+        "macd": 2.400183,
+        "ma20": 523.672493,
+        "ma60": 507.31533,
+        "volatility_20d_pct": 20.08,
+        "return_20d_pct": -0.79,
+        "news_sentiment": "neutral",
+        "news_score": 50
+      },
+      "lesson": {
+        "zh": "momentum 策略本次表现中性（收益 94.3%，夏普 0.93），建议继续观察后续确认。",
+        "en": "momentum showed neutral performance (return 94.3%, Sharpe 0.93); continue monitoring for confirmation."
+      },
+      "tags": [
+        "neutral",
+        "watch",
+        "hold_decision"
+      ],
+      "paper_refs": [
+        "Edwards & Magee (1948), Technical Analysis of Stock Trends",
+        "Wilder (1978), New Concepts in Technical Trading Systems",
+        "Jegadeesh & Titman (1993), Returns to Buying Winners and Selling Losers"
+      ],
+      "source": "rule_fallback"
+    },
+    {
+      "run_id": "QQQ_momentum_20260615225409",
+      "ticker": "QQQ",
+      "strategy": "momentum",
+      "date": "2026-06-15",
+      "timestamp": "2026-06-15T22:54:09.254059",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 94.26,
+        "sharpe_ratio": 0.93,
+        "max_drawdown_pct": 20.98,
+        "win_rate_pct": 37.1,
+        "trades": 81,
+        "risk_score": 49,
+        "risk_level": "medium",
+        "rsi": 44.35068,
+        "macd": 2.400183,
+        "ma20": 523.672493,
+        "ma60": 507.31533,
+        "volatility_20d_pct": 20.08,
+        "return_20d_pct": -0.79,
+        "news_sentiment": "neutral",
+        "news_score": 50
+      },
+      "lesson": {
+        "zh": "momentum 策略本次表现中性（收益 94.3%，夏普 0.93），建议继续观察后续确认。",
+        "en": "momentum showed neutral performance (return 94.3%, Sharpe 0.93); continue monitoring for confirmation."
+      },
+      "tags": [
+        "neutral",
+        "watch",
+        "hold_decision"
+      ],
+      "paper_refs": [
+        "Edwards & Magee (1948), Technical Analysis of Stock Trends",
+        "Wilder (1978), New Concepts in Technical Trading Systems",
+        "Jegadeesh & Titman (1993), Returns to Buying Winners and Selling Losers"
+      ],
+      "source": "rule_fallback"
+    },
+    {
+      "run_id": "SPY_momentum_20260616150417",
+      "ticker": "SPY",
+      "strategy": "momentum",
+      "date": "2026-06-16",
+      "timestamp": "2026-06-16T15:04:17.939834",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 43.16,
+        "sharpe_ratio": 0.64,
+        "max_drawdown_pct": 15.42,
+        "win_rate_pct": 38.0,
+        "trades": 98,
+        "risk_score": 42,
+        "risk_level": "medium",
+        "rsi": 36.446209,
+        "macd": -0.983444,
+        "ma20": 599.538498,
+        "ma60": 590.467668,
+        "volatility_20d_pct": 14.28,
+        "return_20d_pct": -2.91,
+        "news_sentiment": "neutral",
+        "news_score": 50
+      },
+      "lesson": {
+        "zh": "momentum 策略本次表现中性（收益 43.2%，夏普 0.64），建议继续观察后续确认。",
+        "en": "momentum showed neutral performance (return 43.2%, Sharpe 0.64); continue monitoring for confirmation."
+      },
+      "tags": [
+        "neutral",
+        "watch",
+        "hold_decision"
+      ],
+      "paper_refs": [
+        "Edwards & Magee (1948), Technical Analysis of Stock Trends",
+        "Wilder (1978), New Concepts in Technical Trading Systems",
+        "Jegadeesh & Titman (1993), Returns to Buying Winners and Selling Losers"
+      ],
+      "source": "rule_fallback"
+    },
+    {
+      "run_id": "SPY_momentum_20260616153150",
+      "ticker": "SPY",
+      "strategy": "momentum",
+      "date": "2026-06-16",
+      "timestamp": "2026-06-16T15:31:50.638149",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 43.16,
+        "sharpe_ratio": 0.64,
+        "max_drawdown_pct": 15.42,
+        "win_rate_pct": 38.0,
+        "trades": 98,
+        "risk_score": 42,
+        "risk_level": "medium",
+        "rsi": 36.446209,
+        "macd": -0.983444,
+        "ma20": 599.538498,
+        "ma60": 590.467668,
+        "volatility_20d_pct": 14.28,
+        "return_20d_pct": -2.91,
+        "news_sentiment": "neutral",
+        "news_score": 50
+      },
+      "lesson": {
+        "zh": "momentum 策略本次表现中性（收益 43.2%，夏普 0.64），建议继续观察后续确认。",
+        "en": "momentum showed neutral performance (return 43.2%, Sharpe 0.64); continue monitoring for confirmation."
+      },
+      "tags": [
+        "neutral",
+        "watch",
+        "hold_decision"
+      ],
+      "paper_refs": [
+        "Edwards & Magee (1948), Technical Analysis of Stock Trends",
+        "Wilder (1978), New Concepts in Technical Trading Systems",
+        "Jegadeesh & Titman (1993), Returns to Buying Winners and Selling Losers"
+      ],
+      "source": "rule_fallback"
+    },
+    {
+      "run_id": "SPY_momentum_20260616200621",
+      "ticker": "SPY",
+      "strategy": "momentum",
+      "date": "2026-06-16",
+      "timestamp": "2026-06-16T20:06:27.674715",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 43.16,
+        "sharpe_ratio": 0.64,
+        "max_drawdown_pct": 15.42,
+        "win_rate_pct": 38.0,
+        "trades": 98,
+        "risk_score": 42,
+        "risk_level": "medium",
+        "rsi": 36.446209,
+        "macd": -0.983444,
+        "ma20": 599.538498,
+        "ma60": 590.467668,
+        "volatility_20d_pct": 14.28,
+        "return_20d_pct": -2.91,
+        "news_sentiment": "neutral_positive",
+        "news_score": 60
+      },
+      "lesson": {
+        "zh": "动量策略在SPY上表现中性（收益43.2%，夏普0.64），RSI偏低（36.4）且MACD为负，但近期跌幅有限（-2.9%），等待确认信号可避免过早入场。",
+        "en": "Momentum on SPY is neutral (return 43.2%, Sharpe 0.64); low RSI (36.4) and negative MACD suggest weakness, but limited recent decline (-2.9%) supports waiting for confirmation to avoid premature entry."
+      },
+      "tags": [
+        "momentum",
+        "hold_signal",
+        "neutral",
+        "risk_management"
+      ],
+      "paper_refs": [
+        "Jegadeesh & Titman (1993)",
+        "Xiao et al. (2025)"
+      ],
+      "source": "llm"
+    },
+    {
+      "run_id": "SPY_momentum_20260616211921",
+      "ticker": "SPY",
+      "strategy": "momentum",
+      "date": "2026-06-16",
+      "timestamp": "2026-06-16T21:19:37.201346",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 43.16,
+        "sharpe_ratio": 0.64,
+        "max_drawdown_pct": 15.42,
+        "win_rate_pct": 38.0,
+        "trades": 98,
+        "risk_score": 42,
+        "risk_level": "medium",
+        "rsi": 36.446209,
+        "macd": -0.983444,
+        "ma20": 599.538498,
+        "ma60": 590.467668,
+        "volatility_20d_pct": 14.28,
+        "return_20d_pct": -2.91,
+        "news_sentiment": "neutral_positive",
+        "news_score": 65
+      },
+      "lesson": {
+        "zh": "动量策略在SPY上持续中性，RSI 36.4和MACD负值暗示弱势，但近期跌幅仅-2.9%且新闻偏正面，等待确认信号可避免过早入场；与先前经验一致，强化了hold决策。",
+        "en": "Momentum on SPY remains neutral; low RSI (36.4) and negative MACD indicate weakness, but limited recent decline (-2.9%) and positive news support waiting for confirmation, consistent with prior experiences reinforcing the hold decision."
+      },
+      "tags": [
+        "momentum",
+        "hold_signal",
+        "neutral",
+        "risk_management",
+        "news_sentiment"
+      ],
+      "paper_refs": [
+        "Jegadeesh & Titman (1993)",
+        "Xiao et al. (2025)"
+      ],
+      "source": "llm"
+    },
+    {
+      "run_id": "SPY_momentum_20260616213458",
+      "ticker": "SPY",
+      "strategy": "momentum",
+      "date": "2026-06-16",
+      "timestamp": "2026-06-16T21:35:43.767611",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 43.16,
+        "sharpe_ratio": 0.64,
+        "max_drawdown_pct": 15.42,
+        "win_rate_pct": 38.0,
+        "trades": 98,
+        "risk_score": 42,
+        "risk_level": "medium",
+        "rsi": 36.446209,
+        "macd": -0.983444,
+        "ma20": 599.538498,
+        "ma60": 590.467668,
+        "volatility_20d_pct": 14.28,
+        "return_20d_pct": -2.91,
+        "news_sentiment": "neutral",
+        "news_score": 50
+      },
+      "lesson": {
+        "zh": "momentum 策略本次表现中性（收益 43.2%，夏普 0.64），建议继续观察后续确认。",
+        "en": "momentum showed neutral performance (return 43.2%, Sharpe 0.64); continue monitoring for confirmation."
+      },
+      "tags": [
+        "neutral",
+        "watch",
+        "hold_decision"
+      ],
+      "paper_refs": [
+        "Edwards & Magee (1948), Technical Analysis of Stock Trends",
+        "Wilder (1978), New Concepts in Technical Trading Systems",
+        "Jegadeesh & Titman (1993), Returns to Buying Winners and Selling Losers"
+      ],
+      "source": "rule_fallback"
+    },
+    {
+      "run_id": "SPY_momentum_20260616220507",
+      "ticker": "SPY",
+      "strategy": "momentum",
+      "date": "2026-06-16",
+      "timestamp": "2026-06-16T22:05:52.237820",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 43.16,
+        "sharpe_ratio": 0.64,
+        "max_drawdown_pct": 15.42,
+        "win_rate_pct": 38.0,
+        "trades": 98,
+        "risk_score": 42,
+        "risk_level": "medium",
+        "rsi": 36.446209,
+        "macd": -0.983444,
+        "ma20": 599.538498,
+        "ma60": 590.467668,
+        "volatility_20d_pct": 14.28,
+        "return_20d_pct": -2.91,
+        "news_sentiment": "neutral_positive",
+        "news_score": 65
+      },
+      "lesson": {
+        "zh": "momentum 策略本次表现中性（收益 43.2%，夏普 0.64），建议继续观察后续确认。",
+        "en": "momentum showed neutral performance (return 43.2%, Sharpe 0.64); continue monitoring for confirmation."
+      },
+      "tags": [
+        "neutral",
+        "watch",
+        "hold_decision"
+      ],
+      "paper_refs": [
+        "Edwards & Magee (1948), Technical Analysis of Stock Trends",
+        "Wilder (1978), New Concepts in Technical Trading Systems",
+        "Jegadeesh & Titman (1993), Returns to Buying Winners and Selling Losers"
+      ],
+      "source": "rule_fallback"
+    },
+    {
+      "run_id": "SPY_momentum_20260616221019",
+      "ticker": "SPY",
+      "strategy": "momentum",
+      "date": "2026-06-16",
+      "timestamp": "2026-06-16T22:11:04.049565",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 43.16,
+        "sharpe_ratio": 0.64,
+        "max_drawdown_pct": 15.42,
+        "win_rate_pct": 38.0,
+        "trades": 98,
+        "risk_score": 42,
+        "risk_level": "medium",
+        "rsi": 36.446209,
+        "macd": -0.983444,
+        "ma20": 599.538498,
+        "ma60": 590.467668,
+        "volatility_20d_pct": 14.28,
+        "return_20d_pct": -2.91,
+        "news_sentiment": "neutral_positive",
+        "news_score": 60
+      },
+      "lesson": {
+        "zh": "momentum 策略本次表现中性（收益 43.2%，夏普 0.64），建议继续观察后续确认。",
+        "en": "momentum showed neutral performance (return 43.2%, Sharpe 0.64); continue monitoring for confirmation."
+      },
+      "tags": [
+        "neutral",
+        "watch",
+        "hold_decision"
+      ],
+      "paper_refs": [
+        "Edwards & Magee (1948), Technical Analysis of Stock Trends",
+        "Wilder (1978), New Concepts in Technical Trading Systems",
+        "Jegadeesh & Titman (1993), Returns to Buying Winners and Selling Losers"
+      ],
+      "source": "rule_fallback"
+    },
+    {
+      "run_id": "SPY_momentum_20260616221310",
+      "ticker": "SPY",
+      "strategy": "momentum",
+      "date": "2026-06-16",
+      "timestamp": "2026-06-16T22:13:55.996038",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 43.16,
+        "sharpe_ratio": 0.64,
+        "max_drawdown_pct": 15.42,
+        "win_rate_pct": 38.0,
+        "trades": 98,
+        "risk_score": 42,
+        "risk_level": "medium",
+        "rsi": 36.446209,
+        "macd": -0.983444,
+        "ma20": 599.538498,
+        "ma60": 590.467668,
+        "volatility_20d_pct": 14.28,
+        "return_20d_pct": -2.91,
+        "news_sentiment": "neutral",
+        "news_score": 50
+      },
+      "lesson": {
+        "zh": "momentum 策略本次表现中性（收益 43.2%，夏普 0.64），建议继续观察后续确认。",
+        "en": "momentum showed neutral performance (return 43.2%, Sharpe 0.64); continue monitoring for confirmation."
+      },
+      "tags": [
+        "neutral",
+        "watch",
+        "hold_decision"
+      ],
+      "paper_refs": [
+        "Edwards & Magee (1948), Technical Analysis of Stock Trends",
+        "Wilder (1978), New Concepts in Technical Trading Systems",
+        "Jegadeesh & Titman (1993), Returns to Buying Winners and Selling Losers"
+      ],
+      "source": "rule_fallback"
+    },
+    {
+      "run_id": "SPY_momentum_20260616221532",
+      "ticker": "SPY",
+      "strategy": "momentum",
+      "date": "2026-06-16",
+      "timestamp": "2026-06-16T22:15:41.870903",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 43.16,
+        "sharpe_ratio": 0.64,
+        "max_drawdown_pct": 15.42,
+        "win_rate_pct": 38.0,
+        "trades": 98,
+        "risk_score": 42,
+        "risk_level": "medium",
+        "rsi": 36.446209,
+        "macd": -0.983444,
+        "ma20": 599.538498,
+        "ma60": 590.467668,
+        "volatility_20d_pct": 14.28,
+        "return_20d_pct": -2.91,
+        "news_sentiment": "neutral",
+        "news_score": 50
+      },
+      "lesson": {
+        "zh": "动量策略在SPY上持续中性，RSI偏低（36.4）和MACD负值暗示弱势，但近期跌幅有限（-2.9%）且新闻偏正面，等待确认信号可避免过早入场。",
+        "en": "Momentum on SPY remains neutral with low RSI (36.4) and negative MACD indicating weakness, but limited recent decline (-2.9%) and positive news support waiting for confirmation to avoid premature entry."
+      },
+      "tags": [
+        "momentum",
+        "hold_signal",
+        "neutral",
+        "risk_management",
+        "news_sentiment"
+      ],
+      "paper_refs": [
+        "Jegadeesh & Titman (1993)",
+        "Xiao et al. (2025)"
+      ],
+      "source": "llm"
+    },
+    {
+      "run_id": "SPY_momentum_20260616221727",
+      "ticker": "SPY",
+      "strategy": "momentum",
+      "date": "2026-06-16",
+      "timestamp": "2026-06-16T22:18:12.840352",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 43.16,
+        "sharpe_ratio": 0.64,
+        "max_drawdown_pct": 15.42,
+        "win_rate_pct": 38.0,
+        "trades": 98,
+        "risk_score": 42,
+        "risk_level": "medium",
+        "rsi": 36.446209,
+        "macd": -0.983444,
+        "ma20": 599.538498,
+        "ma60": 590.467668,
+        "volatility_20d_pct": 14.28,
+        "return_20d_pct": -2.91,
+        "news_sentiment": "neutral",
+        "news_score": 50
+      },
+      "lesson": {
+        "zh": "momentum 策略本次表现中性（收益 43.2%，夏普 0.64），建议继续观察后续确认。",
+        "en": "momentum showed neutral performance (return 43.2%, Sharpe 0.64); continue monitoring for confirmation."
+      },
+      "tags": [
+        "neutral",
+        "watch",
+        "hold_decision"
+      ],
+      "paper_refs": [
+        "Edwards & Magee (1948), Technical Analysis of Stock Trends",
+        "Wilder (1978), New Concepts in Technical Trading Systems",
+        "Jegadeesh & Titman (1993), Returns to Buying Winners and Selling Losers"
+      ],
+      "source": "rule_fallback"
+    },
+    {
+      "run_id": "SPY_momentum_20260616221953",
+      "ticker": "SPY",
+      "strategy": "momentum",
+      "date": "2026-06-16",
+      "timestamp": "2026-06-16T22:20:02.315555",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 43.16,
+        "sharpe_ratio": 0.64,
+        "max_drawdown_pct": 15.42,
+        "win_rate_pct": 38.0,
+        "trades": 98,
+        "risk_score": 42,
+        "risk_level": "medium",
+        "rsi": 36.446209,
+        "macd": -0.983444,
+        "ma20": 599.538498,
+        "ma60": 590.467668,
+        "volatility_20d_pct": 14.28,
+        "return_20d_pct": -2.91,
+        "news_sentiment": "neutral",
+        "news_score": 50
+      },
+      "lesson": {
+        "zh": "动量策略在SPY上持续中性，RSI偏低（36.4）和MACD负值暗示弱势，但近期跌幅有限（-2.9%）且新闻偏正面，等待确认信号可避免过早入场。",
+        "en": "Momentum on SPY remains neutral with low RSI (36.4) and negative MACD indicating weakness, but limited recent decline (-2.9%) and positive news support waiting for confirmation to avoid premature entry."
+      },
+      "tags": [
+        "momentum",
+        "hold_signal",
+        "neutral",
+        "risk_management",
+        "news_sentiment"
+      ],
+      "paper_refs": [
+        "Jegadeesh & Titman (1993)",
+        "Wilder (1978)",
+        "Appel (1979)",
+        "Xiao et al. (2025)"
+      ],
+      "source": "llm"
+    },
+    {
+      "run_id": "SPY_momentum_20260616222252",
+      "ticker": "SPY",
+      "strategy": "momentum",
+      "date": "2026-06-16",
+      "timestamp": "2026-06-16T22:23:37.449230",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 43.16,
+        "sharpe_ratio": 0.64,
+        "max_drawdown_pct": 15.42,
+        "win_rate_pct": 38.0,
+        "trades": 98,
+        "risk_score": 42,
+        "risk_level": "medium",
+        "rsi": 36.446209,
+        "macd": -0.983444,
+        "ma20": 599.538498,
+        "ma60": 590.467668,
+        "volatility_20d_pct": 14.28,
+        "return_20d_pct": -2.91,
+        "news_sentiment": "neutral",
+        "news_score": 50
+      },
+      "lesson": {
+        "zh": "momentum 策略本次表现中性（收益 43.2%，夏普 0.64），建议继续观察后续确认。",
+        "en": "momentum showed neutral performance (return 43.2%, Sharpe 0.64); continue monitoring for confirmation."
+      },
+      "tags": [
+        "neutral",
+        "watch",
+        "hold_decision"
+      ],
+      "paper_refs": [
+        "Edwards & Magee (1948), Technical Analysis of Stock Trends",
+        "Wilder (1978), New Concepts in Technical Trading Systems",
+        "Jegadeesh & Titman (1993), Returns to Buying Winners and Selling Losers"
+      ],
+      "source": "rule_fallback"
+    },
+    {
+      "run_id": "SPY_momentum_20260616222534",
+      "ticker": "SPY",
+      "strategy": "momentum",
+      "date": "2026-06-16",
+      "timestamp": "2026-06-16T22:25:41.406631",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 43.16,
+        "sharpe_ratio": 0.64,
+        "max_drawdown_pct": 15.42,
+        "win_rate_pct": 38.0,
+        "trades": 98,
+        "risk_score": 42,
+        "risk_level": "medium",
+        "rsi": 36.446209,
+        "macd": -0.983444,
+        "ma20": 599.538498,
+        "ma60": 590.467668,
+        "volatility_20d_pct": 14.28,
+        "return_20d_pct": -2.91,
+        "news_sentiment": "neutral",
+        "news_score": 50
+      },
+      "lesson": {
+        "zh": "动量策略在SPY上持续中性，RSI偏低（36.4）和MACD负值暗示弱势，但近期跌幅有限（-2.9%）且新闻偏正面，等待确认信号可避免过早入场。",
+        "en": "Momentum on SPY remains neutral with low RSI (36.4) and negative MACD indicating weakness, but limited recent decline (-2.9%) and positive news support waiting for confirmation to avoid premature entry."
+      },
+      "tags": [
+        "momentum",
+        "hold_signal",
+        "neutral",
+        "risk_management",
+        "news_sentiment"
+      ],
+      "paper_refs": [
+        "Jegadeesh & Titman (1993)",
+        "Xiao et al. (2025)"
+      ],
+      "source": "llm"
+    },
+    {
+      "run_id": "SPY_momentum_20260616222734",
+      "ticker": "SPY",
+      "strategy": "momentum",
+      "date": "2026-06-16",
+      "timestamp": "2026-06-16T22:27:39.378646",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 43.16,
+        "sharpe_ratio": 0.64,
+        "max_drawdown_pct": 15.42,
+        "win_rate_pct": 38.0,
+        "trades": 98,
+        "risk_score": 42,
+        "risk_level": "medium",
+        "rsi": 36.446209,
+        "macd": -0.983444,
+        "ma20": 599.538498,
+        "ma60": 590.467668,
+        "volatility_20d_pct": 14.28,
+        "return_20d_pct": -2.91,
+        "news_sentiment": "neutral_positive",
+        "news_score": 55
+      },
+      "lesson": {
+        "zh": "动量策略在SPY上持续中性，RSI偏低（36.4）和MACD负值暗示弱势，但近期跌幅有限（-2.9%）且新闻偏正面，等待确认信号可避免过早入场。",
+        "en": "Momentum on SPY remains neutral with low RSI (36.4) and negative MACD indicating weakness, but limited recent decline (-2.9%) and positive news support waiting for confirmation to avoid premature entry."
+      },
+      "tags": [
+        "momentum",
+        "hold_signal",
+        "neutral",
+        "risk_management",
+        "news_sentiment"
+      ],
+      "paper_refs": [
+        "Jegadeesh & Titman (1993)",
+        "Wilder (1978)",
+        "Appel (1979)",
+        "Xiao et al. (2025)"
+      ],
+      "source": "llm"
+    },
+    {
+      "run_id": "SPY_momentum_20260616222852",
+      "ticker": "SPY",
+      "strategy": "momentum",
+      "date": "2026-06-16",
+      "timestamp": "2026-06-16T22:29:03.566138",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 43.16,
+        "sharpe_ratio": 0.64,
+        "max_drawdown_pct": 15.42,
+        "win_rate_pct": 38.0,
+        "trades": 98,
+        "risk_score": 42,
+        "risk_level": "medium",
+        "rsi": 36.446209,
+        "macd": -0.983444,
+        "ma20": 599.538498,
+        "ma60": 590.467668,
+        "volatility_20d_pct": 14.28,
+        "return_20d_pct": -2.91,
+        "news_sentiment": "neutral_positive",
+        "news_score": 65
+      },
+      "lesson": {
+        "zh": "动量策略在SPY上持续中性，RSI偏低（36.4）和MACD负值暗示弱势，但近期跌幅有限（-2.9%）且新闻偏正面，等待确认信号可避免过早入场。",
+        "en": "Momentum on SPY remains neutral with low RSI (36.4) and negative MACD indicating weakness, but limited recent decline (-2.9%) and positive news support waiting for confirmation to avoid premature entry."
+      },
+      "tags": [
+        "momentum",
+        "hold_signal",
+        "neutral",
+        "risk_management",
+        "news_sentiment"
+      ],
+      "paper_refs": [
+        "Jegadeesh & Titman (1993)",
+        "Wilder (1978)",
+        "Appel (1979)",
+        "Xiao et al. (2025)"
+      ],
+      "source": "llm"
+    },
+    {
+      "run_id": "SPY_momentum_20260616223118",
+      "ticker": "SPY",
+      "strategy": "momentum",
+      "date": "2026-06-16",
+      "timestamp": "2026-06-16T22:31:23.010367",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 43.16,
+        "sharpe_ratio": 0.64,
+        "max_drawdown_pct": 15.42,
+        "win_rate_pct": 38.0,
+        "trades": 98,
+        "risk_score": 42,
+        "risk_level": "medium",
+        "rsi": 36.446209,
+        "macd": -0.983444,
+        "ma20": 599.538498,
+        "ma60": 590.467668,
+        "volatility_20d_pct": 14.28,
+        "return_20d_pct": -2.91,
+        "news_sentiment": "neutral_positive",
+        "news_score": 65
+      },
+      "lesson": {
+        "zh": "动量策略在SPY上持续中性，RSI偏低（36.4）和MACD负值暗示弱势，但近期跌幅有限（-2.9%）且新闻偏正面（65分），等待确认信号可避免过早入场。",
+        "en": "Momentum on SPY remains neutral with low RSI (36.4) and negative MACD indicating weakness, but limited recent decline (-2.9%) and positive news (score 65) support waiting for confirmation to avoid premature entry."
+      },
+      "tags": [
+        "momentum",
+        "hold_signal",
+        "neutral",
+        "risk_management",
+        "news_sentiment"
+      ],
+      "paper_refs": [
+        "Jegadeesh & Titman (1993)",
+        "Wilder (1978)",
+        "Appel (1979)",
+        "Xiao et al. (2025)"
+      ],
+      "source": "llm"
+    },
+    {
+      "run_id": "QQQ_momentum_20260616225336",
+      "ticker": "QQQ",
+      "strategy": "momentum",
+      "date": "2026-06-16",
+      "timestamp": "2026-06-16T22:53:42.827029",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 94.26,
+        "sharpe_ratio": 0.93,
+        "max_drawdown_pct": 20.98,
+        "win_rate_pct": 37.1,
+        "trades": 81,
+        "risk_score": 49,
+        "risk_level": "medium",
+        "rsi": 44.35068,
+        "macd": 2.400183,
+        "ma20": 523.672493,
+        "ma60": 507.31533,
+        "volatility_20d_pct": 20.08,
+        "return_20d_pct": -0.79,
+        "news_sentiment": "neutral_positive",
+        "news_score": 65
+      },
+      "lesson": {
+        "zh": "QQQ动量策略在RSI中性（44.4）且MACD正值（2.4）时仍选择持有，与SPY经验一致，说明等待确认信号能避免在震荡中过早入场，但需注意低胜率（37.1%）和中等回撤（21%）对长期收益的侵蚀。",
+        "en": "Momentum on QQQ holds despite neutral RSI (44.4) and positive MACD (2.4), consistent with SPY experience, confirming that waiting for confirmation avoids premature entry in choppy markets, but low win rate (37.1%) and moderate drawdown (21%) erode long-term returns."
+      },
+      "tags": [
+        "momentum",
+        "hold_signal",
+        "risk_management",
+        "win_rate",
+        "drawdown"
+      ],
+      "paper_refs": [
+        "Jegadeesh & Titman (1993)",
+        "Xiao et al. (2025)"
+      ],
+      "source": "llm"
+    },
+    {
+      "run_id": "SPY_momentum_20260616225626",
+      "ticker": "SPY",
+      "strategy": "momentum",
+      "date": "2026-06-16",
+      "timestamp": "2026-06-16T22:57:11.153470",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 43.16,
+        "sharpe_ratio": 0.64,
+        "max_drawdown_pct": 15.42,
+        "win_rate_pct": 38.0,
+        "trades": 98,
+        "risk_score": 42,
+        "risk_level": "medium",
+        "rsi": 36.446209,
+        "macd": -0.983444,
+        "ma20": 599.538498,
+        "ma60": 590.467668,
+        "volatility_20d_pct": 14.28,
+        "return_20d_pct": -2.91,
+        "news_sentiment": "neutral_positive",
+        "news_score": 65
+      },
+      "lesson": {
+        "zh": "momentum 策略本次表现中性（收益 43.2%，夏普 0.64），建议继续观察后续确认。",
+        "en": "momentum showed neutral performance (return 43.2%, Sharpe 0.64); continue monitoring for confirmation."
+      },
+      "tags": [
+        "neutral",
+        "watch",
+        "hold_decision"
+      ],
+      "paper_refs": [
+        "Edwards & Magee (1948), Technical Analysis of Stock Trends",
+        "Wilder (1978), New Concepts in Technical Trading Systems",
+        "Jegadeesh & Titman (1993), Returns to Buying Winners and Selling Losers"
+      ],
+      "source": "rule_fallback"
+    },
+    {
+      "run_id": "SPY_momentum_20260616225825",
+      "ticker": "SPY",
+      "strategy": "momentum",
+      "date": "2026-06-16",
+      "timestamp": "2026-06-16T22:58:31.171412",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 43.16,
+        "sharpe_ratio": 0.64,
+        "max_drawdown_pct": 15.42,
+        "win_rate_pct": 38.0,
+        "trades": 98,
+        "risk_score": 42,
+        "risk_level": "medium",
+        "rsi": 36.446209,
+        "macd": -0.983444,
+        "ma20": 599.538498,
+        "ma60": 590.467668,
+        "volatility_20d_pct": 14.28,
+        "return_20d_pct": -2.91,
+        "news_sentiment": "neutral_positive",
+        "news_score": 65
+      },
+      "lesson": {
+        "zh": "动量策略在SPY上持续中性，RSI偏低（36.4）和MACD负值暗示弱势，但近期跌幅有限（-2.9%）且新闻偏正面（65分），等待确认信号可避免过早入场。",
+        "en": "Momentum on SPY remains neutral with low RSI (36.4) and negative MACD indicating weakness, but limited recent decline (-2.9%) and positive news (score 65) support waiting for confirmation to avoid premature entry."
+      },
+      "tags": [
+        "momentum",
+        "hold_signal",
+        "neutral",
+        "risk_management",
+        "news_sentiment"
+      ],
+      "paper_refs": [
+        "Jegadeesh & Titman (1993)",
+        "Xiao et al. (2025)",
+        "Wilder (1978)",
+        "Appel (1979)"
+      ],
+      "source": "llm"
+    },
+    {
+      "run_id": "QQQ_momentum_20260616230018",
+      "ticker": "QQQ",
+      "strategy": "momentum",
+      "date": "2026-06-16",
+      "timestamp": "2026-06-16T23:00:23.340358",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 94.26,
+        "sharpe_ratio": 0.93,
+        "max_drawdown_pct": 20.98,
+        "win_rate_pct": 37.1,
+        "trades": 81,
+        "risk_score": 49,
+        "risk_level": "medium",
+        "rsi": 44.35068,
+        "macd": 2.400183,
+        "ma20": 523.672493,
+        "ma60": 507.31533,
+        "volatility_20d_pct": 20.08,
+        "return_20d_pct": -0.79,
+        "news_sentiment": "neutral_positive",
+        "news_score": 65
+      },
+      "lesson": {
+        "zh": "QQQ动量策略在RSI中性（44.4）且MACD正值（2.4）时仍选择持有，与SPY经验一致，说明等待确认信号能避免在震荡中过早入场，但需注意低胜率（37.1%）和中等回撤（21%）对长期收益的侵蚀。",
+        "en": "Momentum on QQQ holds despite neutral RSI (44.4) and positive MACD (2.4), consistent with SPY experience, confirming that waiting for confirmation avoids premature entry in choppy markets, but low win rate (37.1%) and moderate drawdown (21%) erode long-term returns."
+      },
+      "tags": [
+        "momentum",
+        "hold_signal",
+        "risk_management",
+        "win_rate",
+        "drawdown"
+      ],
+      "paper_refs": [
+        "Jegadeesh & Titman (1993)",
+        "Edwards & Magee (1948)",
+        "Wilder (1978)",
+        "Appel (1979)"
+      ],
+      "source": "llm"
+    },
+    {
+      "run_id": "SPY_momentum_20260617125611",
+      "ticker": "SPY",
+      "strategy": "momentum",
+      "date": "2026-06-17",
+      "timestamp": "2026-06-17T12:56:13.752814",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 43.16,
+        "sharpe_ratio": 0.64,
+        "max_drawdown_pct": 15.42,
+        "win_rate_pct": 38.0,
+        "trades": 98,
+        "risk_score": 42,
+        "risk_level": "medium",
+        "rsi": 36.446209,
+        "macd": -0.983444,
+        "ma20": 599.538498,
+        "ma60": 590.467668,
+        "volatility_20d_pct": 14.28,
+        "return_20d_pct": -2.91,
+        "news_sentiment": "neutral",
+        "news_score": 50
+      },
+      "lesson": {
+        "zh": "动量策略在SPY上持续发出持有信号，RSI偏低（36.4）和MACD负值（-0.98）确认弱势，但近期跌幅有限（-2.9%）和中性新闻（50分）支持等待确认；低胜率（38%）和中等回撤（15.4%）是长期收益的主要侵蚀因素，与先前经验一致。",
+        "en": "Momentum on SPY continues to issue hold signals, with low RSI (36.4) and negative MACD (-0.98) confirming weakness, but limited recent decline (-2.9%) and neutral news (score 50) support waiting for confirmation; low win rate (38%) and moderate drawdown (15.4%) remain key eroders of long-term returns, consistent with prior experiences."
+      },
+      "tags": [
+        "momentum",
+        "hold_signal",
+        "risk_management",
+        "win_rate",
+        "drawdown",
+        "news_sentiment"
+      ],
+      "paper_refs": [
+        "Jegadeesh & Titman (1993)",
+        "Xiao et al. (2025)"
+      ],
+      "source": "llm"
+    },
+    {
+      "run_id": "SPY_momentum_20260617125952",
+      "ticker": "SPY",
+      "strategy": "momentum",
+      "date": "2026-06-17",
+      "timestamp": "2026-06-17T12:59:55.040359",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 43.16,
+        "sharpe_ratio": 0.64,
+        "max_drawdown_pct": 15.42,
+        "win_rate_pct": 38.0,
+        "trades": 98,
+        "risk_score": 42,
+        "risk_level": "medium",
+        "rsi": 36.446209,
+        "macd": -0.983444,
+        "ma20": 599.538498,
+        "ma60": 590.467668,
+        "volatility_20d_pct": 14.28,
+        "return_20d_pct": -2.91,
+        "news_sentiment": "neutral_positive",
+        "news_score": 55
+      },
+      "lesson": {
+        "zh": "动量策略在SPY上持续持有，RSI偏低（36.4）和MACD负值（-0.98）确认弱势，但近期跌幅有限（-2.9%）和正面新闻（55分）支持等待确认；低胜率（38%）和中等回撤（15.4%）是长期收益的主要侵蚀因素，与先前经验一致。",
+        "en": "Momentum on SPY continues to hold, with low RSI (36.4) and negative MACD (-0.98) confirming weakness, but limited recent decline (-2.9%) and positive news (score 55) support waiting for confirmation; low win rate (38%) and moderate drawdown (15.4%) remain key eroders of long-term returns, consistent with prior experiences."
+      },
+      "tags": [
+        "momentum",
+        "hold_signal",
+        "risk_management",
+        "win_rate",
+        "drawdown",
+        "news_sentiment"
+      ],
+      "paper_refs": [
+        "Jegadeesh & Titman (1993)",
+        "Wilder (1978)",
+        "Appel (1979)"
+      ],
+      "source": "llm"
+    },
+    {
+      "run_id": "QQQ_momentum_20260617130109",
+      "ticker": "QQQ",
+      "strategy": "momentum",
+      "date": "2026-06-17",
+      "timestamp": "2026-06-17T13:01:12.069595",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 94.26,
+        "sharpe_ratio": 0.93,
+        "max_drawdown_pct": 20.98,
+        "win_rate_pct": 37.1,
+        "trades": 81,
+        "risk_score": 49,
+        "risk_level": "medium",
+        "rsi": 44.35068,
+        "macd": 2.400183,
+        "ma20": 523.672493,
+        "ma60": 507.31533,
+        "volatility_20d_pct": 20.08,
+        "return_20d_pct": -0.79,
+        "news_sentiment": "negative",
+        "news_score": 35
+      },
+      "lesson": {
+        "zh": "QQQ动量策略在RSI中性（44.4）且MACD正值（2.4）时仍选择持有，与SPY经验一致，说明等待确认信号能避免在震荡中过早入场，但需注意低胜率（37.1%）和中等回撤（21%）对长期收益的侵蚀。",
+        "en": "Momentum on QQQ holds despite neutral RSI (44.4) and positive MACD (2.4), consistent with SPY experience, confirming that waiting for confirmation avoids premature entry in choppy markets, but low win rate (37.1%) and moderate drawdown (21%) erode long-term returns."
+      },
+      "tags": [
+        "momentum",
+        "hold_signal",
+        "risk_management",
+        "win_rate",
+        "drawdown"
+      ],
+      "paper_refs": [
+        "Jegadeesh & Titman (1993)",
+        "Edwards & Magee (1948)",
+        "Wilder (1978)",
+        "Appel (1979)"
+      ],
+      "source": "llm"
+    },
+    {
+      "run_id": "SPY_momentum_20260617130331",
+      "ticker": "SPY",
+      "strategy": "momentum",
+      "date": "2026-06-17",
+      "timestamp": "2026-06-17T13:03:33.375569",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 43.16,
+        "sharpe_ratio": 0.64,
+        "max_drawdown_pct": 15.42,
+        "win_rate_pct": 38.0,
+        "trades": 98,
+        "risk_score": 42,
+        "risk_level": "medium",
+        "rsi": 36.446209,
+        "macd": -0.983444,
+        "ma20": 599.538498,
+        "ma60": 590.467668,
+        "volatility_20d_pct": 14.28,
+        "return_20d_pct": -2.91,
+        "news_sentiment": "neutral_positive",
+        "news_score": 55
+      },
+      "lesson": {
+        "zh": "动量策略在SPY上持续持有，低RSI（36.4）和负MACD（-0.98）确认弱势，但有限跌幅（-2.9%）和正面新闻（55分）支持等待确认；低胜率（38%）和中等回撤（15.4%）仍是长期收益的主要侵蚀因素，与先前经验一致。",
+        "en": "Momentum on SPY continues to hold, with low RSI (36.4) and negative MACD (-0.98) confirming weakness, but limited decline (-2.9%) and positive news (score 55) support waiting for confirmation; low win rate (38%) and moderate drawdown (15.4%) remain key eroders of long-term returns, consistent with prior experiences."
+      },
+      "tags": [
+        "momentum",
+        "hold_signal",
+        "risk_management",
+        "win_rate",
+        "drawdown",
+        "news_sentiment"
+      ],
+      "paper_refs": [
+        "Jegadeesh & Titman (1993)",
+        "Xiao et al. (2025)"
+      ],
+      "source": "llm"
+    },
+    {
+      "run_id": "SPY_momentum_20260617134300",
+      "ticker": "SPY",
+      "strategy": "momentum",
+      "date": "2026-06-17",
+      "timestamp": "2026-06-17T13:43:46.026161",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 43.16,
+        "sharpe_ratio": 0.64,
+        "max_drawdown_pct": 15.42,
+        "win_rate_pct": 38.0,
+        "trades": 98,
+        "risk_score": 42,
+        "risk_level": "medium",
+        "rsi": 36.446209,
+        "macd": -0.983444,
+        "ma20": 599.538498,
+        "ma60": 590.467668,
+        "volatility_20d_pct": 14.28,
+        "return_20d_pct": -2.91,
+        "news_sentiment": "neutral",
+        "news_score": 50
+      },
+      "lesson": {
+        "zh": "momentum 策略本次表现中性（收益 43.2%，夏普 0.64），建议继续观察后续确认。",
+        "en": "momentum showed neutral performance (return 43.2%, Sharpe 0.64); continue monitoring for confirmation."
+      },
+      "tags": [
+        "neutral",
+        "watch",
+        "hold_decision"
+      ],
+      "paper_refs": [
+        "Edwards & Magee (1948), Technical Analysis of Stock Trends",
+        "Wilder (1978), New Concepts in Technical Trading Systems",
+        "Jegadeesh & Titman (1993), Returns to Buying Winners and Selling Losers"
+      ],
+      "source": "rule_fallback"
+    }
+  ],
+  "experience_cards": [
+    {
+      "id": "exp_momentum_20260617134400",
+      "strategy": "momentum",
+      "created_at": "2026-06-17T13:44:00.568668",
+      "lesson_count": 3,
+      "summary": {
+        "zh": "动量策略在弱势市场中持续发出持有信号，等待确认以避免过早入场。低RSI和混合MACD信号暗示弱势，但有限的近期跌幅和中性偏正面的新闻支持耐心等待。低胜率（约37-38%）和中等回撤（15-21%）是长期收益的主要侵蚀因素，需通过风险管理来缓解。",
+        "en": "Momentum strategy consistently issues hold signals in weak markets, waiting for confirmation to avoid premature entry. Low RSI and mixed MACD signals indicate weakness, but limited recent declines and neutral-to-positive news support patience. Low win rates (~37-38%) and moderate drawdowns (15-21%) are key eroders of long-term returns, requiring risk management to mitigate."
+      },
+      "key_findings": [
+        {
+          "en": "Momentum holds despite neutral-to-low RSI (36-44) and mixed MACD, waiting for confirmation to avoid premature entry in choppy markets.",
+          "zh": "动量策略在RSI中性或偏低（36-44）且MACD有正有负时仍选择持有，等待确认信号能避免震荡市中的过早入场。"
+        },
+        {
+          "en": "Low win rates (37-38%) and moderate drawdowns (15-21%) are key eroders of long-term returns, requiring risk management.",
+          "zh": "低胜率（37-38%）和中等回撤（15-21%）是长期收益的主要侵蚀因素，需通过风险管理来缓解。"
+        },
+        {
+          "en": "Neutral-to-positive news sentiment and limited recent declines (-0.8% to -2.9%) support patience rather than immediate exit.",
+          "zh": "新闻情绪（中性偏正面）和有限的近期跌幅（-0.8%至-2.9%）支持耐心等待，而非立即离场。"
+        }
+      ],
+      "avg_metrics": {
+        "avg_return_pct": 60.19,
+        "avg_sharpe": 0.74
+      },
+      "tags": [
+        "momentum",
+        "hold_signal",
+        "risk_management",
+        "win_rate",
+        "drawdown",
+        "news_sentiment"
+      ],
+      "paper_refs": [
+        "Jegadeesh & Titman (1993)"
+      ],
+      "source_lesson_ids": [
+        "SPY_momentum_20260617134300",
+        "SPY_momentum_20260617130331",
+        "QQQ_momentum_20260617130109"
+      ],
+      "source": "llm"
+    }
+  ],
+  "version": "1.0"
+}

@@ -15,9 +15,9 @@ def compute_decision_score(
     news_result: dict | None = None,
 ) -> dict:
     """Compute a weighted decision score and derive Buy/Sell/Hold."""
-    # Strategy: best score from candidates (0-100)
+    # Strategy: best score from candidates (0-100), prefer blended score, then adjusted/raw
     best_strategy = strategy_scores[0] if strategy_scores else {"name": "?", "score": 50}
-    strategy_score = best_strategy.get("score", 50)
+    strategy_score = best_strategy.get("blended_score", best_strategy.get("adjusted_score", best_strategy.get("score", 50)))
 
     # Regime fit
     strategy_name = best_strategy.get("name", "ma")

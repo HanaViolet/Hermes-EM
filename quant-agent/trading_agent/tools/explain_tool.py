@@ -42,7 +42,7 @@ def explain_decision(context: dict) -> dict:
     top = strategy_scores[0] if strategy_scores else None
     if top:
         top_name = top.get("name", "?")
-        top_score = top.get("score", 0)
+        top_score = top.get("blended_score", top.get("adjusted_score", top.get("score", 0)))
         if top_score > 70:
             reasons.append(f"候选策略 {top_name} 得分 {top_score}，信号较强。")
         else:

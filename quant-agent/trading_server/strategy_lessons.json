@@ -1192,53 +1192,194 @@
         "Jegadeesh & Titman (1993), Returns to Buying Winners and Selling Losers"
       ],
       "source": "rule_fallback"
-    }
-  ],
-  "experience_cards": [
+    },
     {
-      "id": "exp_momentum_20260617134400",
+      "run_id": "SPY_momentum_20260620105407",
+      "ticker": "SPY",
       "strategy": "momentum",
-      "created_at": "2026-06-17T13:44:00.568668",
-      "lesson_count": 3,
-      "summary": {
-        "zh": "动量策略在弱势市场中持续发出持有信号，等待确认以避免过早入场。低RSI和混合MACD信号暗示弱势，但有限的近期跌幅和中性偏正面的新闻支持耐心等待。低胜率（约37-38%）和中等回撤（15-21%）是长期收益的主要侵蚀因素，需通过风险管理来缓解。",
-        "en": "Momentum strategy consistently issues hold signals in weak markets, waiting for confirmation to avoid premature entry. Low RSI and mixed MACD signals indicate weakness, but limited recent declines and neutral-to-positive news support patience. Low win rates (~37-38%) and moderate drawdowns (15-21%) are key eroders of long-term returns, requiring risk management to mitigate."
+      "date": "2026-06-20",
+      "timestamp": "2026-06-20T10:54:11.574761",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "proceed_with_caution",
+        "confidence": 52.0,
+        "position_pct": 49.0,
+        "total_return_pct": 14.41,
+        "sharpe_ratio": 2.13,
+        "max_drawdown_pct": 7.46,
+        "win_rate_pct": 41.1,
+        "trades": 13,
+        "risk_score": 15,
+        "risk_level": "low",
+        "rsi": 70.76117,
+        "macd": 7.189945,
+        "ma20": 467.454503,
+        "ma60": 446.505167,
+        "volatility_20d_pct": 9.8,
+        "return_20d_pct": 4.14,
+        "news_sentiment": "neutral_positive",
+        "news_score": 65
       },
-      "key_findings": [
-        {
-          "en": "Momentum holds despite neutral-to-low RSI (36-44) and mixed MACD, waiting for confirmation to avoid premature entry in choppy markets.",
-          "zh": "动量策略在RSI中性或偏低（36-44）且MACD有正有负时仍选择持有，等待确认信号能避免震荡市中的过早入场。"
-        },
-        {
-          "en": "Low win rates (37-38%) and moderate drawdowns (15-21%) are key eroders of long-term returns, requiring risk management.",
-          "zh": "低胜率（37-38%）和中等回撤（15-21%）是长期收益的主要侵蚀因素，需通过风险管理来缓解。"
-        },
-        {
-          "en": "Neutral-to-positive news sentiment and limited recent declines (-0.8% to -2.9%) support patience rather than immediate exit.",
-          "zh": "新闻情绪（中性偏正面）和有限的近期跌幅（-0.8%至-2.9%）支持耐心等待，而非立即离场。"
-        }
-      ],
-      "avg_metrics": {
-        "avg_return_pct": 60.19,
-        "avg_sharpe": 0.74
+      "lesson": {
+        "zh": "动量策略在SPY上表现优异（收益14.4%，夏普2.13），低风险（15分）和正面新闻（65分）支持持有，但RSI超买（70.8）需警惕回调，与先前经验一致：等待确认信号能避免过早入场，但需关注胜率（41.1%）对长期收益的影响。",
+        "en": "Momentum on SPY performed well (return 14.4%, Sharpe 2.13) with low risk (score 15) and positive news (65), but overbought RSI (70.8) warrants caution; consistent with prior lessons: waiting for confirmation avoids premature entry, but low win rate (41.1%) impacts long-term returns."
       },
       "tags": [
         "momentum",
         "hold_signal",
         "risk_management",
         "win_rate",
-        "drawdown",
-        "news_sentiment"
+        "rsi_overbought"
       ],
       "paper_refs": [
-        "Jegadeesh & Titman (1993)"
-      ],
-      "source_lesson_ids": [
-        "SPY_momentum_20260617134300",
-        "SPY_momentum_20260617130331",
-        "QQQ_momentum_20260617130109"
+        "Jegadeesh & Titman (1993)",
+        "Wilder (1978)",
+        "Xiao et al. (2025)"
       ],
       "source": "llm"
+    },
+    {
+      "run_id": "SPY_momentum_20260620105715",
+      "ticker": "SPY",
+      "strategy": "momentum",
+      "date": "2026-06-20",
+      "timestamp": "2026-06-20T10:57:15.888410",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "proceed_with_caution",
+        "confidence": 49.0,
+        "position_pct": 49.0,
+        "total_return_pct": 14.41,
+        "sharpe_ratio": 2.13,
+        "max_drawdown_pct": 7.46,
+        "win_rate_pct": 41.1,
+        "trades": 13,
+        "risk_score": 15,
+        "risk_level": "low",
+        "rsi": 70.76117,
+        "macd": 7.189945,
+        "ma20": 467.454503,
+        "ma60": 446.505167,
+        "volatility_20d_pct": 9.8,
+        "return_20d_pct": 4.14,
+        "news_sentiment": "neutral",
+        "news_score": 50
+      },
+      "lesson": {
+        "zh": "momentum 策略本次表现良好：收益 14.4%，夏普 2.13，当前市场环境较适合该策略。",
+        "en": "momentum performed well: return 14.4%, Sharpe 2.13; current market regime appears favorable."
+      },
+      "tags": [
+        "positive_return",
+        "good_sharpe",
+        "favorable_regime",
+        "hold_decision"
+      ],
+      "paper_refs": [
+        "Edwards & Magee (1948), Technical Analysis of Stock Trends",
+        "Wilder (1978), New Concepts in Technical Trading Systems",
+        "Jegadeesh & Titman (1993), Returns to Buying Winners and Selling Losers"
+      ],
+      "source": "rule_fallback"
+    },
+    {
+      "run_id": "SPY_momentum_20260620105823",
+      "ticker": "SPY",
+      "strategy": "momentum",
+      "date": "2026-06-20",
+      "timestamp": "2026-06-20T10:58:23.160100",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "proceed_with_caution",
+        "confidence": 49.0,
+        "position_pct": 49.0,
+        "total_return_pct": 14.41,
+        "sharpe_ratio": 2.13,
+        "max_drawdown_pct": 7.46,
+        "win_rate_pct": 41.1,
+        "trades": 13,
+        "risk_score": 15,
+        "risk_level": "low",
+        "rsi": 70.76117,
+        "macd": 7.189945,
+        "ma20": 467.454503,
+        "ma60": 446.505167,
+        "volatility_20d_pct": 9.8,
+        "return_20d_pct": 4.14,
+        "news_sentiment": "neutral",
+        "news_score": 50
+      },
+      "lesson": {
+        "zh": "momentum 策略本次表现良好：收益 14.4%，夏普 2.13，当前市场环境较适合该策略。",
+        "en": "momentum performed well: return 14.4%, Sharpe 2.13; current market regime appears favorable."
+      },
+      "tags": [
+        "positive_return",
+        "good_sharpe",
+        "favorable_regime",
+        "hold_decision"
+      ],
+      "paper_refs": [
+        "Edwards & Magee (1948), Technical Analysis of Stock Trends",
+        "Wilder (1978), New Concepts in Technical Trading Systems",
+        "Jegadeesh & Titman (1993), Returns to Buying Winners and Selling Losers"
+      ],
+      "source": "rule_fallback"
+    }
+  ],
+  "experience_cards": [
+    {
+      "id": "exp_momentum_20260620105823",
+      "strategy": "momentum",
+      "created_at": "2026-06-20T10:58:23.160100",
+      "lesson_count": 3,
+      "summary": {
+        "zh": "基于 3 次运行，momentum 策略平均收益为正（14.4%），夏普 2.13，表现稳定。",
+        "en": "Based on 3 runs, momentum shows stable positive average returns (14.4%) with Sharpe 2.13."
+      },
+      "key_findings": [
+        {
+          "en": "Momentum on SPY performed well (return 14.4%, Sharpe 2.13) with low risk (score 15) and positive news (65), but overbought RSI (70.8) warrants caution; consistent with prior lessons: waiting for confirmation avoids premature entry, but low win rate (41.1%) impacts long-term returns.",
+          "zh": "动量策略在SPY上表现优异（收益14.4%，夏普2.13），低风险（15分）和正面新闻（65分）支持持有，但RSI超买（70.8）需警惕回调，与先前经验一致：等待确认信号能避免过早入场，但需关注胜率（41.1%）对长期收益的影响。"
+        },
+        {
+          "en": "momentum performed well: return 14.4%, Sharpe 2.13; current market regime appears favorable.",
+          "zh": "momentum 策略本次表现良好：收益 14.4%，夏普 2.13，当前市场环境较适合该策略。"
+        },
+        {
+          "en": "momentum performed well: return 14.4%, Sharpe 2.13; current market regime appears favorable.",
+          "zh": "momentum 策略本次表现良好：收益 14.4%，夏普 2.13，当前市场环境较适合该策略。"
+        }
+      ],
+      "avg_metrics": {
+        "avg_return_pct": 14.41,
+        "avg_sharpe": 2.13
+      },
+      "tags": [
+        "favorable_regime",
+        "good_sharpe",
+        "hold_decision",
+        "hold_signal",
+        "momentum",
+        "positive_return",
+        "risk_management",
+        "rsi_overbought",
+        "win_rate"
+      ],
+      "paper_refs": [
+        "Edwards & Magee (1948), Technical Analysis of Stock Trends",
+        "Jegadeesh & Titman (1993)",
+        "Jegadeesh & Titman (1993), Returns to Buying Winners and Selling Losers",
+        "Wilder (1978)",
+        "Wilder (1978), New Concepts in Technical Trading Systems",
+        "Xiao et al. (2025)"
+      ],
+      "source_lesson_ids": [
+        "SPY_momentum_20260620105407",
+        "SPY_momentum_20260620105823",
+        "SPY_momentum_20260620105715"
+      ],
+      "source": "rule_fallback"
     }
   ],
   "version": "1.0"

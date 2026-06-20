@@ -1,6 +1,6 @@
 {
   "mode": "live",
-  "generatedAt": "2026-06-17T05:44:02.627906+00:00",
+  "generatedAt": "2026-06-20T02:58:25.207934+00:00",
   "resources": [
     {
       "id": "document",
@@ -9,41 +9,17 @@
       "status": "done",
       "items": [
         {
-          "id": "document-0",
-          "title": "决策: HOLD",
-          "meta": "number",
-          "excerpt": "Final decision for SPY is HOLD. The momentum strategy signals HOLD, risk gate is Position Limited, and backtest validation is Cautious Pass."
-        },
-        {
-          "id": "document-1",
-          "title": "20日动量: momentum",
-          "meta": "number",
-          "excerpt": "Final decision for SPY is HOLD. The momentum strategy signals HOLD, risk gate is Position Limited, and backtest validation is Cautious Pass."
-        },
-        {
-          "id": "document-2",
-          "title": "信号: HOLD",
-          "meta": "number",
-          "excerpt": "Final decision for SPY is HOLD. The momentum strategy signals HOLD, risk gate is Position Limited, and backtest validation is Cautious Pass."
-        },
-        {
-          "id": "document-3",
-          "title": "置信度: 25%",
-          "meta": "number",
-          "excerpt": "Final decision for SPY is HOLD. The momentum strategy signals HOLD, risk gate is Position Limited, and backtest validation is Cautious Pass."
-        },
-        {
-          "id": "document-4",
-          "title": "仓位: 0%",
-          "meta": "number",
-          "excerpt": "Final decision for SPY is HOLD. The momentum strategy signals HOLD, risk gate is Position Limited, and backtest validation is Cautious Pass."
+          "id": "rp-1",
+          "title": "Report: SPY",
+          "meta": "document",
+          "excerpt": "# Trading Agent Report: SPY\n\n## Final Decision\n- Decision: hold\n- Confidence: 0.49\n\n## Strategy\n- Selected Strategy: momentum\n- Latest Signal: Long\n\n## Backtest\n- Total Return: 14.41%\n- Benchmark Tota"
         }
       ],
-      "itemCount": 5,
-      "summary": "Final decision for SPY is HOLD. The momentum strategy signals HOLD, risk gate is Position Limited, and backtest validation is Cautious Pass.",
-      "detail": "Final decision for SPY is HOLD. The momentum strategy signals HOLD, risk gate is Position Limited, and backtest validation is Cautious Pass.",
+      "itemCount": 1,
+      "summary": "Final decision for SPY is HOLD. The momentum strategy signals HOLD, risk gate is Cleared, and backtest validation is Cautious Pass.",
+      "detail": "Final decision for SPY is HOLD. The momentum strategy signals HOLD, risk gate is Cleared, and backtest validation is Cautious Pass.",
       "source": "trading-agent",
-      "lastAccessAt": "2026-06-17 13:44:04",
+      "lastAccessAt": "2026-06-20 10:58:25",
       "stats": [
         {
           "label": "en",
@@ -64,89 +40,89 @@
       "status": "done",
       "items": [
         {
-          "id": "images-0",
-          "title": "最新收盘: 586.08",
+          "id": "img-0",
+          "title": "最新收盘: 475.31",
           "meta": "number",
-          "excerpt": "当前 SPY 最新收盘 586.08，多头排列，RSI 中性，MACD 偏空，策略信号为 HOLD。"
+          "excerpt": "当前 SPY 最新收盘 475.31，多头排列，RSI 超买，MACD 偏多，策略信号为 HOLD。"
         },
         {
-          "id": "images-1",
+          "id": "img-1",
           "title": "均线状态: 多头排列",
           "meta": "badge",
-          "excerpt": "当前 SPY 最新收盘 586.08，多头排列，RSI 中性，MACD 偏空，策略信号为 HOLD。"
+          "excerpt": "当前 SPY 最新收盘 475.31，多头排列，RSI 超买，MACD 偏多，策略信号为 HOLD。"
         },
         {
-          "id": "images-2",
-          "title": "RSI 状态: 中性",
+          "id": "img-2",
+          "title": "RSI 状态: 超买",
           "meta": "badge",
-          "excerpt": "当前 SPY 最新收盘 586.08，多头排列，RSI 中性，MACD 偏空，策略信号为 HOLD。"
+          "excerpt": "当前 SPY 最新收盘 475.31，多头排列，RSI 超买，MACD 偏多，策略信号为 HOLD。"
         },
         {
-          "id": "images-3",
-          "title": "MACD 状态: 偏空",
+          "id": "img-3",
+          "title": "MACD 状态: 偏多",
           "meta": "badge",
-          "excerpt": "当前 SPY 最新收盘 586.08，多头排列，RSI 中性，MACD 偏空，策略信号为 HOLD。"
+          "excerpt": "当前 SPY 最新收盘 475.31，多头排列，RSI 超买，MACD 偏多，策略信号为 HOLD。"
         },
         {
-          "id": "images-4",
-          "title": "20日收益: -2.9%",
+          "id": "img-4",
+          "title": "20日收益: 4.1%",
           "meta": "number",
-          "excerpt": "当前 SPY 最新收盘 586.08，多头排列，RSI 中性，MACD 偏空，策略信号为 HOLD。"
+          "excerpt": "当前 SPY 最新收盘 475.31，多头排列，RSI 超买，MACD 偏多，策略信号为 HOLD。"
         },
         {
-          "id": "images-5",
-          "title": "20日波动: 14.3%",
+          "id": "img-5",
+          "title": "20日波动: 9.8%",
           "meta": "number",
-          "excerpt": "当前 SPY 最新收盘 586.08，多头排列，RSI 中性，MACD 偏空，策略信号为 HOLD。"
+          "excerpt": "当前 SPY 最新收盘 475.31，多头排列，RSI 超买，MACD 偏多，策略信号为 HOLD。"
         },
         {
-          "id": "images-6",
+          "id": "img-6",
           "title": "策略信号: HOLD",
           "meta": "badge",
-          "excerpt": "当前 SPY 最新收盘 586.08，多头排列，RSI 中性，MACD 偏空，策略信号为 HOLD。"
+          "excerpt": "当前 SPY 最新收盘 475.31，多头排列，RSI 超买，MACD 偏多，策略信号为 HOLD。"
         },
         {
-          "id": "images-7",
-          "title": "策略评分: 62",
+          "id": "img-7",
+          "title": "策略评分: 92",
           "meta": "number",
-          "excerpt": "当前 SPY 最新收盘 586.08，多头排列，RSI 中性，MACD 偏空，策略信号为 HOLD。"
+          "excerpt": "当前 SPY 最新收盘 475.31，多头排列，RSI 超买，MACD 偏多，策略信号为 HOLD。"
         },
         {
-          "id": "images-8",
-          "title": "回测收益: 43.2%",
+          "id": "img-8",
+          "title": "回测收益: 14.4%",
           "meta": "bar",
-          "excerpt": "当前 SPY 最新收盘 586.08，多头排列，RSI 中性，MACD 偏空，策略信号为 HOLD。"
+          "excerpt": "当前 SPY 最新收盘 475.31，多头排列，RSI 超买，MACD 偏多，策略信号为 HOLD。"
         },
         {
-          "id": "images-9",
-          "title": "夏普比率: 0.64",
+          "id": "img-9",
+          "title": "夏普比率: 2.13",
           "meta": "number",
-          "excerpt": "当前 SPY 最新收盘 586.08，多头排列，RSI 中性，MACD 偏空，策略信号为 HOLD。"
+          "excerpt": "当前 SPY 最新收盘 475.31，多头排列，RSI 超买，MACD 偏多，策略信号为 HOLD。"
         },
         {
-          "id": "images-10",
-          "title": "最大回撤: 15.4%",
+          "id": "img-10",
+          "title": "最大回撤: 7.5%",
           "meta": "number",
-          "excerpt": "当前 SPY 最新收盘 586.08，多头排列，RSI 中性，MACD 偏空，策略信号为 HOLD。"
+          "excerpt": "当前 SPY 最新收盘 475.31，多头排列，RSI 超买，MACD 偏多，策略信号为 HOLD。"
         },
         {
-          "id": "images-11",
-          "title": "胜率: 38%",
+          "id": "img-11",
+          "title": "胜率: 41%",
           "meta": "number",
-          "excerpt": "当前 SPY 最新收盘 586.08，多头排列，RSI 中性，MACD 偏空，策略信号为 HOLD。"
+          "excerpt": "当前 SPY 最新收盘 475.31，多头排列，RSI 超买，MACD 偏多，策略信号为 HOLD。"
         },
         {
-          "id": "images-12",
-          "title": "交易次数: 98",
+          "id": "img-12",
+          "title": "交易次数: 13",
           "meta": "number",
-          "excerpt": "当前 SPY 最新收盘 586.08，多头排列，RSI 中性，MACD 偏空，策略信号为 HOLD。"
+          "excerpt": "当前 SPY 最新收盘 475.31，多头排列，RSI 超买，MACD 偏多，策略信号为 HOLD。"
         }
       ],
       "itemCount": 13,
-      "summary": "最新收盘 586.08 · 多头排列 · 信号 HOLD",
-      "detail": "当前 SPY 最新收盘 586.08，多头排列，RSI 中性，MACD 偏空，策略信号为 HOLD。",
+      "summary": "最新收盘 475.31 · 多头排列 · 信号 HOLD",
+      "detail": "当前 SPY 最新收盘 475.31，多头排列，RSI 超买，MACD 偏多，策略信号为 HOLD。",
       "source": "trading-agent",
-      "lastAccessAt": "2026-06-17 13:44:04",
+      "lastAccessAt": "2026-06-20 10:58:25",
       "stats": [
         {
           "label": "en",
@@ -167,41 +143,41 @@
       "status": "done",
       "items": [
         {
-          "id": "memory-0",
-          "title": "运行记录: 11",
+          "id": "mem-0",
+          "title": "运行记录: 12",
           "meta": "number",
-          "excerpt": "Strategy memory has accumulated 11 run records and 12 strategy knowledge entries (2 from literature)."
+          "excerpt": "Strategy memory has accumulated 12 run records and 12 strategy knowledge entries (2 from literature)."
         },
         {
-          "id": "memory-1",
+          "id": "mem-1",
           "title": "策略知识: 12",
           "meta": "number",
-          "excerpt": "Strategy memory has accumulated 11 run records and 12 strategy knowledge entries (2 from literature)."
+          "excerpt": "Strategy memory has accumulated 12 run records and 12 strategy knowledge entries (2 from literature)."
         },
         {
-          "id": "memory-2",
-          "title": "平均收益: 43.2%",
+          "id": "mem-2",
+          "title": "平均收益: 14.4%",
           "meta": "number",
-          "excerpt": "Strategy memory has accumulated 11 run records and 12 strategy knowledge entries (2 from literature)."
+          "excerpt": "Strategy memory has accumulated 12 run records and 12 strategy knowledge entries (2 from literature)."
         },
         {
-          "id": "memory-3",
-          "title": "平均夏普: 0.64",
+          "id": "mem-3",
+          "title": "平均夏普: 2.13",
           "meta": "number",
-          "excerpt": "Strategy memory has accumulated 11 run records and 12 strategy knowledge entries (2 from literature)."
+          "excerpt": "Strategy memory has accumulated 12 run records and 12 strategy knowledge entries (2 from literature)."
         },
         {
-          "id": "memory-4",
+          "id": "mem-4",
           "title": "经验卡: 1",
           "meta": "number",
-          "excerpt": "Strategy memory has accumulated 11 run records and 12 strategy knowledge entries (2 from literature)."
+          "excerpt": "Strategy memory has accumulated 12 run records and 12 strategy knowledge entries (2 from literature)."
         }
       ],
       "itemCount": 5,
-      "summary": "Records: 11 · Avg Return: 43.2% · Knowledge: 12",
-      "detail": "Strategy memory has accumulated 11 run records and 12 strategy knowledge entries (2 from literature).",
+      "summary": "Records: 12 · Avg Return: 14.4% · Knowledge: 12",
+      "detail": "Strategy memory has accumulated 12 run records and 12 strategy knowledge entries (2 from literature).",
       "source": "trading-agent",
-      "lastAccessAt": "2026-06-17 13:44:04",
+      "lastAccessAt": "2026-06-20 10:58:25",
       "stats": [
         {
           "label": "en",
@@ -222,65 +198,41 @@
       "status": "done",
       "items": [
         {
-          "id": "skills-0",
-          "title": "信号: HOLD",
-          "meta": "badge",
-          "excerpt": "20日收益率 (-2.91%) 为负，momentum 偏空，产生卖出/观望信号。"
+          "id": "st-1",
+          "title": "Strategy: auto",
+          "meta": "info",
+          "excerpt": "Selected trading strategy"
         },
         {
-          "id": "skills-1",
-          "title": "策略评分: 62.32pts",
-          "meta": "number",
-          "excerpt": "20日收益率 (-2.91%) 为负，momentum 偏空，产生卖出/观望信号。"
+          "id": "st-2",
+          "title": "Signal: hold",
+          "meta": "metric",
+          "excerpt": "Trade signal"
         },
         {
-          "id": "skills-2",
-          "title": "多因子评分: 50.29pts",
-          "meta": "number",
-          "excerpt": "20日收益率 (-2.91%) 为负，momentum 偏空，产生卖出/观望信号。"
+          "id": "sc-momentum",
+          "title": "momentum: score=94.83",
+          "meta": "metric",
+          "excerpt": "Return 14.41% | Sharpe 2.133 | Buy"
         },
         {
-          "id": "skills-3",
-          "title": "策略: 20日动量",
-          "meta": "badge",
-          "excerpt": "20日收益率 (-2.91%) 为负，momentum 偏空，产生卖出/观望信号。"
+          "id": "sc-ma",
+          "title": "ma: score=94.48",
+          "meta": "metric",
+          "excerpt": "Return 13.65% | Sharpe 2.089 | Buy"
         },
         {
-          "id": "skills-4",
-          "title": "20日动量: 62.32score",
-          "meta": "strategy_score",
-          "excerpt": "20日收益率 (-2.91%) 为负，momentum 偏空，产生卖出/观望信号。"
-        },
-        {
-          "id": "skills-5",
-          "title": "RSI 动量: 57.2score",
-          "meta": "strategy_score",
-          "excerpt": "20日收益率 (-2.91%) 为负，momentum 偏空，产生卖出/观望信号。"
-        },
-        {
-          "id": "skills-6",
-          "title": "均线交叉: 55.53score",
-          "meta": "strategy_score",
-          "excerpt": "20日收益率 (-2.91%) 为负，momentum 偏空，产生卖出/观望信号。"
-        },
-        {
-          "id": "skills-7",
-          "title": "经验条数: 27",
-          "meta": "number",
-          "excerpt": "20日收益率 (-2.91%) 为负，momentum 偏空，产生卖出/观望信号。"
-        },
-        {
-          "id": "skills-8",
-          "title": "经验卡: 1",
-          "meta": "number",
-          "excerpt": "20日收益率 (-2.91%) 为负，momentum 偏空，产生卖出/观望信号。"
+          "id": "sc-rsi",
+          "title": "rsi: score=68.05",
+          "meta": "metric",
+          "excerpt": "Return 5.18% | Sharpe 0.904 | Buy"
         }
       ],
-      "itemCount": 9,
-      "summary": "20日动量 · 信号 HOLD · 评分 62.32 · 多因子 50.29",
-      "detail": "20日收益率 (-2.91%) 为负，momentum 偏空，产生卖出/观望信号。",
+      "itemCount": 5,
+      "summary": "20日动量 · 信号 HOLD · 评分 92.21 · 多因子 61.03",
+      "detail": "20日收益率 (4.14%) 为正，momentum 偏多，产生买入信号。",
       "source": "trading-agent",
-      "lastAccessAt": "2026-06-17 13:44:04",
+      "lastAccessAt": "2026-06-20 10:58:25",
       "stats": [
         {
           "label": "en",
@@ -301,35 +253,35 @@
       "status": "done",
       "items": [
         {
-          "id": "gateway-0",
-          "title": "样本量: 1199bars",
-          "meta": "number",
-          "excerpt": "行情数据完整，无明显缺失，可支持后续分析。"
+          "id": "gw-1",
+          "title": "Data Source: Yahoo Finance",
+          "meta": "info",
+          "excerpt": "OHLCV daily data"
         },
         {
-          "id": "gateway-1",
-          "title": "缺失值: 0",
-          "meta": "number",
-          "excerpt": "行情数据完整，无明显缺失，可支持后续分析。"
+          "id": "gw-2",
+          "title": "Rows loaded: 191",
+          "meta": "metric",
+          "excerpt": "Loaded 191 rows for SPY"
         },
         {
-          "id": "gateway-2",
-          "title": "最新收盘: 586.08",
-          "meta": "number",
-          "excerpt": "行情数据完整，无明显缺失，可支持后续分析。"
+          "id": "gw-3",
+          "title": "Latest Close: 475.309998",
+          "meta": "metric",
+          "excerpt": "Most recent closing price"
         },
         {
-          "id": "gateway-3",
-          "title": "覆盖率: 100%",
-          "meta": "bar",
-          "excerpt": "行情数据完整，无明显缺失，可支持后续分析。"
+          "id": "gw-4",
+          "title": "Coverage: 100%",
+          "meta": "metric",
+          "excerpt": "Data coverage percentage"
         }
       ],
       "itemCount": 4,
-      "summary": "1199 bars · Missing 0",
+      "summary": "191 bars · Missing 0",
       "detail": "行情数据完整，无明显缺失，可支持后续分析。",
       "source": "trading-agent",
-      "lastAccessAt": "2026-06-17 13:44:04",
+      "lastAccessAt": "2026-06-20 10:58:25",
       "stats": [
         {
           "label": "en",
@@ -348,25 +300,12 @@
       "title": "Execution Logs",
       "label": "Execution Logs",
       "status": "done",
-      "items": [
-        {
-          "id": "log-0",
-          "title": "事件数: 8",
-          "meta": "number",
-          "excerpt": "Simulation mode: no real orders were executed. The log records the full execution chain for audit."
-        },
-        {
-          "id": "log-1",
-          "title": "状态: {'en': 'Done', 'zh': '完成'}",
-          "meta": "badge",
-          "excerpt": "Simulation mode: no real orders were executed. The log records the full execution chain for audit."
-        }
-      ],
-      "itemCount": 2,
+      "items": [],
+      "itemCount": 0,
       "summary": "No order · Simulated · 8 events",
       "detail": "Simulation mode: no real orders were executed. The log records the full execution chain for audit.",
       "source": "trading-agent",
-      "lastAccessAt": "2026-06-17 13:44:04",
+      "lastAccessAt": "2026-06-20 10:58:25",
       "stats": [
         {
           "label": "en",
@@ -387,47 +326,71 @@
       "status": "done",
       "items": [
         {
-          "id": "mcp-0",
-          "title": "震荡盘整: Range-bound",
-          "meta": "badge",
-          "excerpt": "Indicators calculated. RSI remains neutral, MACD momentum is moderate."
+          "id": "ind-rows",
+          "title": "rows: 191.0",
+          "meta": "metric",
+          "excerpt": "191.0"
         },
         {
-          "id": "mcp-1",
-          "title": "RSI: 36.4",
-          "meta": "number",
-          "excerpt": "Indicators calculated. RSI remains neutral, MACD momentum is moderate."
+          "id": "ind-close",
+          "title": "close: 475.31",
+          "meta": "metric",
+          "excerpt": "475.31"
         },
         {
-          "id": "mcp-2",
-          "title": "MACD: -0.983",
-          "meta": "number",
-          "excerpt": "Indicators calculated. RSI remains neutral, MACD momentum is moderate."
+          "id": "ind-ma20",
+          "title": "ma20: 467.4545",
+          "meta": "metric",
+          "excerpt": "467.4545"
         },
         {
-          "id": "mcp-3",
-          "title": "MA20: 599.5",
-          "meta": "number",
-          "excerpt": "Indicators calculated. RSI remains neutral, MACD momentum is moderate."
+          "id": "ind-ma60",
+          "title": "ma60: 446.5052",
+          "meta": "metric",
+          "excerpt": "446.5052"
         },
         {
-          "id": "mcp-4",
-          "title": "MA60: 590.5",
-          "meta": "number",
-          "excerpt": "Indicators calculated. RSI remains neutral, MACD momentum is moderate."
+          "id": "ind-rsi",
+          "title": "rsi: 70.7612",
+          "meta": "metric",
+          "excerpt": "70.7612"
         },
         {
-          "id": "mcp-5",
-          "title": "20日收益: -2.9%",
-          "meta": "bar",
-          "excerpt": "Indicators calculated. RSI remains neutral, MACD momentum is moderate."
+          "id": "ind-macd",
+          "title": "macd: 7.1899",
+          "meta": "metric",
+          "excerpt": "7.1899"
+        },
+        {
+          "id": "ind-macd_signal",
+          "title": "macd_signal: 7.3165",
+          "meta": "metric",
+          "excerpt": "7.3165"
+        },
+        {
+          "id": "ind-volatility_20d",
+          "title": "volatility_20d: 0.098",
+          "meta": "metric",
+          "excerpt": "0.098"
+        },
+        {
+          "id": "ind-daily_return",
+          "title": "daily_return: -0.0029",
+          "meta": "metric",
+          "excerpt": "-0.0029"
+        },
+        {
+          "id": "ind-return_20d",
+          "title": "return_20d: 0.0414",
+          "meta": "metric",
+          "excerpt": "0.0414"
         }
       ],
-      "itemCount": 6,
-      "summary": "RSI 36.4 · MACD -0.983 · Vol 14.3%",
-      "detail": "Indicators calculated. RSI remains neutral, MACD momentum is moderate.",
+      "itemCount": 10,
+      "summary": "RSI 70.8 · MACD 7.190 · Vol 9.8%",
+      "detail": "RSI is in an extreme zone; proceed with caution.",
       "source": "trading-agent",
-      "lastAccessAt": "2026-06-17 13:44:04",
+      "lastAccessAt": "2026-06-20 10:58:25",
       "stats": [
         {
           "label": "en",
@@ -448,83 +411,47 @@
       "status": "done",
       "items": [
         {
-          "id": "schedule-0",
-          "title": "决策: HOLD",
-          "meta": "number",
-          "excerpt": "HOLD is not well supported. Consider reducing position size or waiting for confirmation. | Critic: News is neutral, but some agents signal BUY — HOLD may miss early momentum."
+          "id": "sc-1",
+          "title": "Decision: HOLD · Caution",
+          "meta": "metric",
+          "excerpt": "Final decision with mode"
         },
         {
-          "id": "schedule-1",
-          "title": "等待确认: Wait",
-          "meta": "number",
-          "excerpt": "HOLD is not well supported. Consider reducing position size or waiting for confirmation. | Critic: News is neutral, but some agents signal BUY — HOLD may miss early momentum."
+          "id": "sc-2",
+          "title": "Watch Priority: MEDIUM",
+          "meta": "metric",
+          "excerpt": "Monitoring priority level"
         },
         {
-          "id": "schedule-2",
-          "title": "置信度: 25%",
-          "meta": "number",
-          "excerpt": "HOLD is not well supported. Consider reducing position size or waiting for confirmation. | Critic: News is neutral, but some agents signal BUY — HOLD may miss early momentum."
+          "id": "sc-3",
+          "title": "Critic Score: 55",
+          "meta": "metric",
+          "excerpt": "Critic Agent confidence"
         },
         {
-          "id": "schedule-3",
-          "title": "评分: 56",
-          "meta": "number",
-          "excerpt": "HOLD is not well supported. Consider reducing position size or waiting for confirmation. | Critic: News is neutral, but some agents signal BUY — HOLD may miss early momentum."
+          "id": "sc-4",
+          "title": "Revised: BUY → HOLD",
+          "meta": "info",
+          "excerpt": "Decision was revised after critic review"
         },
         {
-          "id": "schedule-4",
-          "title": "Critic: 35",
-          "meta": "number",
-          "excerpt": "HOLD is not well supported. Consider reducing position size or waiting for confirmation. | Critic: News is neutral, but some agents signal BUY — HOLD may miss early momentum."
+          "id": "sc-5",
+          "title": "Score: 76",
+          "meta": "metric",
+          "excerpt": "Weighted decision score"
         },
         {
-          "id": "schedule-5",
-          "title": "仓位: 0%",
-          "meta": "number",
-          "excerpt": "HOLD is not well supported. Consider reducing position size or waiting for confirmation. | Critic: News is neutral, but some agents signal BUY — HOLD may miss early momentum."
-        },
-        {
-          "id": "schedule-6",
-          "title": "观察优先级: HIGH",
-          "meta": "number",
-          "excerpt": "HOLD is not well supported. Consider reducing position size or waiting for confirmation. | Critic: News is neutral, but some agents signal BUY — HOLD may miss early momentum."
-        },
-        {
-          "id": "schedule-7",
-          "title": "指标 Agent: BUY67",
-          "meta": "badge",
-          "excerpt": "HOLD is not well supported. Consider reducing position size or waiting for confirmation. | Critic: News is neutral, but some agents signal BUY — HOLD may miss early momentum."
-        },
-        {
-          "id": "schedule-8",
-          "title": "新闻 Agent: HOLD50",
-          "meta": "badge",
-          "excerpt": "HOLD is not well supported. Consider reducing position size or waiting for confirmation. | Critic: News is neutral, but some agents signal BUY — HOLD may miss early momentum."
-        },
-        {
-          "id": "schedule-9",
-          "title": "风险 Agent: HOLD58",
-          "meta": "badge",
-          "excerpt": "HOLD is not well supported. Consider reducing position size or waiting for confirmation. | Critic: News is neutral, but some agents signal BUY — HOLD may miss early momentum."
-        },
-        {
-          "id": "schedule-10",
-          "title": "回测 Agent: BUY82",
-          "meta": "badge",
-          "excerpt": "HOLD is not well supported. Consider reducing position size or waiting for confirmation. | Critic: News is neutral, but some agents signal BUY — HOLD may miss early momentum."
-        },
-        {
-          "id": "schedule-11",
-          "title": "Critic: HOLD30",
-          "meta": "badge",
-          "excerpt": "HOLD is not well supported. Consider reducing position size or waiting for confirmation. | Critic: News is neutral, but some agents signal BUY — HOLD may miss early momentum."
+          "id": "sc-6",
+          "title": "Position: 35%",
+          "meta": "metric",
+          "excerpt": "Suggested position size"
         }
       ],
-      "itemCount": 12,
-      "summary": "HOLD · Wait",
-      "detail": "HOLD is not well supported. Consider reducing position size or waiting for confirmation. | Critic: News is neutral, but some agents signal BUY — HOLD may miss early momentum.",
+      "itemCount": 6,
+      "summary": "HOLD · Caution",
+      "detail": "BUY is supported but with reservations. Review concerns before execution. | Critic: RSI is 70.8 (near overbought), but decision is BUY — may buy at local peak.",
       "source": "trading-agent",
-      "lastAccessAt": "2026-06-17 13:44:04",
+      "lastAccessAt": "2026-06-20 10:58:25",
       "stats": [
         {
           "label": "en",
@@ -545,35 +472,23 @@
       "status": "done",
       "items": [
         {
-          "id": "alarm-0",
-          "title": "风险分数: 42/100",
-          "meta": "bar",
-          "excerpt": "风险分数由最大回撤、波动率分位数和市场状态共同决定。"
+          "id": "rk-1",
+          "title": "Max DD: -7.46%",
+          "meta": "metric",
+          "excerpt": "Maximum drawdown"
         },
         {
-          "id": "alarm-1",
-          "title": "最大回撤: -15.4%",
-          "meta": "bar",
-          "excerpt": "风险分数由最大回撤、波动率分位数和市场状态共同决定。"
-        },
-        {
-          "id": "alarm-2",
-          "title": "仓位上限: 40%",
-          "meta": "bar",
-          "excerpt": "风险分数由最大回撤、波动率分位数和市场状态共同决定。"
-        },
-        {
-          "id": "alarm-3",
-          "title": "波动率分位: 49%",
-          "meta": "number",
-          "excerpt": "风险分数由最大回撤、波动率分位数和市场状态共同决定。"
+          "id": "rk-2",
+          "title": "Confidence: 0.49",
+          "meta": "metric",
+          "excerpt": "Decision confidence"
         }
       ],
-      "itemCount": 4,
-      "summary": "限制仓位 · 42/100 · 仓位上限 40%",
+      "itemCount": 2,
+      "summary": "可放行 · 15/100 · 仓位上限 70%",
       "detail": "风险分数由最大回撤、波动率分位数和市场状态共同决定。",
       "source": "trading-agent",
-      "lastAccessAt": "2026-06-17 13:44:04",
+      "lastAccessAt": "2026-06-20 10:58:25",
       "stats": [
         {
           "label": "en",
@@ -594,35 +509,23 @@
       "status": "done",
       "items": [
         {
-          "id": "agent-0",
-          "title": "Agent 数: 5",
-          "meta": "number",
-          "excerpt": "All agent stages completed without errors."
+          "id": "ag-1",
+          "title": "Stage: Done",
+          "meta": "info",
+          "excerpt": "Current workflow stage"
         },
         {
-          "id": "agent-1",
-          "title": "平均耗时: 2053ms",
-          "meta": "number",
-          "excerpt": "All agent stages completed without errors."
-        },
-        {
-          "id": "agent-2",
-          "title": "健康: 4",
-          "meta": "number",
-          "excerpt": "All agent stages completed without errors."
-        },
-        {
-          "id": "agent-3",
-          "title": "错误数: 0",
-          "meta": "number",
-          "excerpt": "All agent stages completed without errors."
+          "id": "ag-2",
+          "title": "Progress: 100%",
+          "meta": "metric",
+          "excerpt": "Workflow progress"
         }
       ],
-      "itemCount": 4,
+      "itemCount": 2,
       "summary": "Pipeline completed",
       "detail": "All agent stages completed without errors.",
       "source": "trading-agent",
-      "lastAccessAt": "2026-06-17 13:44:04",
+      "lastAccessAt": "2026-06-20 10:58:25",
       "stats": [
         {
           "label": "en",
@@ -643,41 +546,35 @@
       "status": "done",
       "items": [
         {
-          "id": "task_queues-0",
-          "title": "总收益: 43.2%",
-          "meta": "bar",
-          "excerpt": "回测总收益 43.2%，夏普 0.64，最大回撤 -15.4%。收益为正但 Sharpe 一般。"
+          "id": "bt-1",
+          "title": "Sharpe: 2.13",
+          "meta": "metric",
+          "excerpt": "Risk-adjusted return"
         },
         {
-          "id": "task_queues-1",
-          "title": "夏普比率: 0.64",
-          "meta": "number",
-          "excerpt": "回测总收益 43.2%，夏普 0.64，最大回撤 -15.4%。收益为正但 Sharpe 一般。"
+          "id": "bt-2",
+          "title": "Return: 14.41%",
+          "meta": "metric",
+          "excerpt": "Total return"
         },
         {
-          "id": "task_queues-2",
-          "title": "最大回撤: -15.4%",
-          "meta": "bar",
-          "excerpt": "回测总收益 43.2%，夏普 0.64，最大回撤 -15.4%。收益为正但 Sharpe 一般。"
+          "id": "bt-3",
+          "title": "Win Rate: 0%",
+          "meta": "metric",
+          "excerpt": "Trade win rate"
         },
         {
-          "id": "task_queues-3",
-          "title": "胜率: 38.0%",
-          "meta": "bar",
-          "excerpt": "回测总收益 43.2%，夏普 0.64，最大回撤 -15.4%。收益为正但 Sharpe 一般。"
-        },
-        {
-          "id": "task_queues-4",
-          "title": "交易次数: 98",
-          "meta": "number",
-          "excerpt": "回测总收益 43.2%，夏普 0.64，最大回撤 -15.4%。收益为正但 Sharpe 一般。"
+          "id": "bt-4",
+          "title": "Trades: 13",
+          "meta": "metric",
+          "excerpt": "Number of trades"
         }
       ],
-      "itemCount": 5,
-      "summary": "回测收益 43.2% · 夏普 0.64 · 最大回撤 -15.4%",
-      "detail": "回测总收益 43.2%，夏普 0.64，最大回撤 -15.4%。收益为正但 Sharpe 一般。",
+      "itemCount": 4,
+      "summary": "回测收益 14.4% · 夏普 2.13 · 最大回撤 -7.5%",
+      "detail": "回测总收益 14.4%，夏普 2.13，最大回撤 -7.5%。表现良好。",
       "source": "trading-agent",
-      "lastAccessAt": "2026-06-17 13:44:04",
+      "lastAccessAt": "2026-06-20 10:58:25",
       "stats": [
         {
           "label": "en",
@@ -698,23 +595,23 @@
       "status": "done",
       "items": [
         {
-          "id": "break_room-0",
-          "title": "决策: {'en': 'HOLD', 'zh': '观望'}",
-          "meta": "badge",
-          "excerpt": "Latest analysis for SPY is complete. Decision: HOLD. Agents have returned to the break room."
+          "id": "br-1",
+          "title": "Last: SPY",
+          "meta": "info",
+          "excerpt": "Completed analysis for SPY"
         },
         {
-          "id": "break_room-1",
-          "title": "策略: {'en': 'momentum', 'zh': '20日动量'}",
-          "meta": "badge",
-          "excerpt": "Latest analysis for SPY is complete. Decision: HOLD. Agents have returned to the break room."
+          "id": "br-2",
+          "title": "Decision: hold",
+          "meta": "metric",
+          "excerpt": "Final trading decision"
         }
       ],
       "itemCount": 2,
-      "summary": "SPY · HOLD",
+      "summary": "Processing: 休息室",
       "detail": "Latest analysis for SPY is complete. Decision: HOLD. Agents have returned to the break room.",
       "source": "trading-agent",
-      "lastAccessAt": "2026-06-17 13:44:04",
+      "lastAccessAt": "2026-06-20T02:58:25.202432+00:00",
       "stats": [
         {
           "label": "en",
@@ -734,73 +631,73 @@
       "resourceId": "break_room",
       "type": "access",
       "detail": "Apply volatility filter and stop-loss to ma signal",
-      "occurredAt": "2026-06-17T05:44:02.627906+00:00"
+      "occurredAt": "2026-06-20T02:58:25.207934+00:00"
     },
     {
       "resourceId": "break_room",
       "type": "access",
       "detail": "Calculate ma strategy returns vs benchmark",
-      "occurredAt": "2026-06-17T05:44:02.627906+00:00"
+      "occurredAt": "2026-06-20T02:58:25.207934+00:00"
     },
     {
       "resourceId": "break_room",
       "type": "access",
       "detail": "Apply volatility filter and stop-loss to rsi signal",
-      "occurredAt": "2026-06-17T05:44:02.627906+00:00"
+      "occurredAt": "2026-06-20T02:58:25.207934+00:00"
     },
     {
       "resourceId": "break_room",
       "type": "access",
       "detail": "Calculate rsi strategy returns vs benchmark",
-      "occurredAt": "2026-06-17T05:44:02.627906+00:00"
+      "occurredAt": "2026-06-20T02:58:25.207934+00:00"
     },
     {
       "resourceId": "break_room",
       "type": "access",
       "detail": "Apply volatility filter and stop-loss to momentum signal",
-      "occurredAt": "2026-06-17T05:44:02.627906+00:00"
+      "occurredAt": "2026-06-20T02:58:25.207934+00:00"
     },
     {
       "resourceId": "break_room",
       "type": "access",
       "detail": "Calculate momentum strategy returns vs benchmark",
-      "occurredAt": "2026-06-17T05:44:02.627906+00:00"
+      "occurredAt": "2026-06-20T02:58:25.207934+00:00"
     },
     {
       "resourceId": "break_room",
       "type": "access",
       "detail": "Strategies compared: 3 candidates",
-      "occurredAt": "2026-06-17T05:44:02.627906+00:00"
+      "occurredAt": "2026-06-20T02:58:25.207934+00:00"
     },
     {
       "resourceId": "break_room",
       "type": "access",
       "detail": "历史收益 0.0% 接近零。 历史 Sharpe 0.00 偏低。",
-      "occurredAt": "2026-06-17T05:44:02.627906+00:00"
+      "occurredAt": "2026-06-20T02:58:25.207934+00:00"
     },
     {
       "resourceId": "break_room",
       "type": "access",
       "detail": "Workflow completed",
-      "occurredAt": "2026-06-17T05:44:02.627906+00:00"
+      "occurredAt": "2026-06-20T02:58:25.207934+00:00"
     },
     {
       "resourceId": "break_room",
       "type": "access",
       "detail": "Generated lesson for momentum",
-      "occurredAt": "2026-06-17T05:44:02.627906+00:00"
+      "occurredAt": "2026-06-20T02:58:25.207934+00:00"
     },
     {
       "resourceId": "break_room",
       "type": "access",
-      "detail": "Total lessons: 27",
-      "occurredAt": "2026-06-17T05:44:02.627906+00:00"
+      "detail": "Total lessons: 30",
+      "occurredAt": "2026-06-20T02:58:25.207934+00:00"
     },
     {
       "resourceId": "break_room",
       "type": "access",
       "detail": "Artifacts and learning persisted",
-      "occurredAt": "2026-06-17T05:44:02.627906+00:00"
+      "occurredAt": "2026-06-20T02:58:25.207934+00:00"
     }
   ],
   "focus": {
@@ -825,32 +722,31 @@
     "summary": {
       "selected_strategy": "momentum",
       "decision": "hold",
-      "initial_decision": "hold",
-      "decision_mode": "wait_for_confirmation",
-      "watch_priority": "high",
+      "initial_decision": "buy",
+      "decision_mode": "proceed_with_caution",
+      "watch_priority": "medium",
       "revision_applied": true,
-      "confidence": 0.25,
-      "critic_score": 35,
-      "total_return": 0.4316457687816986,
-      "benchmark_return": 1.3126825875009498,
-      "sharpe_ratio": 0.6401191629090036,
-      "max_drawdown": -0.15422775261995003,
-      "trades": 98,
-      "decision_score": 56,
-      "risk_score": 42
+      "confidence": 0.49,
+      "critic_score": 55,
+      "total_return": 0.14412111785973614,
+      "benchmark_return": 0.18427803744944082,
+      "sharpe_ratio": 2.1333653165840323,
+      "max_drawdown": -0.07460674488780172,
+      "trades": 13,
+      "decision_score": 76,
+      "risk_score": 15
     },
     "report": {
-      "markdown": "# Trading Agent Report: SPY\n\n## Final Decision\n- Decision: hold\n- Confidence: 0.25\n\n## Strategy\n- Selected Strategy: momentum\n- Latest Signal: Cash\n\n## Backtest\n- Total Return: 43.16%\n- Benchmark Total Return: 131.27%\n- Annual Return: 7.84%\n- Annual Volatility: 12.25%\n- Sharpe Ratio: 0.64\n- Max Drawdown: -15.42%\n- Benchmark Max Drawdown: -25.36%\n- Win Rate: 37.98%\n- Number of Trades: 98\n\n## Risk Notice\nThis result is based on historical backtesting and is for educational use only. It is not financial advice.\n",
+      "markdown": "# Trading Agent Report: SPY\n\n## Final Decision\n- Decision: hold\n- Confidence: 0.49\n\n## Strategy\n- Selected Strategy: momentum\n- Latest Signal: Long\n\n## Backtest\n- Total Return: 14.41%\n- Benchmark Total Return: 18.43%\n- Annual Return: 19.55%\n- Annual Volatility: 9.16%\n- Sharpe Ratio: 2.13\n- Max Drawdown: -7.46%\n- Benchmark Max Drawdown: -10.29%\n- Win Rate: 41.05%\n- Number of Trades: 13\n\n## Risk Notice\nThis result is based on historical backtesting and is for educational use only. It is not financial advice.\n",
       "path": ""
     },
     "error": null,
     "decision": "hold",
     "logs": [
-      "Task: SPY auto",
       "Start loading market data",
-      "Loaded 1258 rows",
+      "Loaded 250 rows",
       "Start calculating MA, RSI, MACD and volatility",
-      "市场处于震荡状态，波动率正常，趋势信号不强，不适合激进追涨。",
+      "市场处于上升趋势，波动率偏低，适合跟随趋势策略。",
       "未启用真实 LLM，当前使用 mock 新闻摘要。",
       "Compare candidate strategies",
       "Apply volatility filter and stop-loss to ma signal",
@@ -863,7 +759,7 @@
       "历史收益 0.0% 接近零。 历史 Sharpe 0.00 偏低。",
       "Workflow completed",
       "Generated lesson for momentum",
-      "Total lessons: 27",
+      "Total lessons: 30",
       "Artifacts and learning persisted"
     ],
     "visited_rooms": [
@@ -885,13 +781,13 @@
         "panel_type": "data_health",
         "market_data": {
           "ticker": "SPY",
-          "date_range": "2020-01-01 ~ 2024-12-31",
+          "date_range": "2023-01-01 ~ 2024-01-01",
           "data_source": "Yahoo Finance / Stooq",
-          "rows": 1199,
+          "rows": 191,
           "missing_values": 0,
-          "latest_close": 586.080017,
+          "latest_close": 475.309998,
           "start_price": null,
-          "end_price": 586.080017,
+          "end_price": 475.309998,
           "cache_status": "cache_or_remote",
           "coverage_pct": 100
         },
@@ -919,83 +815,83 @@
           "raw_news": [
             {
               "id": 1,
-              "title": "Stocks Indexes Finish Mostly Lower as Chipmakers Retreat",
-              "source": "Barchart",
-              "url": "https://finance.yahoo.com/m/864f9768-6567-3c2d-9f8a-65cdbf74e03d/stocks-indexes-finish-mostly.html",
-              "published_at": "2026-06-17 04:33:56",
-              "summary": "Stocks Indexes Finish Mostly Lower as Chipmakers Retreat"
+              "title": "Stateless and forced into exile, Bahraini families stuck in limbo",
+              "source": "AFP",
+              "url": "https://finance.yahoo.com/m/bf8210d9-88d1-3b6f-93ae-9cd66434bc75/stateless-and-forced-into.html",
+              "published_at": "2026-06-20 09:41:59",
+              "summary": "Stateless and forced into exile, Bahraini families stuck in limbo"
             },
             {
               "id": 2,
-              "title": "Broader Market Weakens as Energy and Software Stocks Fall",
-              "source": "Barchart",
-              "url": "https://finance.yahoo.com/m/fbe9e833-dfa7-3373-a47c-ddb25b6cac12/broader-market-weakens-as.html",
-              "published_at": "2026-06-16 23:15:38",
-              "summary": "Broader Market Weakens as Energy and Software Stocks Fall"
+              "title": "Making $100K a Year? Here’s the One Fund That Compounds Without the Research",
+              "source": "24/7 Wall St.",
+              "url": "https://finance.yahoo.com/m/29698ec2-b7ed-3ffe-abf8-c62edb19eb7d/making-%24100k-a-year%3F-here%E2%80%99s.html",
+              "published_at": "2026-06-20 06:13:34",
+              "summary": "Making $100K a Year? Here’s the One Fund That Compounds Without the Research"
             },
             {
               "id": 3,
-              "title": "Exchange-Traded Funds, Equity Futures Higher Pre-Bell Tuesday Ahead of Fed Policy Meeting",
-              "source": "MT Newswires",
-              "url": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-123451429.html",
-              "published_at": "2026-06-16 20:34:51",
-              "summary": "Exchange-Traded Funds, Equity Futures Higher Pre-Bell Tuesday Ahead of Fed Policy Meeting"
+              "title": "A Median Earner Needs $803 Monthly for 30 Years to Hit $1 Million. Most Don’t Make It.",
+              "source": "24/7 Wall St.",
+              "url": "https://finance.yahoo.com/m/eb18eee5-e8ff-3a60-852b-6940ef211aa4/a-median-earner-needs-%24803.html",
+              "published_at": "2026-06-20 02:28:44",
+              "summary": "A Median Earner Needs $803 Monthly for 30 Years to Hit $1 Million. Most Don’t Make It."
             },
             {
               "id": 4,
-              "title": "Target Hiked Its Dividend by 1.8%. It’s Not Enough to Change the Thesis for TGT Stock.",
-              "source": "Barchart",
-              "url": "https://finance.yahoo.com/m/e7bcfc6a-83fd-336e-868b-034db39c6956/target-hiked-its-dividend-by.html",
-              "published_at": "2026-06-17 07:30:02",
-              "summary": "Target Hiked Its Dividend by 1.8%. It’s Not Enough to Change the Thesis for TGT Stock."
+              "title": "Encryption, spyware, and now Mythos: History shows why cyber export control doesn’t work",
+              "source": "TechCrunch",
+              "url": "https://finance.yahoo.com/m/252d75f6-5a73-336b-9e20-1e46f9cd679b/encryption%2C-spyware%2C-and-now.html",
+              "published_at": "2026-06-20 06:40:14",
+              "summary": "Encryption, spyware, and now Mythos: History shows why cyber export control doesn’t work"
             },
             {
               "id": 5,
-              "title": "S&P 500, Nasdaq, Dow Futures Edge Higher Ahead Of Fed Rate Decision: INTC, SNAP, SOFI, RUM In Focus",
-              "source": "Stocktwits",
-              "url": "https://finance.yahoo.com/m/beff80e0-3a30-3570-ae3b-37a45f47d04c/s%26p-500%2C-nasdaq%2C-dow-futures.html",
-              "published_at": "2026-06-17 08:49:38",
-              "summary": "S&P 500, Nasdaq, Dow Futures Edge Higher Ahead Of Fed Rate Decision: INTC, SNAP, SOFI, RUM In Focus"
+              "title": "Famous Wall Street Tech Analyst Names Meta and Amazon the Best Magnificent 7 Stock Buys Today",
+              "source": "24/7 Wall St.",
+              "url": "https://finance.yahoo.com/m/ffd28ce0-65e9-3be1-be0a-828446771595/famous-wall-street-tech.html",
+              "published_at": "2026-06-20 00:52:02",
+              "summary": "Famous Wall Street Tech Analyst Names Meta and Amazon the Best Magnificent 7 Stock Buys Today"
             },
             {
               "id": 6,
-              "title": "Stocks Supported by Lower Crude Oil Prices and Bond Yields",
+              "title": "The S&P 500’s Biggest Strength Is Now Its Biggest Risk",
               "source": "Barchart",
-              "url": "https://finance.yahoo.com/m/27a772cd-d509-3783-90a1-afe31459b5a8/stocks-supported-by-lower.html",
-              "published_at": "2026-06-16 22:18:10",
-              "summary": "Stocks Supported by Lower Crude Oil Prices and Bond Yields"
+              "url": "https://finance.yahoo.com/m/9ec55e62-a124-3ac7-ada0-7bfd23b9d4ec/the-s%26p-500%E2%80%99s-biggest.html",
+              "published_at": "2026-06-19 22:30:02",
+              "summary": "The S&P 500’s Biggest Strength Is Now Its Biggest Risk"
             },
             {
               "id": 7,
-              "title": "Wall Street Analyst Calls for S&P 500 Soaring to 9000. Here’s Why the Stock Market Melt Up Could Be Just Beginning.",
-              "source": "24/7 Wall St.",
-              "url": "https://finance.yahoo.com/m/6437e0ca-0a43-38da-89a1-4de3e5e78043/wall-street-analyst-calls-for.html",
-              "published_at": "2026-06-17 01:58:13",
-              "summary": "Wall Street Analyst Calls for S&P 500 Soaring to 9000. Here’s Why the Stock Market Melt Up Could Be Just Beginning."
+              "title": "‘I’m the President and You’re Not’: Trump Tests His Power and Frustrates the GOP",
+              "source": "The Wall Street Journal",
+              "url": "https://finance.yahoo.com/m/e223c94a-85e2-360b-9ffa-79a148c25191/%E2%80%98i%E2%80%99m-the-president-and-you%E2%80%99re.html",
+              "published_at": "2026-06-19 21:07:00",
+              "summary": "‘I’m the President and You’re Not’: Trump Tests His Power and Frustrates the GOP"
             },
             {
               "id": 8,
-              "title": "2026 Emmys Predictions in Every Category",
-              "source": "Variety",
-              "url": "https://finance.yahoo.com/m/0fe162df-e9a4-37d9-b332-3a38c90bfbd3/2026-emmys-predictions-in.html",
-              "published_at": "2026-06-17 01:20:00",
-              "summary": "2026 Emmys Predictions in Every Category"
+              "title": "Stocks Sharply Higher as US-Iran Peace Deal Eases Inflation Risks",
+              "source": "Barchart",
+              "url": "https://finance.yahoo.com/m/8f125907-5369-377e-a434-94a10df2e993/stocks-sharply-higher-as.html",
+              "published_at": "2026-06-19 04:34:23",
+              "summary": "Stocks Sharply Higher as US-Iran Peace Deal Eases Inflation Risks"
             },
             {
               "id": 9,
-              "title": "A $40 Million Gold Heist Risks Exposing CIA’s Top-Secret Spy Programs",
-              "source": "The Wall Street Journal",
-              "url": "https://finance.yahoo.com/m/dae33040-5535-3541-9daf-e50e6524b341/a-%2440-million-gold-heist.html",
-              "published_at": "2026-06-16 23:45:00",
-              "summary": "A $40 Million Gold Heist Risks Exposing CIA’s Top-Secret Spy Programs"
+              "title": "Stocks Supported as Geopolitical Risks Recede",
+              "source": "Barchart",
+              "url": "https://finance.yahoo.com/m/1a9bdbbd-429a-3b0f-bd40-068f6a9e0102/stocks-supported-as.html",
+              "published_at": "2026-06-18 23:17:09",
+              "summary": "Stocks Supported as Geopolitical Risks Recede"
             },
             {
               "id": 10,
-              "title": "SpaceX Now Has Higher Market Cap Than Amazon",
-              "source": "The Wall Street Journal",
-              "url": "https://finance.yahoo.com/m/822b3e19-b9ab-33d6-97a1-1107a2d3fca2/spacex-now-has-higher-market.html",
-              "published_at": "2026-06-17 05:46:00",
-              "summary": "SpaceX Now Has Higher Market Cap Than Amazon"
+              "title": "Stocks Rally as President Trump Signs a Preliminary Deal to End the US-Iran War",
+              "source": "Barchart",
+              "url": "https://finance.yahoo.com/m/7201245b-7ab8-3c5c-bfd0-6f02b9f6d267/stocks-rally-as-president.html",
+              "published_at": "2026-06-18 22:18:58",
+              "summary": "Stocks Rally as President Trump Signs a Preliminary Deal to End the US-Iran War"
             }
           ],
           "ranked_news": [
@@ -1013,11 +909,11 @@
             },
             {
               "type": "news",
-              "title": "Stocks Indexes Finish Mostly Lower as Chipmakers Retreat",
-              "source": "Barchart",
-              "published_at": "2026-06-17 04:33:56",
-              "summary": "Stocks Indexes Finish Mostly Lower as Chipmakers Retreat",
-              "url": "https://finance.yahoo.com/m/864f9768-6567-3c2d-9f8a-65cdbf74e03d/stocks-indexes-finish-mostly.html",
+              "title": "Stateless and forced into exile, Bahraini families stuck in limbo",
+              "source": "AFP",
+              "published_at": "2026-06-20 09:41:59",
+              "summary": "Stateless and forced into exile, Bahraini families stuck in limbo",
+              "url": "https://finance.yahoo.com/m/bf8210d9-88d1-3b6f-93ae-9cd66434bc75/stateless-and-forced-into.html",
               "rec_score": 3,
               "risk_score": 3,
               "confidence": 0.5,
@@ -1025,71 +921,11 @@
             },
             {
               "type": "news",
-              "title": "Broader Market Weakens as Energy and Software Stocks Fall",
-              "source": "Barchart",
-              "published_at": "2026-06-16 23:15:38",
-              "summary": "Broader Market Weakens as Energy and Software Stocks Fall",
-              "url": "https://finance.yahoo.com/m/fbe9e833-dfa7-3373-a47c-ddb25b6cac12/broader-market-weakens-as.html",
-              "rec_score": 3,
-              "risk_score": 3,
-              "confidence": 0.5,
-              "final_score": 1.69
-            },
-            {
-              "type": "news",
-              "title": "Exchange-Traded Funds, Equity Futures Higher Pre-Bell Tuesday Ahead of Fed Policy Meeting",
-              "source": "MT Newswires",
-              "published_at": "2026-06-16 20:34:51",
-              "summary": "Exchange-Traded Funds, Equity Futures Higher Pre-Bell Tuesday Ahead of Fed Policy Meeting",
-              "url": "https://finance.yahoo.com/markets/stocks/articles/exchange-traded-funds-equity-futures-123451429.html",
-              "rec_score": 3,
-              "risk_score": 3,
-              "confidence": 0.5,
-              "final_score": 1.69
-            },
-            {
-              "type": "news",
-              "title": "Target Hiked Its Dividend by 1.8%. It’s Not Enough to Change the Thesis for TGT Stock.",
-              "source": "Barchart",
-              "published_at": "2026-06-17 07:30:02",
-              "summary": "Target Hiked Its Dividend by 1.8%. It’s Not Enough to Change the Thesis for TGT Stock.",
-              "url": "https://finance.yahoo.com/m/e7bcfc6a-83fd-336e-868b-034db39c6956/target-hiked-its-dividend-by.html",
-              "rec_score": 3,
-              "risk_score": 3,
-              "confidence": 0.5,
-              "final_score": 1.69
-            },
-            {
-              "type": "news",
-              "title": "S&P 500, Nasdaq, Dow Futures Edge Higher Ahead Of Fed Rate Decision: INTC, SNAP, SOFI, RUM In Focus",
-              "source": "Stocktwits",
-              "published_at": "2026-06-17 08:49:38",
-              "summary": "S&P 500, Nasdaq, Dow Futures Edge Higher Ahead Of Fed Rate Decision: INTC, SNAP, SOFI, RUM In Focus",
-              "url": "https://finance.yahoo.com/m/beff80e0-3a30-3570-ae3b-37a45f47d04c/s%26p-500%2C-nasdaq%2C-dow-futures.html",
-              "rec_score": 3,
-              "risk_score": 3,
-              "confidence": 0.5,
-              "final_score": 1.69
-            },
-            {
-              "type": "news",
-              "title": "Stocks Supported by Lower Crude Oil Prices and Bond Yields",
-              "source": "Barchart",
-              "published_at": "2026-06-16 22:18:10",
-              "summary": "Stocks Supported by Lower Crude Oil Prices and Bond Yields",
-              "url": "https://finance.yahoo.com/m/27a772cd-d509-3783-90a1-afe31459b5a8/stocks-supported-by-lower.html",
-              "rec_score": 3,
-              "risk_score": 3,
-              "confidence": 0.5,
-              "final_score": 1.69
-            },
-            {
-              "type": "news",
-              "title": "Wall Street Analyst Calls for S&P 500 Soaring to 9000. Here’s Why the Stock Market Melt Up Could Be Just Beginning.",
+              "title": "Making $100K a Year? Here’s the One Fund That Compounds Without the Research",
               "source": "24/7 Wall St.",
-              "published_at": "2026-06-17 01:58:13",
-              "summary": "Wall Street Analyst Calls for S&P 500 Soaring to 9000. Here’s Why the Stock Market Melt Up Could Be Just Beginning.",
-              "url": "https://finance.yahoo.com/m/6437e0ca-0a43-38da-89a1-4de3e5e78043/wall-street-analyst-calls-for.html",
+              "published_at": "2026-06-20 06:13:34",
+              "summary": "Making $100K a Year? Here’s the One Fund That Compounds Without the Research",
+              "url": "https://finance.yahoo.com/m/29698ec2-b7ed-3ffe-abf8-c62edb19eb7d/making-%24100k-a-year%3F-here%E2%80%99s.html",
               "rec_score": 3,
               "risk_score": 3,
               "confidence": 0.5,
@@ -1097,11 +933,11 @@
             },
             {
               "type": "news",
-              "title": "2026 Emmys Predictions in Every Category",
-              "source": "Variety",
-              "published_at": "2026-06-17 01:20:00",
-              "summary": "2026 Emmys Predictions in Every Category",
-              "url": "https://finance.yahoo.com/m/0fe162df-e9a4-37d9-b332-3a38c90bfbd3/2026-emmys-predictions-in.html",
+              "title": "A Median Earner Needs $803 Monthly for 30 Years to Hit $1 Million. Most Don’t Make It.",
+              "source": "24/7 Wall St.",
+              "published_at": "2026-06-20 02:28:44",
+              "summary": "A Median Earner Needs $803 Monthly for 30 Years to Hit $1 Million. Most Don’t Make It.",
+              "url": "https://finance.yahoo.com/m/eb18eee5-e8ff-3a60-852b-6940ef211aa4/a-median-earner-needs-%24803.html",
               "rec_score": 3,
               "risk_score": 3,
               "confidence": 0.5,
@@ -1109,11 +945,47 @@
             },
             {
               "type": "news",
-              "title": "A $40 Million Gold Heist Risks Exposing CIA’s Top-Secret Spy Programs",
+              "title": "Encryption, spyware, and now Mythos: History shows why cyber export control doesn’t work",
+              "source": "TechCrunch",
+              "published_at": "2026-06-20 06:40:14",
+              "summary": "Encryption, spyware, and now Mythos: History shows why cyber export control doesn’t work",
+              "url": "https://finance.yahoo.com/m/252d75f6-5a73-336b-9e20-1e46f9cd679b/encryption%2C-spyware%2C-and-now.html",
+              "rec_score": 3,
+              "risk_score": 3,
+              "confidence": 0.5,
+              "final_score": 1.69
+            },
+            {
+              "type": "news",
+              "title": "Famous Wall Street Tech Analyst Names Meta and Amazon the Best Magnificent 7 Stock Buys Today",
+              "source": "24/7 Wall St.",
+              "published_at": "2026-06-20 00:52:02",
+              "summary": "Famous Wall Street Tech Analyst Names Meta and Amazon the Best Magnificent 7 Stock Buys Today",
+              "url": "https://finance.yahoo.com/m/ffd28ce0-65e9-3be1-be0a-828446771595/famous-wall-street-tech.html",
+              "rec_score": 3,
+              "risk_score": 3,
+              "confidence": 0.5,
+              "final_score": 1.69
+            },
+            {
+              "type": "news",
+              "title": "The S&P 500’s Biggest Strength Is Now Its Biggest Risk",
+              "source": "Barchart",
+              "published_at": "2026-06-19 22:30:02",
+              "summary": "The S&P 500’s Biggest Strength Is Now Its Biggest Risk",
+              "url": "https://finance.yahoo.com/m/9ec55e62-a124-3ac7-ada0-7bfd23b9d4ec/the-s%26p-500%E2%80%99s-biggest.html",
+              "rec_score": 3,
+              "risk_score": 3,
+              "confidence": 0.5,
+              "final_score": 1.69
+            },
+            {
+              "type": "news",
+              "title": "‘I’m the President and You’re Not’: Trump Tests His Power and Frustrates the GOP",
               "source": "The Wall Street Journal",
-              "published_at": "2026-06-16 23:45:00",
-              "summary": "A $40 Million Gold Heist Risks Exposing CIA’s Top-Secret Spy Programs",
-              "url": "https://finance.yahoo.com/m/dae33040-5535-3541-9daf-e50e6524b341/a-%2440-million-gold-heist.html",
+              "published_at": "2026-06-19 21:07:00",
+              "summary": "‘I’m the President and You’re Not’: Trump Tests His Power and Frustrates the GOP",
+              "url": "https://finance.yahoo.com/m/e223c94a-85e2-360b-9ffa-79a148c25191/%E2%80%98i%E2%80%99m-the-president-and-you%E2%80%99re.html",
               "rec_score": 3,
               "risk_score": 3,
               "confidence": 0.5,
@@ -1121,11 +993,35 @@
             },
             {
               "type": "news",
-              "title": "SpaceX Now Has Higher Market Cap Than Amazon",
-              "source": "The Wall Street Journal",
-              "published_at": "2026-06-17 05:46:00",
-              "summary": "SpaceX Now Has Higher Market Cap Than Amazon",
-              "url": "https://finance.yahoo.com/m/822b3e19-b9ab-33d6-97a1-1107a2d3fca2/spacex-now-has-higher-market.html",
+              "title": "Stocks Sharply Higher as US-Iran Peace Deal Eases Inflation Risks",
+              "source": "Barchart",
+              "published_at": "2026-06-19 04:34:23",
+              "summary": "Stocks Sharply Higher as US-Iran Peace Deal Eases Inflation Risks",
+              "url": "https://finance.yahoo.com/m/8f125907-5369-377e-a434-94a10df2e993/stocks-sharply-higher-as.html",
+              "rec_score": 3,
+              "risk_score": 3,
+              "confidence": 0.5,
+              "final_score": 1.69
+            },
+            {
+              "type": "news",
+              "title": "Stocks Supported as Geopolitical Risks Recede",
+              "source": "Barchart",
+              "published_at": "2026-06-18 23:17:09",
+              "summary": "Stocks Supported as Geopolitical Risks Recede",
+              "url": "https://finance.yahoo.com/m/1a9bdbbd-429a-3b0f-bd40-068f6a9e0102/stocks-supported-as.html",
+              "rec_score": 3,
+              "risk_score": 3,
+              "confidence": 0.5,
+              "final_score": 1.69
+            },
+            {
+              "type": "news",
+              "title": "Stocks Rally as President Trump Signs a Preliminary Deal to End the US-Iran War",
+              "source": "Barchart",
+              "published_at": "2026-06-18 22:18:58",
+              "summary": "Stocks Rally as President Trump Signs a Preliminary Deal to End the US-Iran War",
+              "url": "https://finance.yahoo.com/m/7201245b-7ab8-3c5c-bfd0-6f02b9f6d267/stocks-rally-as-president.html",
               "rec_score": 3,
               "risk_score": 3,
               "confidence": 0.5,
@@ -1149,12 +1045,12 @@
           {
             "label": "Market rows",
             "status": "pass",
-            "detail": "1199 rows"
+            "detail": "191 rows"
           },
           {
             "label": "Latest close",
             "status": "pass",
-            "detail": "586.08"
+            "detail": "475.31"
           },
           {
             "label": "News input",
@@ -1169,11 +1065,11 @@
         ],
         "primary": {
           "label": "数据条数",
-          "value": "1199",
+          "value": "191",
           "unit": "bars",
           "level": "positive"
         },
-        "summary": "1199 bars · Missing 0",
+        "summary": "191 bars · Missing 0",
         "insight": "行情数据完整，无明显缺失，可支持后续分析。",
         "impact_on_decision": "数据完整，因此允许进入指标、回测和新闻综合决策阶段。",
         "next_action": "继续执行指标计算。",
@@ -1185,7 +1081,7 @@
         "metrics": [
           {
             "label": "样本量",
-            "value": "1199",
+            "value": "191",
             "unit": "bars",
             "display": "number",
             "level": "positive"
@@ -1199,7 +1095,7 @@
           },
           {
             "label": "最新收盘",
-            "value": "586.08",
+            "value": "475.31",
             "unit": "",
             "display": "number",
             "level": "neutral"
@@ -1216,7 +1112,7 @@
           "kind": "price_chart",
           "data": {
             "sparkline": [],
-            "date_range": "2020-01-01 ~ 2024-12-31"
+            "date_range": "2023-01-01 ~ 2024-01-01"
           }
         },
         "details": {
@@ -1230,7 +1126,7 @@
             "数据从缓存或远程源加载。"
           ]
         },
-        "updated_at": "2026-06-17 13:44:04"
+        "updated_at": "2026-06-20 10:58:25"
       },
       "mcp": {
         "room_id": "mcp",
@@ -1241,17 +1137,17 @@
         "primary": {
           "label": "RSI",
           "label_zh": "RSI",
-          "value": "36.4",
+          "value": "70.8",
           "unit": "",
-          "level": "neutral"
+          "level": "warning"
         },
         "summary": {
-          "en": "RSI 36.4 · MACD -0.983 · Vol 14.3%",
-          "zh": "RSI 36.4 · MACD -0.983 · 波动率 14.3%"
+          "en": "RSI 70.8 · MACD 7.190 · Vol 9.8%",
+          "zh": "RSI 70.8 · MACD 7.190 · 波动率 9.8%"
         },
         "insight": {
-          "en": "Indicators calculated. RSI remains neutral, MACD momentum is moderate.",
-          "zh": "指标计算完成，RSI 未进入超买或超卖区间，MACD 动能中性。"
+          "en": "RSI is in an extreme zone; proceed with caution.",
+          "zh": "RSI 处于极端区间，需谨慎。"
         },
         "impact_on_decision": {
           "en": "Technical indicators are neutral-to-mildly-bullish, but MACD momentum is insufficient for aggressive buying.",
@@ -1285,15 +1181,15 @@
           },
           {
             "label": "RSI",
-            "value": "36.4",
+            "value": "70.8",
             "unit": "",
             "display": "number",
-            "level": "neutral",
+            "level": "warning",
             "label_zh": "RSI"
           },
           {
             "label": "MACD",
-            "value": "-0.983",
+            "value": "7.190",
             "unit": "",
             "display": "number",
             "level": "neutral",
@@ -1301,7 +1197,7 @@
           },
           {
             "label": "MA20",
-            "value": "599.5",
+            "value": "467.5",
             "unit": "",
             "display": "number",
             "level": "neutral",
@@ -1309,7 +1205,7 @@
           },
           {
             "label": "MA60",
-            "value": "590.5",
+            "value": "446.5",
             "unit": "",
             "display": "number",
             "level": "neutral",
@@ -1317,10 +1213,10 @@
           },
           {
             "label": "20D Return",
-            "value": -2.9,
+            "value": 4.1,
             "unit": "%",
             "display": "bar",
-            "level": "danger",
+            "level": "positive",
             "label_zh": "20日收益"
           }
         ],
@@ -1331,23 +1227,23 @@
               {
                 "label": "RSI",
                 "label_zh": "RSI",
-                "value": "36.4",
-                "state": "Neutral",
-                "state_zh": "中性",
-                "level": "neutral"
+                "value": "70.8",
+                "state": "Extreme",
+                "state_zh": "极端",
+                "level": "warning"
               },
               {
                 "label": "MACD",
                 "label_zh": "MACD",
-                "value": "-0.983",
-                "state": "Weak Momentum",
-                "state_zh": "动能偏弱",
-                "level": "neutral"
+                "value": "7.190",
+                "state": "Strong Momentum",
+                "state_zh": "动能偏强",
+                "level": "positive"
               },
               {
                 "label": "Volatility",
                 "label_zh": "波动率",
-                "value": "14.3%",
+                "value": "9.8%",
                 "state": "Medium",
                 "state_zh": "波动中等",
                 "level": "neutral"
@@ -1355,10 +1251,10 @@
               {
                 "label": "Return 20D",
                 "label_zh": "20日收益",
-                "value": "-2.9%",
-                "state": "Negative",
-                "state_zh": "收益为负",
-                "level": "danger"
+                "value": "4.1%",
+                "state": "Positive",
+                "state_zh": "收益为正",
+                "level": "positive"
               }
             ]
           }
@@ -1378,12 +1274,12 @@
           ],
           "reasoning": [
             {
-              "en": "Indicators calculated. RSI remains neutral, MACD momentum is moderate.",
-              "zh": "指标计算完成，RSI 未进入超买或超卖区间，MACD 动能中性。"
+              "en": "RSI is in an extreme zone; proceed with caution.",
+              "zh": "RSI 处于极端区间，需谨慎。"
             }
           ]
         },
-        "updated_at": "2026-06-17 13:44:04"
+        "updated_at": "2026-06-20 10:58:25"
       },
       "images": {
         "room_id": "images",
@@ -1393,12 +1289,12 @@
         "panel_type": "chart_panel",
         "primary": {
           "label": "图表摘要",
-          "value": "586.08",
+          "value": "475.31",
           "unit": "",
           "level": "positive"
         },
-        "summary": "最新收盘 586.08 · 多头排列 · 信号 HOLD",
-        "insight": "当前 SPY 最新收盘 586.08，多头排列，RSI 中性，MACD 偏空，策略信号为 HOLD。",
+        "summary": "最新收盘 475.31 · 多头排列 · 信号 HOLD",
+        "insight": "当前 SPY 最新收盘 475.31，多头排列，RSI 超买，MACD 偏多，策略信号为 HOLD。",
         "impact_on_decision": "图表摘要为决策调度室提供可视化依据，但最终仓位仍需结合风险报警室综合判断。",
         "next_action": "持续观察价格与均线的偏离程度，以及回测夏普比率是否稳定。",
         "monitor_focus": [
@@ -1410,7 +1306,7 @@
         "metrics": [
           {
             "label": "最新收盘",
-            "value": "586.08",
+            "value": "475.31",
             "unit": "",
             "display": "number",
             "level": "neutral"
@@ -1423,26 +1319,26 @@
           },
           {
             "label": "RSI 状态",
-            "value": "中性",
+            "value": "超买",
             "display": "badge",
-            "level": "neutral"
+            "level": "danger"
           },
           {
             "label": "MACD 状态",
-            "value": "偏空",
+            "value": "偏多",
             "display": "badge",
-            "level": "danger"
+            "level": "positive"
           },
           {
             "label": "20日收益",
-            "value": "-2.9",
+            "value": "4.1",
             "unit": "%",
             "display": "number",
-            "level": "danger"
+            "level": "positive"
           },
           {
             "label": "20日波动",
-            "value": "14.3",
+            "value": "9.8",
             "unit": "%",
             "display": "number",
             "level": "neutral"
@@ -1455,42 +1351,42 @@
           },
           {
             "label": "策略评分",
-            "value": "62",
+            "value": "92",
             "unit": "",
             "display": "number",
             "level": "warning"
           },
           {
             "label": "回测收益",
-            "value": 43.2,
+            "value": 14.4,
             "unit": "%",
             "display": "bar",
             "level": "positive"
           },
           {
             "label": "夏普比率",
-            "value": "0.64",
+            "value": "2.13",
             "unit": "",
             "display": "number",
             "level": "neutral"
           },
           {
             "label": "最大回撤",
-            "value": "15.4",
+            "value": "7.5",
             "unit": "%",
             "display": "number",
             "level": "danger"
           },
           {
             "label": "胜率",
-            "value": "38",
+            "value": "41",
             "unit": "%",
             "display": "number",
             "level": "neutral"
           },
           {
             "label": "交易次数",
-            "value": 98,
+            "value": 13,
             "unit": "",
             "display": "number",
             "level": "neutral"
@@ -1500,349 +1396,349 @@
           "kind": "chart_dashboard",
           "data": {
             "ticker": "SPY",
-            "rows": 1199,
+            "rows": 191,
             "has_price_data": true,
             "dates": [
-              "2024-10-07",
-              "2024-10-08",
-              "2024-10-09",
-              "2024-10-10",
-              "2024-10-11",
-              "2024-10-14",
-              "2024-10-15",
-              "2024-10-16",
-              "2024-10-17",
-              "2024-10-18",
-              "2024-10-21",
-              "2024-10-22",
-              "2024-10-23",
-              "2024-10-24",
-              "2024-10-25",
-              "2024-10-28",
-              "2024-10-29",
-              "2024-10-30",
-              "2024-10-31",
-              "2024-11-01",
-              "2024-11-04",
-              "2024-11-05",
-              "2024-11-06",
-              "2024-11-07",
-              "2024-11-08",
-              "2024-11-11",
-              "2024-11-12",
-              "2024-11-13",
-              "2024-11-14",
-              "2024-11-15",
-              "2024-11-18",
-              "2024-11-19",
-              "2024-11-20",
-              "2024-11-21",
-              "2024-11-22",
-              "2024-11-25",
-              "2024-11-26",
-              "2024-11-27",
-              "2024-11-29",
-              "2024-12-02",
-              "2024-12-03",
-              "2024-12-04",
-              "2024-12-05",
-              "2024-12-06",
-              "2024-12-09",
-              "2024-12-10",
-              "2024-12-11",
-              "2024-12-12",
-              "2024-12-13",
-              "2024-12-16",
-              "2024-12-17",
-              "2024-12-18",
-              "2024-12-19",
-              "2024-12-20",
-              "2024-12-23",
-              "2024-12-24",
-              "2024-12-26",
-              "2024-12-27",
-              "2024-12-30",
-              "2024-12-31"
+              "2023-10-05",
+              "2023-10-06",
+              "2023-10-09",
+              "2023-10-10",
+              "2023-10-11",
+              "2023-10-12",
+              "2023-10-13",
+              "2023-10-16",
+              "2023-10-17",
+              "2023-10-18",
+              "2023-10-19",
+              "2023-10-20",
+              "2023-10-23",
+              "2023-10-24",
+              "2023-10-25",
+              "2023-10-26",
+              "2023-10-27",
+              "2023-10-30",
+              "2023-10-31",
+              "2023-11-01",
+              "2023-11-02",
+              "2023-11-03",
+              "2023-11-06",
+              "2023-11-07",
+              "2023-11-08",
+              "2023-11-09",
+              "2023-11-10",
+              "2023-11-13",
+              "2023-11-14",
+              "2023-11-15",
+              "2023-11-16",
+              "2023-11-17",
+              "2023-11-20",
+              "2023-11-21",
+              "2023-11-22",
+              "2023-11-24",
+              "2023-11-27",
+              "2023-11-28",
+              "2023-11-29",
+              "2023-11-30",
+              "2023-12-01",
+              "2023-12-04",
+              "2023-12-05",
+              "2023-12-06",
+              "2023-12-07",
+              "2023-12-08",
+              "2023-12-11",
+              "2023-12-12",
+              "2023-12-13",
+              "2023-12-14",
+              "2023-12-15",
+              "2023-12-18",
+              "2023-12-19",
+              "2023-12-20",
+              "2023-12-21",
+              "2023-12-22",
+              "2023-12-26",
+              "2023-12-27",
+              "2023-12-28",
+              "2023-12-29"
             ],
             "close": [
-              567.8,
-              573.17,
-              577.14,
-              576.13,
-              579.58,
-              584.32,
-              579.78,
-              582.3,
-              582.35,
-              584.59,
-              583.63,
-              583.32,
-              577.99,
-              579.24,
-              579.04,
-              580.83,
-              581.77,
-              580.01,
-              568.64,
-              571.04,
-              569.81,
-              576.7,
-              591.04,
-              595.61,
-              598.19,
-              598.76,
-              596.9,
-              597.19,
-              593.35,
-              585.75,
-              588.15,
-              590.3,
-              590.5,
-              593.67,
-              595.51,
-              597.53,
-              600.65,
-              598.83,
-              602.55,
-              603.63,
-              603.91,
-              607.66,
-              606.66,
-              607.81,
-              604.68,
-              602.8,
-              607.46,
-              604.33,
-              604.21,
-              606.79,
-              604.29,
-              586.28,
-              586.1,
-              591.15,
-              594.69,
-              601.3,
-              601.34,
-              595.01,
-              588.22,
-              586.08
+              424.5,
+              429.54,
+              432.29,
+              434.54,
+              436.32,
+              433.66,
+              431.5,
+              436.04,
+              436.02,
+              430.21,
+              426.43,
+              421.19,
+              420.46,
+              423.63,
+              417.55,
+              412.55,
+              410.68,
+              415.59,
+              418.2,
+              422.66,
+              430.76,
+              434.69,
+              435.69,
+              436.93,
+              437.25,
+              433.84,
+              440.61,
+              440.19,
+              448.73,
+              449.68,
+              450.23,
+              450.79,
+              454.26,
+              453.27,
+              455.02,
+              455.3,
+              454.48,
+              454.93,
+              454.61,
+              456.4,
+              459.1,
+              456.69,
+              456.6,
+              454.76,
+              458.23,
+              460.2,
+              461.99,
+              464.1,
+              470.5,
+              472.01,
+              469.33,
+              471.97,
+              474.84,
+              468.26,
+              472.7,
+              473.65,
+              475.65,
+              476.51,
+              476.69,
+              475.31
             ],
             "ma20": [
-              566.2735,
-              567.4925,
-              568.6285,
-              569.4805,
-              570.359,
-              571.433,
-              572.2685,
-              573.3135,
-              573.882,
-              574.699,
-              575.397,
-              575.998,
-              576.3955,
-              576.7425,
-              577.121,
-              577.4745,
-              578.132,
-              578.6895,
-              578.7305,
-              578.6335,
-              578.734,
-              578.9105,
-              579.6055,
-              580.5795,
-              581.51,
-              582.232,
-              583.088,
-              583.8325,
-              584.3825,
-              584.4405,
-              584.6665,
-              585.0155,
-              585.641,
-              586.3625,
-              587.186,
-              588.021,
-              588.965,
-              589.906,
-              591.6015,
-              593.231,
-              594.936,
-              596.484,
-              597.265,
-              597.875,
-              598.1995,
-              598.4015,
-              598.9295,
-              599.2865,
-              599.8295,
-              600.8815,
-              601.6885,
-              601.4875,
-              601.2675,
-              601.1415,
-              601.1005,
-              601.289,
-              601.3235,
-              601.1325,
-              600.416,
-              599.5385
+              435.2605,
+              434.4615,
+              433.6535,
+              433.081,
+              432.5715,
+              431.7365,
+              431.143,
+              430.7635,
+              430.429,
+              430.0075,
+              429.7595,
+              429.298,
+              428.7095,
+              428.597,
+              428.172,
+              427.3735,
+              426.5335,
+              425.9475,
+              425.778,
+              425.678,
+              425.991,
+              426.2485,
+              426.4185,
+              426.538,
+              426.5845,
+              426.5935,
+              427.049,
+              427.2565,
+              427.892,
+              428.8655,
+              430.0555,
+              431.5355,
+              433.2255,
+              434.7075,
+              436.581,
+              438.7185,
+              440.9085,
+              442.8755,
+              444.696,
+              446.383,
+              447.8,
+              448.9,
+              449.9455,
+              450.837,
+              451.886,
+              453.204,
+              454.273,
+              455.4685,
+              456.557,
+              457.6735,
+              458.6285,
+              459.6875,
+              460.7165,
+              461.466,
+              462.35,
+              463.2675,
+              464.326,
+              465.405,
+              466.509,
+              467.4545
             ],
             "ma60": [
-              554.068,
-              554.262,
-              554.4667,
-              554.7865,
-              555.2352,
-              555.824,
-              556.2428,
-              556.7182,
-              557.4035,
-              558.1732,
-              558.8263,
-              559.469,
-              560.0688,
-              560.5427,
-              561.1432,
-              561.942,
-              563.0152,
-              563.9795,
-              564.8125,
-              565.4857,
-              566.0993,
-              566.8232,
-              567.6398,
-              568.5042,
-              569.2562,
-              569.997,
-              570.6185,
-              571.26,
-              571.8055,
-              572.2977,
-              572.7313,
-              573.2232,
-              573.7055,
-              574.295,
-              574.9143,
-              575.4785,
-              576.288,
-              577.086,
-              577.9683,
-              579.0228,
-              579.9812,
-              580.9623,
-              581.833,
-              582.645,
-              583.3562,
-              584.0222,
-              584.762,
-              585.4775,
-              586.0313,
-              586.6737,
-              587.2507,
-              587.5003,
-              587.768,
-              588.0822,
-              588.4692,
-              588.9282,
-              589.4735,
-              589.9093,
-              590.2493,
-              590.4677
+              443.7602,
+              443.4265,
+              443.1433,
+              442.8717,
+              442.5738,
+              442.2148,
+              441.8702,
+              441.6012,
+              441.2982,
+              440.8777,
+              440.393,
+              439.8713,
+              439.2637,
+              438.6943,
+              438.0455,
+              437.4192,
+              436.7832,
+              436.2628,
+              435.721,
+              435.2862,
+              435.0363,
+              434.8493,
+              434.6833,
+              434.497,
+              434.403,
+              434.3063,
+              434.3783,
+              434.4398,
+              434.5963,
+              434.7885,
+              434.9085,
+              435.1402,
+              435.3783,
+              435.5535,
+              435.6512,
+              435.7227,
+              435.7915,
+              435.8538,
+              435.9433,
+              436.113,
+              436.3505,
+              436.5367,
+              436.6725,
+              436.8187,
+              437.014,
+              437.178,
+              437.4883,
+              437.8295,
+              438.2927,
+              438.8488,
+              439.4812,
+              440.1737,
+              440.8838,
+              441.5902,
+              442.3677,
+              443.1198,
+              443.9227,
+              444.7427,
+              445.661,
+              446.5052
             ],
             "price_summary": {
-              "latest_close": 586.080017,
-              "ma20": 599.538498,
-              "ma60": 590.467668,
+              "latest_close": 475.309998,
+              "ma20": 467.454503,
+              "ma60": 446.505167,
               "trend": "多头排列",
-              "change_pct_20d": -0.029074
+              "change_pct_20d": 0.041433
             },
             "indicator_summary": {
-              "rsi": 36.446209,
-              "rsi_state": "中性",
-              "macd": -0.983444,
-              "macd_state": "偏空",
-              "volatility_20d": 0.142818
+              "rsi": 70.76117,
+              "rsi_state": "超买",
+              "macd": 7.189945,
+              "macd_state": "偏多",
+              "volatility_20d": 0.098019
             },
             "strategy_signal": {
               "name": "20日动量",
               "name_zh": "20日动量",
               "name_en": "momentum",
               "signal": "HOLD",
-              "score": 62.32,
-              "reasoning": "20日收益率 (-2.91%) 为负，momentum 偏空，产生卖出/观望信号。",
-              "reasoning_en": "MA20/MA60 trend is positive; RSI is neutral; MACD is danger. The current strategy signal is HOLD with score 62."
+              "score": 92.21,
+              "reasoning": "20日收益率 (4.14%) 为正，momentum 偏多，产生买入信号。",
+              "reasoning_en": "MA20/MA60 trend is positive; RSI is danger; MACD is positive. The current strategy signal is HOLD with score 92."
             },
             "backtest_summary": {
-              "total_return": 43.16457687816986,
-              "sharpe": 0.6401191629090036,
-              "max_drawdown": 15.422775261995003,
-              "win_rate": 37.97996661101836,
-              "trades": 98
+              "total_return": 14.412111785973615,
+              "sharpe": 2.1333653165840323,
+              "max_drawdown": 7.460674488780173,
+              "win_rate": 41.05263157894737,
+              "trades": 13
             },
             "sparkline": [
-              567.8,
-              573.17,
-              577.14,
-              576.13,
-              579.58,
-              584.32,
-              579.78,
-              582.3,
-              582.35,
-              584.59,
-              583.63,
-              583.32,
-              577.99,
-              579.24,
-              579.04,
-              580.83,
-              581.77,
-              580.01,
-              568.64,
-              571.04,
-              569.81,
-              576.7,
-              591.04,
-              595.61,
-              598.19,
-              598.76,
-              596.9,
-              597.19,
-              593.35,
-              585.75,
-              588.15,
-              590.3,
-              590.5,
-              593.67,
-              595.51,
-              597.53,
-              600.65,
-              598.83,
-              602.55,
-              603.63,
-              603.91,
-              607.66,
-              606.66,
-              607.81,
-              604.68,
-              602.8,
-              607.46,
-              604.33,
-              604.21,
-              606.79,
-              604.29,
-              586.28,
-              586.1,
-              591.15,
-              594.69,
-              601.3,
-              601.34,
-              595.01,
-              588.22,
-              586.08
+              424.5,
+              429.54,
+              432.29,
+              434.54,
+              436.32,
+              433.66,
+              431.5,
+              436.04,
+              436.02,
+              430.21,
+              426.43,
+              421.19,
+              420.46,
+              423.63,
+              417.55,
+              412.55,
+              410.68,
+              415.59,
+              418.2,
+              422.66,
+              430.76,
+              434.69,
+              435.69,
+              436.93,
+              437.25,
+              433.84,
+              440.61,
+              440.19,
+              448.73,
+              449.68,
+              450.23,
+              450.79,
+              454.26,
+              453.27,
+              455.02,
+              455.3,
+              454.48,
+              454.93,
+              454.61,
+              456.4,
+              459.1,
+              456.69,
+              456.6,
+              454.76,
+              458.23,
+              460.2,
+              461.99,
+              464.1,
+              470.5,
+              472.01,
+              469.33,
+              471.97,
+              474.84,
+              468.26,
+              472.7,
+              473.65,
+              475.65,
+              476.51,
+              476.69,
+              475.31
             ],
-            "date_range": "2024-10-07 ~ 2024-12-31"
+            "date_range": "2023-10-05 ~ 2023-12-29"
           }
         },
         "details": {
@@ -1859,10 +1755,10 @@
             "回测表现摘要"
           ],
           "reasoning": [
-            "20日收益率 (-2.91%) 为负，momentum 偏空，产生卖出/观望信号。"
+            "20日收益率 (4.14%) 为正，momentum 偏多，产生买入信号。"
           ]
         },
-        "updated_at": "2026-06-17 13:44:04"
+        "updated_at": "2026-06-20 10:58:25"
       },
       "skills": {
         "room_id": "skills",
@@ -1873,11 +1769,11 @@
         "primary": {
           "label": "当前策略",
           "value": "20日动量",
-          "unit": "62.32",
+          "unit": "92.21",
           "level": "warning"
         },
-        "summary": "20日动量 · 信号 HOLD · 评分 62.32 · 多因子 50.29",
-        "insight": "20日收益率 (-2.91%) 为负，momentum 偏空，产生卖出/观望信号。",
+        "summary": "20日动量 · 信号 HOLD · 评分 92.21 · 多因子 61.03",
+        "insight": "20日收益率 (4.14%) 为正，momentum 偏多，产生买入信号。",
         "impact_on_decision": "策略得分分布均匀，优势不明显，最终保持谨慎。",
         "next_action": "继续观察 Top 策略是否获得趋势确认。",
         "monitor_focus": [
@@ -1895,14 +1791,14 @@
           },
           {
             "label": "策略评分",
-            "value": 62.32,
+            "value": 92.21,
             "unit": "pts",
             "display": "number",
             "level": "neutral"
           },
           {
             "label": "多因子评分",
-            "value": 50.29,
+            "value": 61.03,
             "unit": "pts",
             "display": "number",
             "level": "neutral"
@@ -1915,28 +1811,28 @@
           },
           {
             "label": "20日动量",
-            "value": 62.32,
-            "display": "strategy_score",
-            "signal": "buy",
-            "unit": "score"
-          },
-          {
-            "label": "RSI 动量",
-            "value": 57.2,
+            "value": 92.21,
             "display": "strategy_score",
             "signal": "buy",
             "unit": "score"
           },
           {
             "label": "均线交叉",
-            "value": 55.53,
+            "value": 87.79,
+            "display": "strategy_score",
+            "signal": "buy",
+            "unit": "score"
+          },
+          {
+            "label": "RSI 动量",
+            "value": 66.64,
             "display": "strategy_score",
             "signal": "buy",
             "unit": "score"
           },
           {
             "label": "经验条数",
-            "value": 27,
+            "value": 30,
             "unit": "",
             "display": "number",
             "level": "neutral",
@@ -1958,8 +1854,8 @@
               "name": "momentum",
               "name_zh": "20日动量",
               "signal": "HOLD",
-              "score": 62.32,
-              "base_score": 59.33,
+              "score": 92.21,
+              "base_score": 94.83,
               "params": [
                 {
                   "label": "回看周期",
@@ -1970,41 +1866,174 @@
                   "value": "20日收益 > 0 → 做多"
                 }
               ],
-              "reasoning": "20日收益率 (-2.91%) 为负，momentum 偏空，产生卖出/观望信号。",
+              "reasoning": "20日收益率 (4.14%) 为正，momentum 偏多，产生买入信号。",
               "description": "动量策略：20日收益为正买入，为负卖出。"
             },
             "strategies": [
               {
                 "name": "momentum",
-                "base_score": 59.33,
+                "base_score": 94.83,
                 "llm_adjustment": 0,
-                "experience_delta": 6.0,
-                "experience_reason": "avg return 60.2%; Sharpe 0.74",
-                "final_score": 62.32,
-                "multi_factor_score": 50.29
-              },
-              {
-                "name": "rsi",
-                "base_score": 58.93,
-                "llm_adjustment": 0,
-                "experience_delta": 0.0,
-                "experience_reason": "",
-                "final_score": 57.2,
-                "multi_factor_score": 50.29
+                "experience_delta": 5.4,
+                "experience_reason": "avg return 24.0%; Sharpe 1.63",
+                "final_score": 92.21,
+                "multi_factor_score": 61.03
               },
               {
                 "name": "ma",
-                "base_score": 56.84,
+                "base_score": 94.48,
                 "llm_adjustment": 0,
                 "experience_delta": 0.0,
                 "experience_reason": "",
-                "final_score": 55.53,
-                "multi_factor_score": 50.29
+                "final_score": 87.79,
+                "multi_factor_score": 61.03
+              },
+              {
+                "name": "rsi",
+                "base_score": 68.05,
+                "llm_adjustment": 0,
+                "experience_delta": 0.0,
+                "experience_reason": "",
+                "final_score": 66.64,
+                "multi_factor_score": 61.03
               }
             ],
-            "multi_factor_score": 50.29,
+            "multi_factor_score": 61.03,
             "learning": {
               "recent_lessons": [
+                {
+                  "run_id": "SPY_momentum_20260620105823",
+                  "ticker": "SPY",
+                  "strategy": "momentum",
+                  "date": "2026-06-20",
+                  "timestamp": "2026-06-20T10:58:23.160100",
+                  "metrics": {
+                    "decision": "hold",
+                    "decision_mode": "proceed_with_caution",
+                    "confidence": 49.0,
+                    "position_pct": 49.0,
+                    "total_return_pct": 14.41,
+                    "sharpe_ratio": 2.13,
+                    "max_drawdown_pct": 7.46,
+                    "win_rate_pct": 41.1,
+                    "trades": 13,
+                    "risk_score": 15,
+                    "risk_level": "low",
+                    "rsi": 70.76117,
+                    "macd": 7.189945,
+                    "ma20": 467.454503,
+                    "ma60": 446.505167,
+                    "volatility_20d_pct": 9.8,
+                    "return_20d_pct": 4.14,
+                    "news_sentiment": "neutral",
+                    "news_score": 50
+                  },
+                  "lesson": {
+                    "zh": "momentum 策略本次表现良好：收益 14.4%，夏普 2.13，当前市场环境较适合该策略。",
+                    "en": "momentum performed well: return 14.4%, Sharpe 2.13; current market regime appears favorable."
+                  },
+                  "tags": [
+                    "positive_return",
+                    "good_sharpe",
+                    "favorable_regime",
+                    "hold_decision"
+                  ],
+                  "paper_refs": [
+                    "Edwards & Magee (1948), Technical Analysis of Stock Trends",
+                    "Wilder (1978), New Concepts in Technical Trading Systems",
+                    "Jegadeesh & Titman (1993), Returns to Buying Winners and Selling Losers"
+                  ],
+                  "source": "rule_fallback"
+                },
+                {
+                  "run_id": "SPY_momentum_20260620105715",
+                  "ticker": "SPY",
+                  "strategy": "momentum",
+                  "date": "2026-06-20",
+                  "timestamp": "2026-06-20T10:57:15.888410",
+                  "metrics": {
+                    "decision": "hold",
+                    "decision_mode": "proceed_with_caution",
+                    "confidence": 49.0,
+                    "position_pct": 49.0,
+                    "total_return_pct": 14.41,
+                    "sharpe_ratio": 2.13,
+                    "max_drawdown_pct": 7.46,
+                    "win_rate_pct": 41.1,
+                    "trades": 13,
+                    "risk_score": 15,
+                    "risk_level": "low",
+                    "rsi": 70.76117,
+                    "macd": 7.189945,
+                    "ma20": 467.454503,
+                    "ma60": 446.505167,
+                    "volatility_20d_pct": 9.8,
+                    "return_20d_pct": 4.14,
+                    "news_sentiment": "neutral",
+                    "news_score": 50
+                  },
+                  "lesson": {
+                    "zh": "momentum 策略本次表现良好：收益 14.4%，夏普 2.13，当前市场环境较适合该策略。",
+                    "en": "momentum performed well: return 14.4%, Sharpe 2.13; current market regime appears favorable."
+                  },
+                  "tags": [
+                    "positive_return",
+                    "good_sharpe",
+                    "favorable_regime",
+                    "hold_decision"
+                  ],
+                  "paper_refs": [
+                    "Edwards & Magee (1948), Technical Analysis of Stock Trends",
+                    "Wilder (1978), New Concepts in Technical Trading Systems",
+                    "Jegadeesh & Titman (1993), Returns to Buying Winners and Selling Losers"
+                  ],
+                  "source": "rule_fallback"
+                },
+                {
+                  "run_id": "SPY_momentum_20260620105407",
+                  "ticker": "SPY",
+                  "strategy": "momentum",
+                  "date": "2026-06-20",
+                  "timestamp": "2026-06-20T10:54:11.574761",
+                  "metrics": {
+                    "decision": "hold",
+                    "decision_mode": "proceed_with_caution",
+                    "confidence": 52.0,
+                    "position_pct": 49.0,
+                    "total_return_pct": 14.41,
+                    "sharpe_ratio": 2.13,
+                    "max_drawdown_pct": 7.46,
+                    "win_rate_pct": 41.1,
+                    "trades": 13,
+                    "risk_score": 15,
+                    "risk_level": "low",
+                    "rsi": 70.76117,
+                    "macd": 7.189945,
+                    "ma20": 467.454503,
+                    "ma60": 446.505167,
+                    "volatility_20d_pct": 9.8,
+                    "return_20d_pct": 4.14,
+                    "news_sentiment": "neutral_positive",
+                    "news_score": 65
+                  },
+                  "lesson": {
+                    "zh": "动量策略在SPY上表现优异（收益14.4%，夏普2.13），低风险（15分）和正面新闻（65分）支持持有，但RSI超买（70.8）需警惕回调，与先前经验一致：等待确认信号能避免过早入场，但需关注胜率（41.1%）对长期收益的影响。",
+                    "en": "Momentum on SPY performed well (return 14.4%, Sharpe 2.13) with low risk (score 15) and positive news (65), but overbought RSI (70.8) warrants caution; consistent with prior lessons: waiting for confirmation avoids premature entry, but low win rate (41.1%) impacts long-term returns."
+                  },
+                  "tags": [
+                    "momentum",
+                    "hold_signal",
+                    "risk_management",
+                    "win_rate",
+                    "rsi_overbought"
+                  ],
+                  "paper_refs": [
+                    "Jegadeesh & Titman (1993)",
+                    "Wilder (1978)",
+                    "Xiao et al. (2025)"
+                  ],
+                  "source": "llm"
+                },
                 {
                   "run_id": "SPY_momentum_20260617134300",
                   "ticker": "SPY",
@@ -2092,227 +2121,99 @@
                     "Xiao et al. (2025)"
                   ],
                   "source": "llm"
-                },
-                {
-                  "run_id": "QQQ_momentum_20260617130109",
-                  "ticker": "QQQ",
-                  "strategy": "momentum",
-                  "date": "2026-06-17",
-                  "timestamp": "2026-06-17T13:01:12.069595",
-                  "metrics": {
-                    "decision": "hold",
-                    "decision_mode": "wait_for_confirmation",
-                    "confidence": 25.0,
-                    "position_pct": 0,
-                    "total_return_pct": 94.26,
-                    "sharpe_ratio": 0.93,
-                    "max_drawdown_pct": 20.98,
-                    "win_rate_pct": 37.1,
-                    "trades": 81,
-                    "risk_score": 49,
-                    "risk_level": "medium",
-                    "rsi": 44.35068,
-                    "macd": 2.400183,
-                    "ma20": 523.672493,
-                    "ma60": 507.31533,
-                    "volatility_20d_pct": 20.08,
-                    "return_20d_pct": -0.79,
-                    "news_sentiment": "negative",
-                    "news_score": 35
-                  },
-                  "lesson": {
-                    "zh": "QQQ动量策略在RSI中性（44.4）且MACD正值（2.4）时仍选择持有，与SPY经验一致，说明等待确认信号能避免在震荡中过早入场，但需注意低胜率（37.1%）和中等回撤（21%）对长期收益的侵蚀。",
-                    "en": "Momentum on QQQ holds despite neutral RSI (44.4) and positive MACD (2.4), consistent with SPY experience, confirming that waiting for confirmation avoids premature entry in choppy markets, but low win rate (37.1%) and moderate drawdown (21%) erode long-term returns."
-                  },
-                  "tags": [
-                    "momentum",
-                    "hold_signal",
-                    "risk_management",
-                    "win_rate",
-                    "drawdown"
-                  ],
-                  "paper_refs": [
-                    "Jegadeesh & Titman (1993)",
-                    "Edwards & Magee (1948)",
-                    "Wilder (1978)",
-                    "Appel (1979)"
-                  ],
-                  "source": "llm"
-                },
-                {
-                  "run_id": "SPY_momentum_20260617125952",
-                  "ticker": "SPY",
-                  "strategy": "momentum",
-                  "date": "2026-06-17",
-                  "timestamp": "2026-06-17T12:59:55.040359",
-                  "metrics": {
-                    "decision": "hold",
-                    "decision_mode": "wait_for_confirmation",
-                    "confidence": 25.0,
-                    "position_pct": 0,
-                    "total_return_pct": 43.16,
-                    "sharpe_ratio": 0.64,
-                    "max_drawdown_pct": 15.42,
-                    "win_rate_pct": 38.0,
-                    "trades": 98,
-                    "risk_score": 42,
-                    "risk_level": "medium",
-                    "rsi": 36.446209,
-                    "macd": -0.983444,
-                    "ma20": 599.538498,
-                    "ma60": 590.467668,
-                    "volatility_20d_pct": 14.28,
-                    "return_20d_pct": -2.91,
-                    "news_sentiment": "neutral_positive",
-                    "news_score": 55
-                  },
-                  "lesson": {
-                    "zh": "动量策略在SPY上持续持有，RSI偏低（36.4）和MACD负值（-0.98）确认弱势，但近期跌幅有限（-2.9%）和正面新闻（55分）支持等待确认；低胜率（38%）和中等回撤（15.4%）是长期收益的主要侵蚀因素，与先前经验一致。",
-                    "en": "Momentum on SPY continues to hold, with low RSI (36.4) and negative MACD (-0.98) confirming weakness, but limited recent decline (-2.9%) and positive news (score 55) support waiting for confirmation; low win rate (38%) and moderate drawdown (15.4%) remain key eroders of long-term returns, consistent with prior experiences."
-                  },
-                  "tags": [
-                    "momentum",
-                    "hold_signal",
-                    "risk_management",
-                    "win_rate",
-                    "drawdown",
-                    "news_sentiment"
-                  ],
-                  "paper_refs": [
-                    "Jegadeesh & Titman (1993)",
-                    "Wilder (1978)",
-                    "Appel (1979)"
-                  ],
-                  "source": "llm"
-                },
-                {
-                  "run_id": "SPY_momentum_20260617125611",
-                  "ticker": "SPY",
-                  "strategy": "momentum",
-                  "date": "2026-06-17",
-                  "timestamp": "2026-06-17T12:56:13.752814",
-                  "metrics": {
-                    "decision": "hold",
-                    "decision_mode": "wait_for_confirmation",
-                    "confidence": 25.0,
-                    "position_pct": 0,
-                    "total_return_pct": 43.16,
-                    "sharpe_ratio": 0.64,
-                    "max_drawdown_pct": 15.42,
-                    "win_rate_pct": 38.0,
-                    "trades": 98,
-                    "risk_score": 42,
-                    "risk_level": "medium",
-                    "rsi": 36.446209,
-                    "macd": -0.983444,
-                    "ma20": 599.538498,
-                    "ma60": 590.467668,
-                    "volatility_20d_pct": 14.28,
-                    "return_20d_pct": -2.91,
-                    "news_sentiment": "neutral",
-                    "news_score": 50
-                  },
-                  "lesson": {
-                    "zh": "动量策略在SPY上持续发出持有信号，RSI偏低（36.4）和MACD负值（-0.98）确认弱势，但近期跌幅有限（-2.9%）和中性新闻（50分）支持等待确认；低胜率（38%）和中等回撤（15.4%）是长期收益的主要侵蚀因素，与先前经验一致。",
-                    "en": "Momentum on SPY continues to issue hold signals, with low RSI (36.4) and negative MACD (-0.98) confirming weakness, but limited recent decline (-2.9%) and neutral news (score 50) support waiting for confirmation; low win rate (38%) and moderate drawdown (15.4%) remain key eroders of long-term returns, consistent with prior experiences."
-                  },
-                  "tags": [
-                    "momentum",
-                    "hold_signal",
-                    "risk_management",
-                    "win_rate",
-                    "drawdown",
-                    "news_sentiment"
-                  ],
-                  "paper_refs": [
-                    "Jegadeesh & Titman (1993)",
-                    "Xiao et al. (2025)"
-                  ],
-                  "source": "llm"
                 }
               ],
               "experience_cards": [
                 {
-                  "id": "exp_momentum_20260617134400",
+                  "id": "exp_momentum_20260620105823",
                   "strategy": "momentum",
-                  "created_at": "2026-06-17T13:44:00.568668",
+                  "created_at": "2026-06-20T10:58:23.160100",
                   "lesson_count": 3,
                   "summary": {
-                    "zh": "动量策略在弱势市场中持续发出持有信号，等待确认以避免过早入场。低RSI和混合MACD信号暗示弱势，但有限的近期跌幅和中性偏正面的新闻支持耐心等待。低胜率（约37-38%）和中等回撤（15-21%）是长期收益的主要侵蚀因素，需通过风险管理来缓解。",
-                    "en": "Momentum strategy consistently issues hold signals in weak markets, waiting for confirmation to avoid premature entry. Low RSI and mixed MACD signals indicate weakness, but limited recent declines and neutral-to-positive news support patience. Low win rates (~37-38%) and moderate drawdowns (15-21%) are key eroders of long-term returns, requiring risk management to mitigate."
+                    "zh": "基于 3 次运行，momentum 策略平均收益为正（14.4%），夏普 2.13，表现稳定。",
+                    "en": "Based on 3 runs, momentum shows stable positive average returns (14.4%) with Sharpe 2.13."
                   },
                   "key_findings": [
                     {
-                      "en": "Momentum holds despite neutral-to-low RSI (36-44) and mixed MACD, waiting for confirmation to avoid premature entry in choppy markets.",
-                      "zh": "动量策略在RSI中性或偏低（36-44）且MACD有正有负时仍选择持有，等待确认信号能避免震荡市中的过早入场。"
+                      "en": "Momentum on SPY performed well (return 14.4%, Sharpe 2.13) with low risk (score 15) and positive news (65), but overbought RSI (70.8) warrants caution; consistent with prior lessons: waiting for confirmation avoids premature entry, but low win rate (41.1%) impacts long-term returns.",
+                      "zh": "动量策略在SPY上表现优异（收益14.4%，夏普2.13），低风险（15分）和正面新闻（65分）支持持有，但RSI超买（70.8）需警惕回调，与先前经验一致：等待确认信号能避免过早入场，但需关注胜率（41.1%）对长期收益的影响。"
                     },
                     {
-                      "en": "Low win rates (37-38%) and moderate drawdowns (15-21%) are key eroders of long-term returns, requiring risk management.",
-                      "zh": "低胜率（37-38%）和中等回撤（15-21%）是长期收益的主要侵蚀因素，需通过风险管理来缓解。"
+                      "en": "momentum performed well: return 14.4%, Sharpe 2.13; current market regime appears favorable.",
+                      "zh": "momentum 策略本次表现良好：收益 14.4%，夏普 2.13，当前市场环境较适合该策略。"
                     },
                     {
-                      "en": "Neutral-to-positive news sentiment and limited recent declines (-0.8% to -2.9%) support patience rather than immediate exit.",
-                      "zh": "新闻情绪（中性偏正面）和有限的近期跌幅（-0.8%至-2.9%）支持耐心等待，而非立即离场。"
+                      "en": "momentum performed well: return 14.4%, Sharpe 2.13; current market regime appears favorable.",
+                      "zh": "momentum 策略本次表现良好：收益 14.4%，夏普 2.13，当前市场环境较适合该策略。"
                     }
                   ],
                   "avg_metrics": {
-                    "avg_return_pct": 60.19,
-                    "avg_sharpe": 0.74
+                    "avg_return_pct": 14.41,
+                    "avg_sharpe": 2.13
                   },
                   "tags": [
-                    "momentum",
+                    "favorable_regime",
+                    "good_sharpe",
+                    "hold_decision",
                     "hold_signal",
+                    "momentum",
+                    "positive_return",
                     "risk_management",
-                    "win_rate",
-                    "drawdown",
-                    "news_sentiment"
+                    "rsi_overbought",
+                    "win_rate"
                   ],
                   "paper_refs": [
-                    "Jegadeesh & Titman (1993)"
+                    "Edwards & Magee (1948), Technical Analysis of Stock Trends",
+                    "Jegadeesh & Titman (1993)",
+                    "Jegadeesh & Titman (1993), Returns to Buying Winners and Selling Losers",
+                    "Wilder (1978)",
+                    "Wilder (1978), New Concepts in Technical Trading Systems",
+                    "Xiao et al. (2025)"
                   ],
                   "source_lesson_ids": [
-                    "SPY_momentum_20260617134300",
-                    "SPY_momentum_20260617130331",
-                    "QQQ_momentum_20260617130109"
+                    "SPY_momentum_20260620105407",
+                    "SPY_momentum_20260620105823",
+                    "SPY_momentum_20260620105715"
                   ],
-                  "source": "llm"
+                  "source": "rule_fallback"
                 }
               ],
-              "total_lessons": 27,
+              "total_lessons": 30,
               "latest_lesson": {
-                "run_id": "SPY_momentum_20260617134300",
+                "run_id": "SPY_momentum_20260620105823",
                 "ticker": "SPY",
                 "strategy": "momentum",
-                "date": "2026-06-17",
-                "timestamp": "2026-06-17T13:43:46.026161",
+                "date": "2026-06-20",
+                "timestamp": "2026-06-20T10:58:23.160100",
                 "metrics": {
                   "decision": "hold",
-                  "decision_mode": "wait_for_confirmation",
-                  "confidence": 25.0,
-                  "position_pct": 0,
-                  "total_return_pct": 43.16,
-                  "sharpe_ratio": 0.64,
-                  "max_drawdown_pct": 15.42,
-                  "win_rate_pct": 38.0,
-                  "trades": 98,
-                  "risk_score": 42,
-                  "risk_level": "medium",
-                  "rsi": 36.446209,
-                  "macd": -0.983444,
-                  "ma20": 599.538498,
-                  "ma60": 590.467668,
-                  "volatility_20d_pct": 14.28,
-                  "return_20d_pct": -2.91,
+                  "decision_mode": "proceed_with_caution",
+                  "confidence": 49.0,
+                  "position_pct": 49.0,
+                  "total_return_pct": 14.41,
+                  "sharpe_ratio": 2.13,
+                  "max_drawdown_pct": 7.46,
+                  "win_rate_pct": 41.1,
+                  "trades": 13,
+                  "risk_score": 15,
+                  "risk_level": "low",
+                  "rsi": 70.76117,
+                  "macd": 7.189945,
+                  "ma20": 467.454503,
+                  "ma60": 446.505167,
+                  "volatility_20d_pct": 9.8,
+                  "return_20d_pct": 4.14,
                   "news_sentiment": "neutral",
                   "news_score": 50
                 },
                 "lesson": {
-                  "zh": "momentum 策略本次表现中性（收益 43.2%，夏普 0.64），建议继续观察后续确认。",
-                  "en": "momentum showed neutral performance (return 43.2%, Sharpe 0.64); continue monitoring for confirmation."
+                  "zh": "momentum 策略本次表现良好：收益 14.4%，夏普 2.13，当前市场环境较适合该策略。",
+                  "en": "momentum performed well: return 14.4%, Sharpe 2.13; current market regime appears favorable."
                 },
                 "tags": [
-                  "neutral",
-                  "watch",
+                  "positive_return",
+                  "good_sharpe",
+                  "favorable_regime",
                   "hold_decision"
                 ],
                 "paper_refs": [
@@ -2321,6 +2222,16 @@
                   "Jegadeesh & Titman (1993), Returns to Buying Winners and Selling Losers"
                 ],
                 "source": "rule_fallback"
+              }
+            },
+            "skillopt": {
+              "global_skill": "# 量化交易 Agent 全局技能（SkillOpt 可优化）\n\n## 核心原则\n\n1. **风险优先**：任何买入建议都必须先检查风险分数；风险分数 ≥ 40 时降低仓位或保持观望。\n2. **多信号一致性**：不要仅凭单一维度（新闻、指标或回测）做决策；当多数信号与最终决策冲突时，应主动降低置信度。\n3. **均值回复与趋势跟随的边界**：震荡市（RSI 40-60，MA20 与 MA60 纠缠）避免强买强卖；趋势市才允许激进仓位。\n4. **回测结果只是历史**：回测夏普 > 1 且最大回撤 < 15% 才算有力支持；否则仅作为参考。\n5. **反对意见的权重**：Critic Agent 提出 ≥2 条实质性质疑时，必须重新审视决策，而不是简单忽略。\n6. **止损纪律**：任何策略的最大回撤若超过 -20%，应视为高风险信号，优先收紧仓位。\n7. **持续反思**：每次决策后若结果不佳，优先检查是否过度依赖某个单一 agent 的信号。\n\n## 输出规范\n\n- 所有结论必须给出可量化的理由（分数、阈值、历史对比）。\n- 当置信度不足时，明确给出 \"watch\" / \"wait_for_confirmation\" 模式，而不是强行买入或卖出。\n- 中文回答使用专业但简洁的金融术语；英文回答保持同等详细程度。\n",
+              "status": {
+                "updated": false,
+                "reason": "no_edit_proposed",
+                "baseline_score": 75.625,
+                "new_score": null,
+                "skill_path": "D:\\app\\githubprojects\\algorithmic_trade_push\\quant-agent\\trading_agent\\skills\\global_skill.md"
               }
             }
           }
@@ -2336,11 +2247,11 @@
             "策略排名"
           ],
           "reasoning": [
-            "20日收益率 (-2.91%) 为负，momentum 偏空，产生卖出/观望信号。",
+            "20日收益率 (4.14%) 为正，momentum 偏多，产生买入信号。",
             ""
           ]
         },
-        "updated_at": "2026-06-17 13:44:04"
+        "updated_at": "2026-06-20 10:58:25"
       },
       "alarm": {
         "room_id": "alarm",
@@ -2350,14 +2261,14 @@
         "panel_type": "risk_gauge",
         "primary": {
           "label": "Risk Gate",
-          "value": "限制仓位",
+          "value": "可放行",
           "unit": "",
-          "level": "warning"
+          "level": "positive"
         },
-        "summary": "限制仓位 · 42/100 · 仓位上限 40%",
+        "summary": "可放行 · 15/100 · 仓位上限 70%",
         "insight": "风险分数由最大回撤、波动率分位数和市场状态共同决定。",
-        "impact_on_decision": "风险门控限制激进买入，并降低建议仓位。",
-        "next_action": "等待风险分数下降到 35 以下。",
+        "impact_on_decision": "风险水平较低，允许正常仓位操作。",
+        "next_action": "风险可控，继续监控。",
         "monitor_focus": [
           "风险分数 < 35",
           "最大回撤 < 15%",
@@ -2366,28 +2277,28 @@
         "metrics": [
           {
             "label": "风险分数",
-            "value": 42,
+            "value": 15,
             "unit": "/100",
             "display": "bar",
-            "level": "warning"
+            "level": "neutral"
           },
           {
             "label": "最大回撤",
-            "value": -15.4,
+            "value": -7.5,
             "unit": "%",
             "display": "bar",
-            "level": "warning"
+            "level": "neutral"
           },
           {
             "label": "仓位上限",
-            "value": 40,
+            "value": 70,
             "unit": "%",
             "display": "bar",
-            "level": "warning"
+            "level": "neutral"
           },
           {
             "label": "波动率分位",
-            "value": 49,
+            "value": 20,
             "unit": "%",
             "display": "number",
             "level": "neutral"
@@ -2396,29 +2307,29 @@
         "visual": {
           "kind": "risk_gauge",
           "data": {
-            "risk_score": 42,
-            "risk_level": "medium",
-            "gate_status": "limited",
-            "gate_level": "warning",
-            "gate_label_zh": "限制仓位",
-            "gate_label_en": "Position Limited",
-            "position_limit_pct": 40,
+            "risk_score": 15,
+            "risk_level": "low",
+            "gate_status": "pass",
+            "gate_level": "positive",
+            "gate_label_zh": "可放行",
+            "gate_label_en": "Cleared",
+            "position_limit_pct": 70,
             "sources": [
               {
                 "key": "max_drawdown",
                 "label": "Max Drawdown",
                 "label_zh": "最大回撤",
-                "value": -15.4,
+                "value": -7.5,
                 "unit": "%",
                 "threshold": "< 15%",
-                "status": "warn",
-                "impact": "限制仓位"
+                "status": "pass",
+                "impact": "正常"
               },
               {
                 "key": "volatility_percentile",
                 "label": "Volatility Percentile",
                 "label_zh": "波动率分位",
-                "value": 49,
+                "value": 20,
                 "unit": "%",
                 "threshold": "< 60%",
                 "status": "pass",
@@ -2428,23 +2339,23 @@
                 "key": "position_limit",
                 "label": "Position Limit",
                 "label_zh": "仓位上限",
-                "value": 40,
+                "value": 70,
                 "unit": "%",
                 "threshold": ">= 50%",
-                "status": "warn",
-                "impact": "限制最终仓位"
+                "status": "pass",
+                "impact": "正常"
               }
             ],
             "legacy_sources": [
               {
                 "label": "Max Drawdown",
-                "value": -15.4,
+                "value": -7.5,
                 "unit": "%",
                 "impact": "medium"
               },
               {
                 "label": "Volatility Percentile",
-                "value": 49,
+                "value": 20,
                 "unit": "%",
                 "impact": "medium"
               }
@@ -2453,19 +2364,19 @@
               {
                 "label": "Risk Score < 35",
                 "label_zh": "风险分数 < 35",
-                "current": 42,
-                "status": "wait"
+                "current": 15,
+                "status": "pass"
               },
               {
                 "label": "Max Drawdown < 15%",
                 "label_zh": "最大回撤 < 15%",
-                "current": 15.4,
-                "status": "wait"
+                "current": 7.5,
+                "status": "pass"
               },
               {
                 "label": "Volatility Percentile < 60%",
                 "label_zh": "波动率分位 < 60%",
-                "current": 49,
+                "current": 20,
                 "status": "pass"
               }
             ]
@@ -2486,7 +2397,7 @@
             "回撤和波动率共同决定风险水平。"
           ]
         },
-        "updated_at": "2026-06-17 13:44:04"
+        "updated_at": "2026-06-20 10:58:25"
       },
       "task_queues": {
         "room_id": "task_queues",
@@ -2496,13 +2407,13 @@
         "panel_type": "backtest_curve",
         "primary": {
           "label": "验证结论",
-          "value": "谨慎通过",
+          "value": "通过",
           "unit": "",
-          "level": "warning"
+          "level": "positive"
         },
-        "summary": "回测收益 43.2% · 夏普 0.64 · 最大回撤 -15.4%",
-        "insight": "回测总收益 43.2%，夏普 0.64，最大回撤 -15.4%。收益为正但 Sharpe 一般。",
-        "impact_on_decision": "回测收益为正，但 Sharpe 一般且最大回撤较大，因此只能形成有限正向支持。",
+        "summary": "回测收益 14.4% · 夏普 2.13 · 最大回撤 -7.5%",
+        "insight": "回测总收益 14.4%，夏普 2.13，最大回撤 -7.5%。表现良好。",
+        "impact_on_decision": "回测表现良好，支持当前策略方向。",
         "next_action": "继续监控策略表现。",
         "monitor_focus": [
           "夏普 > 1.0",
@@ -2512,35 +2423,35 @@
         "metrics": [
           {
             "label": "总收益",
-            "value": 43.2,
+            "value": 14.4,
             "unit": "%",
             "display": "bar",
             "level": "positive"
           },
           {
             "label": "夏普比率",
-            "value": "0.64",
+            "value": "2.13",
             "unit": "",
             "display": "number",
-            "level": "neutral"
+            "level": "positive"
           },
           {
             "label": "最大回撤",
-            "value": -15.4,
+            "value": -7.5,
             "unit": "%",
             "display": "bar",
-            "level": "warning"
+            "level": "neutral"
           },
           {
             "label": "胜率",
-            "value": 38.0,
+            "value": 41.1,
             "unit": "%",
             "display": "bar",
             "level": "neutral"
           },
           {
             "label": "交易次数",
-            "value": 98,
+            "value": 13,
             "unit": "",
             "display": "number",
             "level": "neutral"
@@ -2556,34 +2467,34 @@
               1.0
             ],
             "validation": {
-              "status": "caution",
-              "status_zh": "谨慎通过",
-              "status_en": "Caution",
-              "total_return": 43.2,
-              "sharpe": "0.64",
-              "max_drawdown": -15.4,
-              "win_rate": 38.0,
-              "trades": 98
+              "status": "pass",
+              "status_zh": "通过",
+              "status_en": "Pass",
+              "total_return": 14.4,
+              "sharpe": "2.13",
+              "max_drawdown": -7.5,
+              "win_rate": 41.1,
+              "trades": 13
             },
             "risk_handoff": [
               {
                 "label": "Max Drawdown",
                 "label_zh": "最大回撤",
-                "value": -15.4,
+                "value": -7.5,
                 "unit": "%",
-                "status": "warn"
+                "status": "pass"
               },
               {
                 "label": "Sharpe",
                 "label_zh": "夏普比率",
-                "value": "0.64",
+                "value": "2.13",
                 "unit": "",
-                "status": "warn"
+                "status": "pass"
               },
               {
                 "label": "Win Rate",
                 "label_zh": "胜率",
-                "value": 38.0,
+                "value": 41.1,
                 "unit": "%",
                 "status": "warn"
               }
@@ -2621,7 +2532,7 @@
             "基于历史数据模拟策略表现。"
           ]
         },
-        "updated_at": "2026-06-17 13:44:04"
+        "updated_at": "2026-06-20 10:58:25"
       },
       "schedule": {
         "room_id": "schedule",
@@ -2637,11 +2548,11 @@
           "level": "warning"
         },
         "summary": {
-          "en": "HOLD · Wait",
-          "zh": "HOLD · 等待确认"
+          "en": "HOLD · Caution",
+          "zh": "HOLD · 谨慎"
         },
         "insight": {
-          "en": "HOLD is not well supported. Consider reducing position size or waiting for confirmation. | Critic: News is neutral, but some agents signal BUY — HOLD may miss early momentum.",
+          "en": "BUY is supported but with reservations. Review concerns before execution. | Critic: RSI is 70.8 (near overbought), but decision is BUY — may buy at local peak.",
           "zh": "最终选择 HOLD，等待进一步确认。"
         },
         "impact_on_decision": {
@@ -2649,8 +2560,8 @@
           "zh": "最终决策整合所有 Agent 投票，由风险闸门和 Critic Review 限制激进买入。"
         },
         "next_action": {
-          "en": "Enter Wait for Confirmation mode.",
-          "zh": "进入等待确认模式。"
+          "en": "Continue monitoring market signals.",
+          "zh": "继续监控市场信号。"
         },
         "monitor_focus": [
           {
@@ -2677,15 +2588,15 @@
           },
           {
             "label": "Mode",
-            "value": "Wait",
+            "value": "Caution",
             "unit": "",
             "display": "number",
             "level": "neutral",
-            "label_zh": "等待确认"
+            "label_zh": "谨慎"
           },
           {
             "label": "Confidence",
-            "value": "25%",
+            "value": "49%",
             "unit": "",
             "display": "number",
             "level": "neutral",
@@ -2693,7 +2604,7 @@
           },
           {
             "label": "Score",
-            "value": "56",
+            "value": "76",
             "unit": "",
             "display": "number",
             "level": "neutral",
@@ -2701,7 +2612,7 @@
           },
           {
             "label": "Critic",
-            "value": "35",
+            "value": "55",
             "unit": "",
             "display": "number",
             "level": "neutral",
@@ -2709,7 +2620,7 @@
           },
           {
             "label": "Position",
-            "value": "0%",
+            "value": "49%",
             "unit": "",
             "display": "number",
             "level": "neutral",
@@ -2717,7 +2628,7 @@
           },
           {
             "label": "Watch",
-            "value": "HIGH",
+            "value": "MEDIUM",
             "unit": "",
             "display": "number",
             "level": "neutral",
@@ -2726,10 +2637,10 @@
           {
             "label": "Indicator",
             "label_zh": "指标 Agent",
-            "value": "BUY",
-            "unit": "67",
+            "value": "SELL",
+            "unit": "76",
             "display": "badge",
-            "level": "positive"
+            "level": "danger"
           },
           {
             "label": "News",
@@ -2742,16 +2653,16 @@
           {
             "label": "Risk",
             "label_zh": "风险 Agent",
-            "value": "HOLD",
-            "unit": "58",
+            "value": "BUY",
+            "unit": "85",
             "display": "badge",
-            "level": "warning"
+            "level": "positive"
           },
           {
             "label": "Backtest",
             "label_zh": "回测 Agent",
             "value": "BUY",
-            "unit": "82",
+            "unit": "100",
             "display": "badge",
             "level": "positive"
           },
@@ -2759,7 +2670,7 @@
             "label": "Critic",
             "label_zh": "Critic",
             "value": "HOLD",
-            "unit": "30",
+            "unit": "45",
             "display": "badge",
             "level": "warning"
           }
@@ -2769,17 +2680,17 @@
           "data": {
             "decision_panel": {
               "decision": "hold",
-              "initial_decision": "hold",
+              "initial_decision": "buy",
               "final_decision": "hold",
-              "decision_mode": "wait_for_confirmation",
-              "decision_score": 56,
-              "confidence": 0.25,
-              "critic_score": 35,
-              "position_pct": 0,
-              "position_before_pct": 40,
-              "watch_priority": "high",
+              "decision_mode": "proceed_with_caution",
+              "decision_score": 76,
+              "confidence": 0.49,
+              "critic_score": 55,
+              "position_pct": 49,
+              "position_before_pct": 70,
+              "watch_priority": "medium",
               "revision_applied": true,
-              "revision_reason": "Backtest Sharpe is decent; consider small position if confirmation arrives."
+              "revision_reason": "RSI near overbought — consider partial entry or wait for pullback."
             },
             "input_summary": {
               "strategy": {
@@ -2791,7 +2702,7 @@
                 "signal": "HOLD",
                 "strategy": "momentum",
                 "strategy_zh": "20日动量",
-                "score": 62.32
+                "score": 92.21
               },
               "risk": {
                 "room": "alarm",
@@ -2799,13 +2710,13 @@
                   "en": "Risk Alert",
                   "zh": "风险报警室"
                 },
-                "gate_status": "limited",
+                "gate_status": "pass",
                 "gate_label": {
-                  "en": "Position Limited",
-                  "zh": "限制仓位"
+                  "en": "Cleared",
+                  "zh": "可放行"
                 },
-                "position_limit_pct": 40,
-                "risk_score": 42
+                "position_limit_pct": 70,
+                "risk_score": 15
               },
               "backtest": {
                 "room": "task_queues",
@@ -2818,9 +2729,9 @@
                   "en": "Cautious Pass",
                   "zh": "谨慎通过"
                 },
-                "total_return_pct": 43.2,
-                "sharpe": 0.64,
-                "max_drawdown_pct": 15.4
+                "total_return_pct": 14.4,
+                "sharpe": 2.13,
+                "max_drawdown_pct": 7.5
               },
               "market": {
                 "room": "gateway",
@@ -2845,20 +2756,20 @@
                   "zh": "震荡盘整"
                 },
                 "rsi_state": {
-                  "en": "Neutral",
-                  "zh": "中性"
+                  "en": "Extreme",
+                  "zh": "极端"
                 },
-                "macd_signal": "Weak",
-                "macd_signal_zh": "偏弱",
-                "return_20d_pct": -2.9,
-                "volatility_20d_pct": 14.3
+                "macd_signal": "Strong",
+                "macd_signal_zh": "偏强",
+                "return_20d_pct": 4.1,
+                "volatility_20d_pct": 9.8
               }
             },
             "final_strategy": {
               "name": "momentum",
               "name_zh": "20日动量",
               "signal": "HOLD",
-              "score": 62.32
+              "score": 92.21
             },
             "mode_reason": {
               "en": "Auto selected HOLD based on strategy signal, risk gate, backtest validation, and agent consensus.",
@@ -2867,10 +2778,10 @@
             "agent_votes_table": [
               {
                 "agent": "Indicator",
-                "vote": "buy",
-                "score": 67,
-                "confidence": 0.34,
-                "reason": "RSI 36.4 中性，MACD <0"
+                "vote": "sell",
+                "score": 76,
+                "confidence": 0.52,
+                "reason": "RSI 70.8 超买，MACD >0"
               },
               {
                 "agent": "News",
@@ -2881,31 +2792,36 @@
               },
               {
                 "agent": "Risk",
-                "vote": "hold",
-                "score": 58,
-                "confidence": 0.5,
-                "reason": "Risk Score 42，中等风险"
+                "vote": "buy",
+                "score": 85,
+                "confidence": 0.7,
+                "reason": "Risk Score 15，低风险"
               },
               {
                 "agent": "Backtest",
                 "vote": "buy",
-                "score": 82,
-                "confidence": 0.64,
-                "reason": "Sharpe 0.64，Return 43.2%"
+                "score": 100,
+                "confidence": 1.0,
+                "reason": "Sharpe 2.13，Return 14.4%"
               },
               {
                 "agent": "Critic",
                 "vote": "hold",
-                "score": 30,
-                "confidence": 0.6,
-                "reason": "Indicator signals BUY (score 67)"
+                "score": 45,
+                "confidence": 0.7,
+                "reason": "Indicator signals SELL (score 76)"
               }
             ],
             "vote_conflicts": [
               {
-                "conflict": "Majority vs Final Decision",
-                "description": "Majority of agents favor BUY, but final decision is HOLD.",
-                "resolution": "Risk constraints or weak confirmation override majority opinion — wait for stronger alignment."
+                "conflict": "Backtest vs Indicator",
+                "description": "Backtest favors BUY, but current indicators signal SELL.",
+                "resolution": "Current indicators and backtest disagree; prefer current indicators for real-time decisions."
+              },
+              {
+                "conflict": "Indicator vs Risk",
+                "description": "Indicators signal SELL, but risk assessment says BUY.",
+                "resolution": "Low risk allows indicator signals to execute freely."
               }
             ],
             "why_not": {
@@ -2916,25 +2832,21 @@
               },
               "reasons": [
                 {
-                  "en": "MACD is negative — momentum does not support entry",
-                  "zh": "MACD 为负，动能不支持入场"
-                },
-                {
-                  "en": "Risk gate blocks aggressive entry",
-                  "zh": "风险闸门阻止激进入场"
+                  "en": "RSI is not oversold — no deep-value entry signal",
+                  "zh": "RSI 未超卖，没有深度价值入场信号"
                 }
               ]
             },
             "trigger_conditions": [
               {
-                "condition": "Risk Score < 35 (current: 42)",
+                "condition": "Risk Score < 35 (current: 15)",
                 "type": "entry",
-                "condition_zh": "风险分数 < 35（当前：42）"
+                "condition_zh": "风险分数 < 35（当前：15）"
               },
               {
-                "condition": "RSI < 30 (current: 36.4)",
+                "condition": "RSI < 30 (current: 70.8)",
                 "type": "momentum",
-                "condition_zh": "RSI < 30（当前：36.4）"
+                "condition_zh": "RSI < 30（当前：70.8）"
               },
               {
                 "condition": "MACD > signal for 3 consecutive days",
@@ -2954,9 +2866,9 @@
                 "action_zh": "下个交易日复检"
               },
               {
-                "action": "Monitor MACD divergence",
-                "priority": "medium",
-                "action_zh": "关注 MACD 背离"
+                "action": "Monitor MACD crossover closely",
+                "priority": "high",
+                "action_zh": "密切关注 MACD 交叉"
               },
               {
                 "action": "Wait for trigger condition fulfillment before entry",
@@ -2980,30 +2892,29 @@
             "Watch Priority"
           ],
           "reasoning": [
-            "Initial: HOLD → Final: HOLD",
-            "Revision: Backtest Sharpe is decent; consider small position if confirmation arrives.",
-            "Critic verdict: disagree (score 35)",
-            "News is neutral, but some agents signal BUY — HOLD may miss early momentum.",
-            "Backtest return is positive and multiple agents favor BUY, but position remains on HOLD.",
-            "Conflict: Majority vs Final Decision → Risk constraints or weak confirmation override majority opinion — wait for stronger alignment.",
-            "Failure mode: If price breaks above MA20 with volume confirmation, HOLD may miss upside.",
-            "Failure mode: If macro news turns strongly positive and risk drops, current position may be too conservative.",
-            "Failure mode: Multiple agents already signal BUY; waiting for confirmation may result in worse entry price.",
+            "Initial: BUY → Final: HOLD",
+            "Revision: RSI near overbought — consider partial entry or wait for pullback.",
+            "Critic verdict: partial (score 55)",
+            "RSI is 70.8 (near overbought), but decision is BUY — may buy at local peak.",
+            "Conflict: Backtest vs Indicator → Current indicators and backtest disagree; prefer current indicators for real-time decisions.",
+            "Conflict: Indicator vs Risk → Low risk allows indicator signals to execute freely.",
+            "Failure mode: If volatility spikes unexpectedly, entry could suffer immediate drawdown.",
+            "Failure mode: If trend reverses after entry without stop-loss trigger, losses may accumulate.",
             "Failure mode: If data source has delayed or incorrect close price, all signals could be stale."
           ],
           "decision_panel": {
             "decision": "hold",
-            "initial_decision": "hold",
+            "initial_decision": "buy",
             "final_decision": "hold",
-            "decision_mode": "wait_for_confirmation",
-            "decision_score": 56,
-            "confidence": 0.25,
-            "critic_score": 35,
-            "position_pct": 0,
-            "position_before_pct": 40,
-            "watch_priority": "high",
+            "decision_mode": "proceed_with_caution",
+            "decision_score": 76,
+            "confidence": 0.49,
+            "critic_score": 55,
+            "position_pct": 49,
+            "position_before_pct": 70,
+            "watch_priority": "medium",
             "revision_applied": true,
-            "revision_reason": "Backtest Sharpe is decent; consider small position if confirmation arrives."
+            "revision_reason": "RSI near overbought — consider partial entry or wait for pullback."
           },
           "input_summary": {
             "strategy": {
@@ -3015,7 +2926,7 @@
               "signal": "HOLD",
               "strategy": "momentum",
               "strategy_zh": "20日动量",
-              "score": 62.32
+              "score": 92.21
             },
             "risk": {
               "room": "alarm",
@@ -3023,13 +2934,13 @@
                 "en": "Risk Alert",
                 "zh": "风险报警室"
               },
-              "gate_status": "limited",
+              "gate_status": "pass",
               "gate_label": {
-                "en": "Position Limited",
-                "zh": "限制仓位"
+                "en": "Cleared",
+                "zh": "可放行"
               },
-              "position_limit_pct": 40,
-              "risk_score": 42
+              "position_limit_pct": 70,
+              "risk_score": 15
             },
             "backtest": {
               "room": "task_queues",
@@ -3042,9 +2953,9 @@
                 "en": "Cautious Pass",
                 "zh": "谨慎通过"
               },
-              "total_return_pct": 43.2,
-              "sharpe": 0.64,
-              "max_drawdown_pct": 15.4
+              "total_return_pct": 14.4,
+              "sharpe": 2.13,
+              "max_drawdown_pct": 7.5
             },
             "market": {
               "room": "gateway",
@@ -3069,20 +2980,20 @@
                 "zh": "震荡盘整"
               },
               "rsi_state": {
-                "en": "Neutral",
-                "zh": "中性"
+                "en": "Extreme",
+                "zh": "极端"
               },
-              "macd_signal": "Weak",
-              "macd_signal_zh": "偏弱",
-              "return_20d_pct": -2.9,
-              "volatility_20d_pct": 14.3
+              "macd_signal": "Strong",
+              "macd_signal_zh": "偏强",
+              "return_20d_pct": 4.1,
+              "volatility_20d_pct": 9.8
             }
           },
           "final_strategy": {
             "name": "momentum",
             "name_zh": "20日动量",
             "signal": "HOLD",
-            "score": 62.32
+            "score": 92.21
           },
           "mode_reason": {
             "en": "Auto selected HOLD based on strategy signal, risk gate, backtest validation, and agent consensus.",
@@ -3091,10 +3002,10 @@
           "agent_votes_table": [
             {
               "agent": "Indicator",
-              "vote": "buy",
-              "score": 67,
-              "confidence": 0.34,
-              "reason": "RSI 36.4 中性，MACD <0"
+              "vote": "sell",
+              "score": 76,
+              "confidence": 0.52,
+              "reason": "RSI 70.8 超买，MACD >0"
             },
             {
               "agent": "News",
@@ -3105,31 +3016,36 @@
             },
             {
               "agent": "Risk",
-              "vote": "hold",
-              "score": 58,
-              "confidence": 0.5,
-              "reason": "Risk Score 42，中等风险"
+              "vote": "buy",
+              "score": 85,
+              "confidence": 0.7,
+              "reason": "Risk Score 15，低风险"
             },
             {
               "agent": "Backtest",
               "vote": "buy",
-              "score": 82,
-              "confidence": 0.64,
-              "reason": "Sharpe 0.64，Return 43.2%"
+              "score": 100,
+              "confidence": 1.0,
+              "reason": "Sharpe 2.13，Return 14.4%"
             },
             {
               "agent": "Critic",
               "vote": "hold",
-              "score": 30,
-              "confidence": 0.6,
-              "reason": "Indicator signals BUY (score 67)"
+              "score": 45,
+              "confidence": 0.7,
+              "reason": "Indicator signals SELL (score 76)"
             }
           ],
           "vote_conflicts": [
             {
-              "conflict": "Majority vs Final Decision",
-              "description": "Majority of agents favor BUY, but final decision is HOLD.",
-              "resolution": "Risk constraints or weak confirmation override majority opinion — wait for stronger alignment."
+              "conflict": "Backtest vs Indicator",
+              "description": "Backtest favors BUY, but current indicators signal SELL.",
+              "resolution": "Current indicators and backtest disagree; prefer current indicators for real-time decisions."
+            },
+            {
+              "conflict": "Indicator vs Risk",
+              "description": "Indicators signal SELL, but risk assessment says BUY.",
+              "resolution": "Low risk allows indicator signals to execute freely."
             }
           ],
           "why_not": {
@@ -3140,35 +3056,29 @@
             },
             "reasons": [
               {
-                "en": "MACD is negative — momentum does not support entry",
-                "zh": "MACD 为负，动能不支持入场"
-              },
-              {
-                "en": "Risk gate blocks aggressive entry",
-                "zh": "风险闸门阻止激进入场"
+                "en": "RSI is not oversold — no deep-value entry signal",
+                "zh": "RSI 未超卖，没有深度价值入场信号"
               }
             ]
           },
           "main_objections": [
-            "News is neutral, but some agents signal BUY — HOLD may miss early momentum.",
-            "Backtest return is positive and multiple agents favor BUY, but position remains on HOLD."
+            "RSI is 70.8 (near overbought), but decision is BUY — may buy at local peak."
           ],
           "failure_modes": [
-            "If price breaks above MA20 with volume confirmation, HOLD may miss upside.",
-            "If macro news turns strongly positive and risk drops, current position may be too conservative.",
-            "Multiple agents already signal BUY; waiting for confirmation may result in worse entry price.",
+            "If volatility spikes unexpectedly, entry could suffer immediate drawdown.",
+            "If trend reverses after entry without stop-loss trigger, losses may accumulate.",
             "If data source has delayed or incorrect close price, all signals could be stale."
           ],
           "trigger_conditions": [
             {
-              "condition": "Risk Score < 35 (current: 42)",
+              "condition": "Risk Score < 35 (current: 15)",
               "type": "entry",
-              "condition_zh": "风险分数 < 35（当前：42）"
+              "condition_zh": "风险分数 < 35（当前：15）"
             },
             {
-              "condition": "RSI < 30 (current: 36.4)",
+              "condition": "RSI < 30 (current: 70.8)",
               "type": "momentum",
-              "condition_zh": "RSI < 30（当前：36.4）"
+              "condition_zh": "RSI < 30（当前：70.8）"
             },
             {
               "condition": "MACD > signal for 3 consecutive days",
@@ -3183,19 +3093,10 @@
           ],
           "trigger_status": [
             {
-              "condition": "Risk Score < 35.0",
-              "current_value": 42,
-              "target_value": 35.0,
-              "distance": -7.0,
-              "status": "near",
-              "priority": "high",
-              "type": "entry"
-            },
-            {
               "condition": "RSI < 30.0",
-              "current_value": 36.45,
+              "current_value": 70.76,
               "target_value": 30.0,
-              "distance": -6.45,
+              "distance": -40.76,
               "status": "near",
               "priority": "medium",
               "type": "momentum"
@@ -3217,6 +3118,15 @@
               "status": "not_met",
               "priority": "medium",
               "type": "confirmation"
+            },
+            {
+              "condition": "Risk Score < 35.0",
+              "current_value": 15,
+              "target_value": 35.0,
+              "distance": 20.0,
+              "status": "met",
+              "priority": "medium",
+              "type": "entry"
             }
           ],
           "next_plan": [
@@ -3226,9 +3136,9 @@
               "action_zh": "下个交易日复检"
             },
             {
-              "action": "Monitor MACD divergence",
-              "priority": "medium",
-              "action_zh": "关注 MACD 背离"
+              "action": "Monitor MACD crossover closely",
+              "priority": "high",
+              "action_zh": "密切关注 MACD 交叉"
             },
             {
               "action": "Wait for trigger condition fulfillment before entry",
@@ -3236,9 +3146,22 @@
               "action_zh": "等待触发条件满足后再进场"
             }
           ],
-          "strategy_adjustments": []
+          "strategy_adjustments": [
+            {
+              "parameter": "position_size",
+              "current": "70%",
+              "suggested": "80%",
+              "reason": "Low risk + strong Sharpe supports larger position"
+            },
+            {
+              "parameter": "stop_loss",
+              "current": "-15%",
+              "suggested": "-18%",
+              "reason": "Stable history with high Sharpe — allow wider stop"
+            }
+          ]
         },
-        "updated_at": "2026-06-17 13:44:04"
+        "updated_at": "2026-06-20 10:58:25"
       },
       "document": {
         "room_id": "document",
@@ -3254,20 +3177,20 @@
           "level": "neutral"
         },
         "summary": {
-          "zh": "对 SPY 的最终决策为 观望。20日动量 策略发出 观望 信号，风险闸门为 限制仓位，回测验证为 谨慎通过。",
-          "en": "Final decision for SPY is HOLD. The momentum strategy signals HOLD, risk gate is Position Limited, and backtest validation is Cautious Pass."
+          "zh": "对 SPY 的最终决策为 观望。20日动量 策略发出 观望 信号，风险闸门为 可放行，回测验证为 谨慎通过。",
+          "en": "Final decision for SPY is HOLD. The momentum strategy signals HOLD, risk gate is Cleared, and backtest validation is Cautious Pass."
         },
         "insight": {
-          "zh": "SPY当前处于震荡盘整，20日动量策略发出HOLD信号，风险评分中等，仓位受限。建议观望，等待趋势确认。",
-          "en": "SPY is range-bound with a HOLD signal from the 20-day momentum strategy. Risk score is moderate and position is limited. Recommend waiting for trend confirmation."
+          "zh": "对 SPY 的最终决策为 观望。20日动量 策略发出 观望 信号，风险闸门为 可放行，回测验证为 谨慎通过。",
+          "en": "Final decision for SPY is HOLD. The momentum strategy signals HOLD, risk gate is Cleared, and backtest validation is Cautious Pass."
         },
         "impact_on_decision": {
-          "zh": "AI 生成：SPY当前处于震荡盘整，20日动量策略发出HOLD信号，风险评分中等，仓位受限。建议观望，等待趋势确认。",
-          "en": "AI generated: SPY is range-bound with a HOLD signal from the 20-day momentum strategy. Risk score is moderate and position is limited. Recommend waiting for trend confirmation."
+          "zh": "规则模板：对 SPY 的最终决策为 观望。20日动量 策略发出 观望 信号，风险闸门为 可放行，回测验证为 谨慎通过。",
+          "en": "Rule template: Final decision for SPY is HOLD. The momentum strategy signals HOLD, risk gate is Cleared, and backtest validation is Cautious Pass."
         },
         "next_action": {
-          "zh": "建议HOLD，不新建仓位。当前信号不明确，风险限制仓位至40%，需等待更清晰的趋势信号。",
-          "en": "Recommend HOLD, do not open new positions. Current signal is unclear, risk limits position to 40%, wait for clearer trend signals."
+          "zh": "按 70% 仓位上限执行 观望 动作，并持续监控风险分数与新闻情绪。",
+          "en": "Execute HOLD within the 70% position limit and continue monitoring risk score and news sentiment."
         },
         "monitor_focus": [
           {
@@ -3302,7 +3225,7 @@
           },
           {
             "label": "Confidence",
-            "value": "25%",
+            "value": "49%",
             "unit": "",
             "display": "number",
             "level": "neutral",
@@ -3310,7 +3233,7 @@
           },
           {
             "label": "Position",
-            "value": "0%",
+            "value": "49%",
             "unit": "",
             "display": "number",
             "level": "neutral",
@@ -3322,39 +3245,39 @@
           "data": {
             "final_decision": "HOLD",
             "suggested_action": {
-              "zh": "建议HOLD，不新建仓位。当前信号不明确，风险限制仓位至40%，需等待更清晰的趋势信号。",
-              "en": "Recommend HOLD, do not open new positions. Current signal is unclear, risk limits position to 40%, wait for clearer trend signals."
+              "zh": "按 70% 仓位上限执行 观望 动作，并持续监控风险分数与新闻情绪。",
+              "en": "Execute HOLD within the 70% position limit and continue monitoring risk score and news sentiment."
             },
             "executive_summary": {
-              "zh": "SPY当前处于震荡盘整，20日动量策略发出HOLD信号，风险评分中等，仓位受限。建议观望，等待趋势确认。",
-              "en": "SPY is range-bound with a HOLD signal from the 20-day momentum strategy. Risk score is moderate and position is limited. Recommend waiting for trend confirmation."
+              "zh": "对 SPY 的最终决策为 观望。20日动量 策略发出 观望 信号，风险闸门为 可放行，回测验证为 谨慎通过。",
+              "en": "Final decision for SPY is HOLD. The momentum strategy signals HOLD, risk gate is Cleared, and backtest validation is Cautious Pass."
             },
             "key_drivers": [
               {
-                "zh": "20日动量策略信号为HOLD，决策评分56，信心较低（0.25），表明缺乏明确方向。",
-                "en": "20-day momentum strategy signal is HOLD with decision score 56 and low confidence (0.25), indicating lack of clear direction."
+                "zh": "策略信号：观望（评分 92.21）",
+                "en": "Strategy signal: HOLD (score 92.21)"
               },
               {
-                "zh": "技术指标显示震荡盘整趋势，RSI中性，MACD信号弱，无强烈买入或卖出信号。",
-                "en": "Technical indicators show range-bound trend, neutral RSI, weak MACD signal, no strong buy or sell signals."
+                "zh": "风险闸门：可放行（风险分 15）",
+                "en": "Risk gate: Cleared (risk score 15)"
               },
               {
-                "zh": "新闻情绪中性（评分50），市场无明显催化剂推动方向。",
-                "en": "News sentiment is neutral (score 50), no clear catalyst driving direction."
+                "zh": "回测验证：谨慎通过（收益 14.4% / 夏普 2.13）",
+                "en": "Backtest: Cautious Pass (return 14.4% / Sharpe 2.13)"
               }
             ],
             "key_risks": [
               {
-                "zh": "风险评分42，风险门控状态为'限制仓位'，建议仓位不超过40%，显示中等风险。",
-                "en": "Risk score 42, risk gate status 'Position Limited', suggested position ≤40%, indicating moderate risk."
+                "zh": "20日波动率 9.8%",
+                "en": "20D volatility 9.8%"
               },
               {
-                "zh": "近20日回报为-2.9%，波动率14.3%，短期下行压力存在。",
-                "en": "Recent 20-day return is -2.9% with volatility 14.3%, short-term downside pressure exists."
+                "zh": "MACD 信号 偏强",
+                "en": "MACD signal Strong"
               },
               {
-                "zh": "回测最大回撤15.4%，夏普比率0.64，策略长期表现一般，需警惕持续震荡。",
-                "en": "Backtest max drawdown 15.4%, Sharpe 0.64, strategy long-term performance is moderate, be cautious of prolonged consolidation."
+                "zh": "新闻情绪 中性（评分 50）",
+                "en": "News sentiment neutral (score 50)"
               }
             ],
             "references": [
@@ -3375,24 +3298,12 @@
                 "paper_url": "https://www.cmtassociation.org/presenter/gerald-appel/",
                 "why_zh": "策略库：MACD 信号策略",
                 "why_en": "Strategy knowledge: MACD Signal"
-              },
-              {
-                "paper": "Jegadeesh & Titman (1993), Returns to Buying Winners and Selling Losers",
-                "paper_url": "https://doi.org/10.1111/j.1540-6261.1993.tb04703.x",
-                "why_zh": "策略库：20日动量策略",
-                "why_en": "Strategy knowledge: Momentum (20D)"
-              },
-              {
-                "paper": "Xiao et al. (2025), TradingAgents: Multi-Agents LLM Financial Trading Framework, AAAI",
-                "paper_url": "https://arxiv.org/abs/2412.20138",
-                "why_zh": "策略库：多Agent LLM投票框架",
-                "why_en": "Strategy knowledge: Multi-Agent LLM Voting"
               }
             ],
-            "llm_status": "ready",
+            "llm_status": "pending",
             "llm_note": {
-              "zh": "本报告由 AI 生成。",
-              "en": "This report was generated by AI."
+              "zh": "AI 报告正在后台生成，当前显示规则模板。",
+              "en": "AI report is being generated in the background; showing rule-based template."
             },
             "traceability": {
               "decision_room": "schedule",
@@ -3401,26 +3312,26 @@
               "strategy_room": "skills",
               "decision_ref": {
                 "decision": "HOLD",
-                "confidence": 0.25,
-                "position_pct": 0,
-                "mode": "wait_for_confirmation"
+                "confidence": 0.49,
+                "position_pct": 49,
+                "mode": "proceed_with_caution"
               },
               "backtest_ref": {
-                "total_return_pct": 43.2,
-                "sharpe": 0.64,
-                "max_drawdown_pct": 15.4,
+                "total_return_pct": 14.4,
+                "sharpe": 2.13,
+                "max_drawdown_pct": 7.5,
                 "validation": "Cautious Pass"
               },
               "risk_ref": {
-                "risk_score": 42,
-                "gate_status": "Position Limited",
-                "position_limit_pct": 40
+                "risk_score": 15,
+                "gate_status": "Cleared",
+                "position_limit_pct": 70
               },
               "strategy_ref": {
                 "name": "momentum",
                 "name_zh": "20日动量",
                 "signal": "HOLD",
-                "score": 62.32
+                "score": 92.21
               }
             }
           }
@@ -3441,45 +3352,45 @@
           ],
           "reasoning": [
             {
-              "zh": "对 SPY 的最终决策为 观望。20日动量 策略发出 观望 信号，风险闸门为 限制仓位，回测验证为 谨慎通过。",
-              "en": "Final decision for SPY is HOLD. The momentum strategy signals HOLD, risk gate is Position Limited, and backtest validation is Cautious Pass."
+              "zh": "对 SPY 的最终决策为 观望。20日动量 策略发出 观望 信号，风险闸门为 可放行，回测验证为 谨慎通过。",
+              "en": "Final decision for SPY is HOLD. The momentum strategy signals HOLD, risk gate is Cleared, and backtest validation is Cautious Pass."
             }
           ],
           "final_decision": "HOLD",
           "suggested_action": {
-            "zh": "建议HOLD，不新建仓位。当前信号不明确，风险限制仓位至40%，需等待更清晰的趋势信号。",
-            "en": "Recommend HOLD, do not open new positions. Current signal is unclear, risk limits position to 40%, wait for clearer trend signals."
+            "zh": "按 70% 仓位上限执行 观望 动作，并持续监控风险分数与新闻情绪。",
+            "en": "Execute HOLD within the 70% position limit and continue monitoring risk score and news sentiment."
           },
           "executive_summary": {
-            "zh": "SPY当前处于震荡盘整，20日动量策略发出HOLD信号，风险评分中等，仓位受限。建议观望，等待趋势确认。",
-            "en": "SPY is range-bound with a HOLD signal from the 20-day momentum strategy. Risk score is moderate and position is limited. Recommend waiting for trend confirmation."
+            "zh": "对 SPY 的最终决策为 观望。20日动量 策略发出 观望 信号，风险闸门为 可放行，回测验证为 谨慎通过。",
+            "en": "Final decision for SPY is HOLD. The momentum strategy signals HOLD, risk gate is Cleared, and backtest validation is Cautious Pass."
           },
           "key_drivers": [
             {
-              "zh": "20日动量策略信号为HOLD，决策评分56，信心较低（0.25），表明缺乏明确方向。",
-              "en": "20-day momentum strategy signal is HOLD with decision score 56 and low confidence (0.25), indicating lack of clear direction."
+              "zh": "策略信号：观望（评分 92.21）",
+              "en": "Strategy signal: HOLD (score 92.21)"
             },
             {
-              "zh": "技术指标显示震荡盘整趋势，RSI中性，MACD信号弱，无强烈买入或卖出信号。",
-              "en": "Technical indicators show range-bound trend, neutral RSI, weak MACD signal, no strong buy or sell signals."
+              "zh": "风险闸门：可放行（风险分 15）",
+              "en": "Risk gate: Cleared (risk score 15)"
             },
             {
-              "zh": "新闻情绪中性（评分50），市场无明显催化剂推动方向。",
-              "en": "News sentiment is neutral (score 50), no clear catalyst driving direction."
+              "zh": "回测验证：谨慎通过（收益 14.4% / 夏普 2.13）",
+              "en": "Backtest: Cautious Pass (return 14.4% / Sharpe 2.13)"
             }
           ],
           "key_risks": [
             {
-              "zh": "风险评分42，风险门控状态为'限制仓位'，建议仓位不超过40%，显示中等风险。",
-              "en": "Risk score 42, risk gate status 'Position Limited', suggested position ≤40%, indicating moderate risk."
+              "zh": "20日波动率 9.8%",
+              "en": "20D volatility 9.8%"
             },
             {
-              "zh": "近20日回报为-2.9%，波动率14.3%，短期下行压力存在。",
-              "en": "Recent 20-day return is -2.9% with volatility 14.3%, short-term downside pressure exists."
+              "zh": "MACD 信号 偏强",
+              "en": "MACD signal Strong"
             },
             {
-              "zh": "回测最大回撤15.4%，夏普比率0.64，策略长期表现一般，需警惕持续震荡。",
-              "en": "Backtest max drawdown 15.4%, Sharpe 0.64, strategy long-term performance is moderate, be cautious of prolonged consolidation."
+              "zh": "新闻情绪 中性（评分 50）",
+              "en": "News sentiment neutral (score 50)"
             }
           ],
           "references": [
@@ -3500,24 +3411,12 @@
               "paper_url": "https://www.cmtassociation.org/presenter/gerald-appel/",
               "why_zh": "策略库：MACD 信号策略",
               "why_en": "Strategy knowledge: MACD Signal"
-            },
-            {
-              "paper": "Jegadeesh & Titman (1993), Returns to Buying Winners and Selling Losers",
-              "paper_url": "https://doi.org/10.1111/j.1540-6261.1993.tb04703.x",
-              "why_zh": "策略库：20日动量策略",
-              "why_en": "Strategy knowledge: Momentum (20D)"
-            },
-            {
-              "paper": "Xiao et al. (2025), TradingAgents: Multi-Agents LLM Financial Trading Framework, AAAI",
-              "paper_url": "https://arxiv.org/abs/2412.20138",
-              "why_zh": "策略库：多Agent LLM投票框架",
-              "why_en": "Strategy knowledge: Multi-Agent LLM Voting"
             }
           ],
-          "llm_status": "ready",
+          "llm_status": "pending",
           "llm_note": {
-            "zh": "本报告由 AI 生成。",
-            "en": "This report was generated by AI."
+            "zh": "AI 报告正在后台生成，当前显示规则模板。",
+            "en": "AI report is being generated in the background; showing rule-based template."
           },
           "traceability": {
             "decision_room": "schedule",
@@ -3526,26 +3425,26 @@
             "strategy_room": "skills",
             "decision_ref": {
               "decision": "HOLD",
-              "confidence": 0.25,
-              "position_pct": 0,
-              "mode": "wait_for_confirmation"
+              "confidence": 0.49,
+              "position_pct": 49,
+              "mode": "proceed_with_caution"
             },
             "backtest_ref": {
-              "total_return_pct": 43.2,
-              "sharpe": 0.64,
-              "max_drawdown_pct": 15.4,
+              "total_return_pct": 14.4,
+              "sharpe": 2.13,
+              "max_drawdown_pct": 7.5,
               "validation": "Cautious Pass"
             },
             "risk_ref": {
-              "risk_score": 42,
-              "gate_status": "Position Limited",
-              "position_limit_pct": 40
+              "risk_score": 15,
+              "gate_status": "Cleared",
+              "position_limit_pct": 70
             },
             "strategy_ref": {
               "name": "momentum",
               "name_zh": "20日动量",
               "signal": "HOLD",
-              "score": 62.32
+              "score": 92.21
             }
           }
         },
@@ -3556,29 +3455,29 @@
           "strategy_room": "skills",
           "decision_ref": {
             "decision": "HOLD",
-            "confidence": 0.25,
-            "position_pct": 0,
-            "mode": "wait_for_confirmation"
+            "confidence": 0.49,
+            "position_pct": 49,
+            "mode": "proceed_with_caution"
           },
           "backtest_ref": {
-            "total_return_pct": 43.2,
-            "sharpe": 0.64,
-            "max_drawdown_pct": 15.4,
+            "total_return_pct": 14.4,
+            "sharpe": 2.13,
+            "max_drawdown_pct": 7.5,
             "validation": "Cautious Pass"
           },
           "risk_ref": {
-            "risk_score": 42,
-            "gate_status": "Position Limited",
-            "position_limit_pct": 40
+            "risk_score": 15,
+            "gate_status": "Cleared",
+            "position_limit_pct": 70
           },
           "strategy_ref": {
             "name": "momentum",
             "name_zh": "20日动量",
             "signal": "HOLD",
-            "score": 62.32
+            "score": 92.21
           }
         },
-        "updated_at": "2026-06-17 13:44:13"
+        "updated_at": "2026-06-20 10:58:25"
       },
       "agent": {
         "room_id": "agent",
@@ -3640,7 +3539,7 @@
           },
           {
             "label": "Avg Latency",
-            "value": 2053,
+            "value": 2420,
             "unit": "ms",
             "display": "number",
             "level": "neutral",
@@ -3648,7 +3547,7 @@
           },
           {
             "label": "Healthy",
-            "value": 4,
+            "value": 5,
             "unit": "",
             "display": "number",
             "level": "positive",
@@ -3670,8 +3569,8 @@
               {
                 "name_key": "data",
                 "role_key": "data",
-                "status": "idle",
-                "latency_ms": 120,
+                "status": "done",
+                "latency_ms": 2020,
                 "task": {
                   "en": "Load market data",
                   "zh": "加载市场数据"
@@ -3681,23 +3580,23 @@
                   "zh": "SPY 行情数据"
                 },
                 "output": {
-                  "en": "1199 daily bars",
-                  "zh": "1199 条日线数据"
+                  "en": "191 daily bars",
+                  "zh": "191 条日线数据"
                 },
                 "summary": {
-                  "en": "1199 bars loaded",
-                  "zh": "已加载 1199 条数据"
+                  "en": "191 bars loaded",
+                  "zh": "已加载 191 条数据"
                 },
-                "progress_pct": 0,
-                "health": "degraded",
+                "progress_pct": 100,
+                "health": "healthy",
                 "error_count": 0,
-                "last_seen": "13:44:04"
+                "last_seen": "10:57:39"
               },
               {
                 "name_key": "indicator",
                 "role_key": "indicator",
                 "status": "done",
-                "latency_ms": 4083,
+                "latency_ms": 4044,
                 "task": {
                   "en": "Compute technical indicators",
                   "zh": "计算技术指标"
@@ -3707,23 +3606,23 @@
                   "zh": "价格与成交量序列"
                 },
                 "output": {
-                  "en": "RSI 36.4, MACD -0.983",
-                  "zh": "RSI 36.4, MACD -0.983"
+                  "en": "RSI 70.8, MACD 7.190",
+                  "zh": "RSI 70.8, MACD 7.190"
                 },
                 "summary": {
-                  "en": "RSI 36.4, MACD -0.983",
-                  "zh": "RSI 36.4, MACD -0.983"
+                  "en": "RSI 70.8, MACD 7.190",
+                  "zh": "RSI 70.8, MACD 7.190"
                 },
                 "progress_pct": 100,
                 "health": "healthy",
                 "error_count": 0,
-                "last_seen": "13:41:33"
+                "last_seen": "10:57:41"
               },
               {
                 "name_key": "news",
                 "role_key": "news",
                 "status": "done",
-                "latency_ms": 2011,
+                "latency_ms": 2020,
                 "task": {
                   "en": "Fetch and score news",
                   "zh": "获取并评分新闻"
@@ -3743,13 +3642,13 @@
                 "progress_pct": 100,
                 "health": "healthy",
                 "error_count": 0,
-                "last_seen": "13:42:26"
+                "last_seen": "10:57:48"
               },
               {
                 "name_key": "risk",
                 "role_key": "risk",
                 "status": "done",
-                "latency_ms": 2028,
+                "latency_ms": 2006,
                 "task": {
                   "en": "Evaluate risk constraints",
                   "zh": "评估风险约束"
@@ -3759,23 +3658,23 @@
                   "zh": "收益与回撤序列"
                 },
                 "output": {
-                  "en": "Risk score 42/100",
-                  "zh": "风险分数 42/100"
+                  "en": "Risk score 15/100",
+                  "zh": "风险分数 15/100"
                 },
                 "summary": {
-                  "en": "Risk 42/100",
-                  "zh": "风险 42/100"
+                  "en": "Risk 15/100",
+                  "zh": "风险 15/100"
                 },
                 "progress_pct": 100,
                 "health": "healthy",
                 "error_count": 0,
-                "last_seen": "13:42:44"
+                "last_seen": "10:58:07"
               },
               {
                 "name_key": "decision",
                 "role_key": "decision",
                 "status": "done",
-                "latency_ms": 2025,
+                "latency_ms": 2010,
                 "task": {
                   "en": "Aggregate signals into decision",
                   "zh": "汇总信号生成决策"
@@ -3795,7 +3694,7 @@
                 "progress_pct": 100,
                 "health": "healthy",
                 "error_count": 0,
-                "last_seen": "13:42:52"
+                "last_seen": "10:58:15"
               }
             ]
           }
@@ -3813,7 +3712,7 @@
             "Monitors data, indicator, news, risk and decision agents across the execution pipeline."
           ]
         },
-        "updated_at": "2026-06-17 13:44:04"
+        "updated_at": "2026-06-20 10:58:25"
       },
       "log": {
         "room_id": "log",
@@ -3888,7 +3787,7 @@
           "data": {
             "events": [
               {
-                "time": "13:44:04",
+                "time": "10:57:39",
                 "stage": "start",
                 "level": "info",
                 "message": {
@@ -3897,25 +3796,25 @@
                 }
               },
               {
-                "time": "13:44:05",
+                "time": "10:57:39",
                 "stage": "data",
                 "level": "success",
                 "message": {
-                  "en": "Loaded 1199 bars for SPY",
-                  "zh": "已加载 SPY 的 1199 根 K 线"
+                  "en": "Loaded 191 bars for SPY",
+                  "zh": "已加载 SPY 的 191 根 K 线"
                 }
               },
               {
-                "time": "13:41:33",
+                "time": "10:57:41",
                 "stage": "indicator",
                 "level": "info",
                 "message": {
-                  "en": "RSI 36.4, MACD -0.983",
-                  "zh": "RSI 36.4，MACD -0.983"
+                  "en": "RSI 70.8, MACD 7.190",
+                  "zh": "RSI 70.8，MACD 7.190"
                 }
               },
               {
-                "time": "13:42:26",
+                "time": "10:57:48",
                 "stage": "news",
                 "level": "info",
                 "message": {
@@ -3924,34 +3823,34 @@
                 }
               },
               {
-                "time": "13:42:44",
+                "time": "10:58:07",
                 "stage": "risk",
-                "level": "warning",
+                "level": "success",
                 "message": {
-                  "en": "Risk gate Position Limited (score 42)",
-                  "zh": "风险闸门 限制仓位（分数 42）"
+                  "en": "Risk gate Cleared (score 15)",
+                  "zh": "风险闸门 可放行（分数 15）"
                 }
               },
               {
-                "time": "13:42:40",
+                "time": "10:58:03",
                 "stage": "backtest",
                 "level": "success",
                 "message": {
-                  "en": "Backtest return 43.2%, Sharpe 0.64, Max DD 15.4%",
-                  "zh": "回测收益 43.2%，夏普 0.64，最大回撤 15.4%"
+                  "en": "Backtest return 14.4%, Sharpe 2.13, Max DD 7.5%",
+                  "zh": "回测收益 14.4%，夏普 2.13，最大回撤 7.5%"
                 }
               },
               {
-                "time": "13:42:52",
+                "time": "10:58:15",
                 "stage": "decision",
                 "level": "info",
                 "message": {
-                  "en": "Final decision: HOLD at 40% position",
-                  "zh": "最终决策：观望，仓位 40%"
+                  "en": "Final decision: HOLD at 70% position",
+                  "zh": "最终决策：观望，仓位 70%"
                 }
               },
               {
-                "time": "13:44:11",
+                "time": "10:58:32",
                 "stage": "report",
                 "level": "success",
                 "message": {
@@ -3973,7 +3872,7 @@
             "Records the start, data, indicator, news, risk, backtest, decision and report stages for audit."
           ]
         },
-        "updated_at": "2026-06-17 13:44:04"
+        "updated_at": "2026-06-20 10:58:25"
       },
       "memory": {
         "room_id": "memory",
@@ -3994,12 +3893,12 @@
           "level": "positive"
         },
         "summary": {
-          "en": "Records: 11 · Avg Return: 43.2% · Knowledge: 12",
-          "zh": "运行记录 11 条 · 平均收益 43.2% · 策略知识 12 条"
+          "en": "Records: 12 · Avg Return: 14.4% · Knowledge: 12",
+          "zh": "运行记录 12 条 · 平均收益 14.4% · 策略知识 12 条"
         },
         "insight": {
-          "en": "Strategy memory has accumulated 11 run records and 12 strategy knowledge entries (2 from literature).",
-          "zh": "策略记忆库已积累 11 条运行记录和 12 条策略知识（含文献策略 2 条）。"
+          "en": "Strategy memory has accumulated 12 run records and 12 strategy knowledge entries (2 from literature).",
+          "zh": "策略记忆库已积累 12 条运行记录和 12 条策略知识（含文献策略 2 条）。"
         },
         "impact_on_decision": {
           "en": "Historical records exert a slight positive weight on the current strategy, but not enough to override risk constraints.",
@@ -4026,7 +3925,7 @@
         "metrics": [
           {
             "label": "Run Records",
-            "value": 11,
+            "value": 12,
             "unit": "",
             "display": "number",
             "level": "neutral",
@@ -4042,7 +3941,7 @@
           },
           {
             "label": "Avg Return",
-            "value": "43.2",
+            "value": "14.4",
             "unit": "%",
             "display": "number",
             "level": "neutral",
@@ -4050,7 +3949,7 @@
           },
           {
             "label": "Avg Sharpe",
-            "value": "0.64",
+            "value": "2.13",
             "unit": "",
             "display": "number",
             "level": "neutral",
@@ -4070,16 +3969,24 @@
           "data": {
             "records": [
               {
-                "ticker": "QQQ",
-                "strategy": "momentum",
+                "ticker": "SPY",
+                "strategy": "auto",
+                "decision": "HOLD",
+                "return": "N/A",
+                "sharpe": "N/A",
+                "date": "2026-06-20"
+              },
+              {
+                "ticker": "SPY",
+                "strategy": "auto",
                 "decision": "HOLD",
                 "return": "N/A",
                 "sharpe": "N/A",
                 "date": "2026-06-17"
               },
               {
-                "ticker": "SPY",
-                "strategy": "auto",
+                "ticker": "QQQ",
+                "strategy": "momentum",
                 "decision": "HOLD",
                 "return": "N/A",
                 "sharpe": "N/A",
@@ -4153,59 +4060,200 @@
                 "ticker": "SPY",
                 "strategy": "momentum",
                 "decision": "HOLD",
-                "return": "43.2%",
-                "sharpe": "0.64",
-                "date": "2026-06-17"
+                "return": "14.4%",
+                "sharpe": "2.13",
+                "date": "2026-06-20"
               }
             ],
             "experience_cards": [
               {
-                "id": "exp_momentum_20260617134400",
+                "id": "exp_momentum_20260620105823",
                 "strategy": "momentum",
-                "created_at": "2026-06-17T13:44:00.568668",
+                "created_at": "2026-06-20T10:58:23.160100",
                 "lesson_count": 3,
                 "summary": {
-                  "zh": "动量策略在弱势市场中持续发出持有信号，等待确认以避免过早入场。低RSI和混合MACD信号暗示弱势，但有限的近期跌幅和中性偏正面的新闻支持耐心等待。低胜率（约37-38%）和中等回撤（15-21%）是长期收益的主要侵蚀因素，需通过风险管理来缓解。",
-                  "en": "Momentum strategy consistently issues hold signals in weak markets, waiting for confirmation to avoid premature entry. Low RSI and mixed MACD signals indicate weakness, but limited recent declines and neutral-to-positive news support patience. Low win rates (~37-38%) and moderate drawdowns (15-21%) are key eroders of long-term returns, requiring risk management to mitigate."
+                  "zh": "基于 3 次运行，momentum 策略平均收益为正（14.4%），夏普 2.13，表现稳定。",
+                  "en": "Based on 3 runs, momentum shows stable positive average returns (14.4%) with Sharpe 2.13."
                 },
                 "key_findings": [
                   {
-                    "en": "Momentum holds despite neutral-to-low RSI (36-44) and mixed MACD, waiting for confirmation to avoid premature entry in choppy markets.",
-                    "zh": "动量策略在RSI中性或偏低（36-44）且MACD有正有负时仍选择持有，等待确认信号能避免震荡市中的过早入场。"
+                    "en": "Momentum on SPY performed well (return 14.4%, Sharpe 2.13) with low risk (score 15) and positive news (65), but overbought RSI (70.8) warrants caution; consistent with prior lessons: waiting for confirmation avoids premature entry, but low win rate (41.1%) impacts long-term returns.",
+                    "zh": "动量策略在SPY上表现优异（收益14.4%，夏普2.13），低风险（15分）和正面新闻（65分）支持持有，但RSI超买（70.8）需警惕回调，与先前经验一致：等待确认信号能避免过早入场，但需关注胜率（41.1%）对长期收益的影响。"
                   },
                   {
-                    "en": "Low win rates (37-38%) and moderate drawdowns (15-21%) are key eroders of long-term returns, requiring risk management.",
-                    "zh": "低胜率（37-38%）和中等回撤（15-21%）是长期收益的主要侵蚀因素，需通过风险管理来缓解。"
+                    "en": "momentum performed well: return 14.4%, Sharpe 2.13; current market regime appears favorable.",
+                    "zh": "momentum 策略本次表现良好：收益 14.4%，夏普 2.13，当前市场环境较适合该策略。"
                   },
                   {
-                    "en": "Neutral-to-positive news sentiment and limited recent declines (-0.8% to -2.9%) support patience rather than immediate exit.",
-                    "zh": "新闻情绪（中性偏正面）和有限的近期跌幅（-0.8%至-2.9%）支持耐心等待，而非立即离场。"
+                    "en": "momentum performed well: return 14.4%, Sharpe 2.13; current market regime appears favorable.",
+                    "zh": "momentum 策略本次表现良好：收益 14.4%，夏普 2.13，当前市场环境较适合该策略。"
                   }
                 ],
                 "avg_metrics": {
-                  "avg_return_pct": 60.19,
-                  "avg_sharpe": 0.74
+                  "avg_return_pct": 14.41,
+                  "avg_sharpe": 2.13
+                },
+                "tags": [
+                  "favorable_regime",
+                  "good_sharpe",
+                  "hold_decision",
+                  "hold_signal",
+                  "momentum",
+                  "positive_return",
+                  "risk_management",
+                  "rsi_overbought",
+                  "win_rate"
+                ],
+                "paper_refs": [
+                  "Edwards & Magee (1948), Technical Analysis of Stock Trends",
+                  "Jegadeesh & Titman (1993)",
+                  "Jegadeesh & Titman (1993), Returns to Buying Winners and Selling Losers",
+                  "Wilder (1978)",
+                  "Wilder (1978), New Concepts in Technical Trading Systems",
+                  "Xiao et al. (2025)"
+                ],
+                "source_lesson_ids": [
+                  "SPY_momentum_20260620105407",
+                  "SPY_momentum_20260620105823",
+                  "SPY_momentum_20260620105715"
+                ],
+                "source": "rule_fallback"
+              }
+            ],
+            "recent_lessons": [
+              {
+                "run_id": "SPY_momentum_20260620105823",
+                "ticker": "SPY",
+                "strategy": "momentum",
+                "date": "2026-06-20",
+                "timestamp": "2026-06-20T10:58:23.160100",
+                "metrics": {
+                  "decision": "hold",
+                  "decision_mode": "proceed_with_caution",
+                  "confidence": 49.0,
+                  "position_pct": 49.0,
+                  "total_return_pct": 14.41,
+                  "sharpe_ratio": 2.13,
+                  "max_drawdown_pct": 7.46,
+                  "win_rate_pct": 41.1,
+                  "trades": 13,
+                  "risk_score": 15,
+                  "risk_level": "low",
+                  "rsi": 70.76117,
+                  "macd": 7.189945,
+                  "ma20": 467.454503,
+                  "ma60": 446.505167,
+                  "volatility_20d_pct": 9.8,
+                  "return_20d_pct": 4.14,
+                  "news_sentiment": "neutral",
+                  "news_score": 50
+                },
+                "lesson": {
+                  "zh": "momentum 策略本次表现良好：收益 14.4%，夏普 2.13，当前市场环境较适合该策略。",
+                  "en": "momentum performed well: return 14.4%, Sharpe 2.13; current market regime appears favorable."
+                },
+                "tags": [
+                  "positive_return",
+                  "good_sharpe",
+                  "favorable_regime",
+                  "hold_decision"
+                ],
+                "paper_refs": [
+                  "Edwards & Magee (1948), Technical Analysis of Stock Trends",
+                  "Wilder (1978), New Concepts in Technical Trading Systems",
+                  "Jegadeesh & Titman (1993), Returns to Buying Winners and Selling Losers"
+                ],
+                "source": "rule_fallback"
+              },
+              {
+                "run_id": "SPY_momentum_20260620105715",
+                "ticker": "SPY",
+                "strategy": "momentum",
+                "date": "2026-06-20",
+                "timestamp": "2026-06-20T10:57:15.888410",
+                "metrics": {
+                  "decision": "hold",
+                  "decision_mode": "proceed_with_caution",
+                  "confidence": 49.0,
+                  "position_pct": 49.0,
+                  "total_return_pct": 14.41,
+                  "sharpe_ratio": 2.13,
+                  "max_drawdown_pct": 7.46,
+                  "win_rate_pct": 41.1,
+                  "trades": 13,
+                  "risk_score": 15,
+                  "risk_level": "low",
+                  "rsi": 70.76117,
+                  "macd": 7.189945,
+                  "ma20": 467.454503,
+                  "ma60": 446.505167,
+                  "volatility_20d_pct": 9.8,
+                  "return_20d_pct": 4.14,
+                  "news_sentiment": "neutral",
+                  "news_score": 50
+                },
+                "lesson": {
+                  "zh": "momentum 策略本次表现良好：收益 14.4%，夏普 2.13，当前市场环境较适合该策略。",
+                  "en": "momentum performed well: return 14.4%, Sharpe 2.13; current market regime appears favorable."
+                },
+                "tags": [
+                  "positive_return",
+                  "good_sharpe",
+                  "favorable_regime",
+                  "hold_decision"
+                ],
+                "paper_refs": [
+                  "Edwards & Magee (1948), Technical Analysis of Stock Trends",
+                  "Wilder (1978), New Concepts in Technical Trading Systems",
+                  "Jegadeesh & Titman (1993), Returns to Buying Winners and Selling Losers"
+                ],
+                "source": "rule_fallback"
+              },
+              {
+                "run_id": "SPY_momentum_20260620105407",
+                "ticker": "SPY",
+                "strategy": "momentum",
+                "date": "2026-06-20",
+                "timestamp": "2026-06-20T10:54:11.574761",
+                "metrics": {
+                  "decision": "hold",
+                  "decision_mode": "proceed_with_caution",
+                  "confidence": 52.0,
+                  "position_pct": 49.0,
+                  "total_return_pct": 14.41,
+                  "sharpe_ratio": 2.13,
+                  "max_drawdown_pct": 7.46,
+                  "win_rate_pct": 41.1,
+                  "trades": 13,
+                  "risk_score": 15,
+                  "risk_level": "low",
+                  "rsi": 70.76117,
+                  "macd": 7.189945,
+                  "ma20": 467.454503,
+                  "ma60": 446.505167,
+                  "volatility_20d_pct": 9.8,
+                  "return_20d_pct": 4.14,
+                  "news_sentiment": "neutral_positive",
+                  "news_score": 65
+                },
+                "lesson": {
+                  "zh": "动量策略在SPY上表现优异（收益14.4%，夏普2.13），低风险（15分）和正面新闻（65分）支持持有，但RSI超买（70.8）需警惕回调，与先前经验一致：等待确认信号能避免过早入场，但需关注胜率（41.1%）对长期收益的影响。",
+                  "en": "Momentum on SPY performed well (return 14.4%, Sharpe 2.13) with low risk (score 15) and positive news (65), but overbought RSI (70.8) warrants caution; consistent with prior lessons: waiting for confirmation avoids premature entry, but low win rate (41.1%) impacts long-term returns."
                 },
                 "tags": [
                   "momentum",
                   "hold_signal",
                   "risk_management",
                   "win_rate",
-                  "drawdown",
-                  "news_sentiment"
+                  "rsi_overbought"
                 ],
                 "paper_refs": [
-                  "Jegadeesh & Titman (1993)"
-                ],
-                "source_lesson_ids": [
-                  "SPY_momentum_20260617134300",
-                  "SPY_momentum_20260617130331",
-                  "QQQ_momentum_20260617130109"
+                  "Jegadeesh & Titman (1993)",
+                  "Wilder (1978)",
+                  "Xiao et al. (2025)"
                 ],
                 "source": "llm"
-              }
-            ],
-            "recent_lessons": [
+              },
               {
                 "run_id": "SPY_momentum_20260617134300",
                 "ticker": "SPY",
@@ -4279,143 +4327,6 @@
                 "lesson": {
                   "zh": "动量策略在SPY上持续持有，低RSI（36.4）和负MACD（-0.98）确认弱势，但有限跌幅（-2.9%）和正面新闻（55分）支持等待确认；低胜率（38%）和中等回撤（15.4%）仍是长期收益的主要侵蚀因素，与先前经验一致。",
                   "en": "Momentum on SPY continues to hold, with low RSI (36.4) and negative MACD (-0.98) confirming weakness, but limited decline (-2.9%) and positive news (score 55) support waiting for confirmation; low win rate (38%) and moderate drawdown (15.4%) remain key eroders of long-term returns, consistent with prior experiences."
-                },
-                "tags": [
-                  "momentum",
-                  "hold_signal",
-                  "risk_management",
-                  "win_rate",
-                  "drawdown",
-                  "news_sentiment"
-                ],
-                "paper_refs": [
-                  "Jegadeesh & Titman (1993)",
-                  "Xiao et al. (2025)"
-                ],
-                "source": "llm"
-              },
-              {
-                "run_id": "QQQ_momentum_20260617130109",
-                "ticker": "QQQ",
-                "strategy": "momentum",
-                "date": "2026-06-17",
-                "timestamp": "2026-06-17T13:01:12.069595",
-                "metrics": {
-                  "decision": "hold",
-                  "decision_mode": "wait_for_confirmation",
-                  "confidence": 25.0,
-                  "position_pct": 0,
-                  "total_return_pct": 94.26,
-                  "sharpe_ratio": 0.93,
-                  "max_drawdown_pct": 20.98,
-                  "win_rate_pct": 37.1,
-                  "trades": 81,
-                  "risk_score": 49,
-                  "risk_level": "medium",
-                  "rsi": 44.35068,
-                  "macd": 2.400183,
-                  "ma20": 523.672493,
-                  "ma60": 507.31533,
-                  "volatility_20d_pct": 20.08,
-                  "return_20d_pct": -0.79,
-                  "news_sentiment": "negative",
-                  "news_score": 35
-                },
-                "lesson": {
-                  "zh": "QQQ动量策略在RSI中性（44.4）且MACD正值（2.4）时仍选择持有，与SPY经验一致，说明等待确认信号能避免在震荡中过早入场，但需注意低胜率（37.1%）和中等回撤（21%）对长期收益的侵蚀。",
-                  "en": "Momentum on QQQ holds despite neutral RSI (44.4) and positive MACD (2.4), consistent with SPY experience, confirming that waiting for confirmation avoids premature entry in choppy markets, but low win rate (37.1%) and moderate drawdown (21%) erode long-term returns."
-                },
-                "tags": [
-                  "momentum",
-                  "hold_signal",
-                  "risk_management",
-                  "win_rate",
-                  "drawdown"
-                ],
-                "paper_refs": [
-                  "Jegadeesh & Titman (1993)",
-                  "Edwards & Magee (1948)",
-                  "Wilder (1978)",
-                  "Appel (1979)"
-                ],
-                "source": "llm"
-              },
-              {
-                "run_id": "SPY_momentum_20260617125952",
-                "ticker": "SPY",
-                "strategy": "momentum",
-                "date": "2026-06-17",
-                "timestamp": "2026-06-17T12:59:55.040359",
-                "metrics": {
-                  "decision": "hold",
-                  "decision_mode": "wait_for_confirmation",
-                  "confidence": 25.0,
-                  "position_pct": 0,
-                  "total_return_pct": 43.16,
-                  "sharpe_ratio": 0.64,
-                  "max_drawdown_pct": 15.42,
-                  "win_rate_pct": 38.0,
-                  "trades": 98,
-                  "risk_score": 42,
-                  "risk_level": "medium",
-                  "rsi": 36.446209,
-                  "macd": -0.983444,
-                  "ma20": 599.538498,
-                  "ma60": 590.467668,
-                  "volatility_20d_pct": 14.28,
-                  "return_20d_pct": -2.91,
-                  "news_sentiment": "neutral_positive",
-                  "news_score": 55
-                },
-                "lesson": {
-                  "zh": "动量策略在SPY上持续持有，RSI偏低（36.4）和MACD负值（-0.98）确认弱势，但近期跌幅有限（-2.9%）和正面新闻（55分）支持等待确认；低胜率（38%）和中等回撤（15.4%）是长期收益的主要侵蚀因素，与先前经验一致。",
-                  "en": "Momentum on SPY continues to hold, with low RSI (36.4) and negative MACD (-0.98) confirming weakness, but limited recent decline (-2.9%) and positive news (score 55) support waiting for confirmation; low win rate (38%) and moderate drawdown (15.4%) remain key eroders of long-term returns, consistent with prior experiences."
-                },
-                "tags": [
-                  "momentum",
-                  "hold_signal",
-                  "risk_management",
-                  "win_rate",
-                  "drawdown",
-                  "news_sentiment"
-                ],
-                "paper_refs": [
-                  "Jegadeesh & Titman (1993)",
-                  "Wilder (1978)",
-                  "Appel (1979)"
-                ],
-                "source": "llm"
-              },
-              {
-                "run_id": "SPY_momentum_20260617125611",
-                "ticker": "SPY",
-                "strategy": "momentum",
-                "date": "2026-06-17",
-                "timestamp": "2026-06-17T12:56:13.752814",
-                "metrics": {
-                  "decision": "hold",
-                  "decision_mode": "wait_for_confirmation",
-                  "confidence": 25.0,
-                  "position_pct": 0,
-                  "total_return_pct": 43.16,
-                  "sharpe_ratio": 0.64,
-                  "max_drawdown_pct": 15.42,
-                  "win_rate_pct": 38.0,
-                  "trades": 98,
-                  "risk_score": 42,
-                  "risk_level": "medium",
-                  "rsi": 36.446209,
-                  "macd": -0.983444,
-                  "ma20": 599.538498,
-                  "ma60": 590.467668,
-                  "volatility_20d_pct": 14.28,
-                  "return_20d_pct": -2.91,
-                  "news_sentiment": "neutral",
-                  "news_score": 50
-                },
-                "lesson": {
-                  "zh": "动量策略在SPY上持续发出持有信号，RSI偏低（36.4）和MACD负值（-0.98）确认弱势，但近期跌幅有限（-2.9%）和中性新闻（50分）支持等待确认；低胜率（38%）和中等回撤（15.4%）是长期收益的主要侵蚀因素，与先前经验一致。",
-                  "en": "Momentum on SPY continues to issue hold signals, with low RSI (36.4) and negative MACD (-0.98) confirming weakness, but limited recent decline (-2.9%) and neutral news (score 50) support waiting for confirmation; low win rate (38%) and moderate drawdown (15.4%) remain key eroders of long-term returns, consistent with prior experiences."
                 },
                 "tags": [
                   "momentum",
@@ -4648,40 +4559,46 @@
               "name": "momentum",
               "name_zh": "20日动量",
               "signal": "HOLD",
-              "score": 62.32,
-              "date": "2026-06-17"
+              "score": 92.21,
+              "date": "2026-06-20"
             },
             "rankings": {
               "by_return": [
                 {
                   "ticker": "SPY",
                   "strategy": "momentum",
-                  "return": "43.2%",
-                  "date": "2026-06-17"
+                  "return": "14.4%",
+                  "date": "2026-06-20"
                 }
               ],
               "by_sharpe": [
                 {
                   "ticker": "SPY",
                   "strategy": "momentum",
-                  "sharpe": "0.64",
-                  "date": "2026-06-17"
+                  "sharpe": "2.13",
+                  "date": "2026-06-20"
                 }
               ]
             },
             "stats": {
-              "total_runs": 11,
+              "total_runs": 12,
               "best_strategy_by_return": "momentum",
-              "best_return": "43.2%",
+              "best_return": "14.4%",
               "best_strategy_by_sharpe": "momentum",
-              "best_sharpe": "0.64"
+              "best_sharpe": "2.13"
             },
             "reflection": {
               "match_count": 1,
-              "avg_return": 43.2,
-              "reflection": "当前 20 日收益为负，依据 Jegadeesh & Titman (1993) 的动量效应，短期趋势偏空。 MA20 上穿 MA60，符合 Edwards & Magee (1948) 的趋势跟踪原则。 历史记录中该策略仅有 1 条可计算收益记录（43.20%），样本不足，应谨慎外推。",
-              "reflection_en": "The current 20-day return is negative; per Jegadeesh & Titman (1993), short-term momentum is bearish. MA20 is above MA60, consistent with Edwards & Magee (1948) trend-following principles. Only 1 return-calculable record (43.20%) exists for this strategy; sample is too small to extrapolate.",
+              "avg_return": 14.4,
+              "reflection": "当前 20 日收益为正，依据 Jegadeesh & Titman (1993) 的动量效应，短期趋势偏多。 RSI 超买，依据 Wilder (1978) 的均值回归逻辑，需警惕回调。 MA20 上穿 MA60，符合 Edwards & Magee (1948) 的趋势跟踪原则。 历史记录中该策略仅有 1 条可计算收益记录（14.40%），样本不足，应谨慎外推。",
+              "reflection_en": "The current 20-day return is positive; per Jegadeesh & Titman (1993), short-term momentum is bullish. RSI is overbought; per Wilder (1978) mean-reversion logic, watch for a pullback. MA20 is above MA60, consistent with Edwards & Magee (1948) trend-following principles. Only 1 return-calculable record (14.40%) exists for this strategy; sample is too small to extrapolate.",
               "recommendations": [
+                {
+                  "id": "momentum_20d",
+                  "reason": "动量因子在当前为正收益环境下有文献支持。",
+                  "reason_en": "Momentum factor is supported by literature in the current positive-return environment.",
+                  "paper": "Jegadeesh & Titman (1993)"
+                },
                 {
                   "id": "ma_crossover",
                   "reason": "均线金叉支持趋势跟踪。",
@@ -4706,12 +4623,12 @@
             "历史收益 0.0% 接近零。 历史 Sharpe 0.00 偏低。"
           ]
         },
-        "updated_at": "2026-06-17 13:44:04"
+        "updated_at": "2026-06-20 10:58:25"
       },
       "break_room": {
         "room_id": "break_room",
         "room_name": "休息室",
-        "status": "done",
+        "status": "active",
         "type": "idle",
         "panel_type": "idle_summary",
         "primary": {
@@ -4723,10 +4640,7 @@
           "unit": "",
           "level": "positive"
         },
-        "summary": {
-          "en": "SPY · HOLD",
-          "zh": "SPY · 观望"
-        },
+        "summary": "Processing: 休息室",
         "insight": {
           "en": "Latest analysis for SPY is complete. Decision: HOLD. Agents have returned to the break room.",
           "zh": "最新分析 SPY 已完成，决策为 观望。Agent 返回休息室待命。"
@@ -4779,8 +4693,8 @@
             "last_asset": "SPY",
             "last_decision": "HOLD",
             "last_decision_zh": "观望",
-            "last_run_at": "2026-06-17 13:44:04",
-            "tasks_completed": 11,
+            "last_run_at": "2026-06-20 10:58:25",
+            "tasks_completed": 12,
             "ready_message": {
               "en": "System ready for next task",
               "zh": "系统已就绪，等待下一次任务"
@@ -4800,7 +4714,7 @@
             "Agents return to idle after the pipeline completes; the break room reflects system readiness."
           ]
         },
-        "updated_at": "2026-06-17 13:44:04"
+        "updated_at": "2026-06-20T02:58:25.202432+00:00"
       }
     }
   }

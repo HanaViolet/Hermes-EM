@@ -14,6 +14,7 @@ const UI_LOCALE_STORAGE_KEY = 'clawlibrary-ui-locale-v1';
 const INFO_PANEL_STORAGE_KEY = 'clawlibrary-info-panel-visible-v1';
 const DEBUG_PANEL_STORAGE_KEY = 'clawlibrary-debug-panel-visible-v1';
 const ACTOR_VARIANT_STORAGE_KEY = 'clawlibrary-actor-variant-v1';
+
 // Room menu order follows the trading pipeline
 const MENU_RESOURCE_IDS: ResourcePartitionId[] = [
   'break_room',   // 1. Idle / Start
@@ -3402,8 +3403,53 @@ function renderStrategyRankingPanel(artifact: any): string {
         </div>
       </div>
 
+      ${_renderSkillOpt(visual.skillopt || {})}
+
       ${_renderStrategyLearning(visual.learning || {})}
     </section>
+  `;
+}
+
+
+function _renderSkillOpt(skillopt: any): string {
+  const isZh = uiLocale === 'zh';
+  const skillText = skillopt.global_skill || '';
+  const status = skillopt.status || {};
+  if (!skillText && !status.baseline_score) return '';
+
+  const statusLabel = status.updated
+    ? (isZh ? '已更新' : 'Updated')
+    : (isZh ? '未更新' : 'Not updated');
+  const reasonMap: Record<string, string> = {
+    'not_run': isZh ? '尚未运行' : 'Not run yet',
+    'no_edit_proposed': isZh ? '无需编辑' : 'No edit needed',
+    'validation_rejected': isZh ? '验证未通过' : 'Validation rejected',
+    'insufficient_trajectories': isZh ? '样本不足' : 'Insufficient trajectories',
+    'edit_too_large': isZh ? '编辑超出预算' : 'Edit exceeded budget',
+  };
+  const reasonText = reasonMap[status.reason] || status.reason || '';
+  const scoreText = status.baseline_score !== null && status.baseline_score !== undefined
+    ? `${isZh ? '基线评分' : 'Baseline'}: ${status.baseline_score.toFixed(1)}`
+    : '';
+  const newScoreText = status.new_score !== null && status.new_score !== undefined
+    ? `${isZh ? '新评分' : 'New score'}: ${status.new_score.toFixed(1)}`
+    : '';
+
+  return `
+    <div class="strategy-skillopt-card">
+      <div class="strategy-section-title">${isZh ? 'SkillOpt：全局 Skill 自进化' : 'SkillOpt: Global Skill Evolution'}</div>
+      <div class="strategy-skillopt-status">
+        <span class="skillopt-status-badge ${status.updated ? 'updated' : 'pending'}">${statusLabel}</span>
+        ${reasonText ? `<span class="skillopt-status-reason">${escapeHtml(reasonText)}</span>` : ''}
+        ${scoreText ? `<span class="skillopt-status-score">${escapeHtml(scoreText)}${newScoreText ? ` · ${escapeHtml(newScoreText)}` : ''}</span>` : ''}
+      </div>
+      ${skillText ? `
+        <details class="strategy-skillopt-details">
+          <summary>${isZh ? '当前全局 Skill' : 'Current global skill'}</summary>
+          <article class="preview-markdown strategy-skillopt-markdown">${renderMarkdownPreview(skillText)}</article>
+        </details>
+      ` : ''}
+    </div>
   `;
 }
 
@@ -4948,8 +4994,21 @@ function renderRoomModal(): void {
 
   // Advanced room panel rendering (artifact-first dashboard)
   if (roomArtifact && roomArtifact.panel_type) {
+    const skillOptDetails = assetModalItems.querySelector('.strategy-skillopt-details');
+    const wasSkillOptOpen = skillOptDetails?.hasAttribute('open') ?? false;
+    const skillOptMarkdown = assetModalItems.querySelector('.strategy-skillopt-markdown') as HTMLElement | null;
+    const skillOptScrollTop = skillOptMarkdown?.scrollTop ?? 0;
     assetModalItems.classList.toggle('grid', false);
     assetModalItems.innerHTML = renderAdvancedRoomPanel(roomArtifact);
+    if (wasSkillOptOpen) {
+      assetModalItems.querySelector('.strategy-skillopt-details')?.setAttribute('open', '');
+    }
+    if (skillOptScrollTop > 0) {
+      const newMarkdown = assetModalItems.querySelector('.strategy-skillopt-markdown') as HTMLElement | null;
+      if (newMarkdown) {
+        newMarkdown.scrollTop = skillOptScrollTop;
+      }
+    }
     assetModal.classList.remove('hidden');
     assetModal.setAttribute('aria-hidden', 'false');
     return;

@@ -5022,6 +5022,80 @@
         padding: 16px;
         text-align: center;
       }
+
+      .strategy-skillopt-card {
+        border: 1px solid rgba(84, 108, 128, .22);
+        background: rgba(6, 16, 26, .5);
+        border-radius: 12px;
+        padding: 14px;
+      }
+      .strategy-skillopt-status {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+      .skillopt-status-badge {
+        display: inline-flex;
+        padding: 3px 10px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 700;
+        border: 1px solid;
+      }
+      .skillopt-status-badge.updated {
+        background: rgba(54, 211, 153, .14);
+        color: #36d399;
+        border-color: rgba(54, 211, 153, .35);
+      }
+      .skillopt-status-badge.pending {
+        background: rgba(148, 163, 184, .12);
+        color: #94a3b8;
+        border-color: rgba(148, 163, 184, .25);
+      }
+      .skillopt-status-reason {
+        font-size: 12px;
+        color: rgba(148, 163, 184, .8);
+      }
+      .skillopt-status-score {
+        font-size: 12px;
+        color: rgba(226, 232, 240, .85);
+        font-family: var(--font-mono);
+      }
+      .strategy-skillopt-details summary {
+        display: list-item;
+        list-style-position: outside;
+        padding-left: 4px;
+        font-size: 12px;
+        color: rgba(148, 163, 184, .85);
+        cursor: pointer;
+        user-select: none;
+      }
+      .strategy-skillopt-markdown {
+        margin-top: 10px;
+        padding: 12px;
+        border-radius: 10px;
+        background: rgba(4, 14, 24, .55);
+        border: 1px solid rgba(84, 108, 128, .22);
+        max-height: 320px;
+        overflow-y: auto;
+      }
+      .strategy-skillopt-markdown h1,
+      .strategy-skillopt-markdown h2,
+      .strategy-skillopt-markdown h3 {
+        font-family: inherit;
+        color: rgba(226, 232, 240, .9);
+        letter-spacing: 0;
+      }
+      .strategy-skillopt-markdown h1 { font-size: 18px; }
+      .strategy-skillopt-markdown h2 { font-size: 16px; }
+      .strategy-skillopt-markdown h3 { font-size: 14px; }
+      .strategy-skillopt-markdown p,
+      .strategy-skillopt-markdown li {
+        color: rgba(148, 163, 184, .85);
+      }
+
       @media (max-width: 1040px) {
         .strategy-current-body {
           grid-template-columns: 1fr;

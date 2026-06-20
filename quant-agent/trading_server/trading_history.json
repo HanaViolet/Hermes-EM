@@ -1,5 +1,11 @@
 [
   {
+    "task_id": "0f5f609a1fcc",
+    "ticker": "SPY",
+    "strategy": "auto",
+    "completed_at": "2026-06-20 02:54:23"
+  },
+  {
     "task_id": "89d8e5117337",
     "ticker": "SPY",
     "strategy": "auto",
@@ -112,11 +118,5 @@
     "ticker": "QQQ",
     "strategy": "auto",
     "completed_at": "2026-06-14 08:23:48"
-  },
-  {
-    "task_id": "5cab84187470",
-    "ticker": "QQQ",
-    "strategy": "auto",
-    "completed_at": "2026-06-14 07:21:34"
   }
 ]

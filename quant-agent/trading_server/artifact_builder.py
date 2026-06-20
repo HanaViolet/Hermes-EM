@@ -5,11 +5,32 @@ from typing import Any
 import json
 import os
 import threading
+from pathlib import Path
 
 from trading_agent.tools.indicator_tool import compute_multi_factor_score
 
 
+def _load_global_skill() -> str:
+    path = Path(__file__).resolve().parent.parent / "trading_agent" / "skills" / "global_skill.md"
+    try:
+        return path.read_text(encoding="utf-8") if path.exists() else ""
+    except Exception:
+        return ""
+
+
+def _load_skillopt_status() -> dict:
+    path = Path(__file__).resolve().parent.parent / "outputs" / "skillopt_status.json"
+    try:
+        if path.exists():
+            data = json.loads(path.read_text(encoding="utf-8"))
+            return data if isinstance(data, dict) else {}
+    except Exception:
+        pass
+    return {"updated": False, "reason": "not_run", "baseline_score": None, "new_score": None}
+
+
 TELEMETRY_PATH = os.path.join(os.path.dirname(__file__), "..", "ClawLibrary", "src", "data", "trading-telemetry.json")
+
 
 
 def _v(val, fmt=".2f", default="N/A"):
@@ -2175,6 +2196,10 @@ def build_room_artifacts(task: dict, result: dict) -> dict[str, dict]:
                         "experience_cards": experience_cards,
                         "total_lessons": total_lessons,
                         "latest_lesson": learning_result.get("latest_lesson"),
+                    },
+                    "skillopt": {
+                        "global_skill": _load_global_skill(),
+                        "status": _load_skillopt_status(),
                     },
                 }
             },

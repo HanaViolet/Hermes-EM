@@ -12,7 +12,9 @@ Learning Tool — generates lessons and experience cards after each trading run.
 from __future__ import annotations
 import json
 import os
-from datetime import datetime
+import threading
+from collections import Counter
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -24,9 +26,12 @@ except Exception:
     STRATEGY_KNOWLEDGE_BASE = []
 
 _LESSONS_PATH = Path(__file__).resolve().parent.parent.parent / "trading_server" / "strategy_lessons.json"
+_SKILLOPT_STATUS_PATH = Path(__file__).resolve().parent.parent.parent / "outputs" / "skillopt_status.json"
 LESSONS_PER_EXPERIENCE = 3
 MAX_LESSONS = 100
 MAX_EXPERIENCES = 20
+SKILLOPT_MIN_LESSONS = 10
+SKILLOPT_COOLDOWN_SECONDS = 300
 
 
 def _default_knowledge_base() -> list[dict[str, Any]]:
@@ -108,6 +113,57 @@ def _save_store(store: dict[str, Any]) -> None:
     os.replace(tmp_path, _LESSONS_PATH)
 
 
+def _load_skillopt_status() -> dict[str, Any]:
+    if not _SKILLOPT_STATUS_PATH.exists():
+        return {}
+    try:
+        data = json.loads(_SKILLOPT_STATUS_PATH.read_text(encoding="utf-8"))
+        return data if isinstance(data, dict) else {}
+    except Exception:
+        return {}
+
+
+def _skillopt_cooldown_remaining() -> float:
+    """Return seconds until SkillOpt can run again; 0 if ready."""
+    status = _load_skillopt_status()
+    last_run = status.get("last_run_at")
+    if not last_run:
+        return 0.0
+    try:
+        last_dt = datetime.fromisoformat(last_run)
+        if last_dt.tzinfo is None:
+            last_dt = last_dt.replace(tzinfo=timezone.utc)
+        elapsed = (datetime.now(timezone.utc) - last_dt).total_seconds()
+        return max(0.0, SKILLOPT_COOLDOWN_SECONDS - elapsed)
+    except Exception:
+        return 0.0
+
+
+def _should_trigger_skillopt(store: dict[str, Any]) -> bool:
+    """Trigger only when enough lessons have accumulated and cooldown has passed."""
+    if len(store.get("lessons", [])) < SKILLOPT_MIN_LESSONS:
+        return False
+    return _skillopt_cooldown_remaining() <= 0.0
+
+
+def _run_skillopt_thread(lessons: list[dict[str, Any]]) -> None:
+    try:
+        # Lazy import so learning_tool does not depend on SkillOpt at import time.
+        from trading_agent.tools.skillopt import run_skillopt_and_save
+        run_skillopt_and_save(lessons)
+    except Exception:
+        # SkillOpt must never break the trading pipeline.
+        pass
+
+
+def _maybe_trigger_skillopt(store: dict[str, Any]) -> None:
+    if not _should_trigger_skillopt(store):
+        return
+    # Snapshot the lessons so the background thread is isolated from later mutations.
+    lessons_snapshot = json.loads(json.dumps(store.get("lessons", [])))
+    threading.Thread(target=_run_skillopt_thread, args=(lessons_snapshot,), daemon=True).start()
+
+
 def _trim_store(store: dict[str, Any]) -> dict[str, Any]:
     store.setdefault("lessons", [])
     store.setdefault("experience_cards", [])
@@ -125,12 +181,83 @@ def _run_id(task: dict[str, Any], result: dict[str, Any]) -> str:
     return f"{ticker}_{strategy}_{ts}"
 
 
+def _classify_outcome(backtest: dict[str, Any]) -> str:
+    """Classify a backtest result as positive / negative / neutral."""
+    total_ret = backtest.get("total_return", 0) or 0
+    sharpe = backtest.get("sharpe_ratio", 0) or 0
+    max_dd = backtest.get("max_drawdown", 0) or 0
+    # Severe losses or excessive drawdown are unambiguous failures.
+    if total_ret < 0 or sharpe < 0 or max_dd < -0.20:
+        return "negative"
+    # Good outcomes need positive return, decent Sharpe, and controlled drawdown.
+    if total_ret > 0 and sharpe >= 0.5 and max_dd >= -0.15:
+        return "positive"
+    return "neutral"
+
+
+def _attribute_agents(agent_analysis: dict[str, Any], decision: str, backtest: dict[str, Any]) -> list[dict[str, Any]]:
+    """Reflect on the decision flow and attribute poor outcomes to specific agents."""
+    outcome = _classify_outcome(backtest)
+    if outcome != "negative":
+        return []
+
+    dec = str(decision).lower()
+    issues: list[dict[str, Any]] = []
+
+    # Vote agents: if an agent voted the same as the final (losing) decision, it shares blame.
+    for v in (agent_analysis.get("agent_votes") or []):
+        agent_name = v.get("agent", "?")
+        vote = str(v.get("vote", "hold")).lower()
+        if vote == dec:
+            issues.append({
+                "agent": agent_name,
+                "role": "vote",
+                "signal": vote,
+                "issue": f"{agent_name} voted {vote.upper()} alongside the final decision, but the run ended with a loss",
+            })
+
+    # Critic: if outcome was poor but critic did not strongly object, it missed the problem.
+    critic = (agent_analysis.get("critic_review") or {})
+    verdict = critic.get("verdict")
+    objections = critic.get("main_objections", [])
+    if verdict in ("agree", "partial") or not objections:
+        issues.append({
+            "agent": "Critic",
+            "role": "critic",
+            "signal": verdict,
+            "issue": "Critic did not strongly object despite the poor outcome",
+        })
+
+    # Reviser: if it changed the decision and the outcome is still poor, its revision is questionable.
+    revision = agent_analysis.get("decision_revision") or {}
+    if revision.get("revision_applied"):
+        issues.append({
+            "agent": "Reviser",
+            "role": "reviser",
+            "signal": revision.get("final_decision", "?"),
+            "issue": "Reviser adjusted the decision but the outcome remained negative",
+        })
+
+    # Strategy adjustment agent: if it suggested changes and we still lost, note it.
+    adjustments = agent_analysis.get("strategy_adjustments") or []
+    if adjustments:
+        issues.append({
+            "agent": "StrategyAdjustment",
+            "role": "adjustment",
+            "signal": adjustments,
+            "issue": "StrategyAdjustment provided suggestions but did not prevent the loss",
+        })
+
+    return issues
+
+
 def _lesson_context(task: dict[str, Any], result: dict[str, Any]) -> dict[str, Any]:
     backtest = result.get("backtest_result", {}) or {}
     decision = result.get("decision", {}) or {}
     risk = result.get("risk_result", {}) or {}
     indicator = result.get("indicator_result", {}) or {}
     news = result.get("news_result", {}) or {}
+    agent_analysis = result.get("agent_analysis", {}) or {}
     return {
         "ticker": result.get("ticker", task.get("ticker", "?")),
         "strategy": result.get("strategy", task.get("strategy", "?")),
@@ -156,7 +283,8 @@ def _lesson_context(task: dict[str, Any], result: dict[str, Any]) -> dict[str, A
             "news_sentiment": news.get("news_sentiment", "neutral"),
             "news_score": news.get("news_score", 50),
         },
-        "agent_consensus": (result.get("agent_analysis", {}) or {}).get("vote_summary", {}),
+        "agent_consensus": agent_analysis.get("vote_summary", {}),
+        "agent_attribution": _attribute_agents(agent_analysis, decision.get("decision", "hold"), backtest),
     }
 
 
@@ -188,17 +316,26 @@ def _fallback_lesson(
     decision = m.get("decision", "hold")
     risk_score = m.get("risk_score", 40)
 
+    attribution = context.get("agent_attribution", [])
+    attribution_text_zh = ""
+    attribution_text_en = ""
+    if attribution:
+        parts_zh = [f"{a['agent']}：{a['issue']}" for a in attribution]
+        parts_en = [f"{a['agent']}: {a['issue']}" for a in attribution]
+        attribution_text_zh = "；需关注责任归因：" + "；".join(parts_zh)
+        attribution_text_en = "; attribution: " + "; ".join(parts_en)
+
     if total_ret > 0 and sharpe >= 1.0:
         lesson_zh = f"{strategy} 策略本次表现良好：收益 {total_ret:.1f}%，夏普 {sharpe:.2f}，当前市场环境较适合该策略。"
         lesson_en = f"{strategy} performed well: return {total_ret:.1f}%, Sharpe {sharpe:.2f}; current market regime appears favorable."
         tags = ["positive_return", "good_sharpe", "favorable_regime"]
     elif total_ret < 0:
-        lesson_zh = f"{strategy} 策略本次收益为负（{total_ret:.1f}%），需关注最大回撤 {dd:.1f}% 与风险分数 {risk_score}。"
-        lesson_en = f"{strategy} produced negative return ({total_ret:.1f}%); monitor max drawdown {dd:.1f}% and risk score {risk_score}."
+        lesson_zh = f"{strategy} 策略本次收益为负（{total_ret:.1f}%），需关注最大回撤 {dd:.1f}% 与风险分数 {risk_score}{attribution_text_zh}。"
+        lesson_en = f"{strategy} produced negative return ({total_ret:.1f}%); monitor max drawdown {dd:.1f}% and risk score {risk_score}{attribution_text_en}."
         tags = ["negative_return", "risk_alert", "drawdown_watch"]
     elif sharpe < 0.5 and dd > 15:
-        lesson_zh = f"{strategy} 策略夏普过低（{sharpe:.2f}）且回撤较大（{dd:.1f}%），建议收紧仓位或等待更明确信号。"
-        lesson_en = f"{strategy} has low Sharpe ({sharpe:.2f}) and high drawdown ({dd:.1f}%); consider tighter sizing or waiting for clearer signals."
+        lesson_zh = f"{strategy} 策略夏普过低（{sharpe:.2f}）且回撤较大（{dd:.1f}%），建议收紧仓位或等待更明确信号{attribution_text_zh}。"
+        lesson_en = f"{strategy} has low Sharpe ({sharpe:.2f}) and high drawdown ({dd:.1f}%); consider tighter sizing or waiting for clearer signals{attribution_text_en}."
         tags = ["low_sharpe", "high_drawdown", "risk_off"]
     else:
         lesson_zh = f"{strategy} 策略本次表现中性（收益 {total_ret:.1f}%，夏普 {sharpe:.2f}），建议继续观察后续确认。"
@@ -249,12 +386,27 @@ def _fallback_experience(
     if not all_papers:
         all_papers = _pick_paper_refs(strategy, knowledge_base)
 
+    # Aggregate agent attribution across lessons (Hermes reflection)
+    agent_counts = Counter(
+        a["agent"]
+        for l in lessons
+        for a in l.get("agent_attribution", [])
+        if isinstance(a, dict) and a.get("agent")
+    )
+    if agent_counts:
+        top_agents = agent_counts.most_common(3)
+        agents_zh = "，".join(f"{agent} {cnt} 次" for agent, cnt in top_agents)
+        agents_en = ", ".join(f"{agent} {cnt} time(s)" for agent, cnt in top_agents)
+        summary_zh += f" 常见责任 agent：{agents_zh}。"
+        summary_en += f" Frequent responsible agents: {agents_en}."
+
     return {
         "summary": {"zh": summary_zh, "en": summary_en},
         "key_findings": [{"zh": l.get("lesson", {}).get("zh", ""), "en": l.get("lesson", {}).get("en", "")} for l in lessons[-LESSONS_PER_EXPERIENCE:]],
         "avg_metrics": {"avg_return_pct": round(avg_ret, 2), "avg_sharpe": round(avg_sharpe, 2)},
         "tags": all_tags,
         "paper_refs": all_papers,
+        "agent_attribution_summary": dict(agent_counts),
         "_source": "rule_fallback",
     }
 
@@ -262,6 +414,9 @@ def _fallback_experience(
 _LESSON_SYSTEM_PROMPT = """You are a quantitative trading strategy learning engine.
 Analyze the provided run result and generate a structured lesson.
 Also consider the PRIOR EXPERIENCES (if any) so the lesson builds on accumulated knowledge.
+
+The run context includes `agent_attribution`: a list of agents whose vote/advice aligned with a poor final decision.
+When `agent_attribution` is non-empty, explicitly mention which agents contributed to the problem and what should change next time.
 
 Return valid JSON only, with this schema:
 {
@@ -272,7 +427,8 @@ Return valid JSON only, with this schema:
 
 Rules:
 - lesson must explain what worked, what didn't, or what conditions favored / hurt the strategy.
-- tags should categorize the lesson (e.g., "trend_following", "mean_reversion", "momentum", "volatility", "risk_management", "hold_signal").
+- If agent_attribution is provided, name the responsible agents and recommend how to correct their behavior.
+- tags should categorize the lesson (e.g., "trend_following", "mean_reversion", "momentum", "volatility", "risk_management", "hold_signal", "agent_fault").
 - paper_refs must only reference papers listed in the provided knowledge_base.
 - If prior_experiences exist, explicitly contrast or reinforce them.
 - Keep each bilingual text under 200 characters.
@@ -282,6 +438,9 @@ Rules:
 _EXPERIENCE_SYSTEM_PROMPT = """You are a quantitative trading strategy memory synthesizer.
 Given K lessons for the same strategy, produce an experience card that captures the key insight.
 Also consider PRIOR EXPERIENCES so the summary evolves rather than repeats.
+
+Each lesson contains `agent_attribution`: agents whose advice aligned with a poor outcome.
+Use these attributions to identify recurring weak points in the decision pipeline.
 
 Return valid JSON only, with this schema:
 {
@@ -296,7 +455,7 @@ Return valid JSON only, with this schema:
 
 Rules:
 - summary should be a concise strategy-level takeaway (2-3 sentences).
-- key_findings should list 2-4 concrete, non-redundant observations from the lessons.
+- key_findings should list 2-4 concrete, non-redundant observations from the lessons, including any recurring agent failures.
 - tags should cover the dominant themes.
 - paper_refs must only reference papers listed in knowledge_base.
 - Each bilingual text should be under 250 characters.
@@ -379,6 +538,7 @@ def summarize_experience(
                 "metrics": l.get("metrics", {}),
                 "lesson": l.get("lesson", {}),
                 "tags": l.get("tags", []),
+                "agent_attribution": l.get("agent_attribution", []),
             }
             for l in lessons[-LESSONS_PER_EXPERIENCE:]
         ],
@@ -387,6 +547,7 @@ def summarize_experience(
             {
                 "summary": e.get("summary", {}),
                 "tags": e.get("tags", []),
+                "agent_attribution_summary": e.get("agent_attribution_summary", {}),
             }
             for e in (prior_experiences or [])[-2:]
         ],
@@ -451,13 +612,15 @@ def run_learning_pipeline(
 
     # Generate lesson for this run
     lesson_meta = generate_lesson(task, result, kb, prior_lessons, prior_experiences)
+    context = _lesson_context(task, result)
     lesson = {
         "run_id": run_id,
         "ticker": ticker,
         "strategy": strategy,
         "date": str(datetime.now())[:10],
         "timestamp": datetime.now().isoformat(),
-        "metrics": _lesson_context(task, result)["metrics"],
+        "metrics": context["metrics"],
+        "agent_attribution": context.get("agent_attribution", []),
         "lesson": lesson_meta["lesson"],
         "tags": lesson_meta["tags"],
         "paper_refs": lesson_meta["paper_refs"],
@@ -495,6 +658,7 @@ def run_learning_pipeline(
 
     store = _trim_store(store)
     _save_store(store)
+    _maybe_trigger_skillopt(store)
 
     all_experiences = [e for e in store["experience_cards"] if e.get("strategy") == strategy]
     recent_lessons = [l for l in store["lessons"] if l.get("strategy") == strategy][-5:]

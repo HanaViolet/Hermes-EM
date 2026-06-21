@@ -9,6 +9,7 @@ import json as _json
 import threading
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Any
 
 # Robust project-root discovery so this works whether run directly or via start_server.py
 _THIS_FILE = Path(__file__).resolve()
@@ -25,6 +26,20 @@ _lock = threading.Lock()
 # History file
 _HISTORY_PATH = Path(__file__).resolve().parent / "trading_history.json"
 _MAX_HISTORY = 20
+
+
+def _serialize_value(value: Any) -> Any:
+    """Recursively convert pandas DataFrames/Series to plain Python types."""
+    import pandas as pd
+    if isinstance(value, pd.DataFrame):
+        return value.to_dict(orient="records")
+    if isinstance(value, pd.Series):
+        return value.to_dict()
+    if isinstance(value, dict):
+        return {k: _serialize_value(v) for k, v in value.items()}
+    if isinstance(value, list):
+        return [_serialize_value(v) for v in value]
+    return value
 
 
 def _run_agent_in_background(task: dict, task_id: str) -> None:
@@ -150,8 +165,8 @@ def _run_agent_in_background(task: dict, task_id: str) -> None:
             "result": {
                 "ticker": result.get("ticker"),
                 "strategy": result.get("strategy"),
-                "decision": decision,
-                "backtest": backtest,
+                "decision": _serialize_value(decision),
+                "backtest": _serialize_value(backtest),
                 "report": report_md,
             },
         }

@@ -1325,61 +1325,706 @@
         "Jegadeesh & Titman (1993), Returns to Buying Winners and Selling Losers"
       ],
       "source": "rule_fallback"
+    },
+    {
+      "run_id": "SPY_momentum_20260621143427",
+      "ticker": "SPY",
+      "strategy": "momentum",
+      "date": "2026-06-21",
+      "timestamp": "2026-06-21T14:34:31.780062",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 43.16,
+        "sharpe_ratio": 0.64,
+        "max_drawdown_pct": 15.42,
+        "win_rate_pct": 38.0,
+        "trades": 98,
+        "risk_score": 42,
+        "risk_level": "medium",
+        "rsi": 36.446209,
+        "macd": -0.983444,
+        "ma20": 599.538498,
+        "ma60": 590.467668,
+        "volatility_20d_pct": 14.28,
+        "return_20d_pct": -2.91,
+        "news_sentiment": "negative",
+        "news_score": 35
+      },
+      "agent_attribution": [],
+      "lesson": {
+        "zh": "动量策略在SPY上长期收益43.16%但夏普仅0.64、胜率38%，风险评分42触发观望模式正确；RSI<40且MACD为负时等待确认信号避免了弱势入场，与先前经验一致。",
+        "en": "Momentum on SPY achieved 43.16% return but Sharpe 0.64 and win rate 38%; risk score 42 correctly triggered wait mode; RSI<40 with negative MACD avoided weak entry, consistent with prior lessons."
+      },
+      "tags": [
+        "momentum",
+        "hold_signal",
+        "risk_management",
+        "win_rate",
+        "wait_for_confirmation"
+      ],
+      "paper_refs": [
+        "Jegadeesh & Titman (1993)",
+        "Wilder (1978)",
+        "Appel (1979)"
+      ],
+      "source": "llm"
+    },
+    {
+      "run_id": "SPY_momentum_20260621143619",
+      "ticker": "SPY",
+      "strategy": "momentum",
+      "date": "2026-06-21",
+      "timestamp": "2026-06-21T14:36:24.005392",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 43.16,
+        "sharpe_ratio": 0.64,
+        "max_drawdown_pct": 15.42,
+        "win_rate_pct": 38.0,
+        "trades": 98,
+        "risk_score": 42,
+        "risk_level": "medium",
+        "rsi": 36.446209,
+        "macd": -0.983444,
+        "ma20": 599.538498,
+        "ma60": 590.467668,
+        "volatility_20d_pct": 14.28,
+        "return_20d_pct": -2.91,
+        "news_sentiment": "negative",
+        "news_score": 35
+      },
+      "agent_attribution": [],
+      "lesson": {
+        "zh": "动量策略在SPY上长期收益43.16%但夏普仅0.64、胜率38%，风险评分42触发观望模式正确；RSI<40且MACD为负时等待确认信号避免了弱势入场，与先前经验一致。",
+        "en": "Momentum on SPY achieved 43.16% return but Sharpe 0.64 and win rate 38%; risk score 42 correctly triggered wait mode; RSI<40 with negative MACD avoided weak entry, consistent with prior lessons."
+      },
+      "tags": [
+        "momentum",
+        "hold_signal",
+        "risk_management",
+        "win_rate",
+        "wait_for_confirmation"
+      ],
+      "paper_refs": [
+        "Jegadeesh & Titman (1993)",
+        "Wilder (1978)"
+      ],
+      "source": "llm"
+    },
+    {
+      "run_id": "QQQ_momentum_20260621144528",
+      "ticker": "QQQ",
+      "strategy": "momentum",
+      "date": "2026-06-21",
+      "timestamp": "2026-06-21T14:45:35.393724",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 94.26,
+        "sharpe_ratio": 0.93,
+        "max_drawdown_pct": 20.98,
+        "win_rate_pct": 37.1,
+        "trades": 81,
+        "risk_score": 49,
+        "risk_level": "medium",
+        "rsi": 44.35068,
+        "macd": 2.400183,
+        "ma20": 523.672493,
+        "ma60": 507.31533,
+        "volatility_20d_pct": 20.08,
+        "return_20d_pct": -0.79,
+        "news_sentiment": "neutral",
+        "news_score": 50
+      },
+      "agent_attribution": [
+        {
+          "agent": "News",
+          "role": "vote",
+          "signal": "hold",
+          "issue": "News voted HOLD alongside the final decision, but the run ended with a loss"
+        },
+        {
+          "agent": "Risk",
+          "role": "vote",
+          "signal": "hold",
+          "issue": "Risk voted HOLD alongside the final decision, but the run ended with a loss"
+        },
+        {
+          "agent": "Reviser",
+          "role": "reviser",
+          "signal": "hold",
+          "issue": "Reviser adjusted the decision but the outcome remained negative"
+        },
+        {
+          "agent": "StrategyAdjustment",
+          "role": "adjustment",
+          "signal": [
+            {
+              "parameter": "stop_loss",
+              "current": "-15%",
+              "suggested": "-10%",
+              "reason": "Historical max drawdown is severe — tighten stop"
+            }
+          ],
+          "issue": "StrategyAdjustment provided suggestions but did not prevent the loss"
+        }
+      ],
+      "lesson": {
+        "zh": "动量策略在QQQ上因风险评分49触发观望模式正确，但News、Risk、Reviser和StrategyAdjustment均未有效纠正低胜率（37.1%）和-20.98%回撤；应强化多信号一致性检查，并收紧止损至-10%。",
+        "en": "Momentum on QQQ correctly triggered wait mode due to risk score 49, but News, Risk, Reviser, and StrategyAdjustment failed to correct low win rate (37.1%) and -20.98% drawdown; strengthen multi-signal consistency and tighten stop-loss to -10%."
+      },
+      "tags": [
+        "momentum",
+        "risk_management",
+        "wait_for_confirmation",
+        "agent_fault",
+        "low_win_rate",
+        "max_drawdown",
+        "stop_loss"
+      ],
+      "paper_refs": [
+        "Edwards & Magee (1948)",
+        "Wilder (1978)",
+        "Appel (1979)",
+        "Jegadeesh & Titman (1993)",
+        "Xiao et al. (2025)"
+      ],
+      "source": "llm"
+    },
+    {
+      "run_id": "SPY_momentum_20260621152035",
+      "ticker": "SPY",
+      "strategy": "momentum",
+      "date": "2026-06-21",
+      "timestamp": "2026-06-21T15:20:41.189038",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 29.73,
+        "sharpe_ratio": 1.59,
+        "max_drawdown_pct": 8.73,
+        "win_rate_pct": 45.7,
+        "trades": 28,
+        "risk_score": 45,
+        "risk_level": "medium",
+        "rsi": 36.446209,
+        "macd": -0.983444,
+        "ma20": 599.538498,
+        "ma60": 590.467668,
+        "volatility_20d_pct": 14.28,
+        "return_20d_pct": -2.91,
+        "news_sentiment": "negative",
+        "news_score": 30
+      },
+      "agent_attribution": [],
+      "lesson": {
+        "zh": "动量策略在SPY上风险评分45触发观望模式正确，RSI<40且MACD为负时等待确认信号避免了弱势入场，与先前经验一致；但胜率仍低（45.7%），需进一步强化多信号一致性检查。",
+        "en": "Momentum on SPY correctly triggered wait mode due to risk score 45; waiting for confirmation when RSI<40 and MACD negative avoided weak entry, consistent with prior lessons; but win rate remains low (45.7%), requiring stronger multi-signal consistency checks."
+      },
+      "tags": [
+        "momentum",
+        "hold_signal",
+        "risk_management",
+        "wait_for_confirmation",
+        "low_win_rate"
+      ],
+      "paper_refs": [
+        "Jegadeesh & Titman (1993)",
+        "Wilder (1978)",
+        "Appel (1979)",
+        "Xiao et al. (2025)"
+      ],
+      "source": "llm"
+    },
+    {
+      "run_id": "TSLA_momentum_20260621153924",
+      "ticker": "TSLA",
+      "strategy": "momentum",
+      "date": "2026-06-21",
+      "timestamp": "2026-06-21T15:39:28.321878",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 45.8,
+        "sharpe_ratio": 1.21,
+        "max_drawdown_pct": 25.01,
+        "win_rate_pct": 9.0,
+        "trades": 18,
+        "risk_score": 54,
+        "risk_level": "medium",
+        "rsi": 50.568478,
+        "macd": 23.836484,
+        "ma20": 418.905,
+        "ma60": 326.562501,
+        "volatility_20d_pct": 67.19,
+        "return_20d_pct": 13.09,
+        "news_sentiment": "neutral",
+        "news_score": 50
+      },
+      "agent_attribution": [
+        {
+          "agent": "News",
+          "role": "vote",
+          "signal": "hold",
+          "issue": "News voted HOLD alongside the final decision, but the run ended with a loss"
+        },
+        {
+          "agent": "Risk",
+          "role": "vote",
+          "signal": "hold",
+          "issue": "Risk voted HOLD alongside the final decision, but the run ended with a loss"
+        },
+        {
+          "agent": "Reviser",
+          "role": "reviser",
+          "signal": "hold",
+          "issue": "Reviser adjusted the decision but the outcome remained negative"
+        },
+        {
+          "agent": "StrategyAdjustment",
+          "role": "adjustment",
+          "signal": [
+            {
+              "parameter": "position_size",
+              "current": "40%",
+              "suggested": "27%",
+              "reason": "High risk score suggests reducing exposure"
+            },
+            {
+              "parameter": "stop_loss",
+              "current": "-15%",
+              "suggested": "-10%",
+              "reason": "Historical max drawdown is severe — tighten stop"
+            }
+          ],
+          "issue": "StrategyAdjustment provided suggestions but did not prevent the loss"
+        }
+      ],
+      "lesson": {
+        "zh": "动量策略在TSLA上因风险评分54触发观望模式正确，但News、Risk、Reviser和StrategyAdjustment均未有效纠正低胜率（9%）和-25%回撤；应强化多信号一致性检查，并收紧止损至-10%。",
+        "en": "Momentum on TSLA correctly triggered wait mode due to risk score 54, but News, Risk, Reviser, and StrategyAdjustment failed to correct low win rate (9%) and -25% drawdown; strengthen multi-signal consistency and tighten stop-loss to -10%."
+      },
+      "tags": [
+        "momentum",
+        "risk_management",
+        "wait_for_confirmation",
+        "agent_fault",
+        "low_win_rate",
+        "max_drawdown",
+        "stop_loss"
+      ],
+      "paper_refs": [
+        "Xiao et al. (2025)",
+        "Edwards & Magee (1948)",
+        "Wilder (1978)",
+        "Appel (1979)",
+        "Jegadeesh & Titman (1993)"
+      ],
+      "source": "llm"
+    },
+    {
+      "run_id": "NVDA_ma_20260621154411",
+      "ticker": "NVDA",
+      "strategy": "ma",
+      "date": "2026-06-21",
+      "timestamp": "2026-06-21T15:44:15.695239",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "proceed_with_caution",
+        "confidence": 25.0,
+        "position_pct": 25.0,
+        "total_return_pct": 145.76,
+        "sharpe_ratio": 1.9,
+        "max_drawdown_pct": 15.99,
+        "win_rate_pct": 26.7,
+        "trades": 16,
+        "risk_score": 36,
+        "risk_level": "low",
+        "rsi": 48.812403,
+        "macd": -0.763437,
+        "ma20": 137.148499,
+        "ma60": 138.961832,
+        "volatility_20d_pct": 34.1,
+        "return_20d_pct": -3.13,
+        "news_sentiment": "neutral",
+        "news_score": 50
+      },
+      "agent_attribution": [],
+      "lesson": {
+        "zh": "在NVDA的MA策略中，低胜率（26.7%）但高总回报（145.76%）表明趋势跟踪策略在强趋势中有效，但需警惕高波动（34.1%）和近期回调（-3.13%）。当前RSI中性、MACD负值，且新闻中性，hold决策合理。未来应优先依赖趋势跟踪信号，而非均值回归或动量信号。",
+        "en": "In NVDA's MA strategy, low win rate (26.7%) but high total return (145.76%) confirms trend-following works in strong trends, but high volatility (34.1%) and recent pullback (-3.13%) warrant caution. Current neutral RSI, negative MACD, and neutral news support hold. Future decisions should prioritize trend-following over mean-reversion or momentum signals."
+      },
+      "tags": [
+        "trend_following",
+        "volatility",
+        "hold_signal",
+        "risk_management"
+      ],
+      "paper_refs": [
+        "Edwards & Magee (1948)",
+        "Appel (1979)",
+        "Jegadeesh & Titman (1993)"
+      ],
+      "source": "llm"
+    },
+    {
+      "run_id": "AAPL_ma_20260621154851",
+      "ticker": "AAPL",
+      "strategy": "ma",
+      "date": "2026-06-21",
+      "timestamp": "2026-06-21T15:48:54.554552",
+      "metrics": {
+        "decision": "buy",
+        "decision_mode": "proceed",
+        "confidence": 70.0,
+        "position_pct": 55.0,
+        "total_return_pct": 45.98,
+        "sharpe_ratio": 1.42,
+        "max_drawdown_pct": 15.34,
+        "win_rate_pct": 38.2,
+        "trades": 7,
+        "risk_score": 26,
+        "risk_level": "low",
+        "rsi": 53.982563,
+        "macd": 5.087179,
+        "ma20": 249.809499,
+        "ma60": 236.296999,
+        "volatility_20d_pct": 16.49,
+        "return_20d_pct": 4.52,
+        "news_sentiment": "neutral",
+        "news_score": 45
+      },
+      "agent_attribution": [],
+      "lesson": {
+        "zh": "MA策略在AAPL上取得了45.98%的总回报，但低胜率（38.2%）和15.34%的最大回撤表明趋势跟踪有效但需警惕回撤。未来应优先依赖趋势跟踪信号，并在风险分数低时适当提高仓位。",
+        "en": "The MA strategy achieved 45.98% total return on AAPL, but low win rate (38.2%) and 15.34% max drawdown indicate trend-following works but requires drawdown vigilance. Future decisions should prioritize trend-following signals and increase position when risk score is low."
+      },
+      "tags": [
+        "trend_following",
+        "risk_management",
+        "hold_signal"
+      ],
+      "paper_refs": [
+        "Edwards & Magee (1948)",
+        "Appel (1979)",
+        "Jegadeesh & Titman (1993)"
+      ],
+      "source": "llm"
+    },
+    {
+      "run_id": "MSFT_rsi_20260621155047",
+      "ticker": "MSFT",
+      "strategy": "rsi",
+      "date": "2026-06-21",
+      "timestamp": "2026-06-21T15:50:50.430671",
+      "metrics": {
+        "decision": "buy",
+        "decision_mode": "proceed",
+        "confidence": 70.0,
+        "position_pct": 55.0,
+        "total_return_pct": 15.67,
+        "sharpe_ratio": 0.97,
+        "max_drawdown_pct": 8.06,
+        "win_rate_pct": 13.1,
+        "trades": 10,
+        "risk_score": 31,
+        "risk_level": "low",
+        "rsi": 30.793602,
+        "macd": 0.008663,
+        "ma20": 439.829997,
+        "ma60": 426.503833,
+        "volatility_20d_pct": 19.19,
+        "return_20d_pct": -2.2,
+        "news_sentiment": "neutral_positive",
+        "news_score": 55
+      },
+      "agent_attribution": [],
+      "lesson": {
+        "zh": "RSI策略在低风险、低波动环境下表现良好，但低胜率（13.1%）提示需结合趋势确认信号，避免在弱势反弹中过早入场。",
+        "en": "RSI strategy performs well in low-risk, low-volatility environments, but the low win rate (13.1%) suggests combining trend confirmation signals to avoid premature entries during weak bounces."
+      },
+      "tags": [
+        "mean_reversion",
+        "risk_management",
+        "hold_signal"
+      ],
+      "paper_refs": [
+        "Wilder (1978)",
+        "Edwards & Magee (1948)"
+      ],
+      "source": "llm"
+    },
+    {
+      "run_id": "AMD_ma_20260621164244",
+      "ticker": "AMD",
+      "strategy": "ma",
+      "date": "2026-06-21",
+      "timestamp": "2026-06-21T16:42:50.101295",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "proceed_with_caution",
+        "confidence": 25.0,
+        "position_pct": 25.0,
+        "total_return_pct": -5.42,
+        "sharpe_ratio": -0.12,
+        "max_drawdown_pct": 19.62,
+        "win_rate_pct": 12.9,
+        "trades": 24,
+        "risk_score": 46,
+        "risk_level": "medium",
+        "rsi": 37.477497,
+        "macd": -4.878154,
+        "ma20": 128.3885,
+        "ma60": 142.591834,
+        "volatility_20d_pct": 34.49,
+        "return_20d_pct": -14.97,
+        "news_sentiment": "neutral_positive",
+        "news_score": 55
+      },
+      "agent_attribution": [
+        {
+          "agent": "News",
+          "role": "vote",
+          "signal": "hold",
+          "issue": "News voted HOLD alongside the final decision, but the run ended with a loss"
+        },
+        {
+          "agent": "Risk",
+          "role": "vote",
+          "signal": "hold",
+          "issue": "Risk voted HOLD alongside the final decision, but the run ended with a loss"
+        },
+        {
+          "agent": "Reviser",
+          "role": "reviser",
+          "signal": "hold",
+          "issue": "Reviser adjusted the decision but the outcome remained negative"
+        }
+      ],
+      "lesson": {
+        "zh": "AMD的MA策略在低胜率（12.9%）和负夏普（-0.12）下表现不佳，风险分数46（中风险）和RSI<40提示弱势，但News、Risk和Reviser均支持hold，导致错失止损机会。未来应强制检查风险分数>40时降低仓位，并优先采纳趋势跟踪信号，避免多agent一致但结果负面时忽视止损纪律。",
+        "en": "AMD's MA strategy underperformed with low win rate (12.9%) and negative Sharpe (-0.12). Risk score 46 (medium) and RSI<40 signaled weakness, but News, Risk, and Reviser all supported hold, missing stop-loss opportunities. Future must enforce position reduction when risk score >40 and prioritize trend-following signals, avoiding consensus-driven inaction despite negative outcomes."
+      },
+      "tags": [
+        "trend_following",
+        "risk_management",
+        "agent_fault",
+        "hold_signal",
+        "mean_reversion"
+      ],
+      "paper_refs": [
+        "Edwards & Magee (1948)",
+        "Wilder (1978)",
+        "Appel (1979)",
+        "Xiao et al. (2025)"
+      ],
+      "source": "llm"
+    },
+    {
+      "run_id": "SPY_momentum_20260621164418",
+      "ticker": "SPY",
+      "strategy": "momentum",
+      "date": "2026-06-21",
+      "timestamp": "2026-06-21T16:44:23.255737",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 43.16,
+        "sharpe_ratio": 0.64,
+        "max_drawdown_pct": 15.42,
+        "win_rate_pct": 38.0,
+        "trades": 98,
+        "risk_score": 42,
+        "risk_level": "medium",
+        "rsi": 36.446209,
+        "macd": -0.983444,
+        "ma20": 599.538498,
+        "ma60": 590.467668,
+        "volatility_20d_pct": 14.28,
+        "return_20d_pct": -2.91,
+        "news_sentiment": "negative",
+        "news_score": 30
+      },
+      "agent_attribution": [],
+      "lesson": {
+        "zh": "动量策略在SPY上因风险评分42触发观望模式正确，但胜率仅38%且最大回撤15.42%仍偏高；RSI<40且MACD为负时等待确认信号避免了弱势入场，与先前经验一致；需继续强化多信号一致性检查并收紧止损至-10%。",
+        "en": "Momentum on SPY correctly triggered wait mode due to risk score 42, but win rate remains low at 38% and max drawdown 15.42% is still high; waiting for confirmation when RSI<40 and MACD negative avoided weak entry, consistent with prior lessons; continue strengthening multi-signal consistency and tighten stop-loss to -10%."
+      },
+      "tags": [
+        "momentum",
+        "hold_signal",
+        "risk_management",
+        "wait_for_confirmation",
+        "low_win_rate",
+        "max_drawdown",
+        "stop_loss"
+      ],
+      "paper_refs": [
+        "Wilder (1978)",
+        "Appel (1979)",
+        "Jegadeesh & Titman (1993)",
+        "Xiao et al. (2025)"
+      ],
+      "source": "llm"
+    },
+    {
+      "run_id": "NVDA_ma_20260621164548",
+      "ticker": "NVDA",
+      "strategy": "ma",
+      "date": "2026-06-21",
+      "timestamp": "2026-06-21T16:45:54.001154",
+      "metrics": {
+        "decision": "hold",
+        "decision_mode": "wait_for_confirmation",
+        "confidence": 25.0,
+        "position_pct": 0,
+        "total_return_pct": 143.89,
+        "sharpe_ratio": 1.36,
+        "max_drawdown_pct": 15.99,
+        "win_rate_pct": 17.2,
+        "trades": 16,
+        "risk_score": 33,
+        "risk_level": "low",
+        "rsi": 48.812403,
+        "macd": -0.763437,
+        "ma20": 137.148499,
+        "ma60": 138.961832,
+        "volatility_20d_pct": 34.1,
+        "return_20d_pct": -3.13,
+        "news_sentiment": "neutral_positive",
+        "news_score": 60
+      },
+      "agent_attribution": [],
+      "lesson": {
+        "zh": "NVDA的MA策略在低胜率（17.2%）下实现高总回报（143.89%），确认趋势跟踪有效。当前RSI中性、MACD负值、新闻中性偏正面，hold决策合理。未来应优先依赖趋势跟踪信号，并在风险分数低时保持观望，避免过早入场。",
+        "en": "NVDA's MA strategy achieved high total return (143.89%) despite low win rate (17.2%), confirming trend-following effectiveness. Current neutral RSI, negative MACD, and neutral-positive news support hold. Future decisions should prioritize trend-following signals and maintain watch mode when risk is low, avoiding premature entry."
+      },
+      "tags": [
+        "trend_following",
+        "hold_signal",
+        "risk_management",
+        "volatility"
+      ],
+      "paper_refs": [
+        "Edwards & Magee (1948)",
+        "Appel (1979)",
+        "Jegadeesh & Titman (1993)"
+      ],
+      "source": "llm"
     }
   ],
   "experience_cards": [
     {
-      "id": "exp_momentum_20260620105823",
+      "id": "exp_momentum_20260621164429",
       "strategy": "momentum",
-      "created_at": "2026-06-20T10:58:23.160100",
+      "created_at": "2026-06-21T16:44:29.887005",
       "lesson_count": 3,
       "summary": {
-        "zh": "基于 3 次运行，momentum 策略平均收益为正（14.4%），夏普 2.13，表现稳定。",
-        "en": "Based on 3 runs, momentum shows stable positive average returns (14.4%) with Sharpe 2.13."
+        "zh": "动量策略在风险评分中等时触发观望模式正确，但胜率持续偏低（9%-45.7%）且最大回撤严重（-25%），News、Risk、Reviser和StrategyAdjustment等智能体未能有效纠正；必须强化多信号一致性检查，并将止损收紧至-10%。",
+        "en": "Momentum strategy correctly triggers wait mode under moderate risk scores, but persistently low win rates (9%-45.7%) and severe max drawdowns (-25%) indicate that News, Risk, Reviser, and StrategyAdjustment agents fail to correct; multi-signal consistency checks must be strengthened and stop-loss tightened to -10%."
       },
       "key_findings": [
         {
-          "en": "Momentum on SPY performed well (return 14.4%, Sharpe 2.13) with low risk (score 15) and positive news (65), but overbought RSI (70.8) warrants caution; consistent with prior lessons: waiting for confirmation avoids premature entry, but low win rate (41.1%) impacts long-term returns.",
-          "zh": "动量策略在SPY上表现优异（收益14.4%，夏普2.13），低风险（15分）和正面新闻（65分）支持持有，但RSI超买（70.8）需警惕回调，与先前经验一致：等待确认信号能避免过早入场，但需关注胜率（41.1%）对长期收益的影响。"
+          "en": "Wait mode triggered correctly under moderate risk scores (42-54); waiting for confirmation when RSI<40 and MACD negative avoided weak entry, consistent with prior lessons.",
+          "zh": "风险评分中等（42-54）时触发观望模式正确，RSI<40且MACD为负时等待确认信号避免了弱势入场，与先前经验一致。"
         },
         {
-          "en": "momentum performed well: return 14.4%, Sharpe 2.13; current market regime appears favorable.",
-          "zh": "momentum 策略本次表现良好：收益 14.4%，夏普 2.13，当前市场环境较适合该策略。"
+          "en": "Persistently low win rates (9%-45.7%) and severe max drawdowns (-25%) indicate that News, Risk, Reviser, and StrategyAdjustment agents fail to correct; multi-signal consistency checks must be strengthened.",
+          "zh": "胜率持续偏低（9%-45.7%）且最大回撤严重（-25%），News、Risk、Reviser和StrategyAdjustment智能体未能有效纠正，需强化多信号一致性检查。"
         },
         {
-          "en": "momentum performed well: return 14.4%, Sharpe 2.13; current market regime appears favorable.",
-          "zh": "momentum 策略本次表现良好：收益 14.4%，夏普 2.13，当前市场环境较适合该策略。"
+          "en": "In the TSLA case, all four agents supported hold but the outcome was negative; mandatory stop-loss discipline check should be triggered, adopting StrategyAdjustment's suggestion to tighten stop-loss from -15% to -10%.",
+          "zh": "TSLA案例中，四个智能体均支持hold但结果负面，应强制触发止损纪律检查并采纳StrategyAdjustment的止损收紧建议（从-15%至-10%）。"
         }
       ],
       "avg_metrics": {
-        "avg_return_pct": 14.41,
-        "avg_sharpe": 2.13
+        "avg_return_pct": 39.56,
+        "avg_sharpe": 1.15
       },
       "tags": [
-        "favorable_regime",
-        "good_sharpe",
-        "hold_decision",
-        "hold_signal",
         "momentum",
-        "positive_return",
         "risk_management",
-        "rsi_overbought",
-        "win_rate"
+        "wait_for_confirmation",
+        "agent_fault",
+        "low_win_rate",
+        "max_drawdown",
+        "stop_loss",
+        "rsi",
+        "macd"
       ],
       "paper_refs": [
-        "Edwards & Magee (1948), Technical Analysis of Stock Trends",
         "Jegadeesh & Titman (1993)",
-        "Jegadeesh & Titman (1993), Returns to Buying Winners and Selling Losers",
-        "Wilder (1978)",
-        "Wilder (1978), New Concepts in Technical Trading Systems",
         "Xiao et al. (2025)"
       ],
       "source_lesson_ids": [
-        "SPY_momentum_20260620105407",
-        "SPY_momentum_20260620105823",
-        "SPY_momentum_20260620105715"
+        "SPY_momentum_20260621152035",
+        "TSLA_momentum_20260621153924",
+        "SPY_momentum_20260621164418"
       ],
-      "source": "rule_fallback"
+      "source": "llm"
+    },
+    {
+      "id": "exp_ma_20260621164601",
+      "strategy": "ma",
+      "created_at": "2026-06-21T16:46:01.628508",
+      "lesson_count": 3,
+      "summary": {
+        "zh": "MA趋势跟踪策略在强趋势股（如NVDA、AAPL）中有效，但低胜率（12.9%-38.2%）和高波动（34%）要求严格的风险管理。当风险分数>40或RSI<40时，必须强制降低仓位或止损，避免多agent共识（如AMD案例）导致忽视弱势信号。",
+        "en": "MA trend-following works in strong trends (e.g., NVDA, AAPL) but low win rates (12.9%-38.2%) and high volatility (34%) demand strict risk management. When risk score >40 or RSI<40, must enforce position reduction or stop-loss, avoiding multi-agent consensus (e.g., AMD) that ignores weak signals."
+      },
+      "key_findings": [
+        {
+          "en": "Low win rates (12.9%-38.2%) are inherent to MA strategy, but high returns (e.g., NVDA 143.89%) confirm trend-following effectiveness in strong trends; position sizing must adapt to risk score and RSI.",
+          "zh": "低胜率（12.9%-38.2%）是MA策略的固有特征，但高回报（如NVDA 143.89%）表明趋势跟踪在强趋势中有效；需结合风险分数和RSI动态调整仓位。"
+        },
+        {
+          "en": "In AMD case, News, Risk, and Reviser all supported hold but led to loss, exposing risk of ignoring weak signals (risk score 46, RSI<40) under multi-agent consensus; future must enforce position reduction when risk score >40.",
+          "zh": "AMD案例中，News、Risk和Reviser均支持hold，但最终亏损，暴露了多agent一致时忽视弱势信号（风险分数46、RSI<40）的风险；未来应强制检查风险分数>40时降低仓位。"
+        },
+        {
+          "en": "High volatility (e.g., AMD 34.49%, NVDA 34.1%) demands stricter stop-loss discipline; low win rate strategies (<40%) should default to tighter stop-loss at -10% or lower.",
+          "zh": "高波动（如AMD 34.49%、NVDA 34.1%）要求更严格的止损纪律；低胜率策略（<40%）应默认收紧止损至-10%或更低。"
+        }
+      ],
+      "avg_metrics": {
+        "avg_return_pct": 61.48,
+        "avg_sharpe": 0.89
+      },
+      "tags": [
+        "trend_following",
+        "risk_management",
+        "agent_fault",
+        "hold_signal",
+        "volatility",
+        "stop_loss"
+      ],
+      "paper_refs": [
+        "Edwards & Magee (1948)",
+        "Wilder (1978)",
+        "Appel (1979)",
+        "Jegadeesh & Titman (1993)",
+        "Xiao et al. (2025)"
+      ],
+      "source_lesson_ids": [
+        "AAPL_ma_20260621154851",
+        "NVDA_ma_20260621164548",
+        "AMD_ma_20260621164244"
+      ],
+      "source": "llm"
     }
   ],
   "version": "1.0"

@@ -12,7 +12,7 @@ export class NorthboundAgent extends BaseInvestorAgent {
 
   async decide(market: MarketState, environment: MarketEnvironmentSnapshot): Promise<AgentDecision> {
     const tick = market.status.tick;
-    if (this.state.openOrderIds.length > 0) return this.hold(tick, '北向资金订单排队');
+    if (this.state.openOrderIds.length > 0) return this.hold(tick, '北向资金订单排队中');
     if (tick % 5 !== 0) return this.hold(tick, '北向低频观察');
 
     const price = market.stock.currentPrice;
@@ -22,14 +22,18 @@ export class NorthboundAgent extends BaseInvestorAgent {
 
     if ((discount || environment.lastNewsImpact > 0.25) && canBuyLots > 0) {
       const lots = Math.max(8, Math.min(canBuyLots, 28));
-      return this.buildDecision('buy', tick, lots * 100, round2(price - 0.01), '北向资金价值买入', 0.78, 0.45);
+      const decision = this.buildDecision('buy', tick, lots * 100, round2(price - 0.01), '北向资金按价值和趋势买入', 0.78, 0.45);
+      this.maybeSay(tick, 'buy', price, 0.35);
+      return decision;
     }
 
     if (market.stock.changePct > 5 && canSellLots > 0) {
       const lots = Math.max(6, Math.min(canSellLots, 20));
-      return this.buildDecision('sell', tick, lots * 100, round2(price + 0.02), '北向资金高位减仓', 0.66, 0.42);
+      const decision = this.buildDecision('sell', tick, lots * 100, round2(price + 0.02), '北向资金高位减仓', 0.66, 0.42);
+      this.maybeSay(tick, 'sell', price, 0.3);
+      return decision;
     }
 
-    return this.hold(tick, '估值信号不足');
+    return this.hold(tick, '价值和趋势信号不足');
   }
 }

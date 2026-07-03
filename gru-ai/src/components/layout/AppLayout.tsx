@@ -11,6 +11,7 @@ import { TERMINAL } from '@/components/market/marketTerminal';
 const NAV_ITEMS = [
   { label: '市场数据', to: '/market-data' },
   { label: 'Agent 状态', to: '/agent-status' },
+  { label: '社交网络', to: '/social' },
 ] as const;
 
 export default function AppLayout() {

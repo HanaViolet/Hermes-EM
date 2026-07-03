@@ -23,6 +23,8 @@ import { MatchingEngine } from './MatchingEngine.js';
 import { OrderGenerator } from './OrderGenerator.js';
 import { ScenarioLoader } from './scenarios/ScenarioLoader.js';
 import { SimulationClock } from './SimulationClock.js';
+import { SocialEngine } from '../social/SocialEngine.js';
+import { getPersonaSkillForType, personaSkillToStrategyParams } from '../skills/personaSkills.js';
 import type {
   AgentMessage,
   AgentScenarioConfig,
@@ -50,6 +52,7 @@ function mid([min, max]: [number, number]): number {
 }
 
 function seedFromConfig(id: string, type: AgentType, name: string, config: AgentScenarioConfig) {
+  const personaSkill = getPersonaSkillForType(type);
   return {
     id,
     type,
@@ -59,9 +62,27 @@ function seedFromConfig(id: string, type: AgentType, name: string, config: Agent
     sentiment: Number(mid(config.sentimentRange).toFixed(2)),
     riskAppetite: Number(mid(config.riskPreferenceRange).toFixed(2)),
     groupSize: config.count,
-    strategyParams: config.strategyParams,
-    currentStrategy: strategyName(type),
+    strategyParams: {
+      ...config.strategyParams,
+      ...personaSkillToStrategyParams(personaSkill),
+    },
+    currentStrategy: personaSkill.tradeStyle || readableStrategyName(type),
+    personaSkill,
   };
+}
+
+function readableStrategyName(type: AgentType): string {
+  const labels: Partial<Record<AgentType, string>> = {
+    retail: '追涨杀跌 / 群体行为',
+    hot_money: '打板接力 / 炸板撤退',
+    mutual_fund: '估值中枢 / 慢速调仓',
+    quant: '动量 + 均值回归 + 盘口不平衡',
+    northbound: '趋势流入 / 宏观风险过滤',
+    national_team: '极端下跌护盘',
+    training_quant: '外部训练接口驱动',
+    news: '新闻事件驱动',
+  };
+  return labels[type] ?? '新闻事件驱动';
 }
 
 function strategyName(type: AgentType): string {
@@ -116,7 +137,7 @@ function createAgent(seed: ReturnType<typeof seedFromConfig> & { llmClient?: LLM
 
 function createAgents(scenario: MarketScenario, llmClient?: LLMClient): BaseInvestorAgent[] {
   const seed = (id: string, type: AgentType, name: string, config: AgentScenarioConfig, sentiment?: number) => {
-    const base = seedFromConfig(id, type, name, config);
+    const base = seedFromConfig(id, type, readableAgentName(id, type, name), config);
     if (sentiment !== undefined) base.sentiment = sentiment;
     return { ...base, llmClient };
   };
@@ -136,6 +157,30 @@ function createAgents(scenario: MarketScenario, llmClient?: LLMClient): BaseInve
   }
 
   return agents;
+}
+
+function readableAgentName(id: string, type: AgentType, fallback: string): string {
+  const names: Record<string, string> = {
+    'retail-1': '散户群体代表A',
+    'retail-2': '散户群体代表B',
+    'hot-money-1': '游资打板席位',
+    'mutual-fund-1': '公募稳健组合',
+    'quant-1': '内置量化Alpha',
+    'northbound-1': '北向长线资金',
+    'national-team-1': '国家队稳定账户',
+    'training-quant-1': '训练量化Agent',
+  };
+  const byType: Partial<Record<AgentType, string>> = {
+    retail: '散户代表',
+    hot_money: '游资代表',
+    mutual_fund: '公募基金',
+    quant: '量化研究员',
+    northbound: '北向资金',
+    national_team: '国家队',
+    training_quant: 'Hermes Agent',
+    news: '新闻事件',
+  };
+  return names[id] ?? byType[type] ?? fallback;
 }
 
 function eventImpact(eventType: ManualEventType): number {
@@ -211,6 +256,7 @@ export class SimulationEngine extends EventEmitter {
   private readonly store = new SimulationStore();
   private readonly newsAgent = new NewsEventAgent();
   private readonly syntheticNewsEngine = new SyntheticFinancialNewsEngine();
+  private readonly socialEngine = new SocialEngine();
   private readonly llmClient: LLMClient | undefined;
   private pendingMessages: AgentMessage[] = [];
   private agents: BaseInvestorAgent[] = [];
@@ -244,6 +290,10 @@ export class SimulationEngine extends EventEmitter {
 
   start(): void {
     this.clock.start();
+  }
+
+  getSocialEngine(): SocialEngine {
+    return this.socialEngine;
   }
 
   pause(): void {
@@ -551,7 +601,6 @@ export class SimulationEngine extends EventEmitter {
         state.status = 'waiting';
       }
 
-      this.collectMessages();
     } else {
       this.marketState.appendEvent({
         id: randomUUID(),
@@ -577,6 +626,11 @@ export class SimulationEngine extends EventEmitter {
     this.environment.updateFromState(this.marketState.snapshot(), trades);
     this.marketState.setEnvironment(this.environment.getSnapshot());
     this.syntheticNewsEngine.updateDecayAndFeedback(context.tick, this.marketState.snapshot());
+    const socialState = this.socialEngine.tick(Array.from(agentStates.values()), context.tick);
+    if (!environment.halted) {
+      this.collectMessages();
+    }
+    this.marketState.setAgents(Array.from(agentStates.values()));
 
     const wealth = this.trainingAgentWealth();
     const reward = wealth - this.previousTrainingWealth;
@@ -591,6 +645,9 @@ export class SimulationEngine extends EventEmitter {
     this.emit('scenario', this.getScenarioUpdate());
     this.emit('training', this.getTrainingUpdate());
     this.emit('news', this.getNewsUpdate());
+
+    // 社交网络：每 tick 更新并广播（复用已有的 agentStates Map）
+    this.emit('social', socialState);
   }
 
   private distributeMessages(): void {

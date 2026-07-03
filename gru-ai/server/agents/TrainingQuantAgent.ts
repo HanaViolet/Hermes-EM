@@ -1,6 +1,6 @@
+import { randomUUID } from 'node:crypto';
 import { BaseInvestorAgent, type InvestorSeed } from './BaseInvestorAgent.js';
 import type { AgentDecision, MarketEnvironmentSnapshot, MarketState, QuantAction } from '../simulation/types.js';
-import { randomUUID } from 'node:crypto';
 
 function round2(value: number): number {
   return Number(value.toFixed(2));
@@ -23,7 +23,10 @@ export class TrainingQuantAgent extends BaseInvestorAgent {
 
     const action = this.queuedAction;
     this.queuedAction = null;
-    if (!action || action.type === 'hold') return this.hold(tick, '训练接口未提交动作，保持观察');
+    if (!action || action.type === 'hold') {
+      this.maybeSay(tick, 'hold', market.stock.currentPrice, 0.12);
+      return this.hold(tick, '训练接口未提交动作，保持观察');
+    }
     if (action.type === 'cancel') {
       return {
         id: randomUUID(),
@@ -38,6 +41,7 @@ export class TrainingQuantAgent extends BaseInvestorAgent {
     }
 
     const price = action.price ?? market.stock.currentPrice;
+    this.maybeSay(tick, action.type, price, 0.45);
     return this.buildDecision(
       action.type,
       tick,

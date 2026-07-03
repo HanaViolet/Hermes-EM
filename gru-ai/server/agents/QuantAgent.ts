@@ -12,7 +12,7 @@ export class QuantAgent extends BaseInvestorAgent {
 
   async decide(market: MarketState, environment: MarketEnvironmentSnapshot): Promise<AgentDecision> {
     const tick = market.status.tick;
-    if (this.state.openOrderIds.length > 0) return this.hold(tick, '量化等待盘口回报');
+    if (this.state.openOrderIds.length > 0) return this.hold(tick, '量化订单等待盘口回报');
 
     const price = market.stock.currentPrice;
     const mean = market.stock.previousClose + environment.lastNewsImpact * 0.8;
@@ -22,14 +22,19 @@ export class QuantAgent extends BaseInvestorAgent {
 
     if ((deviation < -0.0015 || market.metrics.orderBookImbalance < -0.25) && canBuyLots > 0) {
       const lots = Math.max(1, Math.min(canBuyLots, 8));
-      return this.buildDecision('buy', tick, lots * 100, round2(price + 0.01), '量化均值回归买入', 0.7, 0.7);
+      const decision = this.buildDecision('buy', tick, lots * 100, round2(price + 0.01), '量化均值回归买入', 0.7, 0.7);
+      this.maybeSay(tick, 'buy', price, 0.3);
+      return decision;
     }
 
     if ((deviation > 0.0015 || market.metrics.orderBookImbalance > 0.25) && canSellLots > 0) {
       const lots = Math.max(1, Math.min(canSellLots, 8));
-      return this.buildDecision('sell', tick, lots * 100, round2(price - 0.01), '量化均值回归卖出', 0.7, 0.7);
+      const decision = this.buildDecision('sell', tick, lots * 100, round2(price - 0.01), '量化均值回归卖出', 0.7, 0.7);
+      this.maybeSay(tick, 'sell', price, 0.3);
+      return decision;
     }
 
+    this.maybeSay(tick, 'hold', price, 0.04);
     return this.hold(tick, '价差不足，量化观望');
   }
 }

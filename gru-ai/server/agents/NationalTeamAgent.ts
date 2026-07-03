@@ -20,9 +20,12 @@ export class NationalTeamAgent extends BaseInvestorAgent {
 
     if (panic && canBuyLots > 0) {
       const lots = Math.max(20, Math.min(canBuyLots, 70));
-      return this.buildDecision('buy', tick, lots * 100, round2(price + 0.04), '国家队护盘买入', 0.88, 0.65);
+      const decision = this.buildDecision('buy', tick, lots * 100, round2(price + 0.04), '国家队护盘买入', 0.88, 0.65);
+      this.maybeSay(tick, 'buy', price, 0.6);
+      return decision;
     }
 
+    this.maybeSay(tick, 'hold', price, 0.04);
     return this.hold(tick, '未触发护盘条件');
   }
 }

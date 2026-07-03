@@ -128,6 +128,19 @@ export interface AgentMessage {
   tick: number;
 }
 
+export interface AgentPersonaSkill {
+  id: string;
+  label: string;
+  distilledFrom: string;
+  role: string;
+  informationPreference: string[];
+  coreRules: string[];
+  riskDiscipline: string;
+  socialStyle: string;
+  tradeStyle: string;
+  evolutionRule: string;
+}
+
 export interface AgentState {
   id: string;
   type: AgentType;
@@ -154,6 +167,75 @@ export interface AgentState {
   inbox: AgentMessage[];
   outbox: AgentMessage[];
   lastSay?: AgentMessage;
+  personaSkill?: AgentPersonaSkill;
+  // 社交网络扩展
+  socialFeed?: SocialPost[];
+}
+
+// ─── 社交网络类型 ───────────────────────────────────────────
+
+export interface SocialComment {
+  agentId: string;
+  agentName: string;
+  content: string;
+  tick: number;
+}
+
+export interface SocialPost {
+  id: string;
+  agentId: string;
+  agentName: string;
+  agentType: AgentType;
+  content: string;
+  tick: number;
+  timestamp: number;
+  sentiment: number;        // -1 to 1，帖子情绪极性
+  postType: 'opinion' | 'rumor' | 'analysis' | 'alert';
+  likes: number;
+  collects: number;
+  reposts: number;
+  comments: SocialComment[];
+  score: number;            // Reddit hotness score
+  originalMessageTick?: number;
+}
+
+export interface SocialRelation {
+  followerId: string;
+  followeeId: string;
+  weight: number;           // 0-1，关注强度
+  createdTick: number;
+  likeCount: number;        // follower 对 followee 帖子的点赞累计，驱动权重
+}
+
+export interface AgentSocialProfile {
+  agentId: string;
+  agentName: string;
+  agentType: AgentType;
+  followers: string[];
+  following: string[];
+  influenceScore: number;   // 粉丝数 × 平均互动率
+  postCount: number;
+  totalLikes: number;
+  feed: SocialPost[];       // 推荐 feed
+  ownPosts: SocialPost[];   // 历史帖子（最近 20 条）
+}
+
+export interface SocialMetrics {
+  averageSentiment: number;
+  rumorHeat: number;
+  alertHeat: number;
+  totalInteractions: number;
+  averageInfluence: number;
+  topInfluencers: string[];
+  hotPostIds: string[];
+}
+
+export interface SocialState {
+  posts: SocialPost[];                              // 最近 200 条（热度排序）
+  relations: SocialRelation[];
+  profiles: Record<string, AgentSocialProfile>;
+  tick: number;
+  metrics: SocialMetrics;
 }
 
 export interface OrderBookLevel {

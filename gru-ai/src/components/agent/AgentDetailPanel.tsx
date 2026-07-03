@@ -22,6 +22,8 @@ export default function AgentDetailPanel({ agent }: { agent: AgentSnapshot | nul
 
   const color = AGENT_COLORS[agent.type] ?? TERMINAL.blue;
   const isLLM = agent.strategyParams?.llm === true;
+  const persona = agent.personaSkill;
+
   return (
     <section className="p-3 space-y-3" style={terminalPanel}>
       <div className="flex items-center justify-between gap-2 font-mono">
@@ -39,11 +41,22 @@ export default function AgentDetailPanel({ agent }: { agent: AgentSnapshot | nul
             )}
           </div>
           <p className="mt-1 text-[11px]" style={{ color }}>
-            {AGENT_LABELS[agent.type]} · {agent.sentimentEmoji} {agent.sentimentLabel}
+            {AGENT_LABELS[agent.type]} / {agent.sentimentEmoji} {agent.sentimentLabel}
           </p>
         </div>
         <span className="text-[11px]" style={{ color }}>{agent.lastAction.toUpperCase()}</span>
       </div>
+
+      {persona && (
+        <div className="p-2 font-mono" style={{ backgroundColor: TERMINAL.panelSoft, border: `1px solid ${TERMINAL.borderSoft}` }}>
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-[10px]" style={{ color: TERMINAL.textDim }}>人物 Skill</span>
+            <span className="text-[10px]" style={{ color: TERMINAL.amber }}>{persona.distilledFrom}</span>
+          </div>
+          <div className="mt-1 text-xs font-bold" style={{ color: TERMINAL.text }}>{persona.label}</div>
+          <div className="mt-1 text-[11px] leading-snug" style={{ color: TERMINAL.textDim }}>{persona.riskDiscipline}</div>
+        </div>
+      )}
 
       <div className="space-y-1.5">
         <Row label="现金" value={formatLargeNumber(agent.cash)} />
@@ -69,7 +82,7 @@ export default function AgentDetailPanel({ agent }: { agent: AgentSnapshot | nul
         <div className="p-2 font-mono" style={{ backgroundColor: TERMINAL.panelSoft, border: `1px solid ${TERMINAL.borderSoft}` }}>
           <div className="text-[10px]" style={{ color: TERMINAL.textDim }}>发出的消息</div>
           <div className="mt-1 text-xs leading-snug" style={{ color: TERMINAL.text }}>
-            “{agent.lastSay.content}”
+            "{agent.lastSay.content}"
           </div>
         </div>
       )}
@@ -83,7 +96,7 @@ export default function AgentDetailPanel({ agent }: { agent: AgentSnapshot | nul
             agent.inbox.map((message, index) => (
               <div key={index} className="text-xs leading-snug">
                 <span style={{ color: TERMINAL.textDim }}>{message.from}: </span>
-                <span style={{ color: TERMINAL.text }}>“{message.content}”</span>
+                <span style={{ color: TERMINAL.text }}>"{message.content}"</span>
               </div>
             ))
           )}

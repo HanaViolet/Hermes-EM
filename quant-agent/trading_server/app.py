@@ -84,6 +84,9 @@ def trading_run():
         start_date = str(data.get("start_date", "2020-01-01"))
         end_date = str(data.get("end_date", "2024-12-31"))
         transaction_cost = _parse_float(data.get("transaction_cost", 0.001), 0.001)
+        sentiment_market = data.get("sentiment_market") or data.get("sentiment_market_context")
+        if sentiment_market is not None and not isinstance(sentiment_market, dict):
+            return jsonify({"ok": False, "message": "sentiment_market must be an object"}), 400
         start_dt = _validate_date(start_date, "start_date")
         end_dt = _validate_date(end_date, "end_date")
         if start_dt >= end_dt:
@@ -100,6 +103,8 @@ def trading_run():
         "strategy": strategy,
         "transaction_cost": transaction_cost,
     }
+    if sentiment_market is not None:
+        task_data["sentiment_market"] = sentiment_market
     task_id = start_task(task_data)
 
     return jsonify({

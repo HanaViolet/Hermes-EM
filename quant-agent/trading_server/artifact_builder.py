@@ -1873,6 +1873,9 @@ def build_room_artifacts(task: dict, result: dict) -> dict[str, dict]:
     risk_score = risk.get("risk_score", 40)
     risk_level = risk.get("risk_level", "medium")
     position_pct = risk.get("position_pct", decision.get("suggested_position", 0.35) if isinstance(decision, dict) else 0.35)
+    sentiment_market = result.get("sentiment_market_result") or risk.get("sentiment_market", {}) or {}
+    sentiment_risk_score = sentiment_market.get("sentiment_risk_score", risk.get("sentiment_market_risk"))
+    sentiment_risk_zone = sentiment_market.get("risk_zone", risk.get("sentiment_market_zone", "calm"))
 
     dd_pct = abs(backtest.get("max_drawdown", 0)) * 100
     total_ret = (backtest.get("total_return") or 0) * 100
@@ -2052,6 +2055,29 @@ def build_room_artifacts(task: dict, result: dict) -> dict[str, dict]:
         {"label": "Max Drawdown < 15%", "label_zh": "最大回撤 < 15%", "current": round(dd_pct, 1), "status": "pass" if dd_pct < 15 else "wait"},
         {"label": "Volatility Percentile < 60%", "label_zh": "波动率分位 < 60%", "current": vol_percentile, "status": "pass" if vol_percentile < 60 else "wait"},
     ]
+    if sentiment_risk_score is not None:
+        risk_source_rows.append({
+            "key": "sentiment_market",
+            "label": "Sentiment Market Risk",
+            "label_zh": "情绪市场风险",
+            "value": sentiment_risk_score,
+            "unit": "/100",
+            "threshold": "< 55",
+            "status": "blocked" if sentiment_risk_score >= 75 else "warn" if sentiment_risk_score >= 55 else "pass",
+            "impact": f"zone={sentiment_risk_zone}",
+        })
+        review_conditions.append({
+            "label": "Sentiment Market Risk < 55",
+            "label_zh": "情绪市场风险 < 55",
+            "current": sentiment_risk_score,
+            "status": "pass" if sentiment_risk_score < 55 else "wait",
+        })
+        risk_sources.append({
+            "label": "Sentiment Market",
+            "value": sentiment_risk_score,
+            "unit": "/100",
+            "impact": "high" if sentiment_risk_score >= 75 else "medium" if sentiment_risk_score >= 55 else "low",
+        })
 
     raw_news = news.get("raw_news", []) if isinstance(news, dict) else []
     key_events = news.get("key_events", []) if isinstance(news, dict) else []

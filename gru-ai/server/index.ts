@@ -189,6 +189,36 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // --- Social Network API ---
+  if (url.pathname === '/api/social/graph' && req.method === 'GET') {
+    sendJson(res, simulationManager.getSocialEngine().getGraphData());
+    return;
+  }
+
+  if (url.pathname === '/api/social/posts' && req.method === 'GET') {
+    const limit = parseInt(url.searchParams.get('limit') ?? '50', 10);
+    sendJson(res, simulationManager.getSocialEngine().getRecentPosts(limit));
+    return;
+  }
+
+  const socialFeedMatch = url.pathname.match(/^\/api\/social\/feed\/([^/]+)$/);
+  if (socialFeedMatch && req.method === 'GET') {
+    sendJson(res, simulationManager.getSocialEngine().getFeed(socialFeedMatch[1]));
+    return;
+  }
+
+  const socialAgentMatch = url.pathname.match(/^\/api\/social\/agent\/([^/]+)$/);
+  if (socialAgentMatch && req.method === 'GET') {
+    const profile = simulationManager.getSocialEngine().getProfile(socialAgentMatch[1]);
+    if (!profile) {
+      res.writeHead(404, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Agent not found' }));
+    } else {
+      sendJson(res, profile);
+    }
+    return;
+  }
+
   // Unknown /api/* routes → 404 JSON (don't fall through to SPA)
   if (url.pathname.startsWith('/api/')) {
     res.writeHead(404, { 'Content-Type': 'application/json' });

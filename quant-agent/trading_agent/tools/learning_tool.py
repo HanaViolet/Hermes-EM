@@ -255,6 +255,7 @@ def _lesson_context(task: dict[str, Any], result: dict[str, Any]) -> dict[str, A
     backtest = result.get("backtest_result", {}) or {}
     decision = result.get("decision", {}) or {}
     risk = result.get("risk_result", {}) or {}
+    sentiment_market = result.get("sentiment_market_result") or risk.get("sentiment_market", {}) or {}
     indicator = result.get("indicator_result", {}) or {}
     news = result.get("news_result", {}) or {}
     agent_analysis = result.get("agent_analysis", {}) or {}
@@ -274,6 +275,12 @@ def _lesson_context(task: dict[str, Any], result: dict[str, Any]) -> dict[str, A
             "trades": backtest.get("trades") or backtest.get("number_of_trades", 0),
             "risk_score": risk.get("risk_score", 40),
             "risk_level": risk.get("risk_level", "medium"),
+            "sentiment_market_risk": sentiment_market.get("sentiment_risk_score", risk.get("sentiment_market_risk", 0)),
+            "sentiment_market_zone": sentiment_market.get("risk_zone", risk.get("sentiment_market_zone", "calm")),
+            "social_heat": sentiment_market.get("social_heat", 0),
+            "rumor_heat": sentiment_market.get("rumor_heat", 0),
+            "crowding": sentiment_market.get("crowding", 0),
+            "liquidity_score": sentiment_market.get("liquidity_score", 0),
             "rsi": indicator.get("rsi"),
             "macd": indicator.get("macd"),
             "ma20": indicator.get("ma20"),
@@ -315,6 +322,7 @@ def _fallback_lesson(
     dd = m.get("max_drawdown_pct", 0.0)
     decision = m.get("decision", "hold")
     risk_score = m.get("risk_score", 40)
+    sentiment_risk = m.get("sentiment_market_risk", 0)
 
     attribution = context.get("agent_attribution", [])
     attribution_text_zh = ""
@@ -325,13 +333,19 @@ def _fallback_lesson(
         attribution_text_zh = "；需关注责任归因：" + "；".join(parts_zh)
         attribution_text_en = "; attribution: " + "; ".join(parts_en)
 
+    sentiment_text_zh = ""
+    sentiment_text_en = ""
+    if sentiment_risk and sentiment_risk >= 55:
+        sentiment_text_zh = f"、情绪市场风险 {sentiment_risk}/100"
+        sentiment_text_en = f", sentiment-market risk {sentiment_risk}/100"
+
     if total_ret > 0 and sharpe >= 1.0:
         lesson_zh = f"{strategy} 策略本次表现良好：收益 {total_ret:.1f}%，夏普 {sharpe:.2f}，当前市场环境较适合该策略。"
         lesson_en = f"{strategy} performed well: return {total_ret:.1f}%, Sharpe {sharpe:.2f}; current market regime appears favorable."
         tags = ["positive_return", "good_sharpe", "favorable_regime"]
     elif total_ret < 0:
-        lesson_zh = f"{strategy} 策略本次收益为负（{total_ret:.1f}%），需关注最大回撤 {dd:.1f}% 与风险分数 {risk_score}{attribution_text_zh}。"
-        lesson_en = f"{strategy} produced negative return ({total_ret:.1f}%); monitor max drawdown {dd:.1f}% and risk score {risk_score}{attribution_text_en}."
+        lesson_zh = f"{strategy} 策略本次收益为负（{total_ret:.1f}%），需关注最大回撤 {dd:.1f}%、风险分数 {risk_score}{sentiment_text_zh}{attribution_text_zh}。"
+        lesson_en = f"{strategy} produced negative return ({total_ret:.1f}%); monitor max drawdown {dd:.1f}%, risk score {risk_score}{sentiment_text_en}{attribution_text_en}."
         tags = ["negative_return", "risk_alert", "drawdown_watch"]
     elif sharpe < 0.5 and dd > 15:
         lesson_zh = f"{strategy} 策略夏普过低（{sharpe:.2f}）且回撤较大（{dd:.1f}%），建议收紧仓位或等待更明确信号{attribution_text_zh}。"

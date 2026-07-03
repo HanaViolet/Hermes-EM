@@ -86,6 +86,9 @@ export class SimulationManager extends EventEmitter {
     return this.engines.get(symbol)?.getNewsUpdate() ?? this.getActiveEngine().getNewsUpdate();
   }
 
+  getSocialEngine(symbol = this.activeSymbol) {
+    return this.engines.get(symbol)?.getSocialEngine() ?? this.getActiveEngine().getSocialEngine();
+  }
   getNewsRecord(newsId: string, symbol = this.activeSymbol) {
     return this.engines.get(symbol)?.getNewsRecord(newsId);
   }
@@ -236,6 +239,12 @@ export class SimulationManager extends EventEmitter {
     engine.on('news', (payload) => {
       if (symbol === this.activeSymbol) {
         this.emit('news', payload);
+      }
+    });
+
+    engine.on('social', (payload) => {
+      if (symbol === this.activeSymbol) {
+        this.emit('social', payload);
       }
     });
 

@@ -55,6 +55,7 @@ def _run_agent_in_background(task: dict, task_id: str) -> None:
         end_date = task.get("end_date", "2024-12-31")
         strategy_name = task.get("strategy", "auto")
         transaction_cost = float(task.get("transaction_cost", 0.001))
+        sentiment_market_context = task.get("sentiment_market") or task.get("sentiment_market_context")
 
         result = run_trading_agent(
             ticker=ticker,
@@ -62,6 +63,7 @@ def _run_agent_in_background(task: dict, task_id: str) -> None:
             end_date=end_date,
             strategy_name=strategy_name,
             transaction_cost=transaction_cost,
+            sentiment_market_context=sentiment_market_context,
         )
 
         # Build room_artifacts and write to telemetry

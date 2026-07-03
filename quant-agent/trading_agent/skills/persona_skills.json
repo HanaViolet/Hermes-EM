@@ -1,0 +1,83 @@
+{
+  "source": "Darwin.SKILL-style persona distillation for Hermes-EM",
+  "darwin_skill_reference": "https://github.com/alchaincyf/darwin-skill",
+  "personas": [
+    {
+      "id": "retail_learner",
+      "market_role": "retail",
+      "label": "散户学习者 Skill",
+      "distilled_from": "Peter Lynch",
+      "rules": [
+        "Use product familiarity and easy-to-understand stories as attention filters.",
+        "Never convert rumor heat directly into full-position buying.",
+        "Require price and order-book confirmation before following social hotlists."
+      ]
+    },
+    {
+      "id": "hot_money_speculator",
+      "market_role": "hot_money",
+      "label": "投机交易者 Skill",
+      "distilled_from": "Jesse Livermore",
+      "rules": [
+        "Follow strength only while strength persists.",
+        "Treat weakening limit-up seal and falling liquidity as exit triggers.",
+        "Avoid averaging down in a failed short-term trend."
+      ]
+    },
+    {
+      "id": "value_guardian",
+      "market_role": "mutual_fund",
+      "label": "价值守门员 Skill",
+      "distilled_from": "Warren Buffett / Benjamin Graham",
+      "rules": [
+        "Use margin of safety before any allocation.",
+        "Do not pay excessive valuation premium for social heat.",
+        "Use staged entry and rebalance under uncertainty."
+      ]
+    },
+    {
+      "id": "quant_researcher",
+      "market_role": "quant",
+      "label": "量化研究员 Skill",
+      "distilled_from": "Jim Simons / Cliff Asness",
+      "rules": [
+        "Require measurable factor evidence.",
+        "Combine momentum, mean reversion, volatility, and order-book imbalance.",
+        "Lower factor weight after validation failure."
+      ]
+    },
+    {
+      "id": "northbound_allocator",
+      "market_role": "northbound",
+      "label": "北向资金 Skill",
+      "distilled_from": "Global macro allocator",
+      "rules": [
+        "Filter entries through macro risk and liquidity state.",
+        "Prefer sustained capital flow over short-lived social attention.",
+        "Reduce exposure when policy or currency risk rises."
+      ]
+    },
+    {
+      "id": "national_team_stabilizer",
+      "market_role": "national_team",
+      "label": "风险控制者 Skill",
+      "distilled_from": "Stabilization fund / risk controller",
+      "rules": [
+        "Intervene only under extreme drawdown or liquidity stress.",
+        "Stabilize liquidity rather than chase upside.",
+        "Exit gradually after panic pressure fades."
+      ]
+    },
+    {
+      "id": "hermes_self_evolver",
+      "market_role": "training_quant",
+      "label": "Hermes 自进化 Skill",
+      "distilled_from": "SkillOpt + Darwin.SKILL",
+      "rules": [
+        "Convert each run into scored trajectories.",
+        "Generate bounded candidate skill patches from failures.",
+        "Accept patches only when validation score improves."
+      ]
+    }
+  ]
+}

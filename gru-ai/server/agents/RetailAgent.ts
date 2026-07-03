@@ -36,7 +36,7 @@ export class RetailAgent extends BaseInvestorAgent {
     if (!bookNeedsBuy && !bookNeedsSell && Math.random() > activityThreshold + Math.abs(emotionalBias) * 0.2) {
       this.state.status = 'idle';
       this.state.lastAction = 'hold';
-      return this.hold(tick, '情绪不足，暂时观望');
+      return this.hold(tick, '情绪和成交都不够明确，暂时观望');
     }
 
     const wantsBuy = bookNeedsBuy && bookNeedsSell
@@ -47,17 +47,37 @@ export class RetailAgent extends BaseInvestorAgent {
       if (!canBuy) return this.hold(tick, '现金不足，无法买入');
       const lots = Math.max(1, Math.min(maxAffordableLots, Math.ceil(this.state.riskAppetite * 4)));
       const aggression = 0.01 + this.state.riskAppetite * 0.06 + Math.max(0, emotionalBias) * 0.04;
-      return this.buildDecision('buy', tick, lots * 100, round2(price + aggression), '追随上涨情绪提交买单', 0.55 + Math.random() * 0.35, 0.4 + this.state.riskAppetite * 0.5);
+      const decision = this.buildDecision(
+        'buy',
+        tick,
+        lots * 100,
+        round2(price + aggression),
+        '追随上涨情绪提交买单',
+        0.55 + Math.random() * 0.35,
+        0.4 + this.state.riskAppetite * 0.5,
+      );
+      this.maybeSay(tick, 'buy', price, 0.35);
+      return decision;
     }
 
     if (canSell) {
       const lotsHeld = Math.floor(this.state.availablePosition / 100);
       const lots = Math.max(1, Math.min(lotsHeld, Math.ceil((0.5 + this.state.riskAppetite) * 2)));
       const aggression = 0.01 + this.state.riskAppetite * 0.05 + Math.max(0, -emotionalBias) * 0.04;
-      return this.buildDecision('sell', tick, lots * 100, round2(price - aggression), '担心回落提交卖单', 0.55 + Math.random() * 0.35, 0.4 + this.state.riskAppetite * 0.5);
+      const decision = this.buildDecision(
+        'sell',
+        tick,
+        lots * 100,
+        round2(price - aggression),
+        '担心回落，提交卖单',
+        0.55 + Math.random() * 0.35,
+        0.4 + this.state.riskAppetite * 0.5,
+      );
+      this.maybeSay(tick, 'sell', price, 0.3);
+      return decision;
     }
 
+    this.maybeSay(tick, 'hold', price, 0.08);
     return this.hold(tick, '没有可执行方向');
   }
-
 }

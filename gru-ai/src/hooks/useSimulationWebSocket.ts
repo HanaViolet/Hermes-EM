@@ -5,6 +5,7 @@ import { useNewsStore } from '@/stores/newsStore';
 import { useScenarioStore } from '@/stores/scenarioStore';
 import { useSimulationStore } from '@/stores/simulation-store';
 import { useTrainingStore } from '@/stores/trainingStore';
+import { useSocialStore } from '@/stores/socialStore';
 import type { SimulationCommand, SimulationMessage } from '@/types/market';
 
 const MAX_RECONNECT_DELAY = 30000;
@@ -26,6 +27,7 @@ export function useSimulationWebSocket() {
   const setNewsUpdate = useNewsStore((s) => s.setNewsUpdate);
   const setScenarioUpdate = useScenarioStore((s) => s.setScenarioUpdate);
   const setTrainingUpdate = useTrainingStore((s) => s.setTrainingUpdate);
+  const setSocialState = useSocialStore((s) => s.setSocialState);
 
   useEffect(() => {
     function sendCommand(command: SimulationCommand) {
@@ -92,6 +94,9 @@ export function useSimulationWebSocket() {
             case 'stock_list':
               setStockList(message.payload);
               break;
+            case 'social_update':
+              setSocialState(message.payload);
+              break;
           }
         } catch {
           setError('Received malformed simulation message');
@@ -123,5 +128,5 @@ export function useSimulationWebSocket() {
         wsRef.current = null;
       }
     };
-  }, [setConnected, setSimulationMarketState, setStatus, setError, setCommandSender, setMarketState, setStockList, mergeMarketUpdate, mergeAgentUpdate, setNewsUpdate, setScenarioUpdate, setTrainingUpdate]);
+  }, [setConnected, setSimulationMarketState, setStatus, setError, setCommandSender, setMarketState, setStockList, mergeMarketUpdate, mergeAgentUpdate, setNewsUpdate, setScenarioUpdate, setTrainingUpdate, setSocialState]);
 }

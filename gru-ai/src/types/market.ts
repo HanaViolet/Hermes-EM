@@ -122,6 +122,19 @@ export interface AgentMessage {
   tick: number;
 }
 
+export interface AgentPersonaSkill {
+  id: string;
+  label: string;
+  distilledFrom: string;
+  role: string;
+  informationPreference: string[];
+  coreRules: string[];
+  riskDiscipline: string;
+  socialStyle: string;
+  tradeStyle: string;
+  evolutionRule: string;
+}
+
 export interface AgentState {
   id: string;
   type: AgentType;
@@ -147,6 +160,7 @@ export interface AgentState {
   inbox: AgentMessage[];
   outbox: AgentMessage[];
   lastSay?: AgentMessage;
+  personaSkill?: AgentPersonaSkill;
 }
 
 export interface OrderBookLevel {
@@ -674,4 +688,5 @@ export type SimulationMessage =
   | { version: 1; type: 'scenario_update'; payload: ScenarioUpdateMessage }
   | { version: 1; type: 'training_update'; payload: TrainingUpdateMessage }
   | { version: 1; type: 'news_update'; payload: SyntheticNewsUpdate }
+  | { version: 1; type: 'social_update'; payload: import('./social').SocialState }
   | { version: 1; type: 'stock_list'; payload: { activeSymbol: string; stocks: SimulatedStockSummary[] } };

@@ -11,6 +11,7 @@ from trading_agent.tools.decision_score_tool import compute_decision_score
 from trading_agent.tools.explain_tool import explain_decision
 from trading_agent.tools.report_tool import generate_report
 from trading_agent.tools.learning_tool import load_strategy_experience_adjustments
+from trading_agent.tools.sentiment_market_tool import normalize_sentiment_market_context
 from trading_agent.utils.logger import get_logger
 from trading_agent.utils.office_bridge import update_workflow, ROOM_LABELS, _telemetry_state, _persist_telemetry
 
@@ -134,7 +135,8 @@ def run_trading_agent(
     start_date: str,
     end_date: str,
     strategy_name: str = "auto",
-    transaction_cost: float = 0.001
+    transaction_cost: float = 0.001,
+    sentiment_market_context: dict | None = None,
 ) -> dict:
     try:
         task = {
@@ -144,6 +146,8 @@ def run_trading_agent(
             "strategy": strategy_name,
             "transaction_cost": transaction_cost,
         }
+        sentiment_market_result = normalize_sentiment_market_context(sentiment_market_context)
+        task["sentiment_market"] = sentiment_market_result
 
         logger.info(f"Run agent: ticker={ticker}, strategy={strategy_name}")
 
@@ -217,6 +221,14 @@ def run_trading_agent(
         from trading_agent.tools.news_tool import run_news_agent
         news_result = run_news_agent(asset=ticker, indicators=indicator_result, regime=regime_result)
         update_workflow(current_stage="analyzing_news", progress=42, summary=f"News: {news_result.get('news_sentiment','neutral')} ({news_result.get('news_score',50)}/100)", logs=[news_result.get("summary","")])
+
+        update_workflow(
+            current_stage="analyzing_news",
+            progress=44,
+            summary=f"Sentiment market: {sentiment_market_result['risk_zone']} ({sentiment_market_result['sentiment_risk_score']}/100)",
+            details=sentiment_market_result,
+            logs=[sentiment_market_result.get("summary_zh", "")],
+        )
 
         # ── Stage 5-7: Strategy / Risk / Backtest ──
         update_workflow(
@@ -294,7 +306,12 @@ def run_trading_agent(
         logger.info(f"Backtest done: sharpe={result['sharpe_ratio']:.2f}")
 
         # ── Stage 7: Dynamic Risk ──
-        risk_result = compute_dynamic_risk_score(backtest=result, indicators=indicator_result, regime=regime_result)
+        risk_result = compute_dynamic_risk_score(
+            backtest=result,
+            indicators=indicator_result,
+            regime=regime_result,
+            sentiment_market=sentiment_market_result,
+        )
         update_workflow(current_stage="checking_risk", progress=72, summary=f"Risk: {risk_result['risk_level']} ({risk_result['risk_score']}/100)")
 
         # ── Stage 8: Memory ──
@@ -303,7 +320,16 @@ def run_trading_agent(
         update_workflow(current_stage="using_memory", progress=78, summary=f"Memory: {memory_result.get('memory_score',0)} boost", logs=[memory_result.get("evidence","")])
 
         # ── Stage 9: Score-based Decision (Initial) ──
-        initial_decision_result = compute_decision_score(regime=regime_result, risk=risk_result, strategy_scores=strategy_scores, memory=memory_result, indicators=indicator_result, backtest=result, news_result=news_result)
+        initial_decision_result = compute_decision_score(
+            regime=regime_result,
+            risk=risk_result,
+            strategy_scores=strategy_scores,
+            memory=memory_result,
+            indicators=indicator_result,
+            backtest=result,
+            news_result=news_result,
+            sentiment_market=sentiment_market_result,
+        )
         update_workflow(current_stage="making_decision", progress=85, summary=f"Initial: {initial_decision_result['decision'].upper()} (score={initial_decision_result['decision_score']})")
 
         # ── Stage 9.2: Agent Votes ──
@@ -404,7 +430,14 @@ def run_trading_agent(
         update_workflow(current_stage="agent_analysis", progress=92, summary=f"Agents: {vote_result['summary']['dominant']} ({vote_result['summary']['buy_count']}B/{vote_result['summary']['sell_count']}S/{vote_result['summary']['hold_count']}H) · Mode: {decision_result['decision_mode']}")
 
         # ── Stage 10: Explain ──
-        explanation = explain_decision({"decision_result": decision_result, "risk_result": risk_result, "regime_result": regime_result, "strategy_scores": strategy_scores, "indicator_result": indicator_result})
+        explanation = explain_decision({
+            "decision_result": decision_result,
+            "risk_result": risk_result,
+            "regime_result": regime_result,
+            "strategy_scores": strategy_scores,
+            "indicator_result": indicator_result,
+            "sentiment_market_result": sentiment_market_result,
+        })
         update_workflow(current_stage="explaining_decision", progress=94, summary=explanation.get("short",""))
 
         # ── Stage 11: Report ──
@@ -429,6 +462,8 @@ def run_trading_agent(
             "trades": result["number_of_trades"],
             "decision_score": decision_result["decision_score"],
             "risk_score": risk_result["risk_score"],
+            "sentiment_market_risk": sentiment_market_result["sentiment_risk_score"],
+            "sentiment_market_zone": sentiment_market_result["risk_zone"],
         }
         update_workflow(global_status="done", current_stage="completed", progress=100, cat_id="trading_cat", cat_status="done", summary=f"Completed. Decision: {decision_result['decision']} · {decision_result.get('decision_mode','proceed')}", result_summary=result_summary, report={"markdown": report_md, "path": ""}, logs=["Workflow completed"])
 
@@ -445,6 +480,7 @@ def run_trading_agent(
             "regime_result": regime_result,
             "news_result": news_result,
             "risk_result": risk_result,
+            "sentiment_market_result": sentiment_market_result,
             "memory_result": memory_result,
             "explanation": explanation,
             "agent_analysis": agent_analysis,

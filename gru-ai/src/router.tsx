@@ -8,6 +8,7 @@ const GamePage = lazy(() => import('@/components/game/GamePage'));
 const MarketSimulation = lazy(() => import('@/pages/MarketSimulation'));
 const MarketDataPage = lazy(() => import('@/pages/MarketDataPage'));
 const AgentStatusPage = lazy(() => import('@/pages/AgentStatusPage'));
+const SocialNetworkPage = lazy(() => import('@/pages/SocialNetworkPage'));
 
 // eslint-disable-next-line react-refresh/only-export-components
 function PageLoader() {
@@ -33,6 +34,7 @@ export const router = createBrowserRouter([
       { path: 'agent-status', element: <SuspenseWrapper><AgentStatusPage /></SuspenseWrapper> },
       { path: 'simulation', element: <SuspenseWrapper><MarketSimulation /></SuspenseWrapper> },
       { path: 'office', element: <SuspenseWrapper><GamePage /></SuspenseWrapper> },
+      { path: 'social', element: <SuspenseWrapper><SocialNetworkPage /></SuspenseWrapper> },
     ],
   },
 ]);

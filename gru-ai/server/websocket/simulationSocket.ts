@@ -14,6 +14,7 @@ import type {
   SimulatedStockSummary,
   SimulationCommand,
   SimulationStatus,
+  SocialState,
   TrainingUpdateMessage,
 } from '../simulation/types.js';
 
@@ -26,6 +27,7 @@ type SimulationMessage =
   | { version: 1; type: 'scenario_update'; payload: ScenarioUpdateMessage }
   | { version: 1; type: 'training_update'; payload: TrainingUpdateMessage }
   | { version: 1; type: 'news_update'; payload: SyntheticNewsUpdate }
+  | { version: 1; type: 'social_update'; payload: SocialState }
   | { version: 1; type: 'stock_list'; payload: { activeSymbol: string; stocks: SimulatedStockSummary[] } };
 
 const AGENT_LABELS: Record<AgentType, string> = {
@@ -258,6 +260,10 @@ export function attachSimulationSocket(wss: WebSocketServer, manager: Simulation
 
   manager.on('stock_list', (payload: { activeSymbol: string; stocks: SimulatedStockSummary[] }) => {
     broadcast(wss, { version: 1, type: 'stock_list', payload });
+  });
+
+  manager.on('social', (payload: SocialState) => {
+    broadcast(wss, { version: 1, type: 'social_update', payload });
   });
 
   manager.on('error', (payload: { message: string }) => {

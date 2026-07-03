@@ -22,14 +22,19 @@ export class HotMoneyAgent extends BaseInvestorAgent {
 
     if (strongTape && canBuyLots > 0 && Math.random() < 0.78) {
       const lots = Math.max(5, Math.min(canBuyLots, nearLimitUp ? 35 : 18));
-      return this.buildDecision('buy', tick, lots * 100, round2(price + (nearLimitUp ? 0.18 : 0.08)), '游资尝试打板/接力', 0.82, 0.92);
+      const decision = this.buildDecision('buy', tick, lots * 100, round2(price + (nearLimitUp ? 0.18 : 0.08)), '游资尝试打板或接力', 0.82, 0.92);
+      this.maybeSay(tick, 'buy', price, 0.5);
+      return decision;
     }
 
     if (!strongTape && canSellLots > 0 && Math.random() < 0.58) {
       const lots = Math.max(3, Math.min(canSellLots, 20));
-      return this.buildDecision('sell', tick, lots * 100, round2(price - 0.09), '热点退潮，游资兑现', 0.72, 0.86);
+      const decision = this.buildDecision('sell', tick, lots * 100, round2(price - 0.09), '热点退潮，游资兑现', 0.72, 0.86);
+      this.maybeSay(tick, 'sell', price, 0.45);
+      return decision;
     }
 
+    this.maybeSay(tick, 'hold', price, 0.06);
     return this.hold(tick, '等待明确热点信号');
   }
 }
